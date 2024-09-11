@@ -6,12 +6,16 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using PilotLookUp.Commands;
 using System.Windows.Input;
+using System.Linq;
+using IDataObject = Ascon.Pilot.SDK.IDataObject;
+using System.Collections.Generic;
 
 
 namespace PilotLookUp
 {
 
     [Export(typeof(IMenu<MainViewContext>))]
+
     public class App : IMenu<MainViewContext>
     {
 
@@ -20,8 +24,11 @@ namespace PilotLookUp
         private ITabServiceProvider _tabServiceProvider;
         private IObjectModifier _objectModifier;
 
+        private IDataObject _selection;
+
         [ImportingConstructor]
-        public App(IObjectsRepository objectsRepository, IFileProvider fileProvider, ITabServiceProvider tabServiceProvider, IObjectModifier objectModifier)
+        public App(IObjectsRepository objectsRepository, IFileProvider fileProvider
+            , ITabServiceProvider tabServiceProvider, IObjectModifier objectModifier)
         {
             _objectsRepository = objectsRepository;
             _fileProvider = fileProvider;
@@ -39,6 +46,7 @@ namespace PilotLookUp
         public void OnMenuItemClick(string name, MainViewContext context)
         {
             //MessageBox.Show("Ura");
+            var a = _selection;
             if (name == "LookSelected")
             {
                 new RiseCommand( new LookSelektion());
