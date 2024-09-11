@@ -13,6 +13,12 @@ namespace PilotLookUp.Commands
 {
     internal class LookSelektion : ICommand
     {
+        private IDataObject _dataObject { get; }
+
+        internal  LookSelektion(IDataObject dataObject)
+        {
+            _dataObject = dataObject;
+        }
         public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
@@ -24,7 +30,7 @@ namespace PilotLookUp.Commands
         {
             LookUpView view = new LookUpView(new LookUpVM(new LookUpModel()));
             view.Show();
-            MessageBox.Show("Ura");
+            //MessageBox.Show("Ura");
         }
     }
 }

@@ -1,9 +1,14 @@
-﻿namespace PilotLookUp.Model
+﻿using Ascon.Pilot.SDK;
+
+namespace PilotLookUp.Model
 {
     internal class LookUpModel
     {
-        public LookUpModel()
+        private IDataObject _dataObject { get; }
+
+        public LookUpModel(IDataObject dataObject)
         {
+            _dataObject = dataObject;
         }
     }
 }

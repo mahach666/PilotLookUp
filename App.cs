@@ -9,20 +9,22 @@ using System.Windows.Input;
 using System.Linq;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 using System.Collections.Generic;
+using Ascon.Pilot.SDK.Toolbar;
 
 
 namespace PilotLookUp
 {
 
     [Export(typeof(IMenu<MainViewContext>))]
-
-    public class App : IMenu<MainViewContext>
+    [Export(typeof(IToolbar<ObjectsViewContext>))]
+    public class App : IMenu<MainViewContext>, IToolbar<ObjectsViewContext>
     {
 
         private IObjectsRepository _objectsRepository;
         private IFileProvider _fileProvider;
         private ITabServiceProvider _tabServiceProvider;
         private IObjectModifier _objectModifier;
+        private ObjectsViewContext _viewContext;
 
         private IDataObject _selection;
 
@@ -43,10 +45,14 @@ namespace PilotLookUp
             item.WithSubmenu().AddItem("LookDB", 0).WithHeader("LookDB");
         }
 
+        public void Build(IToolbarBuilder builder, ObjectsViewContext context)
+        {
+            _viewContext = context;
+            _selection = context.SelectedObjects.First();
+        }
+
         public void OnMenuItemClick(string name, MainViewContext context)
         {
-            //MessageBox.Show("Ura");
-            var a = _selection;
             if (name == "LookSelected")
             {
                 new RiseCommand( new LookSelektion());
@@ -55,6 +61,10 @@ namespace PilotLookUp
             {
                 //LookDB(context);
             }
+        }
+
+        public void OnToolbarItemClick(string name, ObjectsViewContext context)
+        {
         }
     }
 }
