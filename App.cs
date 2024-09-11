@@ -4,6 +4,9 @@ using System;
 using System.ComponentModel.Composition;
 using System.Text.RegularExpressions;
 using System.Windows;
+using PilotLookUp.Commands;
+using System.Windows.Input;
+
 
 namespace PilotLookUp
 {
@@ -28,12 +31,22 @@ namespace PilotLookUp
 
         public void Build(IMenuBuilder builder, MainViewContext context)
         {
-            builder.AddItem("Gogogo", 1).WithHeader("Anal boss");
+            var item = builder.AddItem("PilotLookUp", 1).WithHeader("PilotLookUp");
+            item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
+            item.WithSubmenu().AddItem("LookDB", 0).WithHeader("LookDB");
         }
 
         public void OnMenuItemClick(string name, MainViewContext context)
         {
-            MessageBox.Show("Ura");
+            //MessageBox.Show("Ura");
+            if (name == "LookSelected")
+            {
+                new RiseCommand( new LookSelektion());
+            }
+            else if (name == "LookDB")
+            {
+                //LookDB(context);
+            }
         }
     }
 }
