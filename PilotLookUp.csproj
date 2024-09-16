@@ -181,9 +181,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\LookSeleсtion.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Model\LookUpModel.cs" />
     <Compile Include="Model\ObjReflection.cs" />
+    <Compile Include="Utils\ObjectLoader.cs" />
+    <Compile Include="Utils\Loader.cs" />
     <Compile Include="View\LookUpView.xaml.cs">
       <DependentUpon>LookUpView.xaml</DependentUpon>
     </Compile>

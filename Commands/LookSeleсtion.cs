@@ -1,4 +1,5 @@
-﻿using PilotLookUp.Model;
+﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Model;
 using PilotLookUp.View;
 using PilotLookUp.VM;
 using System;
@@ -16,10 +17,12 @@ namespace PilotLookUp.Commands
     internal class LookSeleсtion : ICommand
     {
         private List<IDataObject> _dataObject { get; }
+        private IObjectsRepository _objectsRepository { get; }
 
-        internal  LookSeleсtion(List<IDataObject> dataObject)
+        internal  LookSeleсtion(List<IDataObject> dataObject, IObjectsRepository objectsRepository)
         {
             _dataObject = dataObject;
+            _objectsRepository = objectsRepository;
         }
         public event EventHandler CanExecuteChanged;
 
@@ -30,7 +33,7 @@ namespace PilotLookUp.Commands
 
         public void Execute(object parameter)
         {
-            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(_dataObject)));
+            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(_dataObject, _objectsRepository)));
             view.Show();
         }
     }

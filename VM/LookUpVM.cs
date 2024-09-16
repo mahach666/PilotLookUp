@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Commands;
 using PilotLookUp.Model;
 using PilotLookUp.View;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.VM
@@ -37,8 +39,10 @@ namespace PilotLookUp.VM
 
 
 
-        public ObjReflection Info => lookUpModel.GetInfo(_dataObjectSelekted);
 
+
+        public ObjReflection Info => lookUpModel.GetInfo(_dataObjectSelekted);
+        public ICommand SelectedValueClickCommand =>  new AsyncRelayCommand(lookUpModel.DataGridSelecror);
 
 
 

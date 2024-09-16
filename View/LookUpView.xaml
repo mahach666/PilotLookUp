@@ -59,9 +59,22 @@
                     <DataGridTextColumn Header="Name"
                                         Binding="{Binding Key, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*" />
-                    <DataGridTextColumn Header="Value"
-                                        Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="*" />              
+                    <!--<DataGridTextColumn Header="Value"
+                                        Binding="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*" />-->
+                    <DataGridTemplateColumn Header="Value"
+                                            Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                <Hyperlink Command="{Binding DataContext.SelectedValueClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           CommandParameter="{Binding Value}">
+                                    <TextBlock Text="{Binding Value}" />
+                                </Hyperlink>
+                            </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
                 
             </DataGrid>
