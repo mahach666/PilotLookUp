@@ -10,6 +10,7 @@ using System.Linq;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 using System.Collections.Generic;
 using Ascon.Pilot.SDK.Toolbar;
+using PilotLookUp.Model;
 
 
 namespace PilotLookUp
@@ -53,9 +54,11 @@ namespace PilotLookUp
 
         public void OnMenuItemClick(string name, MainViewContext context)
         {
+            var converter = new List<object>(_selection);
+
             if (name == "LookSelected")
             {
-                new RiseCommand( new LookSeleсtion(_selection, _objectsRepository));
+                new RiseCommand( new LookSeleсtion(converter, _objectsRepository));
             }
             else if (name == "LookDB")
             {

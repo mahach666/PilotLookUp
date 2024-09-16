@@ -24,7 +24,7 @@ namespace PilotLookUp.VM
         }
 
 
-        public List<IDataObject> SelectionDataObjects => lookUpModel.SelectionDataObjects;
+        public List<object> SelectionDataObjects => lookUpModel.SelectionDataObjects;
         private IDataObject _dataObjectSelekted { get; set; }
         public IDataObject DataObjectSelekted
         {

@@ -14,17 +14,17 @@ namespace PilotLookUp.Model
 {
     internal class LookUpModel
     {
-        private List<IDataObject> _dataObjects { get; }
+        private List<object> _dataObjects { get; }
         private IObjectsRepository _objectsRepository { get; }
 
 
-        public LookUpModel(List<IDataObject> dataObjects, IObjectsRepository objectsRepository)
+        public LookUpModel(List<object> dataObjects, IObjectsRepository objectsRepository)
         {
             _dataObjects = dataObjects;
             _objectsRepository = objectsRepository;
         }
 
-        public List<IDataObject> SelectionDataObjects => _dataObjects;
+        public List<object> SelectionDataObjects => _dataObjects;
 
         public ObjReflection GetInfo(IDataObject dataObject)
         {
@@ -42,16 +42,16 @@ namespace PilotLookUp.Model
                 IDataObject dataObj = await loader.Load(id);
                 if (dataObj != null)
                 {
-                    new RiseCommand(new LookSeleсtion(new List<IDataObject>() { dataObj }, _objectsRepository));
+                    new RiseCommand(new LookSeleсtion(new List<object>() { dataObj }, _objectsRepository));
                 }
             }
             else if ( obj is IEnumerable<Guid> idEnum)
             {
-                var dataObjes = new List<IDataObject>();
+                var dataObjes = new List<object>();
                 foreach (var guid in idEnum)
                 {
                     var loader = new ObjectLoader(_objectsRepository);
-                    IDataObject dataObj = await loader.Load(guid);
+                    object dataObj = await loader.Load(guid);
                     if (dataObj != null)
                     {
                         dataObjes.Add(dataObj);
