@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Utils
 {
@@ -24,6 +27,7 @@ namespace PilotLookUp.Utils
             _changesetId = changesetId;
             _tcs = new TaskCompletionSource<IDataObject>();
             _subscription = _repository.SubscribeObjects(new[] { id }).Subscribe(this);
+
             return _tcs.Task;
         }
 
