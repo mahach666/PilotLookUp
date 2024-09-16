@@ -26,7 +26,7 @@ namespace PilotLookUp
         private IObjectModifier _objectModifier;
         private ObjectsViewContext _viewContext;
 
-        private IDataObject _selection;
+        private List<IDataObject> _selection;
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository, IFileProvider fileProvider
@@ -48,14 +48,14 @@ namespace PilotLookUp
         public void Build(IToolbarBuilder builder, ObjectsViewContext context)
         {
             _viewContext = context;
-            _selection = context.SelectedObjects.First();
+            _selection = context.SelectedObjects.ToList();
         }
 
         public void OnMenuItemClick(string name, MainViewContext context)
         {
             if (name == "LookSelected")
             {
-                new RiseCommand( new LookSelektion());
+                new RiseCommand( new LookSeleсtion(_selection));
             }
             else if (name == "LookDB")
             {

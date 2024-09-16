@@ -8,14 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using IDataObject = Ascon.Pilot.SDK.IDataObject;
+
 
 namespace PilotLookUp.Commands
 {
-    internal class LookSelektion : ICommand
+    internal class LookSeleсtion : ICommand
     {
-        private IDataObject _dataObject { get; }
+        private List<IDataObject> _dataObject { get; }
 
-        internal  LookSelektion(IDataObject dataObject)
+        internal  LookSeleсtion(List<IDataObject> dataObject)
         {
             _dataObject = dataObject;
         }
@@ -28,9 +30,8 @@ namespace PilotLookUp.Commands
 
         public void Execute(object parameter)
         {
-            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel()));
+            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(_dataObject)));
             view.Show();
-            //MessageBox.Show("Ura");
         }
     }
 }

@@ -12,32 +12,60 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
         <Grid Grid.Column="0">
-
         </Grid>
-        <!--<GridSplitter Grid.Column="1"
-                      ShowsPreview="False"
-                      Width="3"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch" />-->
-        <Grid Grid.Column="2"
-              Visibility="{Binding TripleVerticalGridVisable}">
+        
+        <Grid Grid.Column="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <ListBox ItemsSource="{Binding FirstColumnList}"
-                     Grid.Column="0">
+
+            <ListBox ItemsSource="{Binding SelectionDataObjects}"                     
+                     Grid.Column="0"
+                     SelectedItem="{Binding DataObjectSelekted}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem x:Name="CopySelected"
+                                              Header="Копировать выделенное" />
+                                    <MenuItem x:Name="CopySelectedForJson"
+                                              Header="Копировать выделенное с текстом Json" />
+                                    <MenuItem x:Name="CopyAll"
+                                              Header="Копировать все" />
+                                    <MenuItem x:Name="CopyAllForJson"
+                                              Header="Копировать все с текстом Json" />
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
+            
             <GridSplitter Grid.Column="1"
                           ShowsPreview="False"
                           Width="3"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Stretch" />
-            <ListBox ItemsSource="{Binding SecondColumnList}"
-                     Grid.Column="2">
-            </ListBox>
+
+            <DataGrid ItemsSource="{Binding Info.KeyValuePairs}"
+                      Grid.Column="2">
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name"
+                                        Binding="{Binding Key, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*" />
+                    <DataGridTextColumn Header="Value"
+                                        Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*" />              
+                </DataGrid.Columns>
+                
+            </DataGrid>
+            
         </Grid>
     </Grid>
 </Window>
