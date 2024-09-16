@@ -38,7 +38,6 @@ namespace PilotLookUp.Model
             if (obj == null) return;
             else if (obj is Guid id)
             {
-                //var loader = new ObjectLoader(_objectsRepository);
                 IDataObject dataObj = await loader.Load(id);
                 if (dataObj != null)
                 {
@@ -50,7 +49,6 @@ namespace PilotLookUp.Model
                 var dataObjes = new List<object>();
                 foreach (var guid in idEnum)
                 {
-                    //var loader = new ObjectLoader(_objectsRepository);
 
                     object dataObj = await loader.Load(guid);
                        
