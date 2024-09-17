@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Xml;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +27,7 @@ namespace PilotLookUp.Model
 
         public List<object> SelectionDataObjects => _dataObjects;
 
-        public ObjReflection GetInfo(IDataObject dataObject)
+        public ObjReflection GetInfo(object dataObject)
         {
             return new ObjReflection(dataObject);
         }
@@ -36,6 +37,7 @@ namespace PilotLookUp.Model
             var loader = new ObjectLoader(_objectsRepository);
 
             if (obj == null) return;
+
             else if (obj is Guid id)
             {
                 IDataObject dataObj = await loader.Load(id);
@@ -44,12 +46,12 @@ namespace PilotLookUp.Model
                     new RiseCommand(new LookSeleсtion(new List<object>() { dataObj }, _objectsRepository));
                 }
             }
+
             else if ( obj is IEnumerable<Guid> idEnum)
             {
                 var dataObjes = new List<object>();
                 foreach (var guid in idEnum)
                 {
-
                     object dataObj = await loader.Load(guid);
                        
                     if (dataObj != null)
@@ -59,6 +61,37 @@ namespace PilotLookUp.Model
                 }
                 new RiseCommand(new LookSeleсtion(dataObjes, _objectsRepository));
             }
+
+            else if (obj is string str)
+            {
+
+            }
+
+            else if (obj is DateTime date)
+            {
+
+            }
+
+            else if (obj is IDictionary<string, object> attrDict)
+            {
+                //new RiseCommand(new LookSeleсtion(attrDict, _objectsRepository));
+            }
+
+            else if (obj is IType type)
+            {
+                new RiseCommand(new LookSeleсtion(new List<object>() { type }, _objectsRepository));
+            }
+
+            else if (obj is IPerson person)
+            {
+                new RiseCommand(new LookSeleсtion(new List<object>() { person }, _objectsRepository));
+            }
+
+            else if (obj is IEnumerable<IRelation> relEnum)
+            {
+                new RiseCommand(new LookSeleсtion(relEnum.Cast<object>().ToList(), _objectsRepository));
+            }
+
             else
             {
                 MessageBox.Show(obj.GetType().ToString());

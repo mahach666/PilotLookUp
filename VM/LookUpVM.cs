@@ -21,12 +21,13 @@ namespace PilotLookUp.VM
         public LookUpVM(LookUpModel lookUpModel)
         {
             this.lookUpModel = lookUpModel;
+            DataObjectSelekted = SelectionDataObjects.FirstOrDefault();
         }
 
 
         public List<object> SelectionDataObjects => lookUpModel.SelectionDataObjects;
-        private IDataObject _dataObjectSelekted { get; set; }
-        public IDataObject DataObjectSelekted
+        private object _dataObjectSelekted { get; set; }
+        public object DataObjectSelekted
         {
             get { return _dataObjectSelekted; }
             set

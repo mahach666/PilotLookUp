@@ -11,7 +11,7 @@ namespace PilotLookUp.Model
 {
     internal class ObjReflection
     {
-        internal ObjReflection(IDataObject dataObjects)
+        internal ObjReflection(object dataObjects)
         {
             if (dataObjects != null)
             {
