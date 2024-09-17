@@ -20,7 +20,7 @@ namespace PilotLookUp.View
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml
     /// </summary>
-    public partial class LookUpView : Window
+    public partial class LookUpView
     {
         LookUpVM _vm { get; set; }
 
