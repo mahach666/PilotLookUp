@@ -1,35 +1,36 @@
 ﻿<Window x:Class="PilotLookUp.View.LookUpView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PilotLookUp.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:PilotLookUp.View"
+        mc:Ignorable="d"
+        d:DesignHeight="450"
+        d:DesignWidth="800"
+        Title="PilotLookUp">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <Grid Grid.Column="0">
         </Grid>
-        
+
         <Grid Grid.Column="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="300" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ListBox ItemsSource="{Binding SelectionDataObjects}"                     
+            <ListBox ItemsSource="{Binding SelectionDataObjects}"
                      Grid.Column="0"
                      SelectedItem="{Binding DataObjectSelekted}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock 
-                            Text="{Binding DisplayName}">
+                        <TextBlock Text="{Binding DisplayName}">
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem x:Name="CopySelected"
@@ -46,7 +47,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
+
             <GridSplitter Grid.Column="1"
                           ShowsPreview="False"
                           Width="3"
@@ -77,9 +78,9 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-                
+
             </DataGrid>
-            
+
         </Grid>
     </Grid>
 </Window>

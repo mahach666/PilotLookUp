@@ -13,7 +13,7 @@ namespace PilotLookUp.Model
     {
         internal ObjReflection(PilotTypsHelper typeHelper)
         {
-            object dataObjects = typeHelper.PilotObj;
+            object dataObjects = typeHelper?.PilotObj;
 
             if (dataObjects != null)
             {
