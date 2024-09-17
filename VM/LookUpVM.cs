@@ -25,9 +25,9 @@ namespace PilotLookUp.VM
         }
 
 
-        public List<object> SelectionDataObjects => lookUpModel.SelectionDataObjects;
-        private object _dataObjectSelekted { get; set; }
-        public object DataObjectSelekted
+        public List<PilotTypsHelper> SelectionDataObjects => lookUpModel.SelectionDataObjects;
+        private PilotTypsHelper _dataObjectSelekted { get; set; }
+        public PilotTypsHelper DataObjectSelekted
         {
             get { return _dataObjectSelekted; }
             set

@@ -1,19 +1,40 @@
-﻿using System;
+﻿using Ascon.Pilot.SDK;
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Model
 {
-    internal class PilotTypsHelper<T>
+    public class PilotTypsHelper
     {
-        internal PilotTypsHelper(T pilotObj)
+        public PilotTypsHelper(object pilotObj)
         {
             PilotObj = pilotObj;
-            ObjType = PilotObj.GetType();
+
+            if (PilotObj == null) return;
+
+
+            else if (PilotObj is IDataObject idataObj)
+            {
+                DisplayName = idataObj.DisplayName;
+            }
+
+            else if (PilotObj is IType pilotType)
+            {
+                DisplayName = pilotType.Name;
+            }
+
+            else if (PilotObj is IAttribute pilotAttr)
+            {
+                DisplayName = pilotAttr.Title;
+            }
         }
-        public T PilotObj { get; }
-        public Type ObjType { get; }
+
+
+        public object PilotObj { get; }
+        public  string DisplayName { get; }
     }
 }

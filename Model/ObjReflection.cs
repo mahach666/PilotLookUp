@@ -11,8 +11,10 @@ namespace PilotLookUp.Model
 {
     internal class ObjReflection
     {
-        internal ObjReflection(object dataObjects)
+        internal ObjReflection(PilotTypsHelper typeHelper)
         {
+            object dataObjects = typeHelper.PilotObj;
+
             if (dataObjects != null)
             {
                 _objType = dataObjects.GetType();

@@ -28,7 +28,8 @@
                      SelectedItem="{Binding DataObjectSelekted}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding DisplayName}">
+                        <TextBlock 
+                            Text="{Binding DisplayName}">
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem x:Name="CopySelected"

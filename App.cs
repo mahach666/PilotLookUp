@@ -54,11 +54,11 @@ namespace PilotLookUp
 
         public void OnMenuItemClick(string name, MainViewContext context)
         {
-            var converter = new List<object>(_selection);
+            var converter = _selection.Select(i => new PilotTypsHelper(i)).ToList();
 
             if (name == "LookSelected")
             {
-                new RiseCommand( new LookSeleсtion(converter, _objectsRepository));
+                new RiseCommand(new LookSeleсtion(converter, _objectsRepository));
             }
             else if (name == "LookDB")
             {

@@ -16,10 +16,10 @@ namespace PilotLookUp.Commands
 {
     internal class LookSeleсtion : ICommand
     {
-        private List<object> _dataObject { get; }
+        private List<PilotTypsHelper> _dataObject { get; }
         private IObjectsRepository _objectsRepository { get; }
 
-        internal  LookSeleсtion(List<object> dataObject, IObjectsRepository objectsRepository)
+        internal  LookSeleсtion(List<PilotTypsHelper> dataObject, IObjectsRepository objectsRepository)
         {
             _dataObject = dataObject;
             _objectsRepository = objectsRepository;
