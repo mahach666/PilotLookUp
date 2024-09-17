@@ -78,61 +78,39 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
-            <Style TargetType="{x:Type ListBox}"
-                   x:Key="ListBox_Style">
-                <Setter Property="Background"
-                        Value="#86609B" />
-                <Setter Property="Foreground"
-                        Value="White" />
-                <Setter Property="FontSize"
-                        Value="11" />
-                <Setter Property="FontFamily"
-                        Value="./#Segoe UI" />
-                <Setter Property="SnapsToDevicePixels"
-                        Value="True" />
-                <Setter Property="Margin"
-                        Value="0,5,0,0" />
-                <Setter Property="HorizontalAlignment"
-                        Value="Right" />
 
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Foreground"
+                        Value="Black" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Stretch" />
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ListBox}">
-                            <Border CornerRadius="0"
-                                    Background="{TemplateBinding Background}">
-                                <Grid>
-                                    <ContentPresenter x:Name="MyContentPresenter"
-                                                      
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
-                                                      Margin="0,0,0,0" />
-                                </Grid>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="5">
+                                <ContentPresenter />
                             </Border>
-
                             <ControlTemplate.Triggers>
+                                <!-- Триггер для выделенного элемента -->
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#ADD8E6" />
+                                    <!-- Светло-голубой -->
+                                    <Setter Property="Foreground"
+                                            Value="Black" />
+                                </Trigger>
+                                <!-- Триггер для наведения мыши -->
                                 <Trigger Property="IsMouseOver"
                                          Value="True">
                                     <Setter Property="Background"
-                                            Value="#86509B" />
+                                            Value="#B0C4DE" />
+                                    <!-- Цвет при наведении -->
                                     <Setter Property="Foreground"
-                                            Value="White" />
-                                </Trigger>
-
-                                <Trigger Property="Selector.SelectedItem"
-                                         Value="True">
-                                    <Setter Property="Background"
-                                            Value="#86309B" />
-                                    <Setter Property="Foreground"
-                                            Value="White" />
-                                </Trigger>
-
-                                <Trigger Property="IsEnabled"
-                                         Value="False">
-                                    <Setter Property="Background"
-                                            Value="LightGray" />
-                                    <Setter Property="Foreground"
-                                            Value="White" />
+                                            Value="Black" />
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -162,7 +140,7 @@
             <ListBox ItemsSource="{Binding SelectionDataObjects}"
                      Grid.Column="0"
                      SelectedItem="{Binding DataObjectSelekted}"
-                     >
+                     ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding DisplayName}">
