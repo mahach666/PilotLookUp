@@ -98,7 +98,7 @@
                                 <Trigger Property="IsSelected"
                                          Value="True">
                                     <Setter Property="Background"
-                                            Value="#ADD8E6" />
+                                            Value="#D283E6" />
                                     <!-- Светло-голубой -->
                                     <Setter Property="Foreground"
                                             Value="Black" />
@@ -107,7 +107,7 @@
                                 <Trigger Property="IsMouseOver"
                                          Value="True">
                                     <Setter Property="Background"
-                                            Value="#B0C4DE" />
+                                            Value="#DCB2E6" />
                                     <!-- Цвет при наведении -->
                                     <Setter Property="Foreground"
                                             Value="Black" />

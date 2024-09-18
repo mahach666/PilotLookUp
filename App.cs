@@ -25,8 +25,6 @@ namespace PilotLookUp
         private IFileProvider _fileProvider;
         private ITabServiceProvider _tabServiceProvider;
         private IObjectModifier _objectModifier;
-        private ObjectsViewContext _viewContext;
-
         private List<IDataObject> _selection;
 
         [ImportingConstructor]
@@ -48,7 +46,6 @@ namespace PilotLookUp
 
         public void Build(IToolbarBuilder builder, ObjectsViewContext context)
         {
-            _viewContext = context;
             _selection = context.SelectedObjects.ToList();
         }
 
