@@ -14,11 +14,15 @@ namespace PilotLookUp.Model
     {
         private List<PilotTypsHelper> _dataObjects { get; }
         private IObjectsRepository _objectsRepository { get; }
+        private ObjectLoader _loader { get; }
 
         public LookUpModel(List<PilotTypsHelper> dataObjects, IObjectsRepository objectsRepository)
         {
             _dataObjects = dataObjects;
             _objectsRepository = objectsRepository;
+
+            _loader = new ObjectLoader(_objectsRepository);
+
             PilotTypsHelper.Loader = new ObjectLoader(_objectsRepository);
         }
 
@@ -33,20 +37,28 @@ namespace PilotLookUp.Model
         {
             if (obj == null) return;
 
-            var loader = new ObjectLoader(_objectsRepository);
-
             switch (obj)
             {
+                case DateTime date:
+                    return;
+
+                case bool boolValue:
+                    return;
+
+                case string stringValue:
+                    bool isGuid = Guid.TryParse(stringValue, out Guid resGuid);
+                    if (isGuid) AddToSelection(await GetObjByGuid(resGuid));
+                    return;
+
                 case Guid id:
-                    var dataObj = await loader.Load(id);
-                    AddToSelection(dataObj);
+                    AddToSelection(await GetObjByGuid(id));
                     break;
 
                 case IEnumerable<Guid> idEnum:
                     var dataObjes = new List<object>();
                     foreach (var guid in idEnum)
                     {
-                        object dataObject = await loader.Load(guid);
+                        object dataObject = await _loader.Load(guid);
 
                         if (dataObject != null)
                         {
@@ -89,6 +101,42 @@ namespace PilotLookUp.Model
                     AddToSelection(orgUnits);
                     break;
 
+                case IEnumerable<IRelation> relationList:
+                    AddToSelection(relationList);
+                    break;
+
+                case IEnumerable<IAttribute> attributeList:
+                    AddToSelection(attributeList);
+                    break;
+
+                case IEnumerable<IFile> fileList:
+                    AddToSelection(fileList);
+                    break;
+
+                case IEnumerable<IAccessRecord> accessRecordList:
+                    AddToSelection(accessRecordList);
+                    break;
+
+                case IEnumerable<IFilesSnapshot> fileSnapshotList:
+                    AddToSelection(fileSnapshotList);
+                    break;
+
+                case IDictionary<string, object> attrDict:
+                    AddToSelection(attrDict);
+                    break;
+
+                case IDictionary<Guid, int> childretTypes:
+                    AddToSelection(childretTypes);
+                    break;
+
+                case IDictionary<int, IAccess> accessDict:
+                    AddToSelection(accessDict);
+                    break;
+
+                case Enum enumObj:
+                    AddToSelection(enumObj);
+                    break;
+
                 // Other cases for collections and dictionaries
                 default:
 #if DEBUG
@@ -98,13 +146,9 @@ namespace PilotLookUp.Model
             }
         }
 
-        private void AddToSelection(params object[] objects)
+        private void AddToSelection(object objects)
         {
-            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
-            if (selection.Any())
-            {
-                new LookSeleсtion(selection, _objectsRepository);
-            }
+            new LookSeleсtion(new List<PilotTypsHelper> { new PilotTypsHelper(objects) }, _objectsRepository);
         }
 
         private void AddToSelection(IEnumerable<object> objects)
@@ -114,6 +158,52 @@ namespace PilotLookUp.Model
             {
                 new LookSeleсtion(selection, _objectsRepository);
             }
+        }
+        private void AddToSelection(IDictionary<string, object> objects)
+        {
+            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
+            if (selection.Any())
+            {
+                new LookSeleсtion(selection, _objectsRepository);
+            }
+        }
+        private void AddToSelection(IDictionary<Guid, int> objects)
+        {
+            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
+            if (selection.Any())
+            {
+                new LookSeleсtion(selection, _objectsRepository);
+            }
+        }
+        private void AddToSelection(IDictionary<int, IAccess> objects)
+        {
+            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
+            if (selection.Any())
+            {
+                new LookSeleсtion(selection, _objectsRepository);
+            }
+        }
+
+        private async Task<object> GetObjByGuid(Guid guid)
+        {
+            if (guid == null || guid == Guid.Empty) return null;
+
+            IEnumerable<IUserState> states = _objectsRepository.GetUserStates();
+            var state = states.FirstOrDefault(i => i.Id == guid);
+
+            if (state == null)
+            {
+                var statesMachine = _objectsRepository.GetUserStateMachines();
+                var stateMachine = statesMachine.FirstOrDefault(i => i.Id == guid);
+
+                if (state == null)
+                {
+                    var dataObj = await _loader.Load(guid);
+                    return dataObj;
+                }
+                return stateMachine;
+            }
+            return state;
         }
     }
 }

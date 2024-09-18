@@ -139,7 +139,7 @@
 
             <ListBox ItemsSource="{Binding SelectionDataObjects}"
                      Grid.Column="0"
-                     SelectedItem="{Binding DataObjectSelekted}"
+                     SelectedItem="{Binding DataObjectSelected}"
                      ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

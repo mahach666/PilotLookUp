@@ -6,6 +6,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Model
 {
@@ -27,6 +29,12 @@ namespace PilotLookUp.Model
                     break;
                 case IPerson person:
                     DisplayName = person.DisplayName;
+                    break;
+                case IUserState userStateMachine:
+                    DisplayName = userStateMachine.Title;
+                    break;
+                case IUserStateMachine userState:
+                    DisplayName = userState.Title;
                     break;
                 case IAttribute pilotAttr:
                     DisplayName = pilotAttr.Title;
@@ -65,7 +73,8 @@ namespace PilotLookUp.Model
                     DisplayName = dataEnum.ToString();
                     break;
                 default:
-                    throw new ArgumentException("Unsupported type", nameof(pilotObj));
+                    MessageBox.Show("Invalid type", nameof(pilotObj));
+                    break;
             }
         }
 
