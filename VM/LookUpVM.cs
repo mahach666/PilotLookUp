@@ -6,51 +6,48 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.VM
 {
     internal class LookUpVM : INotifyPropertyChanged
     {
         internal LookUpView _view;
-        private LookUpModel lookUpModel;
-
+        private LookUpModel _lookUpModel;
+        private PilotTypsHelper _dataObjectSelected;
+        private ICommand _selectedValueClickCommand;
 
         public LookUpVM(LookUpModel lookUpModel)
         {
-            this.lookUpModel = lookUpModel;
-            DataObjectSelekted = SelectionDataObjects.FirstOrDefault();
+            _lookUpModel = lookUpModel;
+            DataObjectSelected = SelectionDataObjects.FirstOrDefault();
+            _selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
         }
 
+        public List<PilotTypsHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
 
-        public List<PilotTypsHelper> SelectionDataObjects => lookUpModel.SelectionDataObjects;
-        private PilotTypsHelper _dataObjectSelekted { get; set; }
-        public PilotTypsHelper DataObjectSelekted
+        public PilotTypsHelper DataObjectSelected
         {
-            get { return _dataObjectSelekted; }
+            get => _dataObjectSelected;
             set
             {
-                _dataObjectSelekted = value;
-                OnPropertyChanged("Info");
-                OnPropertyChanged();
+                if (_dataObjectSelected != value)
+                {
+                    _dataObjectSelected = value;
+                    OnPropertyChanged("Info");
+                    OnPropertyChanged();
+                }
             }
         }
 
+        public ObjReflection Info => _lookUpModel.GetInfo(_dataObjectSelected);
 
-
-
-
-        public ObjReflection Info => lookUpModel.GetInfo(_dataObjectSelekted);
-        public ICommand SelectedValueClickCommand =>  new AsyncRelayCommand(lookUpModel.DataGridSelecror);
-
-
+        public ICommand SelectedValueClickCommand => _selectedValueClickCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string prop = "")
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

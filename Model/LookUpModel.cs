@@ -3,11 +3,7 @@ using PilotLookUp.Commands;
 using PilotLookUp.Utils;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Cryptography.Xml;
-using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
@@ -18,7 +14,6 @@ namespace PilotLookUp.Model
     {
         private List<PilotTypsHelper> _dataObjects { get; }
         private IObjectsRepository _objectsRepository { get; }
-
 
         public LookUpModel(List<PilotTypsHelper> dataObjects, IObjectsRepository objectsRepository)
         {
@@ -34,117 +29,90 @@ namespace PilotLookUp.Model
             return new ObjReflection(dataObject);
         }
 
-        public async Task DataGridSelecror(object obj)
+        public async Task DataGridSelector(object obj)
         {
-            var loader = new ObjectLoader(_objectsRepository);
-
             if (obj == null) return;
 
-            else if (obj is Guid id)
-            {
-                IDataObject dataObj = await loader.Load(id);
-                if (dataObj != null)
-                {
-                    new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(dataObj) }, _objectsRepository);
-                }
-            }
+            var loader = new ObjectLoader(_objectsRepository);
 
-            else if (obj is IEnumerable<Guid> idEnum)
+            switch (obj)
             {
-                var dataObjes = new List<object>();
-                foreach (var guid in idEnum)
-                {
-                    object dataObj = await loader.Load(guid);
+                case Guid id:
+                    var dataObj = await loader.Load(id);
+                    AddToSelection(dataObj);
+                    break;
 
-                    if (dataObj != null)
+                case IEnumerable<Guid> idEnum:
+                    var dataObjes = new List<object>();
+                    foreach (var guid in idEnum)
                     {
-                        dataObjes.Add(dataObj);
+                        object dataObject = await loader.Load(guid);
+
+                        if (dataObject != null)
+                        {
+                            dataObjes.Add(dataObject);
+                        }
                     }
-                }
-                new LookSeleсtion(dataObjes.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
+                    AddToSelection(dataObjes);
+                    break;
 
-            else if (obj is string str)
-            {
+                case int personId:
+                    var person = _objectsRepository.GetPerson(personId);
+                    AddToSelection(person);
+                    break;
 
-            }
+                case IEnumerable<int> peopleIdList:
+                    var people = _objectsRepository.GetPeople().Where(i => peopleIdList.Contains(i.Id));
+                    AddToSelection(people);
+                    break;
 
-            else if (obj is DateTime date)
-            {
+                case IFilesSnapshot filesSnapshot:
+                    AddToSelection(filesSnapshot);
+                    break;
 
-            }
+                case IType type:
+                    AddToSelection(type);
+                    break;
 
-            else if (obj is bool boolVol)
-            {
+                case IPerson personObj:
+                    AddToSelection(personObj);
+                    break;
 
-            }
+                case IPosition position:
+                    var orgUnit = _objectsRepository.GetOrganisationUnit(position.Order);
+                    AddToSelection(orgUnit);
+                    break;
 
-            else if (obj is IDictionary<string, object> attrDict)
-            {
-                new LookSeleсtion(attrDict.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
+                case IEnumerable<IPosition> positionList:
+                    var orgUnits = _objectsRepository.GetOrganisationUnits()
+                                    .Where(i => positionList.Select(j => j.Order).Contains(i.Id));
+                    AddToSelection(orgUnits);
+                    break;
 
-            else if (obj is IDictionary<Guid, int> childretTypes)
-            {
-                new LookSeleсtion(childretTypes.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj is IType type)
-            {
-                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(type) }, _objectsRepository);
-            }
-
-            else if (obj is IPerson person)
-            {
-                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(person) }, _objectsRepository);
-            }
-
-            else if (obj is IEnumerable<IRelation> relEnum)
-            {
-                new LookSeleсtion(relEnum.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj is IEnumerable<IAttribute> attrClassList)
-            {
-                new LookSeleсtion(attrClassList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj is IEnumerable<IFile> file)
-            {
-                new LookSeleсtion(file.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj is IDictionary<int, IAccess> accessDict)
-            {
-                new LookSeleсtion(accessDict.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj is IEnumerable<IAccessRecord> accessRecordList)
-            {
-                new LookSeleсtion(accessRecordList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj is IFilesSnapshot filesSnapshot)
-            {
-                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(filesSnapshot) }, _objectsRepository);
-            }
-
-            else if (obj is IEnumerable<IFilesSnapshot> filesSnapshotList)
-            {
-                new LookSeleсtion(filesSnapshotList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
-            }
-
-            else if (obj.GetType().IsEnum)
-            {
-                var dataEnum = obj as Enum;
-                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(dataEnum) }, _objectsRepository);
-            }
-
-            else
-            {
+                // Other cases for collections and dictionaries
+                default:
 #if DEBUG
-                MessageBox.Show(obj.GetType().ToString());
+                    MessageBox.Show($"Unhandled type: {obj.GetType()}");
 #endif
+                    break;
+            }
+        }
+
+        private void AddToSelection(params object[] objects)
+        {
+            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
+            if (selection.Any())
+            {
+                new LookSeleсtion(selection, _objectsRepository);
+            }
+        }
+
+        private void AddToSelection(IEnumerable<object> objects)
+        {
+            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
+            if (selection.Any())
+            {
+                new LookSeleсtion(selection, _objectsRepository);
             }
         }
     }
