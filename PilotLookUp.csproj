@@ -193,7 +193,6 @@
       <DependentUpon>LookUpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="VM\LookUpVM.cs" />
-    <Compile Include="Commands\RiseCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

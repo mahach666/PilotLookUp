@@ -45,7 +45,7 @@ namespace PilotLookUp.Model
                 IDataObject dataObj = await loader.Load(id);
                 if (dataObj != null)
                 {
-                    new RiseCommand(new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(dataObj) }, _objectsRepository));
+                    new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(dataObj) }, _objectsRepository);
                 }
             }
 
@@ -61,7 +61,7 @@ namespace PilotLookUp.Model
                         dataObjes.Add(dataObj);
                     }
                 }
-                new RiseCommand(new LookSeleсtion(dataObjes.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(dataObjes.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is string str)
@@ -81,70 +81,70 @@ namespace PilotLookUp.Model
 
             else if (obj is IDictionary<string, object> attrDict)
             {
-                new RiseCommand(new LookSeleсtion(attrDict.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(attrDict.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is IDictionary<Guid, int> childretTypes)
             {
-                new RiseCommand(new LookSeleсtion(childretTypes.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(childretTypes.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is IType type)
             {
-                new RiseCommand(new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(type) }, _objectsRepository));
+                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(type) }, _objectsRepository);
             }
 
             else if (obj is IPerson person)
             {
-                new RiseCommand(new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(person) }, _objectsRepository));
+                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(person) }, _objectsRepository);
             }
 
             else if (obj is IEnumerable<IRelation> relEnum)
             {
-                new RiseCommand(new LookSeleсtion(relEnum.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(relEnum.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is IEnumerable<IAttribute> attrClassList)
             {
-                new RiseCommand(new LookSeleсtion(attrClassList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(attrClassList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is IEnumerable<IFile> file)
             {
-                new RiseCommand(new LookSeleсtion(file.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(file.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
-            else if (obj is IDictionary<int,IAccess> accessDict)
+            else if (obj is IDictionary<int, IAccess> accessDict)
             {
-                new RiseCommand(new LookSeleсtion(accessDict.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(accessDict.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is IEnumerable<IAccessRecord> accessRecordList)
             {
-                new RiseCommand(new LookSeleсtion(accessRecordList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(accessRecordList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj is IFilesSnapshot filesSnapshot)
             {
-                new RiseCommand(new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(filesSnapshot) }, _objectsRepository));
+                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(filesSnapshot) }, _objectsRepository);
             }
 
             else if (obj is IEnumerable<IFilesSnapshot> filesSnapshotList)
             {
-                new RiseCommand(new LookSeleсtion(filesSnapshotList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository));
+                new LookSeleсtion(filesSnapshotList.Select(i => new PilotTypsHelper(i)).ToList(), _objectsRepository);
             }
 
             else if (obj.GetType().IsEnum)
             {
                 var dataEnum = obj as Enum;
-                new RiseCommand(new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(dataEnum) }, _objectsRepository));
+                new LookSeleсtion(new List<PilotTypsHelper>() { new PilotTypsHelper(dataEnum) }, _objectsRepository);
             }
-
- 
 
             else
             {
+#if DEBUG
                 MessageBox.Show(obj.GetType().ToString());
+#endif
             }
         }
     }

@@ -14,25 +14,15 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Commands
 {
-    internal class LookSeleсtion : ICommand
+    internal class LookSeleсtion
     {
         private List<PilotTypsHelper> _dataObject { get; }
         private IObjectsRepository _objectsRepository { get; }
 
-        internal  LookSeleсtion(List<PilotTypsHelper> dataObject, IObjectsRepository objectsRepository)
+        internal LookSeleсtion(List<PilotTypsHelper> dataObject, IObjectsRepository objectsRepository)
         {
             _dataObject = dataObject;
             _objectsRepository = objectsRepository;
-        }
-        public event EventHandler CanExecuteChanged;
-
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
-
-        public void Execute(object parameter)
-        {
             LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(_dataObject, _objectsRepository)));
             view.Show();
         }

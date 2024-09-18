@@ -55,7 +55,7 @@ namespace PilotLookUp
 
             if (name == "LookSelected")
             {
-                new RiseCommand(new LookSeleсtion(converter, _objectsRepository));
+                new LookSeleсtion(converter, _objectsRepository);
             }
             else if (name == "LookDB")
             {
