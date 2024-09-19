@@ -23,7 +23,7 @@ namespace PilotLookUp.Model
 
             _loader = new ObjectLoader(_objectsRepository);
 
-            PilotTypsHelper.Loader = new ObjectLoader(_objectsRepository);
+            //PilotTypsHelper.Loader = new ObjectLoader(_objectsRepository);
         }
 
         public List<PilotTypsHelper> SelectionDataObjects => _dataObjects;
@@ -120,6 +120,10 @@ namespace PilotLookUp.Model
                     AddToSelection(fileSnapshotList);
                     break;
 
+                case IEnumerable<ITransition> transitionList:
+                    AddToSelection(transitionList);
+                    break;
+
                 case IDictionary<string, object> attrDict:
                     AddToSelection(attrDict);
                     break;
@@ -130,6 +134,10 @@ namespace PilotLookUp.Model
 
                 case IDictionary<int, IAccess> accessDict:
                     AddToSelection(accessDict);
+                    break;
+
+                case IDictionary<Guid, IEnumerable<ITransition>> transitionsDict:
+                    AddToSelection(transitionsDict);
                     break;
 
                 case Enum enumObj:
@@ -155,7 +163,7 @@ namespace PilotLookUp.Model
         }
         private void AddToSelection<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
-            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
+            var selection = objects.Select(i => new PilotTypsHelper(i, _objectsRepository)).ToList();
             if (selection.Any())
             {
                 new LookSeleсtion(selection, _objectsRepository);

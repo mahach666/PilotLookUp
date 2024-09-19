@@ -13,8 +13,10 @@ namespace PilotLookUp.Model
 {
     public class PilotTypsHelper
     {
-        public PilotTypsHelper(object pilotObj)
+        public PilotTypsHelper(object pilotObj, IObjectsRepository objectsRepository = null)
         {
+            _objectsRepository = objectsRepository;
+
             PilotObj = pilotObj;
             if (PilotObj == null) return;
 
@@ -48,6 +50,9 @@ namespace PilotLookUp.Model
                 case KeyValuePair<int, IAccess> accessDict:
                     DisplayName = accessDict.Value.ToString();
                     break;
+                case KeyValuePair<Guid, IEnumerable<ITransition>> transitionsDict:
+                    DisplayName = _objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == transitionsDict.Key)?.Title ?? "invalid";
+                    break;
                 case IRelation relation:
                     DisplayName = relation.Name;
                     break;
@@ -69,6 +74,9 @@ namespace PilotLookUp.Model
                 case IOrganisationUnit organisationUnit:
                     DisplayName = organisationUnit.Title;
                     break;
+                case ITransition transition:
+                    DisplayName = transition.DisplayName;
+                    break;
                 case Enum dataEnum:
                     DisplayName = dataEnum.ToString();
                     break;
@@ -80,7 +88,9 @@ namespace PilotLookUp.Model
 
         public object PilotObj { get; }
         public string DisplayName { get; }
-        public static ObjectLoader Loader { private get; set; }
+        //public static ObjectLoader Loader { private get; set; }
+        private IObjectsRepository _objectsRepository { get; }
+
     }
 
 
