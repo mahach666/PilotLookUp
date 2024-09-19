@@ -46,8 +46,7 @@ namespace PilotLookUp.Model
                     return;
 
                 case string stringValue:
-                    bool isGuid = Guid.TryParse(stringValue, out Guid resGuid);
-                    if (isGuid) AddToSelection(await GetObjByGuid(resGuid));
+                    if (Guid.TryParse(stringValue, out Guid resGuid)) AddToSelection(await GetObjByGuid(resGuid));
                     return;
 
                 case Guid id:
@@ -58,7 +57,7 @@ namespace PilotLookUp.Model
                     var dataObjes = new List<object>();
                     foreach (var guid in idEnum)
                     {
-                        object dataObject = await _loader.Load(guid);
+                        object dataObject = await GetObjByGuid(guid);
 
                         if (dataObject != null)
                         {
@@ -146,12 +145,7 @@ namespace PilotLookUp.Model
             }
         }
 
-        private void AddToSelection(object objects)
-        {
-            new LookSeleсtion(new List<PilotTypsHelper> { new PilotTypsHelper(objects) }, _objectsRepository);
-        }
-
-        private void AddToSelection(IEnumerable<object> objects)
+        private void AddToSelection<T>(IEnumerable<T> objects)
         {
             var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
             if (selection.Any())
@@ -159,7 +153,7 @@ namespace PilotLookUp.Model
                 new LookSeleсtion(selection, _objectsRepository);
             }
         }
-        private void AddToSelection(IDictionary<string, object> objects)
+        private void AddToSelection<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
             var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
             if (selection.Any())
@@ -167,21 +161,9 @@ namespace PilotLookUp.Model
                 new LookSeleсtion(selection, _objectsRepository);
             }
         }
-        private void AddToSelection(IDictionary<Guid, int> objects)
+        private void AddToSelection(object obj)
         {
-            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
-            if (selection.Any())
-            {
-                new LookSeleсtion(selection, _objectsRepository);
-            }
-        }
-        private void AddToSelection(IDictionary<int, IAccess> objects)
-        {
-            var selection = objects.Select(i => new PilotTypsHelper(i)).ToList();
-            if (selection.Any())
-            {
-                new LookSeleсtion(selection, _objectsRepository);
-            }
+            new LookSeleсtion(new List<PilotTypsHelper> { new PilotTypsHelper(obj) }, _objectsRepository);
         }
 
         private async Task<object> GetObjByGuid(Guid guid)
@@ -196,7 +178,7 @@ namespace PilotLookUp.Model
                 var statesMachine = _objectsRepository.GetUserStateMachines();
                 var stateMachine = statesMachine.FirstOrDefault(i => i.Id == guid);
 
-                if (state == null)
+                if (stateMachine == null)
                 {
                     var dataObj = await _loader.Load(guid);
                     return dataObj;
