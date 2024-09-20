@@ -182,8 +182,8 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
-    <Compile Include="Commands\LookSeleсtion.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Model\LookSeleсtion.cs" />
     <Compile Include="Model\LookUpModel.cs" />
     <Compile Include="Model\ObjReflection.cs" />
     <Compile Include="Model\PilotTypsHelper.cs" />

@@ -1,15 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Model;
 using PilotLookUp.View;
 using PilotLookUp.VM;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 
 namespace PilotLookUp.Model
