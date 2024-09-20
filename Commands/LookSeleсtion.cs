@@ -12,7 +12,7 @@ using System.Windows.Input;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 
-namespace PilotLookUp.Commands
+namespace PilotLookUp.Model
 {
     internal class LookSeleсtion
     {
