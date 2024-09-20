@@ -17,7 +17,12 @@ namespace PilotLookUp.Model
         {
             _objectsRepository = objectsRepository;
 
-            PilotObj = pilotObj;
+            //var pilotObjTypeName = pilotObj.GetType().Name;
+            //if (pilotObjTypeName == "PluginStorageDataObject")
+            //    PilotObj = ((dynamic)pilotObj).DataObject;
+            //else
+                PilotObj = pilotObj;
+
             if (PilotObj == null) return;
 
             // Используем старый switch с проверками типов
@@ -76,6 +81,10 @@ namespace PilotLookUp.Model
                     break;
                 case ITransition transition:
                     DisplayName = transition.DisplayName;
+                    break;
+                case IStorageDataObject transition:
+                    PilotObj = transition.DataObject;
+                    DisplayName = transition.DataObject.DisplayName;
                     break;
                 case Enum dataEnum:
                     DisplayName = dataEnum.ToString();
