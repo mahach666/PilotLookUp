@@ -1,17 +1,11 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
-using System;
-using System.ComponentModel.Composition;
-using System.Text.RegularExpressions;
-using System.Windows;
-using PilotLookUp.Commands;
-using System.Windows.Input;
-using System.Linq;
-using IDataObject = Ascon.Pilot.SDK.IDataObject;
-using System.Collections.Generic;
 using Ascon.Pilot.SDK.Toolbar;
 using PilotLookUp.Model;
-using System.Xml.Linq;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
 
 
 namespace PilotLookUp
@@ -23,9 +17,17 @@ namespace PilotLookUp
     [Export(typeof(IMenu<TasksViewContext2>))]
     [Export(typeof(IMenu<DocumentFilesContext>))]
     [Export(typeof(IMenu<LinkedObjectsContext>))]
+    [Export(typeof(IToolbar<ObjectsViewContext>))]
+    [Export(typeof(IToolbar<StorageContext>))]
+    [Export(typeof(IToolbar<TasksViewContext2>))]
+    [Export(typeof(IToolbar<DocumentFilesContext>))]
+    [Export(typeof(IToolbar<LinkedObjectsContext>))]
     public class App : IMenu<MainViewContext>, IMenu<ObjectsViewContext>
         , IMenu<StorageContext>, IMenu<TasksViewContext2>
         , IMenu<DocumentFilesContext>, IMenu<LinkedObjectsContext>
+        , IToolbar<ObjectsViewContext>, IToolbar<StorageContext>
+        , IToolbar<TasksViewContext2>, IToolbar<DocumentFilesContext>
+        , IToolbar<LinkedObjectsContext>
     {
 
         private IObjectsRepository _objectsRepository;
@@ -50,19 +52,16 @@ namespace PilotLookUp
             item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
             item.WithSubmenu().AddItem("LookDB", 0).WithHeader("LookDB");
         }
-
         public void Build(IMenuBuilder builder, ObjectsViewContext context)
         {
             SelectUpdater(context);
             ContextButtunBuilder(builder);
         }
-
         public void Build(IMenuBuilder builder, StorageContext context)
         {
             SelectUpdater(context);
             ContextButtunBuilder(builder);
         }
-
         public void Build(IMenuBuilder builder, TasksViewContext2 context)
         {
             SelectUpdater(context);
@@ -79,45 +78,74 @@ namespace PilotLookUp
             ContextButtunBuilder(builder);
         }
 
+        public void Build(IToolbarBuilder builder, ObjectsViewContext context)
+        {
+            SelectUpdater(context);
+        }
+        public void Build(IToolbarBuilder builder, StorageContext context)
+        {
+            SelectUpdater(context);
+        }
+        public void Build(IToolbarBuilder builder, TasksViewContext2 context)
+        {
+            SelectUpdater(context);
+        }
+        public void Build(IToolbarBuilder builder, DocumentFilesContext context)
+        {
+            SelectUpdater(context);
+        }
+        public void Build(IToolbarBuilder builder, LinkedObjectsContext context)
+        {
+            SelectUpdater(context);
+        }
+
 
         public void OnMenuItemClick(string name, MainViewContext context)
         {
             ItemClick(name);
         }
-
         public void OnMenuItemClick(string name, ObjectsViewContext context)
         {
             ItemClick(name);
         }
-
         public void OnMenuItemClick(string name, StorageContext context)
         {
             ItemClick(name);
         }
-
         public void OnMenuItemClick(string name, TasksViewContext2 context)
         {
             ItemClick(name);
         }
-
         public void OnMenuItemClick(string name, DocumentFilesContext context)
         {
             ItemClick(name);
         }
-
         public void OnMenuItemClick(string name, LinkedObjectsContext context)
         {
             ItemClick(name);
         }
 
+        public void OnToolbarItemClick(string name, ObjectsViewContext context)
+        {          
+        }
+        public void OnToolbarItemClick(string name, StorageContext context)
+        {          
+        }
+        public void OnToolbarItemClick(string name, TasksViewContext2 context)
+        {          
+        }
+        public void OnToolbarItemClick(string name, DocumentFilesContext context)
+        {           
+        }
+        public void OnToolbarItemClick(string name, LinkedObjectsContext context)
+        {            
+        }
 
 
 
 
         private void ItemClick(string name)
         {
-            //List<PilotTypsHelper> converter = _selection?.Select(i => new PilotTypsHelper(i))?.ToList();
-
             if (_convertSelection == null || !_convertSelection.Any()) return;
 
             if (name == "LookSelected")
@@ -143,19 +171,23 @@ namespace PilotLookUp
                     return;
 
                 case ObjectsViewContext objectsViewContext:
-                    _convertSelection = objectsViewContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
+                    var selectedDO = objectsViewContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
+                    _convertSelection = selectedDO.Any() ? selectedDO : _convertSelection;
                     return;
 
                 case TasksViewContext2 tasksViewContext:
-                    _convertSelection = tasksViewContext.SelectedTasks?.Select(i => new PilotTypsHelper(i)).ToList();
+                    var selectedT = tasksViewContext.SelectedTasks?.Select(i => new PilotTypsHelper(i)).ToList();
+                    _convertSelection = selectedT.Any() ? selectedT : _convertSelection;
                     return;
 
                 case DocumentFilesContext documentFilesContext:
-                    _convertSelection = documentFilesContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
+                    var selectedF = documentFilesContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
+                    _convertSelection = selectedF.Any() ? selectedF : _convertSelection;
                     break;
 
                 case LinkedObjectsContext linkedObjectsContext:
-                    _convertSelection = linkedObjectsContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
+                    var selectedLO = linkedObjectsContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
+                    _convertSelection = selectedLO.Any() ? selectedLO : _convertSelection;
                     break;
             }
         }
