@@ -17,17 +17,18 @@ namespace PilotLookUp
     [Export(typeof(IMenu<TasksViewContext2>))]
     [Export(typeof(IMenu<DocumentFilesContext>))]
     [Export(typeof(IMenu<LinkedObjectsContext>))]
-    [Export(typeof(IToolbar<ObjectsViewContext>))]
-    [Export(typeof(IToolbar<StorageContext>))]
-    [Export(typeof(IToolbar<TasksViewContext2>))]
-    [Export(typeof(IToolbar<DocumentFilesContext>))]
-    [Export(typeof(IToolbar<LinkedObjectsContext>))]
+    [Export(typeof(IMenu<LinkedTasksContext2>))]
+    //[Export(typeof(IToolbar<ObjectsViewContext>))]
+    //[Export(typeof(IToolbar<StorageContext>))]
+    //[Export(typeof(IToolbar<TasksViewContext2>))]
+    //[Export(typeof(IToolbar<DocumentFilesContext>))]
+    //[Export(typeof(IToolbar<LinkedObjectsContext>))]
     public class App : IMenu<MainViewContext>, IMenu<ObjectsViewContext>
         , IMenu<StorageContext>, IMenu<TasksViewContext2>
-        , IMenu<DocumentFilesContext>, IMenu<LinkedObjectsContext>
-        , IToolbar<ObjectsViewContext>, IToolbar<StorageContext>
-        , IToolbar<TasksViewContext2>, IToolbar<DocumentFilesContext>
-        , IToolbar<LinkedObjectsContext>
+        , IMenu<DocumentFilesContext>, IMenu<LinkedObjectsContext>, IMenu<LinkedTasksContext2>
+    //, IToolbar<ObjectsViewContext>, IToolbar<StorageContext>
+    //, IToolbar<TasksViewContext2>, IToolbar<DocumentFilesContext>
+    //, IToolbar<LinkedObjectsContext>
     {
 
         private IObjectsRepository _objectsRepository;
@@ -77,27 +78,32 @@ namespace PilotLookUp
             SelectUpdater(context);
             ContextButtunBuilder(builder);
         }
+        public void Build(IMenuBuilder builder, LinkedTasksContext2 context)
+        {
+            SelectUpdater(context);
+            ContextButtunBuilder(builder);
+        }
 
-        public void Build(IToolbarBuilder builder, ObjectsViewContext context)
-        {
-            SelectUpdater(context);
-        }
-        public void Build(IToolbarBuilder builder, StorageContext context)
-        {
-            SelectUpdater(context);
-        }
-        public void Build(IToolbarBuilder builder, TasksViewContext2 context)
-        {
-            SelectUpdater(context);
-        }
-        public void Build(IToolbarBuilder builder, DocumentFilesContext context)
-        {
-            SelectUpdater(context);
-        }
-        public void Build(IToolbarBuilder builder, LinkedObjectsContext context)
-        {
-            SelectUpdater(context);
-        }
+        //public void Build(IToolbarBuilder builder, ObjectsViewContext context)
+        //{
+        //    SelectUpdater(context);
+        //}
+        //public void Build(IToolbarBuilder builder, StorageContext context)
+        //{
+        //    SelectUpdater(context);
+        //}
+        //public void Build(IToolbarBuilder builder, TasksViewContext2 context)
+        //{
+        //    SelectUpdater(context);
+        //}
+        //public void Build(IToolbarBuilder builder, DocumentFilesContext context)
+        //{
+        //    SelectUpdater(context);
+        //}
+        //public void Build(IToolbarBuilder builder, LinkedObjectsContext context)
+        //{
+        //    SelectUpdater(context);
+        //}
 
 
         public void OnMenuItemClick(string name, MainViewContext context)
@@ -125,21 +131,26 @@ namespace PilotLookUp
             ItemClick(name);
         }
 
-        public void OnToolbarItemClick(string name, ObjectsViewContext context)
-        {          
+        public void OnMenuItemClick(string name, LinkedTasksContext2 context)
+        {
+            ItemClick(name);
         }
-        public void OnToolbarItemClick(string name, StorageContext context)
-        {          
-        }
-        public void OnToolbarItemClick(string name, TasksViewContext2 context)
-        {          
-        }
-        public void OnToolbarItemClick(string name, DocumentFilesContext context)
-        {           
-        }
-        public void OnToolbarItemClick(string name, LinkedObjectsContext context)
-        {            
-        }
+
+        //public void OnToolbarItemClick(string name, ObjectsViewContext context)
+        //{          
+        //}
+        //public void OnToolbarItemClick(string name, StorageContext context)
+        //{          
+        //}
+        //public void OnToolbarItemClick(string name, TasksViewContext2 context)
+        //{          
+        //}
+        //public void OnToolbarItemClick(string name, DocumentFilesContext context)
+        //{           
+        //}
+        //public void OnToolbarItemClick(string name, LinkedObjectsContext context)
+        //{            
+        //}
 
 
 
@@ -188,6 +199,10 @@ namespace PilotLookUp
                 case LinkedObjectsContext linkedObjectsContext:
                     var selectedLO = linkedObjectsContext.SelectedObjects?.Select(i => new PilotTypsHelper(i)).ToList();
                     _convertSelection = selectedLO.Any() ? selectedLO : _convertSelection;
+                    break;
+                    case LinkedTasksContext2 linkedTasksContext:
+                    var selectedLT = linkedTasksContext.SelectedTasks?.Select(i => new PilotTypsHelper(i)).ToList();
+                    _convertSelection = selectedLT.Any() ? selectedLT : _convertSelection;
                     break;
             }
         }
