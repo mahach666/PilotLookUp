@@ -17,11 +17,7 @@ namespace PilotLookUp.Model
         {
             _objectsRepository = objectsRepository;
 
-            //var pilotObjTypeName = pilotObj.GetType().Name;
-            //if (pilotObjTypeName == "PluginStorageDataObject")
-            //    PilotObj = ((dynamic)pilotObj).DataObject;
-            //else
-                PilotObj = pilotObj;
+            PilotObj = pilotObj;
 
             if (PilotObj == null) return;
 
@@ -45,18 +41,6 @@ namespace PilotLookUp.Model
                     break;
                 case IAttribute pilotAttr:
                     DisplayName = pilotAttr.Title;
-                    break;
-                case KeyValuePair<string, object> keyValuePair:
-                    DisplayName = keyValuePair.Key;
-                    break;
-                case KeyValuePair<Guid, int> childrenTypes:
-                    DisplayName = childrenTypes.Key.ToString();
-                    break;
-                case KeyValuePair<int, IAccess> accessDict:
-                    DisplayName = accessDict.Value.ToString();
-                    break;
-                case KeyValuePair<Guid, IEnumerable<ITransition>> transitionsDict:
-                    DisplayName = _objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == transitionsDict.Key)?.Title ?? "invalid";
                     break;
                 case IRelation relation:
                     DisplayName = relation.Name;
@@ -85,6 +69,18 @@ namespace PilotLookUp.Model
                 case IStorageDataObject transition:
                     PilotObj = transition.DataObject;
                     DisplayName = transition.DataObject.DisplayName;
+                    break;
+                case KeyValuePair<string, object> keyValuePair:
+                    DisplayName = keyValuePair.Key;
+                    break;
+                case KeyValuePair<Guid, int> childrenTypes:
+                    DisplayName = childrenTypes.Key.ToString();
+                    break;
+                case KeyValuePair<int, IAccess> accessDict:
+                    DisplayName = accessDict.Value.ToString();
+                    break;
+                case KeyValuePair<Guid, IEnumerable<ITransition>> transitionsDict:
+                    DisplayName = _objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == transitionsDict.Key)?.Title ?? "invalid";
                     break;
                 case Enum dataEnum:
                     DisplayName = dataEnum.ToString();

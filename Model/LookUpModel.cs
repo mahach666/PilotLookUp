@@ -67,8 +67,8 @@ namespace PilotLookUp.Model
                     AddToSelection(dataObjes);
                     break;
 
-                case int personId:
-                    var person = _objectsRepository.GetPerson(personId);
+                case int unknowId:
+                    var person = _objectsRepository.GetPerson(unknowId);
                     AddToSelection(person);
                     break;
 
