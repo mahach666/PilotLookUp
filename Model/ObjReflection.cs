@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Objects.TypeHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace PilotLookUp.Model
 {
     internal class ObjReflection
     {
-        internal ObjReflection(PilotTypsHelper typeHelper)
+        internal ObjReflection(TypeHelper typeHelper)
         {
-            object dataObjects = typeHelper?.PilotObj;
+            object dataObjects = typeHelper?.LookUpObject;
 
             if (dataObjects != null)
             {

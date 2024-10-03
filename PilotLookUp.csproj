@@ -187,7 +187,10 @@
     <Compile Include="Model\LookUpModel.cs" />
     <Compile Include="Model\ObjReflection.cs" />
     <Compile Include="Model\PilotTypsHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\DataObjectHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\PersonTypeHelper.cs" />
     <Compile Include="Objects\TypeHelpers\TypeHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\TypeTypeHelper.cs" />
     <Compile Include="Utils\ObjectLoader.cs" />
     <Compile Include="Utils\Loader.cs" />
     <Compile Include="View\LookUpView.xaml.cs">
