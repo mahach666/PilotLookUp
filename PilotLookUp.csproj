@@ -187,6 +187,7 @@
     <Compile Include="Model\LookUpModel.cs" />
     <Compile Include="Model\ObjReflection.cs" />
     <Compile Include="Model\PilotTypsHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\TypeHelper.cs" />
     <Compile Include="Utils\ObjectLoader.cs" />
     <Compile Include="Utils\Loader.cs" />
     <Compile Include="View\LookUpView.xaml.cs">
@@ -209,5 +210,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
