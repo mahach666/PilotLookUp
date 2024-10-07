@@ -11,9 +11,9 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Model
 {
-    public class PilotTypsHelper
+    public class PilotTypsHelperOLD
     {
-        public PilotTypsHelper(object pilotObj, IObjectsRepository objectsRepository = null)
+        public PilotTypsHelperOLD(object pilotObj, IObjectsRepository objectsRepository = null)
         {
             _objectsRepository = objectsRepository;
 

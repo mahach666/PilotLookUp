@@ -143,7 +143,7 @@
                      ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding DisplayName}">
+                        <TextBlock Text="{Binding Name}">
                             <TextBlock.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem x:Name="CopySelected"

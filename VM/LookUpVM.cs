@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Commands;
 using PilotLookUp.Model;
+using PilotLookUp.Objects;
 using PilotLookUp.View;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ namespace PilotLookUp.VM
     {
         internal LookUpView _view;
         private LookUpModel _lookUpModel;
-        private PilotTypsHelper _dataObjectSelected;
+        private PilotObjectHelper _dataObjectSelected;
         private ICommand _selectedValueClickCommand;
 
         public LookUpVM(LookUpModel lookUpModel)
@@ -24,9 +25,9 @@ namespace PilotLookUp.VM
             _selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
         }
 
-        public List<PilotTypsHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
+        public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
 
-        public PilotTypsHelper DataObjectSelected
+        public PilotObjectHelper DataObjectSelected
         {
             get => _dataObjectSelected;
             set
