@@ -12,7 +12,7 @@ namespace PilotLookUp.Model
 {
     internal class ObjReflection
     {
-        internal ObjReflection(TypeHelper typeHelper)
+        internal ObjReflection(PilotObjectHelper typeHelper)
         {
             object dataObjects = typeHelper?.LookUpObject;
 

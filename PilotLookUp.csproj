@@ -188,9 +188,13 @@
     <Compile Include="Model\ObjReflection.cs" />
     <Compile Include="Model\PilotTypsHelper.cs" />
     <Compile Include="Objects\TypeHelpers\DataObjectHelper.cs" />
-    <Compile Include="Objects\TypeHelpers\PersonTypeHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\PersonHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\PilotObjectHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\AttributeHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\KeyValuePairHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\UserStateMachineHelper.cs" />
+    <Compile Include="Objects\TypeHelpers\UserStateHelper.cs" />
     <Compile Include="Objects\TypeHelpers\TypeHelper.cs" />
-    <Compile Include="Objects\TypeHelpers\TypeTypeHelper.cs" />
     <Compile Include="Utils\ObjectLoader.cs" />
     <Compile Include="Utils\Loader.cs" />
     <Compile Include="View\LookUpView.xaml.cs">

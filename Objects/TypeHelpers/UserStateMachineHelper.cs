@@ -8,9 +8,9 @@ using System.Xml.Linq;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class TypeTypeHelper : TypeHelper
+    internal class UserStateMachineHelper : PilotObjectHelper
     {
-        public TypeTypeHelper(IType obj)
+        public UserStateMachineHelper(IUserStateMachine obj)
         {
             LookUpObject = obj;
             Name = obj.Title;

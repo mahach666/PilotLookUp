@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class TypeHelper : PilotObjectHelper
+    internal class PersonHelper : PilotObjectHelper
     {
-        public TypeHelper(IType obj)
+        public PersonHelper(IPerson obj)
         {
             LookUpObject = obj;
-            Name = obj.Title;
+            Name = obj.DisplayName;
         }
     }
 }
