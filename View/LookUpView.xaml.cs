@@ -1,5 +1,5 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.VM;
+using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

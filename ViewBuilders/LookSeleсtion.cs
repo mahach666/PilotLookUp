@@ -1,11 +1,12 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
-using PilotLookUp.VM;
+using PilotLookUp.ViewModel;
 using System.Collections.Generic;
 
 
-namespace PilotLookUp.Model
+namespace PilotLookUp.ViewBuilders
 {
     internal class LookSeleсtion
     {

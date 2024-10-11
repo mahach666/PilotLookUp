@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
-namespace PilotLookUp.Model
+namespace PilotLookUp.Core
 {
     internal class ObjReflection
     {

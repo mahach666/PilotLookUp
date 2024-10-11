@@ -184,10 +184,11 @@
     <Compile Include="App.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Model\LookSeleсtion.cs" />
+    <Compile Include="Extensions\Class1.cs" />
+    <Compile Include="Objects\TypeHelpers\GuidHelper.cs" />
+    <Compile Include="ViewBuilders\LookSeleсtion.cs" />
     <Compile Include="Model\LookUpModel.cs" />
-    <Compile Include="Model\ObjReflection.cs" />
-    <Compile Include="Model\PilotTypsHelper%28OLD%29.cs" />
+    <Compile Include="Core\ObjReflection.cs" />
     <Compile Include="Objects\TypeHelpers\DataObjectHelper.cs" />
     <Compile Include="Objects\TypeHelpers\AccessRecordHelper.cs" />
     <Compile Include="Objects\TypeHelpers\OrganisationUnitHelper.cs" />
@@ -211,7 +212,7 @@
     <Compile Include="View\LookUpView.xaml.cs">
       <DependentUpon>LookUpView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VM\LookUpVM.cs" />
+    <Compile Include="ViewModel\LookUpVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

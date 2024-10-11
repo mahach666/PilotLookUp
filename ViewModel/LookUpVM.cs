@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Commands;
+using PilotLookUp.Core;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace PilotLookUp.VM
+namespace PilotLookUp.ViewModel
 {
     internal class LookUpVM : INotifyPropertyChanged
     {
