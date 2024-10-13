@@ -26,7 +26,7 @@ namespace PilotLookUp.Objects
                 //MacroManager when type is null || type == typeof(MacroManager) => new MacroManagerDescriptor(),
                 //IEnumerable value => new EnumerableDescriptor(value),
                 //Exception value when type is null || type == typeof(Exception) => new ExceptionDescriptor(value),
-                Guid value => new GuidHelper(value, _objectsRepository),
+                //Guid value => new GuidHelper(value, _objectsRepository),
 
                 // PilotTypes
                 IDataObject value => new DataObjectHelper(value),

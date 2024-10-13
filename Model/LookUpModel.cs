@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Commands;
 using PilotLookUp.Core;
+using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewBuilders;
@@ -34,17 +35,26 @@ namespace PilotLookUp.Model
             return dataObject.Reflection;
             //return new ObjReflection(dataObject);
         }
-            
+
         public async Task DataGridSelector(object obj)
         {
             if (obj == null) return;
             PilotObjectMap.Updaate(_objectsRepository);
-            AddToSelection(obj);           
+            AddToSelection(obj);
         }
 
-        private void AddToSelection<T>(IEnumerable<T> objects)
+        private async void AddToSelection<T>(IEnumerable<T> objects)
         {
-            var selection = objects.Select(i => PilotObjectMap.Wrap(i)).ToList();
+            //var selection = objects.Select(i => PilotObjectMap.Wrap(i)).ToList();
+
+            var selection = new List<PilotObjectHelper>();
+            foreach (object obj in objects)
+            {
+                if (obj is Guid) selection.Add(PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _objectsRepository));
+                else
+                    selection.Add(PilotObjectMap.Wrap(obj, _objectsRepository));
+            }
+
             if (selection.Any())
             {
                 new LookSeleсtion(selection, _objectsRepository);
@@ -58,9 +68,12 @@ namespace PilotLookUp.Model
                 new LookSeleсtion(selection, _objectsRepository);
             }
         }
-        private void AddToSelection(object obj)
+        private async void AddToSelection(object obj)
         {
-            new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(obj) }, _objectsRepository);
+            if (obj is Guid)
+                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)) }, _objectsRepository);
+            else
+                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(obj) }, _objectsRepository);
         }
 
         private async Task<object> GetObjByGuid(Guid guid)
