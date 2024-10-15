@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI;
 using System.Windows.Documents;
 
 namespace PilotLookUp.Core
@@ -46,6 +47,11 @@ namespace PilotLookUp.Core
                     }
                 }
             }
+        }
+
+        public static ObjReflection Empty()
+        {
+            return new ObjReflection(PilotObjectMap.Wrap(null));
         }
 
         private Type _objType { get; }

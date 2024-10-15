@@ -200,6 +200,7 @@
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\ObjectsRepositoryEx.cs" />
+    <Compile Include="Objects\TypeHelpers\NullHelper.cs" />
     <Compile Include="ViewBuilders\LookSeleсtion.cs" />
     <Compile Include="Model\LookUpModel.cs" />
     <Compile Include="Core\ObjReflection.cs" />

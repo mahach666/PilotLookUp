@@ -11,6 +11,6 @@ namespace PilotLookUp.Objects
     {
         public string Name { get; set; }
         public object LookUpObject { get; set; }
-        public ObjReflection Reflection { get { return new ObjReflection(this); } } 
+        public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
     }
 }
