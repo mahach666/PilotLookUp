@@ -31,7 +31,7 @@ namespace PilotLookUp.Model
 
         public ObjReflection GetInfo(PilotObjectHelper dataObject)
         {
-            return dataObject.Reflection;
+            return dataObject?.Reflection;
             //return new ObjReflection(dataObject);
         }
 
