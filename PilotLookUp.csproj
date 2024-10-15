@@ -222,8 +222,8 @@
     <Compile Include="Objects\TypeHelpers\UserStateHelper.cs" />
     <Compile Include="Objects\TypeHelpers\TypeHelper.cs" />
     <Compile Include="Objects\PilotObjectMap.cs" />
-    <Compile Include="Utils\ObjectLoader.cs" />
-    <Compile Include="Utils\Loader.cs" />
+    <Compile Include="Core\ObjectLoader.cs" />
+    <Compile Include="Core\Loader.cs" />
     <Compile Include="View\LookUpView.xaml.cs">
       <DependentUpon>LookUpView.xaml</DependentUpon>
     </Compile>

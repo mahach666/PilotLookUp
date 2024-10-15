@@ -3,7 +3,6 @@ using PilotLookUp.Commands;
 using PilotLookUp.Core;
 using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
-using PilotLookUp.Utils;
 using PilotLookUp.ViewBuilders;
 using System;
 using System.Collections.Generic;

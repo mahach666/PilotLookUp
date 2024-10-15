@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PilotLookUp.Utils
+namespace PilotLookUp.Core
 {
     public class Loader : IObserver<IDataObject>
     {

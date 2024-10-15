@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
-namespace PilotLookUp.Utils
+namespace PilotLookUp.Core
 {
     public class ObjectLoader : IObserver<IDataObject>
     {
