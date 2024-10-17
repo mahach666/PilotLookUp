@@ -13,8 +13,8 @@ namespace PilotLookUp.Objects.TypeHelpers
         // Attr
         public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IDataObject sender)
         {
-            LookUpObject = keyValuePair.Value;
-            Name = sender.Type.Attributes.FirstOrDefault(i=>i.Name == keyValuePair.Key).Title;
+            LookUpObject = keyValuePair;
+            Name = sender.Type.Attributes.FirstOrDefault(i=>i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
             //Name = keyValuePair.Key;
         }
 

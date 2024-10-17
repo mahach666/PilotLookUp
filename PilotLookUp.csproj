@@ -42,8 +42,8 @@
     <Reference Include="Ascon.Pilot.DataModifier, Version=24.38.0.51811, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Ascon.Pilot.Server.Api.24.38.0\lib\netstandard2.0\Ascon.Pilot.DataModifier.dll</HintPath>
     </Reference>
-    <Reference Include="Ascon.Pilot.SDK, Version=24.38.0.51811, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Ascon.Pilot.SDK.24.38.0\lib\net472\Ascon.Pilot.SDK.dll</HintPath>
+    <Reference Include="Ascon.Pilot.SDK, Version=24.39.0.51966, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Ascon.Pilot.SDK.24.39.0\lib\net472\Ascon.Pilot.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Ascon.Pilot.Search, Version=24.38.0.51811, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Ascon.Pilot.Server.Api.24.38.0\lib\netstandard2.0\Ascon.Pilot.Search.dll</HintPath>
@@ -51,8 +51,8 @@
     <Reference Include="Ascon.Pilot.Server.Api, Version=24.38.0.51811, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Ascon.Pilot.Server.Api.24.38.0\lib\netstandard2.0\Ascon.Pilot.Server.Api.dll</HintPath>
     </Reference>
-    <Reference Include="Ascon.Pilot.Theme, Version=24.38.0.51811, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Ascon.Pilot.SDK.24.38.0\lib\net472\Ascon.Pilot.Theme.dll</HintPath>
+    <Reference Include="Ascon.Pilot.Theme, Version=24.39.0.51966, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Ascon.Pilot.SDK.24.39.0\lib\net472\Ascon.Pilot.Theme.dll</HintPath>
     </Reference>
     <Reference Include="Ascon.Pilot.Transport, Version=24.38.0.51811, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Ascon.Pilot.Server.Api.24.38.0\lib\netstandard2.0\Ascon.Pilot.Transport.dll</HintPath>
@@ -200,6 +200,7 @@
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\ObjectsRepositoryEx.cs" />
+    <Compile Include="Model\Utils\Tracer.cs" />
     <Compile Include="Objects\TypeHelpers\NullHelper.cs" />
     <Compile Include="ViewBuilders\LookSeleсtion.cs" />
     <Compile Include="Model\LookUpModel.cs" />

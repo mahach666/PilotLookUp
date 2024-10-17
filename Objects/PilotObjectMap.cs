@@ -15,7 +15,7 @@ namespace PilotLookUp.Objects
 {
     internal static class PilotObjectMap
     {
-        public static PilotObjectHelper Wrap(object obj, object sender = null)
+        public static PilotObjectHelper Wrap(object obj, PilotObjectHelper sender = null)
         {
 
             return obj switch
@@ -35,7 +35,7 @@ namespace PilotLookUp.Objects
                 IUserState value => new UserStateHelper(value),
                 IUserStateMachine value => new UserStateMachineHelper(value),
                 IAttribute value => new AttributeHelper(value),
-                KeyValuePair<string, object> value => new KeyValuePairHelper(value, (IDataObject)sender),
+                KeyValuePair<string, object> value => new KeyValuePairHelper(value, (IDataObject)sender.LookUpObject),
                 KeyValuePair<Guid, int> value => new KeyValuePairHelper(value),
                 KeyValuePair<Guid, IEnumerable<ITransition>> value => new KeyValuePairHelper(value, _objectsRepository),
                 IRelation value => new RelationHelper(value),

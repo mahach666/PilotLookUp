@@ -36,6 +36,7 @@ namespace PilotLookUp.ViewModel
                 if (_dataObjectSelected != value)
                 {
                     _dataObjectSelected = value;
+                    _lookUpModel.Update(value);
                     OnPropertyChanged("Info");
                     OnPropertyChanged();
                 }
