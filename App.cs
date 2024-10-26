@@ -135,6 +135,8 @@ namespace PilotLookUp
 
         private void SelectUpdater(MarshalByRefObject context)
         {
+            PilotObjectMap.Updaate(_objectsRepository);
+
             switch (context)
             {
                 case MainViewContext mainViewContext:
