@@ -22,7 +22,7 @@ namespace PilotLookUp.Model.Utils
 
             _objectsRepository = objectsRepository;
             _sender = sender;
-            //PilotObjectMap.Updaate(_objectsRepository);
+            PilotObjectMap.Updaate(_objectsRepository);
 
             // Определение типа объекта и вызов соответствующей перегрузки
             if (obj is IEnumerable enumerable)
