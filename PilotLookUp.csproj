@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\AppData\Local\ASCON\Pilot-BIM\Development\Look\</OutputPath>
+    <OutputPath>..\..\..\AppData\Local\ASCON\Pilot-BIM\Development\Look\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -201,6 +201,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\ObjectsRepositoryEx.cs" />
     <Compile Include="Model\Utils\Tracer.cs" />
+    <Compile Include="Objects\TypeHelpers\IntHelper.cs" />
     <Compile Include="Objects\TypeHelpers\NullHelper.cs" />
     <Compile Include="ViewBuilders\LookSeleсtion.cs" />
     <Compile Include="Model\LookUpModel.cs" />

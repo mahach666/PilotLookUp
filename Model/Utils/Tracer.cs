@@ -71,9 +71,9 @@ namespace PilotLookUp.Model.Utils
         private static async void AddToSelection(object obj)
         {
             if (obj is Guid)
-                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)) }, _objectsRepository);
+                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender) }, _objectsRepository);
             else
-                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(obj) }, _objectsRepository);
+                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(obj, _sender) }, _objectsRepository);
         }
     }
 }

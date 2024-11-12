@@ -21,6 +21,7 @@ namespace PilotLookUp.Objects
             return obj switch
             {
                 //System
+                int value =>  new IntHelper(value, sender),
                 //string value when type is null || type == typeof(string) => new StringDescriptor(value),
                 //bool value when type is null || type == typeof(bool) => new BoolDescriptor(value),
                 //MacroManager when type is null || type == typeof(MacroManager) => new MacroManagerDescriptor(),
@@ -47,7 +48,7 @@ namespace PilotLookUp.Objects
                 IOrganisationUnit value => new OrganisationUnitHelper(value),
                 ITransition value => new TransitionHelper(value),
                 IStorageDataObject value => new StorageDataObjectHelper(value),
-                null => new NullHelper(),
+                null => null, //new NullHelper(),
 
                 _ => null
             };
