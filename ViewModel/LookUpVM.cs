@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -18,13 +20,16 @@ namespace PilotLookUp.ViewModel
         internal LookUpView _view;
         private LookUpModel _lookUpModel;
         private PilotObjectHelper _dataObjectSelected;
-        private ICommand _selectedValueClickCommand;
+        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_lookUpModel.DataGridSelector);
+        public ICommand CopyCommand => new RelayCommand(CopyToMem);
+        //public ICommand CopyCommand => new AsyncRelayCommand(CopyToMem);
+
 
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
-            _selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
+            //_selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
@@ -44,9 +49,24 @@ namespace PilotLookUp.ViewModel
             }
         }
 
+        private void CopyToMem(object value)
+        {
+            if (value != null)
+            {
+                Clipboard.SetText(value.ToString());
+            }
+        }
+        //private async Task CopyToMem(object value)
+        //{
+        //    if (value != null)
+        //    {
+        //        Clipboard.SetText(value.ToString());
+        //    }
+        //}
+
         public ObjReflection Info => _lookUpModel.GetInfo(_dataObjectSelected);
 
-        public ICommand SelectedValueClickCommand => _selectedValueClickCommand;
+        //public ICommand SelectedValueClickCommand => _selectedValueClickCommand;
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

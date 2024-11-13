@@ -145,7 +145,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}">
-                            <TextBlock.ContextMenu>
+                            <!--<TextBlock.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem x:Name="CopySelected"
                                               Header="Копировать выделенное" />
@@ -156,7 +156,7 @@
                                     <MenuItem x:Name="CopyAllForJson"
                                               Header="Копировать все с текстом Json" />
                                 </ContextMenu>
-                            </TextBlock.ContextMenu>
+                            </TextBlock.ContextMenu>-->
                         </TextBlock>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
