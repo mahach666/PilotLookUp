@@ -1,7 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
-using Ascon.Pilot.SDK.Toolbar;
-using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewBuilders;
 using System;
