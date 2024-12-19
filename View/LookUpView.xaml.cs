@@ -31,5 +31,11 @@ namespace PilotLookUp.View
             _vm = vm;
             DataContext = _vm;
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Контекстное меню работает!");
+        }
+
     }
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -17,18 +18,20 @@ namespace PilotLookUp.ViewModel
     {
         internal LookUpView _view;
         private LookUpModel _lookUpModel;
-        private PilotObjectHelper _dataObjectSelected;
         private ICommand _selectedValueClickCommand;
+        public ICommand CopyCommand { get; }
 
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
             _selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
+            CopyCommand = new RelayCommand<string>(CopyToClipboard);
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
 
+        private PilotObjectHelper _dataObjectSelected;
         public PilotObjectHelper DataObjectSelected
         {
             get => _dataObjectSelected;
@@ -44,7 +47,32 @@ namespace PilotLookUp.ViewModel
             }
         }
 
+        private KeyValuePair<string, object> _dataGridSelected;
+        public KeyValuePair<string, object> DataGridSelected
+        {
+            get => _dataGridSelected;
+            set
+            {
+                _dataGridSelected = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObjReflection Info => _lookUpModel.GetInfo(_dataObjectSelected);
+
+        private void CopyToClipboard(string text)
+        {
+            if (text == "List")
+            {
+                Clipboard.SetText(_dataObjectSelected.Name);
+            }
+            else if (text == "DataGridSelectName")
+            {
+                Clipboard.SetText(_dataGridSelected.Key);
+            }
+
+        }
+        //public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
 
         public ICommand SelectedValueClickCommand => _selectedValueClickCommand;
 
