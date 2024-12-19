@@ -234,6 +234,7 @@
     </Compile>
     <Compile Include="ViewModel\LookUpVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\Resources\DataGridCellStyleSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
