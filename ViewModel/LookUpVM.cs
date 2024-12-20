@@ -20,7 +20,7 @@ namespace PilotLookUp.ViewModel
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
-            DataObjectSelected = SelectionDataObjects.FirstOrDefault();
+            _dataObjectSelected = SelectionDataObjects.FirstOrDefault();
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
@@ -33,8 +33,7 @@ namespace PilotLookUp.ViewModel
             {
                 if (_dataObjectSelected != value)
                 {
-                    _dataObjectSelected = value;
-                    //_lookUpModel.Update(value);
+                    _dataObjectSelected = value;  
                     OnPropertyChanged("Info");
                     OnPropertyChanged();
                 }

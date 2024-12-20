@@ -73,4 +73,8 @@
 		<Reference Include="System.Xaml" />
 		<Reference Include="WindowsBase" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="Enums\" />
+	</ItemGroup>
 </Project>
