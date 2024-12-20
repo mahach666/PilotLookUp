@@ -18,15 +18,11 @@ namespace PilotLookUp.ViewModel
     {
         internal LookUpView _view;
         private LookUpModel _lookUpModel;
-        private ICommand _selectedValueClickCommand;
-        //public ICommand CopyCommand { get; }
 
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
-            _selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
-            //CopyCommand = new RelayCommand<string>(CopyToClipboard);
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
@@ -60,28 +56,32 @@ namespace PilotLookUp.ViewModel
 
         public ObjReflection Info => _lookUpModel.GetInfo(_dataObjectSelected);
 
-        private void CopyToClipboard(string text)
+        private void CopyToClipboard(string sender)
         {
-            if (text == "List")
+            if (sender == "List" && _dataObjectSelected != null)
             {
                 Clipboard.SetText(_dataObjectSelected.Name);
             }
-            else if (text == "DataGridSelectName")
+            else if (sender == "DataGridSelectName" && _dataGridSelected.Key != null)
             {
                 Clipboard.SetText(_dataGridSelected.Key);
             }
-            else if (text == "DataGridSelectValue")
+            else if (sender == "DataGridSelectValue" && _dataGridSelected.Value != null)
             {
                 Clipboard.SetText(_dataGridSelected.Value.ToString());
             }
-            else if (text == "DataGridSelectLine")
+            else if (sender == "DataGridSelectLine" && _dataGridSelected.Key != null)
             {
                 Clipboard.SetText(_dataGridSelected.Key + "\t" + _dataGridSelected.Value.ToString());
+            }
+            else
+            {
+                Clipboard.SetText("Ошибка копирования, ничего не выбрано");
             }
         }
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
 
-        public ICommand SelectedValueClickCommand => _selectedValueClickCommand;
+        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_lookUpModel.DataGridSelector);
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

@@ -189,20 +189,6 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Key, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                    <!--<TextBlock.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Копировать Name"
-                                                      Command="{Binding DataContext.CopyCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                      CommandParameter="{Binding Key}" />
-                                            <MenuItem Header="Копировать Value"
-                                                      Command="{Binding DataContext.CopyCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                      CommandParameter="{Binding Value}" />
-                                            <MenuItem x:Name="CopySelected"
-                                                      Header="Копировать NameValue" />
-                                            <MenuItem x:Name="CopyAll"
-                                                      Header="Копировать все" />
-                                        </ContextMenu>
-                                    </TextBlock.ContextMenu>-->
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -218,20 +204,6 @@
                                            CommandParameter="{Binding Value}">
                                     <TextBlock Text="{Binding Value, Mode=OneWay}" />
                                 </Hyperlink>
-                                    <!--<TextBlock.ContextMenu>
-    <ContextMenu>
-                    <MenuItem Header="Копировать Name"
-                                            Command="{Binding DataContext.CopyCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding Key}" />
-                    <MenuItem Header="Копировать Value"
-                                            Command="{Binding DataContext.CopyCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                            CommandParameter="{Binding Value}" />
-        <MenuItem x:Name="CopySelected"
-                                            Header="Копировать NameValue" />
-        <MenuItem x:Name="CopyAll"
-                                            Header="Копировать все" />
-    </ContextMenu>
-</TextBlock.ContextMenu>-->
                             </TextBlock>
                             </DataTemplate>
 
