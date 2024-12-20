@@ -1,14 +1,7 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Objects;
-using PilotLookUp.Objects.TypeHelpers;
+﻿using PilotLookUp.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI;
-using System.Windows.Documents;
 
 namespace PilotLookUp.Core
 {
