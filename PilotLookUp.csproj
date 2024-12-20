@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\AppData\Local\ASCON\Pilot-BIM\Development\Look\</OutputPath>
+    <OutputPath>..\..\..\AppData\Local\ASCON\Pilot-BIM\Development\PilotLookUp\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -233,12 +233,6 @@
       <DependentUpon>LookUpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\LookUpVM.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\Resources\DataGridCellStyleSelector.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources\StyleDictionary.xaml">
@@ -251,7 +245,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

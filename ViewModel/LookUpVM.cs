@@ -1,9 +1,7 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Commands;
+﻿using PilotLookUp.Commands;
 using PilotLookUp.Core;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.View;
 using System.Collections.Generic;
 using System.ComponentModel;

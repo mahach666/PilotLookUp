@@ -10,7 +10,6 @@ using System.Linq;
 
 namespace PilotLookUp
 {
-
     [Export(typeof(IMenu<MainViewContext>))]
     [Export(typeof(IMenu<ObjectsViewContext>))]
     [Export(typeof(IMenu<StorageContext>))]
@@ -19,25 +18,21 @@ namespace PilotLookUp
     [Export(typeof(IMenu<LinkedObjectsContext>))]
     [Export(typeof(IMenu<LinkedTasksContext2>))]
 
-    public class App : IMenu<MainViewContext>, IMenu<ObjectsViewContext>
-        , IMenu<StorageContext>, IMenu<TasksViewContext2>
-        , IMenu<DocumentFilesContext>, IMenu<LinkedObjectsContext>, IMenu<LinkedTasksContext2>
+    public class App : IMenu<MainViewContext>
+        , IMenu<ObjectsViewContext>
+        , IMenu<StorageContext>
+        , IMenu<TasksViewContext2>
+        , IMenu<DocumentFilesContext>
+        , IMenu<LinkedObjectsContext>
+        , IMenu<LinkedTasksContext2>
     {
-
         private IObjectsRepository _objectsRepository;
-        private IFileProvider _fileProvider;
-        private ITabServiceProvider _tabServiceProvider;
-        private IObjectModifier _objectModifier;
         private List<PilotObjectHelper> _convertSelection;
 
         [ImportingConstructor]
-        public App(IObjectsRepository objectsRepository, IFileProvider fileProvider
-             , ITabServiceProvider tabServiceProvider, IObjectModifier objectModifier)
+        public App(IObjectsRepository objectsRepository)
         {
             _objectsRepository = objectsRepository;
-            _fileProvider = fileProvider;
-            _tabServiceProvider = tabServiceProvider;
-            _objectModifier = objectModifier;
         }
 
         // Build
