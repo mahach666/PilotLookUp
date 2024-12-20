@@ -19,14 +19,14 @@ namespace PilotLookUp.ViewModel
         internal LookUpView _view;
         private LookUpModel _lookUpModel;
         private ICommand _selectedValueClickCommand;
-        public ICommand CopyCommand { get; }
+        //public ICommand CopyCommand { get; }
 
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
             _selectedValueClickCommand = new AsyncRelayCommand(_lookUpModel.DataGridSelector);
-            CopyCommand = new RelayCommand<string>(CopyToClipboard);
+            //CopyCommand = new RelayCommand<string>(CopyToClipboard);
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
@@ -70,9 +70,16 @@ namespace PilotLookUp.ViewModel
             {
                 Clipboard.SetText(_dataGridSelected.Key);
             }
-
+            else if (text == "DataGridSelectValue")
+            {
+                Clipboard.SetText(_dataGridSelected.Value.ToString());
+            }
+            else if (text == "DataGridSelectLine")
+            {
+                Clipboard.SetText(_dataGridSelected.Key + "\t" + _dataGridSelected.Value.ToString());
+            }
         }
-        //public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
 
         public ICommand SelectedValueClickCommand => _selectedValueClickCommand;
 

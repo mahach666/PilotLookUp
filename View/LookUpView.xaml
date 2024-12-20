@@ -128,14 +128,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
-            <Button Content="Button"
-                    HorizontalAlignment="Left"
-                    Margin="25,344,0,0"
-                    VerticalAlignment="Top"
-                    Command="{Binding CopyCommand}"
-                    CommandParameter="List" />
-        </Grid>
+        <Grid Grid.Column="0" />
 
         <Grid Grid.Column="2">
             <Grid.ColumnDefinitions>
@@ -181,6 +174,12 @@
                         <MenuItem Header="Копировать Name"
                                   Command="{Binding CopyCommand}"
                                   CommandParameter="DataGridSelectName" />
+                        <MenuItem Header="Копировать Value"
+                                  Command="{Binding CopyCommand}"
+                                  CommandParameter="DataGridSelectValue" />
+                        <MenuItem Header="Копировать строку"
+                                  Command="{Binding CopyCommand}"
+                                  CommandParameter="DataGridSelectLine" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
 
