@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Model.Utils
 {
-    internal static class Tracer
+    public class Tracer
     {
-        private static IObjectsRepository _objectsRepository { get; set; }
-        private static PilotObjectHelper _sender { get; set; }
+        private IObjectsRepository _objectsRepository { get; set; }
+        private PilotObjectHelper _sender { get; set; }
 
-        public static void Trace(IObjectsRepository objectsRepository, PilotObjectHelper sender, object obj)
+        public void Trace(IObjectsRepository objectsRepository, PilotObjectHelper sender, object obj)
         {
             if (obj == null) return;
 
@@ -43,7 +43,7 @@ namespace PilotLookUp.Model.Utils
             }
         }
 
-        private static async void AddToSelectionEnum<T>(IEnumerable<T> objects)
+        private async void AddToSelectionEnum<T>(IEnumerable<T> objects)
         {
             //var selection = objects.Select(i => PilotObjectMap.Wrap(i)).ToList();
 
@@ -60,7 +60,7 @@ namespace PilotLookUp.Model.Utils
                 new LookSeleсtion(selection, _objectsRepository);
             }
         }
-        private static void AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
+        private void AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
             var selection = objects.Select(i => PilotObjectMap.Wrap(i, _sender)).ToList();
             if (selection.Any())
@@ -68,7 +68,7 @@ namespace PilotLookUp.Model.Utils
                 new LookSeleсtion(selection, _objectsRepository);
             }
         }
-        private static async void AddToSelection(object obj)
+        private async void AddToSelection(object obj)
         {
             if (obj is Guid)
                 new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender) }, _objectsRepository);

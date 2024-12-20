@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Objects
 {
-    internal abstract class PilotObjectHelper
+    public abstract class PilotObjectHelper
     {
         public string Name { get; set; }
         public object LookUpObject { get; set; }

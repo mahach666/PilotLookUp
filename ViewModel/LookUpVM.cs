@@ -36,7 +36,7 @@ namespace PilotLookUp.ViewModel
                 if (_dataObjectSelected != value)
                 {
                     _dataObjectSelected = value;
-                    _lookUpModel.Update(value);
+                    //_lookUpModel.Update(value);
                     OnPropertyChanged("Info");
                     OnPropertyChanged();
                 }
@@ -54,7 +54,7 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ObjReflection Info => _lookUpModel.GetInfo(_dataObjectSelected);
+        public ObjReflection Info => _dataObjectSelected?.Reflection;
 
         private void CopyToClipboard(string sender)
         {
@@ -79,9 +79,13 @@ namespace PilotLookUp.ViewModel
                 Clipboard.SetText("Ошибка копирования, ничего не выбрано");
             }
         }
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
 
-        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_lookUpModel.DataGridSelector);
+
+        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataObjectSelected, _dataGridSelected.Value));
+
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

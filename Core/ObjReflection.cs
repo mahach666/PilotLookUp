@@ -12,9 +12,9 @@ using System.Windows.Documents;
 
 namespace PilotLookUp.Core
 {
-    internal class ObjReflection
+    public class ObjReflection
     {
-        internal ObjReflection(PilotObjectHelper typeHelper)
+        public ObjReflection(PilotObjectHelper typeHelper)
         {
             object dataObjects = typeHelper?.LookUpObject;
 
