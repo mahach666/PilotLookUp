@@ -29,7 +29,8 @@ namespace PilotLookUp.Objects.TypeHelpers
             }
             else
             {
-
+                LookUpObject = value;
+                Name = value.ToString();
             }
         }
     }

@@ -50,6 +50,6 @@ namespace PilotLookUp.Core
         private Type _objType { get; }
         private PropertyInfo[] _propertyes { get; }
         private MethodInfo[] _methods { get; }
-        public Dictionary<string, object> KeyValuePairs { get; } = new Dictionary<string, object>();
+        public Dictionary<string, PilotObjectHelper> KeyValuePairs { get; } = new Dictionary<string, PilotObjectHelper>();
     }
 }
