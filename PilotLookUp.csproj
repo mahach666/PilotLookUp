@@ -40,8 +40,8 @@
 	<!-- Пути к папкам для дебага -->
 	<PropertyGroup>
 		<AppData>$(USERPROFILE)\AppData\Local</AppData>
-		<UserDirectoryPathBIM>$(AppData)\ASCON\Pilot-BIM\Development\$(RootNamespace)</UserDirectoryPathBIM>
-		<UserDirectoryPathICE>$(AppData)\ASCON\Pilot-ICE Enterprise\Development\$(RootNamespace)</UserDirectoryPathICE>
+		<UserDirectoryPathBIM>$(AppData)\ASCON\Pilot-BIM\Development\$(AssemblyProduct)</UserDirectoryPathBIM>
+		<UserDirectoryPathICE>$(AppData)\ASCON\Pilot-ICE Enterprise\Development\$(AssemblyProduct)</UserDirectoryPathICE>
 	</PropertyGroup>
 
 	<!-- Копирование файлов в папки для дебага -->
@@ -62,7 +62,7 @@
 	<!-- Создаем архив на релизе -->
 	<Target Name="CreateZip" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<Delete Files="$(OutputPath)\*.pdb; $(OutputPath)\*.xml" />
-		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(AssemblyName).zip -Force&quot;" />
+		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(AssemblyProduct).zip -Force&quot;" />
 	</Target>
 
 	<ItemGroup>
