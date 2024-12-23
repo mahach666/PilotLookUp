@@ -10,7 +10,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class NullHelper : PilotObjectHelper
     {
-        public NullHelper()
+        public NullHelper(IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             LookUpObject = null;
             Name = "NULL";

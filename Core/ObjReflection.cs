@@ -1,6 +1,8 @@
-﻿using PilotLookUp.Objects;
+﻿using PilotLookUp.Model.Utils;
+using PilotLookUp.Objects;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace PilotLookUp.Core
@@ -50,6 +52,6 @@ namespace PilotLookUp.Core
         private Type _objType { get; }
         private PropertyInfo[] _propertyes { get; }
         private MethodInfo[] _methods { get; }
-        public Dictionary<string, PilotObjectHelper> KeyValuePairs { get; } = new Dictionary<string, PilotObjectHelper>();
+        public Dictionary<string, object> KeyValuePairs { get; } = new Dictionary<string,object>();
     }
 }

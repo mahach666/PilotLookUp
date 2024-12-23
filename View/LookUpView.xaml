@@ -164,7 +164,7 @@
                           HorizontalAlignment="Center"
                           VerticalAlignment="Stretch" />
 
-            <DataGrid ItemsSource="{Binding Info.KeyValuePairs}"
+            <DataGrid ItemsSource="{Binding Info}"
                       Grid.Column="2"
                       IsReadOnly="True"
                       SelectedItem="{Binding DataGridSelected}">

@@ -21,7 +21,7 @@ namespace PilotLookUp.Objects
             return obj switch
             {
                 //System
-                int value =>  new IntHelper(value, sender),
+                int value =>  new IntHelper(value, _objectsRepository, sender),
                 //string value when type is null || type == typeof(string) => new StringDescriptor(value),
                 //bool value when type is null || type == typeof(bool) => new BoolDescriptor(value),
                 //MacroManager when type is null || type == typeof(MacroManager) => new MacroManagerDescriptor(),
@@ -30,24 +30,24 @@ namespace PilotLookUp.Objects
                 //Guid value => new GuidHelper(value, _objectsRepository),
 
                 // PilotTypes
-                IDataObject value => new DataObjectHelper(value),
-                IType type => new TypeHelper(type),
-                IPerson value => new PersonHelper(value),
-                IUserState value => new UserStateHelper(value),
-                IUserStateMachine value => new UserStateMachineHelper(value),
-                IAttribute value => new AttributeHelper(value),
-                KeyValuePair<string, object> value => new KeyValuePairHelper(value, (IDataObject)sender.LookUpObject),
-                KeyValuePair<Guid, int> value => new KeyValuePairHelper(value),
+                IDataObject value => new DataObjectHelper(value, _objectsRepository),
+                IType type => new TypeHelper(type, _objectsRepository),
+                IPerson value => new PersonHelper(value, _objectsRepository),
+                IUserState value => new UserStateHelper(value, _objectsRepository),
+                IUserStateMachine value => new UserStateMachineHelper(value, _objectsRepository),
+                IAttribute value => new AttributeHelper(value, _objectsRepository),
+                KeyValuePair<string, object> value => new KeyValuePairHelper(value, _objectsRepository,(IDataObject)sender.LookUpObject),
+                KeyValuePair<Guid, int> value => new KeyValuePairHelper(value, _objectsRepository),
                 KeyValuePair<Guid, IEnumerable<ITransition>> value => new KeyValuePairHelper(value, _objectsRepository),
-                IRelation value => new RelationHelper(value),
-                IFile value => new FileHelper(value),
-                IAccess value => new AccessHelper(value),
+                IRelation value => new RelationHelper(value, _objectsRepository),
+                IFile value => new FileHelper(value, _objectsRepository),
+                IAccess value => new AccessHelper(value, _objectsRepository),
                 IAccessRecord value => new AccessRecordHelper(value, _objectsRepository),
-                IFilesSnapshot value => new FilesSnapshotHelper(value),
+                IFilesSnapshot value => new FilesSnapshotHelper(value, _objectsRepository),
                 IPosition value => new PositionHelper(value, _objectsRepository),
-                IOrganisationUnit value => new OrganisationUnitHelper(value),
-                ITransition value => new TransitionHelper(value),
-                IStorageDataObject value => new StorageDataObjectHelper(value),
+                IOrganisationUnit value => new OrganisationUnitHelper(value, _objectsRepository),
+                ITransition value => new TransitionHelper(value, _objectsRepository),
+                IStorageDataObject value => new StorageDataObjectHelper(value, _objectsRepository),
                 null => null, //new NullHelper(),
 
                 _ => null

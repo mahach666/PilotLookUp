@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Model.Utils;
 using PilotLookUp.Objects;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -24,6 +25,19 @@ namespace PilotLookUp.Model
         {
             if (obj == null) return;
             new Tracer().Trace(_objectsRepository, sender, obj);
+        }
+
+        public async Task<Dictionary<string, List<PilotObjectHelper>>> Info(PilotObjectHelper sender)
+        {
+            var res = new Dictionary<string, List<PilotObjectHelper>>();
+
+            foreach (var pair in sender.Reflection.KeyValuePairs)
+            {
+                List<PilotObjectHelper> newPilotObj = await new Tracer().Trace(_objectsRepository, sender, pair.Value);
+                res.Add(pair.Key, newPilotObj);
+            }
+
+            return res;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class RelationHelper : PilotObjectHelper
     {
-        public RelationHelper(IRelation obj)
+        public RelationHelper(IRelation obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             LookUpObject = obj;
             Name = obj.Name;

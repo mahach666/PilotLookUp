@@ -10,7 +10,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class FileHelper : PilotObjectHelper
     {
-        public FileHelper(IFile obj)
+        public FileHelper(IFile obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             LookUpObject = obj;
             Name = obj.Name;

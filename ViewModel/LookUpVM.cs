@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -51,7 +52,7 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ObjReflection Info => _dataObjectSelected?.Reflection;
+        public async Task< Dictionary<string, List<PilotObjectHelper>>> Info() { return await _lookUpModel.Info(_dataObjectSelected); }
 
         private void CopyToClipboard(string sender)
         {

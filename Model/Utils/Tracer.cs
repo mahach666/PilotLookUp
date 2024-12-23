@@ -16,9 +16,9 @@ namespace PilotLookUp.Model.Utils
         private IObjectsRepository _objectsRepository { get; set; }
         private PilotObjectHelper _sender { get; set; }
 
-        public void Trace(IObjectsRepository objectsRepository, PilotObjectHelper sender, object obj)
+        public async Task<List<PilotObjectHelper>> Trace(IObjectsRepository objectsRepository, PilotObjectHelper sender, object obj)
         {
-            if (obj == null) return;
+            if (obj == null) return new List<PilotObjectHelper>();
 
             _objectsRepository = objectsRepository;
             _sender = sender;
@@ -27,23 +27,23 @@ namespace PilotLookUp.Model.Utils
             // Определение типа объекта и вызов соответствующей перегрузки
             if (obj is IEnumerable enumerable)
             {
-                AddToSelectionEnum(enumerable.Cast<object>());
+                return await AddToSelectionEnum(enumerable.Cast<object>());
             }
             else if (obj is IDictionary dictionary)
             {
                 List<object> keys = new List<object>(dictionary.Keys.Cast<object>());
                 List<object> values = new List<object>(dictionary.Values.Cast<object>());
 
-                AddToSelectionDict(keys.Zip(values, (key, value) => new { key, value })
+                return AddToSelectionDict(keys.Zip(values, (key, value) => new { key, value })
                                          .ToDictionary(x => x.key, x => x.value));
             }
             else
             {
-                AddToSelection(obj);
+                return await AddToSelection(obj);
             }
         }
 
-        private async void AddToSelectionEnum<T>(IEnumerable<T> objects)
+        private async Task<List<PilotObjectHelper>> AddToSelectionEnum<T>(IEnumerable<T> objects)
         {
             //var selection = objects.Select(i => PilotObjectMap.Wrap(i)).ToList();
 
@@ -55,25 +55,27 @@ namespace PilotLookUp.Model.Utils
                     selection.Add(PilotObjectMap.Wrap(obj, _sender));
             }
 
-            if (selection.Any())
-            {
-                new LookSeleсtion(selection, _objectsRepository);
-            }
+            //if (selection.Any())
+            //{
+            //    new LookSeleсtion(selection, _objectsRepository);
+            //}
+            return selection;
         }
-        private void AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
+        private List<PilotObjectHelper> AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
             var selection = objects.Select(i => PilotObjectMap.Wrap(i, _sender)).ToList();
-            if (selection.Any())
-            {
-                new LookSeleсtion(selection, _objectsRepository);
-            }
+            //if (selection.Any())
+            //{
+                return selection;
+            //}   
+            
         }
-        private async void AddToSelection(object obj)
+        private async Task<List<PilotObjectHelper>> AddToSelection(object obj)
         {
             if (obj is Guid)
-                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender) }, _objectsRepository);
+                return new List<PilotObjectHelper>() { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender) };
             else
-                new LookSeleсtion(new List<PilotObjectHelper> { PilotObjectMap.Wrap(obj, _sender) }, _objectsRepository);
+                return new List<PilotObjectHelper>() { PilotObjectMap.Wrap(obj, _sender) } ;
         }
     }
 }

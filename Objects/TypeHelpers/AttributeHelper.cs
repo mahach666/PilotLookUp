@@ -10,7 +10,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class AttributeHelper : PilotObjectHelper
     {
-        public AttributeHelper(IAttribute obj)
+        public AttributeHelper(IAttribute obj , IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             LookUpObject = obj;
             Name = obj.Title;
