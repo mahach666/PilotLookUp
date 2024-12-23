@@ -35,12 +35,7 @@ namespace PilotLookUp.ViewModel
                 if (_dataObjectSelected != value)
                 {
                     _dataObjectSelected = value;
-                    Task.Run(async () =>
-                    {
-                        Info = await _lookUpModel.Info(_dataObjectSelected);
-                        OnPropertyChanged("Info");
-                    }
-                    );
+                    UpdateInfo();
                     OnPropertyChanged();
                 }
             }
@@ -53,12 +48,27 @@ namespace PilotLookUp.ViewModel
             set
             {
                 _dataGridSelected = value;
-                OnPropertyChanged("Info");
                 OnPropertyChanged();
             }
         }
 
-        public Dictionary<string, ObjectSet> Info { get; set; }
+        private void UpdateInfo()
+        {
+            Task.Run(async () =>
+            {
+                Info = await _lookUpModel.Info(_dataObjectSelected);
+            });
+        }
+        private Dictionary<string, ObjectSet> _info;
+        public Dictionary<string, ObjectSet> Info
+        {
+            get => _info;
+            set
+            {
+                _info = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void CopyToClipboard(string sender)
         {
@@ -86,7 +96,7 @@ namespace PilotLookUp.ViewModel
 
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector( _dataGridSelected.Value));
+        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected.Value));
 
 
 
