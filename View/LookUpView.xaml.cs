@@ -30,6 +30,11 @@ namespace PilotLookUp.View
             vm._view = this;
             _vm = vm;
             DataContext = _vm;
+
+
+        var a = new TextBlock();
+
+            a.Background = new SolidColorBrush(Colors.Red);
         }
     }
 }
