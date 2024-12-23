@@ -28,12 +28,22 @@ namespace PilotLookUp.Objects
             {
                 if (Count == 0) return "No objects";
                 else if (Count == 1) return this.FirstOrDefault()?.Name ?? "null";
-                else return $"List<{this.FirstOrDefault()?.LookUpObject?.GetType().Name : invalid}>Count = {Count}";
+                else return $"List<{this.FirstOrDefault()?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
             }
         }
 
-        public Brush Color { get { return new SolidColorBrush(Colors.Red); } }
-        
+        public Brush Color
+        {
+            get
+            {
+                if (this.FirstOrDefault().LookUpObject is string)
+                {
+                    return new SolidColorBrush(Colors.Black);
+                }
+                return new SolidColorBrush(Colors.Blue);
+            }
+        }
+
         public override string ToString()
         {
             return Discription;

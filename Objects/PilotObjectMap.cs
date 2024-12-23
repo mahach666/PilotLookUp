@@ -23,11 +23,7 @@ namespace PilotLookUp.Objects
                 //System
                 int value =>  new IntHelper(value, _objectsRepository, sender),
                 string value => new StringHelper(value, _objectsRepository),
-                //bool value when type is null || type == typeof(bool) => new BoolDescriptor(value),
-                //MacroManager when type is null || type == typeof(MacroManager) => new MacroManagerDescriptor(),
-                //IEnumerable value => new EnumerableDescriptor(value),
-                //Exception value when type is null || type == typeof(Exception) => new ExceptionDescriptor(value),
-                //Guid value => new GuidHelper(value, _objectsRepository),
+                //bool value ,
 
                 // PilotTypes
                 IDataObject value => new DataObjectHelper(value, _objectsRepository),
