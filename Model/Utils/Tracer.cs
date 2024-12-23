@@ -25,7 +25,7 @@ namespace PilotLookUp.Model.Utils
             PilotObjectMap.Updaate(_objectsRepository);
 
             // Определение типа объекта и вызов соответствующей перегрузки
-            if (obj is IEnumerable enumerable)
+            if (obj is IEnumerable enumerable && !(obj is string))
             {
                 return await AddToSelectionEnum(enumerable.Cast<object>());
             }
@@ -54,21 +54,13 @@ namespace PilotLookUp.Model.Utils
                 else
                     selection.Add(PilotObjectMap.Wrap(obj, _sender));
             }
-
-            //if (selection.Any())
-            //{
-            //    new LookSeleсtion(selection, _objectsRepository);
-            //}
             return selection;
         }
         private ObjectSet AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
             var selection = new ObjectSet(objects.Select(i => PilotObjectMap.Wrap(i, _sender)).ToList());
-            //if (selection.Any())
-            //{
-            return selection;
-            //}   
 
+            return selection; 
         }
         private async Task<ObjectSet> AddToSelection(object obj)
         {

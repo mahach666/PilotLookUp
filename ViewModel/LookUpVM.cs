@@ -41,15 +41,13 @@ namespace PilotLookUp.ViewModel
                         OnPropertyChanged("Info");
                     }
                     );
-
-                    //OnPropertyChanged("Info");
                     OnPropertyChanged();
                 }
             }
         }
 
-        private KeyValuePair<string, object> _dataGridSelected;
-        public KeyValuePair<string, object> DataGridSelected
+        private KeyValuePair<string, ObjectSet> _dataGridSelected;
+        public KeyValuePair<string, ObjectSet> DataGridSelected
         {
             get => _dataGridSelected;
             set
@@ -72,13 +70,13 @@ namespace PilotLookUp.ViewModel
             {
                 Clipboard.SetText(_dataGridSelected.Key);
             }
-            else if (sender == "DataGridSelectValue" && _dataGridSelected.Value != null)
+            else if (sender == "DataGridSelectValue" && _dataGridSelected.Value.Discription != null)
             {
                 Clipboard.SetText(_dataGridSelected.Value.ToString());
             }
             else if (sender == "DataGridSelectLine" && _dataGridSelected.Key != null)
             {
-                Clipboard.SetText(_dataGridSelected.Key + "\t" + _dataGridSelected.Value.ToString());
+                Clipboard.SetText(_dataGridSelected.Key + "\t" + _dataGridSelected.Value.Discription);
             }
             else
             {
@@ -88,7 +86,7 @@ namespace PilotLookUp.ViewModel
 
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataObjectSelected, _dataGridSelected.Value));
+        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector( _dataGridSelected.Value));
 
 
 

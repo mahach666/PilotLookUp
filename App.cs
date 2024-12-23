@@ -27,7 +27,7 @@ namespace PilotLookUp
         , IMenu<LinkedTasksContext2>
     {
         private IObjectsRepository _objectsRepository;
-        private List<PilotObjectHelper> _convertSelection;
+        private ObjectSet _convertSelection;
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository)
@@ -137,27 +137,27 @@ namespace PilotLookUp
 
                 case ObjectsViewContext objectsViewContext:
                     var selectedDO = objectsViewContext.SelectedObjects?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedDO.Any() ? selectedDO : _convertSelection;
+                    _convertSelection =new ObjectSet( selectedDO.Any() ? selectedDO : _convertSelection);
                     return;
 
                 case TasksViewContext2 tasksViewContext:
                     var selectedT = tasksViewContext.SelectedTasks?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedT.Any() ? selectedT : _convertSelection;
+                    _convertSelection = new ObjectSet(selectedT.Any() ? selectedT : _convertSelection);
                     return;
 
                 case DocumentFilesContext documentFilesContext:
                     var selectedF = documentFilesContext.SelectedObjects?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedF.Any() ? selectedF : _convertSelection;
+                    _convertSelection = new ObjectSet(selectedF.Any() ? selectedF : _convertSelection);
                     break;
 
                 case LinkedObjectsContext linkedObjectsContext:
                     var selectedLO = linkedObjectsContext.SelectedObjects?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedLO.Any() ? selectedLO : _convertSelection;
+                    _convertSelection = new ObjectSet(selectedLO.Any() ? selectedLO : _convertSelection);
                     break;
 
                 case LinkedTasksContext2 linkedTasksContext:
                     var selectedLT = linkedTasksContext.SelectedTasks?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedLT.Any() ? selectedLT : _convertSelection;
+                    _convertSelection = new ObjectSet(selectedLT.Any() ? selectedLT : _convertSelection);
                     break;
             }
         }
