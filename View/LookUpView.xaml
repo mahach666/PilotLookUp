@@ -201,7 +201,7 @@
                             <DataTemplate>
                                 <TextBlock>
                                 <Hyperlink Command="{Binding DataContext.SelectedValueClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
-                                    <TextBlock Text="{Binding Value.LookUpObject, Mode=OneWay}" />
+                                    <TextBlock Text="{Binding Value.Discription, Mode=OneWay}" />
                                 </Hyperlink>
                             </TextBlock>
                             </DataTemplate>

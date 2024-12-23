@@ -24,16 +24,16 @@ namespace PilotLookUp.Model
         public async Task DataGridSelector(PilotObjectHelper sender ,object obj)
         {
             if (obj == null) return;
-            new Tracer().Trace(_objectsRepository, sender, obj);
+            //new Tracer().Trace(_objectsRepository, sender, obj);
         }
 
-        public async Task<Dictionary<string, List<PilotObjectHelper>>> Info(PilotObjectHelper sender)
+        public async Task<Dictionary<string, ObjectSet>> Info(PilotObjectHelper sender)
         {
-            var res = new Dictionary<string, List<PilotObjectHelper>>();
+            var res = new Dictionary<string, ObjectSet>();
 
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                List<PilotObjectHelper> newPilotObj = await new Tracer().Trace(_objectsRepository, sender, pair.Value);
+                ObjectSet newPilotObj = await new Tracer().Trace(_objectsRepository, sender, pair.Value);
                 res.Add(pair.Key, newPilotObj);
             }
 

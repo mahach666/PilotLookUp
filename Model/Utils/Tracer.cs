@@ -16,9 +16,9 @@ namespace PilotLookUp.Model.Utils
         private IObjectsRepository _objectsRepository { get; set; }
         private PilotObjectHelper _sender { get; set; }
 
-        public async Task<List<PilotObjectHelper>> Trace(IObjectsRepository objectsRepository, PilotObjectHelper sender, object obj)
+        public async Task<ObjectSet> Trace(IObjectsRepository objectsRepository, PilotObjectHelper sender, object obj)
         {
-            if (obj == null) return new List<PilotObjectHelper>();
+            if (obj == null) return new ObjectSet();
 
             _objectsRepository = objectsRepository;
             _sender = sender;
@@ -43,11 +43,11 @@ namespace PilotLookUp.Model.Utils
             }
         }
 
-        private async Task<List<PilotObjectHelper>> AddToSelectionEnum<T>(IEnumerable<T> objects)
+        private async Task<ObjectSet> AddToSelectionEnum<T>(IEnumerable<T> objects)
         {
             //var selection = objects.Select(i => PilotObjectMap.Wrap(i)).ToList();
 
-            var selection = new List<PilotObjectHelper>();
+            var selection = new ObjectSet();
             foreach (object obj in objects)
             {
                 if (obj is Guid) selection.Add(PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender));
@@ -61,21 +61,21 @@ namespace PilotLookUp.Model.Utils
             //}
             return selection;
         }
-        private List<PilotObjectHelper> AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
+        private ObjectSet AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
-            var selection = objects.Select(i => PilotObjectMap.Wrap(i, _sender)).ToList();
+            var selection = new ObjectSet(objects.Select(i => PilotObjectMap.Wrap(i, _sender)).ToList());
             //if (selection.Any())
             //{
-                return selection;
+            return selection;
             //}   
-            
+
         }
-        private async Task<List<PilotObjectHelper>> AddToSelection(object obj)
+        private async Task<ObjectSet> AddToSelection(object obj)
         {
             if (obj is Guid)
-                return new List<PilotObjectHelper>() { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender) };
+                return new ObjectSet { PilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj), _sender) };
             else
-                return new List<PilotObjectHelper>() { PilotObjectMap.Wrap(obj, _sender) } ;
+                return new ObjectSet { PilotObjectMap.Wrap(obj, _sender) };
         }
     }
 }
