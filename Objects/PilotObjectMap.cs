@@ -2,6 +2,7 @@
 using PilotLookUp.Objects.TypeHelpers;
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Lifetime;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Objects
@@ -28,6 +29,7 @@ namespace PilotLookUp.Objects
                 int value =>  new IntHelper(value, _objectsRepository, _senderObj),
                 long value => new LongHelper(value, _objectsRepository),
                 DateTime value => new DateTimeHelper(value,_objectsRepository),
+                ILease value => new LeaseHelper(value, _objectsRepository),
 
                 // PilotTypes
                 IDataObject value => new DataObjectHelper(value, _objectsRepository),

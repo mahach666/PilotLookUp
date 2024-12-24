@@ -73,6 +73,10 @@ namespace PilotLookUp.Model.Utils
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
             }
+            //else if (_objectSet.SenderMemberName.Contains("InitializeLifetimeService"))
+            //{
+            //    _objectSet.Add(_pilotObjectMap.Wrap(obj.ToString()));
+            //}
             else
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
