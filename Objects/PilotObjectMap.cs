@@ -1,15 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
-using PilotLookUp.Model;
 using PilotLookUp.Objects.TypeHelpers;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Objects
