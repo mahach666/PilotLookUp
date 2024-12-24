@@ -188,7 +188,7 @@
                                             Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Key, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="{Binding SenderMemberName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -200,10 +200,10 @@
 
                             <DataTemplate>
                                 <TextBlock>
-                                <Hyperlink Command="{Binding DataContext.SelectedValueClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                           TextDecorations="{Binding Value.Decoration}">
-                                    <TextBlock Text="{Binding Value.Discription, Mode=OneWay}"
-                                               Foreground="{Binding Value.Color}" />
+                                <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           TextDecorations="{Binding Decoration}">
+                                    <TextBlock Text="{Binding Discription, Mode=OneWay}"
+                                               Foreground="{Binding Color}" />
                                 </Hyperlink>
                             </TextBlock>
                             </DataTemplate>
