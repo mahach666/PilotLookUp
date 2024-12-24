@@ -56,7 +56,7 @@ namespace PilotLookUp.Objects
                 ILockInfo value => new LockInfoHelper(value, _objectsRepository),
                 null => new NullHelper(null),
 
-                _ => null
+                _ => new OtherHelper(obj, _objectsRepository)
             };
         }
 
