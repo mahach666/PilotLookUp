@@ -25,7 +25,7 @@ namespace PilotLookUp.Objects
             }
         }
         private MemberInfo _memberInfo { get; }
-        public bool IsMethodResult { get => _memberInfo is MethodInfo; }
+        public bool IsMethodResult { get => _memberInfo.MemberType is MemberTypes.Method; }
         public string SenderMemberName { get => IsMethodResult ? _memberInfo.Name + "()" : _memberInfo.Name; }
 
         public string Discription
