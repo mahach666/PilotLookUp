@@ -18,7 +18,14 @@ namespace PilotLookUp.Objects.TypeHelpers
         // TypesByChildren
         public KeyValuePairHelper(KeyValuePair<Guid, int> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
-            _lookUpObject = keyValuePair.Value;
+            _lookUpObject = keyValuePair;
+            _name = keyValuePair.Key.ToString();
+            _isLookable = true;
+        }
+        // TypesByChildren v2
+        public KeyValuePairHelper(KeyValuePair<IDataObject, int> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
+        {
+            _lookUpObject = keyValuePair;
             _name = keyValuePair.Key.ToString();
             _isLookable = true;
         }

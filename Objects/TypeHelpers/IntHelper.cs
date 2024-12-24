@@ -13,6 +13,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _lookUpObject = type;
                     _name = type.Title;
                     _isLookable = true;
+                    _stringId = type.Id.ToString();
                 }
             }
             else if (sender.LookUpObject is IPerson person)
@@ -22,6 +23,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _lookUpObject = person;
                     _name = person.DisplayName;
                     _isLookable = true;
+                    _stringId = person.Id.ToString();
                 }
             }
             else

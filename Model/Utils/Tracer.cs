@@ -39,7 +39,7 @@ namespace PilotLookUp.Model.Utils
                 List<object> keys = new List<object>(dictionary.Keys.Cast<object>());
                 List<object> values = new List<object>(dictionary.Values.Cast<object>());
 
-                return AddToSelectionDict(keys.Zip(values, (key, value) => new { key, value })
+                return await AddToSelectionDict(keys.Zip(values, (key, value) => new { key, value })
                                          .ToDictionary(x => x.key, x => x.value));
             }
             else
@@ -58,11 +58,22 @@ namespace PilotLookUp.Model.Utils
             }
             return _objectSet;
         }
-        private ObjectSet AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
+
+        private async Task<ObjectSet> AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
+            if (objects is Dictionary<Guid, int> childTypeDict)
+            {
+                foreach (var item in childTypeDict)
+                {
+                    var lodetDict = new Dictionary<IDataObject, int>() { [await _objectsRepository.GetObject(item.Key)] = item.Value };
+                    _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
+                }
+            }
+
             _objectSet.AddRange(objects.Select(i => _pilotObjectMap.Wrap(i)));
             return _objectSet;
         }
+
         private async Task<ObjectSet> AddToSelection(object obj)
         {
             if (obj is Guid)

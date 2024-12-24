@@ -43,6 +43,7 @@ namespace PilotLookUp.Objects
                 IAttribute value => new AttributeHelper(value, _objectsRepository),
                 KeyValuePair<string, object> value => new KeyValuePairHelper(value, _objectsRepository,(IDataObject)_senderObj.LookUpObject),
                 KeyValuePair<Guid, int> value => new KeyValuePairHelper(value, _objectsRepository),
+                KeyValuePair<IDataObject, int> value => new KeyValuePairHelper(value, _objectsRepository),
                 KeyValuePair<Guid, IEnumerable<ITransition>> value => new KeyValuePairHelper(value, _objectsRepository),
                 IRelation value => new RelationHelper(value, _objectsRepository),
                 IFile value => new FileHelper(value, _objectsRepository),
