@@ -1,6 +1,8 @@
 ﻿using Ascon.Pilot.SDK;
 using System.Collections.Generic;
-using System;
+using System.Collections.ObjectModel;
+using System.Windows;
+using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -28,7 +30,8 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _stringId = person.Id.ToString();
                 }
             }
-            else if (sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair)
+            else if (sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair
+                && keyValuePair.Key.Type.Id == value)
             {
                 _lookUpObject = keyValuePair.Key.Type;
                 _name = keyValuePair.Key.Type.Title;
