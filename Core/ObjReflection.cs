@@ -46,7 +46,7 @@ namespace PilotLookUp.Core
 
         public static ObjReflection Empty()
         {
-            return new ObjReflection(PilotObjectMap.Wrap(null));
+            return new ObjReflection(PilotObjectMap.WrapNull());
         }
 
         private Type _objType { get; }

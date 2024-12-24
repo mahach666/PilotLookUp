@@ -14,8 +14,10 @@ namespace PilotLookUp.Objects
         {
             ObjectsRepository = objectsRepository;
         }
-        public string Name { get; set; }
-        public object LookUpObject { get; set; }
+        protected string _name { get; set; }
+        public string Name { get => _name; }
+        public object _lookUpObject { get; set; }
+        public object LookUpObject { get=> _lookUpObject; }
         public IObjectsRepository ObjectsRepository { get; }
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
     }

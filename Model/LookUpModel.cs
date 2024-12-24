@@ -34,7 +34,7 @@ namespace PilotLookUp.Model
 
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                ObjectSet newPilotObj = await new Tracer().Trace(_objectsRepository, sender, pair.Value);
+                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender).Trace( pair.Value);
                 res.Add(pair.Key, newPilotObj);
             }
 

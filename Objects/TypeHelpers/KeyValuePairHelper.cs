@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -13,16 +10,16 @@ namespace PilotLookUp.Objects.TypeHelpers
         // Attr
         public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IObjectsRepository objectsRepository, IDataObject sender) : base(objectsRepository)
         {
-            LookUpObject = keyValuePair;
-            Name = sender.Type.Attributes.FirstOrDefault(i=>i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
+            _lookUpObject = keyValuePair;
+            _name = sender.Type.Attributes.FirstOrDefault(i=>i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
             //Name = keyValuePair.Key;
         }
 
         // TypesByChildren
         public KeyValuePairHelper(KeyValuePair<Guid, int> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
-            LookUpObject = keyValuePair.Value;
-            Name = keyValuePair.Key.ToString(); ;
+            _lookUpObject = keyValuePair.Value;
+            _name = keyValuePair.Key.ToString(); ;
         }
 
         //// Access
@@ -35,8 +32,8 @@ namespace PilotLookUp.Objects.TypeHelpers
         // ITransition
         public KeyValuePairHelper(KeyValuePair<Guid, IEnumerable<ITransition>> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
-            LookUpObject = keyValuePair.Value;
-            Name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Title ?? "invalid"; ;
+            _lookUpObject = keyValuePair.Value;
+            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Title ?? "invalid"; ;
         }
     }
 }

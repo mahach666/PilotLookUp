@@ -27,7 +27,7 @@ namespace PilotLookUp.Objects
             get
             {
                 if (Count == 0) return "No objects";
-                else if (Count == 1) return this.FirstOrDefault()?.Name ?? "null";
+                else if (Count == 1) return this.FirstOrDefault()?.Name ?? "NULL";
                 else return $"List<{this.FirstOrDefault()?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
             }
         }

@@ -1,9 +1,4 @@
 ﻿using Ascon.Pilot.SDK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -11,8 +6,8 @@ namespace PilotLookUp.Objects.TypeHelpers
     {
         public FilesSnapshotHelper(IFilesSnapshot obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
-            LookUpObject = obj;
-            Name = obj.Created.ToString();
+            _lookUpObject = obj;
+            _name = obj.Created.ToString();
         }
     }
 }

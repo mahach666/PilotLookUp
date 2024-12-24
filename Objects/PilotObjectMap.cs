@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Extensions;
 using PilotLookUp.Model;
 using PilotLookUp.Objects.TypeHelpers;
 using System;
@@ -13,15 +14,23 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Objects
 {
-    internal static class PilotObjectMap
+    public class PilotObjectMap
     {
-        public static PilotObjectHelper Wrap(object obj, PilotObjectHelper sender = null)
+        public PilotObjectMap(IObjectsRepository objectsRepository, PilotObjectHelper senderObj = null)
         {
+            _objectsRepository = objectsRepository;
+            _senderObj = senderObj;
+        }
+        private static IObjectsRepository _objectsRepository { get; set; }
+        private PilotObjectHelper _senderObj { get; set; }
 
+
+        public PilotObjectHelper Wrap(object obj)
+        {
             return obj switch
             {
                 //System
-                int value =>  new IntHelper(value, _objectsRepository, sender),
+                int value =>  new IntHelper(value, _objectsRepository, _senderObj),
                 string value => new StringHelper(value, _objectsRepository),
                 //bool value ,
 
@@ -32,7 +41,7 @@ namespace PilotLookUp.Objects
                 IUserState value => new UserStateHelper(value, _objectsRepository),
                 IUserStateMachine value => new UserStateMachineHelper(value, _objectsRepository),
                 IAttribute value => new AttributeHelper(value, _objectsRepository),
-                KeyValuePair<string, object> value => new KeyValuePairHelper(value, _objectsRepository,(IDataObject)sender.LookUpObject),
+                KeyValuePair<string, object> value => new KeyValuePairHelper(value, _objectsRepository,(IDataObject)_senderObj.LookUpObject),
                 KeyValuePair<Guid, int> value => new KeyValuePairHelper(value, _objectsRepository),
                 KeyValuePair<Guid, IEnumerable<ITransition>> value => new KeyValuePairHelper(value, _objectsRepository),
                 IRelation value => new RelationHelper(value, _objectsRepository),
@@ -44,16 +53,15 @@ namespace PilotLookUp.Objects
                 IOrganisationUnit value => new OrganisationUnitHelper(value, _objectsRepository),
                 ITransition value => new TransitionHelper(value, _objectsRepository),
                 IStorageDataObject value => new StorageDataObjectHelper(value, _objectsRepository),
-                null => null, //new NullHelper(),
+                null => new NullHelper(null), //new NullHelper(),
 
                 _ => null
             };
         }
 
-        public static void Updaate(IObjectsRepository objectsRepository)
+        public static PilotObjectHelper WrapNull()
         {
-            _objectsRepository = objectsRepository;
+            return new NullHelper(null);
         }
-        private static IObjectsRepository _objectsRepository { get; set; }
     }
 }

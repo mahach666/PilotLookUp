@@ -1,9 +1,4 @@
 ﻿using Ascon.Pilot.SDK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -15,22 +10,22 @@ namespace PilotLookUp.Objects.TypeHelpers
             {
                 if (type.Id == value)
                 {
-                    LookUpObject = type;
-                    Name = type.Title;
+                    _lookUpObject = type;
+                    _name = type.Title;
                 }
             }
             else if (sender.LookUpObject is IPerson person)
             {
                 if (person.Id == value)
                 {
-                    LookUpObject = person;
-                    Name = person.DisplayName;
+                    _lookUpObject = person;
+                    _name = person.DisplayName;
                 }
             }
             else
             {
-                LookUpObject = value;
-                Name = value.ToString();
+                _lookUpObject = value;
+                _name = value.ToString();
             }
         }
     }
