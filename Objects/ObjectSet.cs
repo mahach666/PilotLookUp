@@ -37,7 +37,7 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                if (this.FirstOrDefault()?.IsLookable == true)
+                if (IsLookable == true)
                 {
                     return new SolidColorBrush(Colors.Blue);
                 }
@@ -49,11 +49,23 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                if (this.FirstOrDefault()?.IsLookable == true)
+                if (IsLookable == true)
                 {
                     return TextDecorations.Underline;
                 }
                 return null;
+            }
+        }
+
+        public bool IsLookable 
+        {
+            get
+            {
+                if (this.FirstOrDefault()?.IsLookable == true)
+                {
+                    return true;
+                }
+                return false;
             }
         }
 
