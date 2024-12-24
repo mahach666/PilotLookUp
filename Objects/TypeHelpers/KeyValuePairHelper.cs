@@ -26,7 +26,7 @@ namespace PilotLookUp.Objects.TypeHelpers
         public KeyValuePairHelper(KeyValuePair<IDataObject, int> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             _lookUpObject = keyValuePair;
-            _name = keyValuePair.Key.ToString();
+            _name = keyValuePair.Key.DisplayName;
             _isLookable = true;
         }
 
