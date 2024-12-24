@@ -8,7 +8,7 @@ namespace PilotLookUp.Objects.TypeHelpers
         {
             _lookUpObject = obj;
             _name = objectsRepository.GetOrganisationUnit(obj.OrgUnitId).Title;
-            _isLookable = true;
+            _isLookable = true;            
         }
     }
 }
