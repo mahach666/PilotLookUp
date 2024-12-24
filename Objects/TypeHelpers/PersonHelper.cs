@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using System.Collections.ObjectModel;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -7,7 +8,7 @@ namespace PilotLookUp.Objects.TypeHelpers
         public PersonHelper(IPerson obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             _lookUpObject = obj;
-            //System.Collections.ObjectModel.ReadOnlyCollection<int> a =obj.AllOrgUnits();
+            //ReadOnlyCollection<int> a = obj.AllOrgUnits();
             _name = obj.DisplayName;
             _isLookable = true;
             _stringId = obj.Id.ToString();

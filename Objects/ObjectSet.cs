@@ -17,16 +17,16 @@ namespace PilotLookUp.Objects
         {
             _memberInfo = memberInfo;
         }
-        public ObjectSet(IEnumerable<PilotObjectHelper> collection)
-        {
-            foreach (PilotObjectHelper item in collection)
-            {
-                Add(item);
-            }
-        }
+        //public ObjectSet(IEnumerable<PilotObjectHelper> collection)
+        //{
+        //    foreach (PilotObjectHelper item in collection)
+        //    {
+        //        Add(item);
+        //    }
+        //}
         private MemberInfo _memberInfo { get; }
-        public bool IsMethodResult { get => _memberInfo.MemberType is MemberTypes.Method; }
-        public string SenderMemberName { get => IsMethodResult ? _memberInfo.Name + "()" : _memberInfo.Name; }
+        public bool IsMethodResult { get => _memberInfo?.MemberType is MemberTypes.Method; }
+        public string SenderMemberName { get => IsMethodResult ? _memberInfo?.Name + "()" : _memberInfo?.Name; }
 
         public string Discription
         {

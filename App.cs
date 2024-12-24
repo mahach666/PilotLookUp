@@ -129,6 +129,7 @@ namespace PilotLookUp
         private void SelectUpdater(MarshalByRefObject context)
         {
             var pilotObjectMap = new PilotObjectMap(_objectsRepository);
+            _convertSelection = new ObjectSet(null);
 
             switch (context)
             {
@@ -137,27 +138,27 @@ namespace PilotLookUp
 
                 case ObjectsViewContext objectsViewContext:
                     var selectedDO = objectsViewContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection =new ObjectSet( selectedDO.Any() ? selectedDO : _convertSelection);
+                    _convertSelection.AddRange( selectedDO.Any() ? selectedDO : _convertSelection);
                     return;
 
                 case TasksViewContext2 tasksViewContext:
                     var selectedT = tasksViewContext.SelectedTasks?.Select(i => pilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = new ObjectSet(selectedT.Any() ? selectedT : _convertSelection);
+                    _convertSelection.AddRange(selectedT.Any() ? selectedT : _convertSelection);
                     return;
 
                 case DocumentFilesContext documentFilesContext:
                     var selectedF = documentFilesContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = new ObjectSet(selectedF.Any() ? selectedF : _convertSelection);
+                    _convertSelection.AddRange(selectedF.Any() ? selectedF : _convertSelection);
                     break;
 
                 case LinkedObjectsContext linkedObjectsContext:
                     var selectedLO = linkedObjectsContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = new ObjectSet(selectedLO.Any() ? selectedLO : _convertSelection);
+                    _convertSelection.AddRange(selectedLO.Any() ? selectedLO : _convertSelection);
                     break;
 
                 case LinkedTasksContext2 linkedTasksContext:
                     var selectedLT = linkedTasksContext.SelectedTasks?.Select(i => pilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = new ObjectSet(selectedLT.Any() ? selectedLT : _convertSelection);
+                    _convertSelection.AddRange(selectedLT.Any() ? selectedLT : _convertSelection);
                     break;
             }
         }
