@@ -41,8 +41,8 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private KeyValuePair<string, ObjectSet> _dataGridSelected;
-        public KeyValuePair<string, ObjectSet> DataGridSelected
+        private ObjectSet _dataGridSelected;
+        public ObjectSet DataGridSelected
         {
             get => _dataGridSelected;
             set
@@ -72,21 +72,23 @@ namespace PilotLookUp.ViewModel
 
         private void CopyToClipboard(string sender)
         {
-            if (sender == "List" && _dataObjectSelected != null)
+            if (_dataObjectSelected == null) Clipboard.SetText("Ошибка копирования, ничего не выбрано");
+
+            if (sender == "List")
             {
                 Clipboard.SetText(_dataObjectSelected.Name);
             }
-            else if (sender == "DataGridSelectName" && _dataGridSelected.Key != null)
+            else if (sender == "DataGridSelectName")
             {
-                Clipboard.SetText(_dataGridSelected.Key);
+                Clipboard.SetText(_dataGridSelected?.SenderMemberName);
             }
-            else if (sender == "DataGridSelectValue" && _dataGridSelected.Value.Discription != null)
+            else if (sender == "DataGridSelectValue")
             {
-                Clipboard.SetText(_dataGridSelected.Value.ToString());
+                Clipboard.SetText(_dataGridSelected?.Discription);
             }
-            else if (sender == "DataGridSelectLine" && _dataGridSelected.Key != null)
+            else if (sender == "DataGridSelectLine")
             {
-                Clipboard.SetText(_dataGridSelected.Key + "\t" + _dataGridSelected.Value.Discription);
+                Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
             }
             else
             {
@@ -96,7 +98,7 @@ namespace PilotLookUp.ViewModel
 
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected.Value));
+        public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 
 
 
