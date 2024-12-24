@@ -1,4 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
+using System.Collections.Generic;
+using System;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -25,6 +27,13 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _isLookable = true;
                     _stringId = person.Id.ToString();
                 }
+            }
+            else if (sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair)
+            {
+                _lookUpObject = keyValuePair.Key.Type;
+                _name = keyValuePair.Key.Type.Title;
+                _isLookable = true;
+                _stringId = keyValuePair.Key.Type.Id.ToString();
             }
             else
             {
