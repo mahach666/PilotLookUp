@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
@@ -17,13 +13,7 @@ namespace PilotLookUp.Objects
         {
             _memberInfo = memberInfo;
         }
-        //public ObjectSet(IEnumerable<PilotObjectHelper> collection)
-        //{
-        //    foreach (PilotObjectHelper item in collection)
-        //    {
-        //        Add(item);
-        //    }
-        //}
+
         private MemberInfo _memberInfo { get; }
         public bool IsMethodResult { get => _memberInfo?.MemberType is MemberTypes.Method; }
         public string SenderMemberName { get => IsMethodResult ? _memberInfo?.Name + "()" : _memberInfo?.Name; }
