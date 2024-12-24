@@ -62,8 +62,9 @@ namespace PilotLookUp.Model.Utils
 
         private async Task<ObjectSet> AddToSelection(object obj)
         {
-            if (_senderObj is RelationHelper
-                && obj is Guid
+            if ( obj is Guid
+                && (_senderObj is RelationHelper 
+                || _senderObj is FileHelper)                
                 && _objectSet.SenderMemberName == "Id")
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj.ToString()));
