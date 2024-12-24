@@ -31,11 +31,11 @@ namespace PilotLookUp.Objects
             {
                 //System
                 Enum value => new EnumHelper(value, _objectsRepository),
+                string value => new StringHelper(value, _objectsRepository),
+                bool value => new BoolHelper(value, _objectsRepository),
                 int value =>  new IntHelper(value, _objectsRepository, _senderObj),
                 long value => new LongHelper(value, _objectsRepository),
-                string value => new StringHelper(value, _objectsRepository),
                 DateTime value => new DateTimeHelper(value,_objectsRepository),
-                //bool value ,
 
                 // PilotTypes
                 IDataObject value => new DataObjectHelper(value, _objectsRepository),
