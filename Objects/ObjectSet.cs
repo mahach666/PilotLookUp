@@ -26,7 +26,6 @@ namespace PilotLookUp.Objects
                 if (Count == 0) return "No objects";
                 else if (Count == 1)
                 {
-                    //if (SenderMemberName.EndsWith("Id")) return firstObj?.StringId ?? firstObj?.Name ?? "Ошибка вычисления";
                     return firstObj?.StringId ?? firstObj?.Name ?? firstObj?.ToString() ?? "Ошибка вычисления";
                 }
                 else return $"List<{firstObj?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
