@@ -51,6 +51,7 @@ namespace PilotLookUp.Objects
                 ITransition value => new TransitionHelper(value, _objectsRepository),
                 IStorageDataObject value => new StorageDataObjectHelper(value, _objectsRepository),
                 IStateInfo value => new StateInfoHelper(value, _objectsRepository),
+                ILockInfo value => new LockInfoHelper(value, _objectsRepository),
                 null => new NullHelper(null),
 
                 _ => null
