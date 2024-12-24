@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class AttributeHelper : PilotObjectHelper
+    public class AttributeHelper : PilotObjectHelper
     {
         public AttributeHelper(IAttribute obj , IObjectsRepository objectsRepository) : base(objectsRepository)
         {

@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class FilesSnapshotHelper : PilotObjectHelper
+    public class FilesSnapshotHelper : PilotObjectHelper
     {
         public FilesSnapshotHelper(IFilesSnapshot obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {

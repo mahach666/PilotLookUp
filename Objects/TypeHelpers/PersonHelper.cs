@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class PersonHelper : PilotObjectHelper
+    public class PersonHelper : PilotObjectHelper
     {
         public PersonHelper(IPerson obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {

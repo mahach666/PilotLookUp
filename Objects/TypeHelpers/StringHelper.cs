@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class StringHelper : PilotObjectHelper
+    public class StringHelper : PilotObjectHelper
     {
         public StringHelper(string value, IObjectsRepository objectsRepository) : base(objectsRepository)
         {

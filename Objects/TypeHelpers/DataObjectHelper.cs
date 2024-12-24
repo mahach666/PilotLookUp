@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class DataObjectHelper : PilotObjectHelper
+    public class DataObjectHelper : PilotObjectHelper
     {
         public DataObjectHelper(IDataObject obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {

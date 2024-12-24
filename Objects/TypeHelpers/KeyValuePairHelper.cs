@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class KeyValuePairHelper : PilotObjectHelper
+    public class KeyValuePairHelper : PilotObjectHelper
     {
         // Attr
         public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IObjectsRepository objectsRepository, IDataObject sender) : base(objectsRepository)

@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class FileHelper : PilotObjectHelper
+    public class FileHelper : PilotObjectHelper
     {
         public FileHelper(IFile obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {

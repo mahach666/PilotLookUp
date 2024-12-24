@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class TransitionHelper : PilotObjectHelper
+    public class TransitionHelper : PilotObjectHelper
     {
         public TransitionHelper(ITransition obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
