@@ -28,13 +28,13 @@ namespace PilotLookUp.Model
             new LookSeleсtion(obj, _objectsRepository);
         }
 
-        public async Task<Dictionary<string, ObjectSet>> Info(PilotObjectHelper sender)
+        public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
         {
-            var res = new Dictionary<string, ObjectSet>();
+            var res = new List<ObjectSet>();
 
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender).Trace( pair.Value);
+                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender).Trace(pair.Value);
                 res.Add(pair.Key, newPilotObj);
             }
 

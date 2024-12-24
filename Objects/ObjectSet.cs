@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,23 +13,32 @@ namespace PilotLookUp.Objects
 {
     public class ObjectSet : List<PilotObjectHelper>
     {
-        public ObjectSet()
+        public ObjectSet(MemberInfo memberInfo)
         {
+            _memberInfo = memberInfo;
         }
-        public ObjectSet(IEnumerable<PilotObjectHelper> collection)
+        public ObjectSet(MemberInfo memberInfo, IEnumerable<PilotObjectHelper> collection)
         {
+            _memberInfo = memberInfo;
             foreach (PilotObjectHelper item in collection)
             {
                 Add(item);
             }
         }
+        private MemberInfo _memberInfo { get; }
+        public bool IsMethodResult { get => _memberInfo is MethodInfo; }
+        public string SenderMemberName { get => IsMethodResult ? _memberInfo.Name + "()" : _memberInfo.Name; }
 
         public string Discription
         {
             get
             {
                 if (Count == 0) return "No objects";
-                else if (Count == 1) return this.FirstOrDefault()?.Name ?? "NULL";
+                else if (Count == 1)
+                {
+                    if (SenderMemberName.Contains("Id")) return this.FirstOrDefault()
+                    return this.FirstOrDefault()?.Name ?? "NULL";
+                }
                 else return $"List<{this.FirstOrDefault()?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
             }
         }
@@ -57,7 +67,7 @@ namespace PilotLookUp.Objects
             }
         }
 
-        public bool IsLookable 
+        public bool IsLookable
         {
             get
             {
