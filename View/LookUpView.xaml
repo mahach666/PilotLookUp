@@ -200,9 +200,10 @@
 
                             <DataTemplate>
                                 <TextBlock>
-                                <Hyperlink Command="{Binding DataContext.SelectedValueClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                <Hyperlink Command="{Binding DataContext.SelectedValueClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           TextDecorations="{Binding Value.Decoration}">
                                     <TextBlock Text="{Binding Value.Discription, Mode=OneWay}"
-                                               Foreground="{Binding Value.Color}"/>
+                                               Foreground="{Binding Value.Color}" />
                                 </Hyperlink>
                             </TextBlock>
                             </DataTemplate>

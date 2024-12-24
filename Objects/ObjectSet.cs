@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
 
@@ -36,11 +37,23 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                if (this.FirstOrDefault().LookUpObject is string)
+                if (this.FirstOrDefault()?.IsLookable == true)
                 {
-                    return new SolidColorBrush(Colors.Black);
+                    return new SolidColorBrush(Colors.Blue);
                 }
-                return new SolidColorBrush(Colors.Blue);
+                return new SolidColorBrush(Colors.Black);
+            }
+        }
+
+        public TextDecorationCollection Decoration
+        {
+            get
+            {
+                if (this.FirstOrDefault()?.IsLookable == true)
+                {
+                    return TextDecorations.Underline;
+                }
+                return null;
             }
         }
 

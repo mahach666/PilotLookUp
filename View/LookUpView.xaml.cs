@@ -34,7 +34,7 @@ namespace PilotLookUp.View
 
         var a = new TextBlock();
 
-            a.Background = new SolidColorBrush(Colors.Red);
+            a.TextDecorations =  TextDecorations.Underline;
         }
     }
 }
