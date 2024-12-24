@@ -2,13 +2,11 @@
 using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
-using PilotLookUp.ViewBuilders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Model.Utils
@@ -104,7 +102,6 @@ namespace PilotLookUp.Model.Utils
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
             return _objectSet;
-
         }
     }
 }
