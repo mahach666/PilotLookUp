@@ -48,6 +48,7 @@ namespace PilotLookUp.Objects
                 KeyValuePair<Guid, int> value => new KeyValuePairHelper(value, _objectsRepository),
                 KeyValuePair<IDataObject, int> value => new KeyValuePairHelper(value, _objectsRepository),
                 KeyValuePair<Guid, IEnumerable<ITransition>> value => new KeyValuePairHelper(value, _objectsRepository),
+                KeyValuePair<int, IAccess> value => new KeyValuePairHelper(value, _objectsRepository),
                 IRelation value => new RelationHelper(value, _objectsRepository),
                 IFile value => new FileHelper(value, _objectsRepository),
                 IAccess value => new AccessHelper(value, _objectsRepository),

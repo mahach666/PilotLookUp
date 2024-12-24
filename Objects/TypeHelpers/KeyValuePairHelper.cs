@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +31,13 @@ namespace PilotLookUp.Objects.TypeHelpers
             _isLookable = true;
         }
 
-        //// Access
-        //public KeyValuePairHelper(KeyValuePair<int, IAccess> keyValuePair)
-        //{
-        //    LookUpObject = keyValuePair.Value;
-        //    Name = keyValuePair.Value.AccessLevel.ToString(); ;
-        //}
+        // Access
+        public KeyValuePairHelper(KeyValuePair<int, IAccess> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
+        {
+            _lookUpObject = keyValuePair.Value;
+            _name = keyValuePair.Value.AccessLevel.ToString();
+            _isLookable = true;
+        }
 
         // ITransition
         public KeyValuePairHelper(KeyValuePair<Guid, IEnumerable<ITransition>> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
