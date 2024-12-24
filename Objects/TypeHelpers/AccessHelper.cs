@@ -8,6 +8,7 @@ namespace PilotLookUp.Objects.TypeHelpers
         {
             _lookUpObject = obj;
             _name = obj.AccessLevel.ToString();
+            _isLookable = true;
         }
     }
 }

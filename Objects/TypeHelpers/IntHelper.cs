@@ -12,6 +12,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                 {
                     _lookUpObject = type;
                     _name = type.Title;
+                    _isLookable = true;
                 }
             }
             else if (sender.LookUpObject is IPerson person)
@@ -20,12 +21,14 @@ namespace PilotLookUp.Objects.TypeHelpers
                 {
                     _lookUpObject = person;
                     _name = person.DisplayName;
+                    _isLookable = true;
                 }
             }
             else
             {
                 _lookUpObject = value;
                 _name = value.ToString();
+                _isLookable = false;
             }
         }
     }

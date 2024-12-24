@@ -12,14 +12,15 @@ namespace PilotLookUp.Objects.TypeHelpers
         {
             _lookUpObject = keyValuePair;
             _name = sender.Type.Attributes.FirstOrDefault(i=>i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
-            //Name = keyValuePair.Key;
+            _isLookable = true;
         }
 
         // TypesByChildren
         public KeyValuePairHelper(KeyValuePair<Guid, int> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             _lookUpObject = keyValuePair.Value;
-            _name = keyValuePair.Key.ToString(); ;
+            _name = keyValuePair.Key.ToString();
+            _isLookable = true;
         }
 
         //// Access
@@ -33,7 +34,8 @@ namespace PilotLookUp.Objects.TypeHelpers
         public KeyValuePairHelper(KeyValuePair<Guid, IEnumerable<ITransition>> keyValuePair, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             _lookUpObject = keyValuePair.Value;
-            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Title ?? "invalid"; ;
+            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Title ?? "invalid";
+            _isLookable = true;
         }
     }
 }
