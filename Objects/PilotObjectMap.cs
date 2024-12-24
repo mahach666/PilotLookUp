@@ -34,6 +34,7 @@ namespace PilotLookUp.Objects
                 long value => new LongHelper(value, _objectsRepository),
                 string value => new StringHelper(value, _objectsRepository),
                 DateTime value => new DateTimeHelper(value,_objectsRepository),
+                Enum value => new EnumHelper(value, _objectsRepository),
                 //bool value ,
 
                 // PilotTypes
@@ -56,7 +57,7 @@ namespace PilotLookUp.Objects
                 IOrganisationUnit value => new OrganisationUnitHelper(value, _objectsRepository),
                 ITransition value => new TransitionHelper(value, _objectsRepository),
                 IStorageDataObject value => new StorageDataObjectHelper(value, _objectsRepository),
-                DataState value => new DataStateHelper(value, _objectsRepository),
+                //DataState value => new DataStateHelper(value, _objectsRepository),
                 IStateInfo value => new StateInfoHelper(value, _objectsRepository),
                 null => new NullHelper(null),
 
