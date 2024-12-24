@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,18 +14,20 @@ namespace PilotLookUp.Model.Utils
 {
     public class Tracer
     {
-        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj)
+        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember)
         {
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj);
             _objectsRepository = objectsRepository;
+            _objectSet = new ObjectSet(senderMember);
         }
 
-       private PilotObjectMap _pilotObjectMap { get; }
+        private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
+        private ObjectSet _objectSet { get; set; }
 
         public async Task<ObjectSet> Trace(object obj)
         {
-            if (obj == null) return new ObjectSet();
+            if (obj == null) return _objectSet;
 
             // Определение типа объекта и вызов соответствующей перегрузки
             if (obj is IEnumerable enumerable && !(obj is string))
@@ -47,27 +50,31 @@ namespace PilotLookUp.Model.Utils
 
         private async Task<ObjectSet> AddToSelectionEnum<T>(IEnumerable<T> objects)
         {
-            var selection = new ObjectSet();
             foreach (object obj in objects)
             {
-                if (obj is Guid) selection.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
+                if (obj is Guid) _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
                 else
-                    selection.Add(_pilotObjectMap.Wrap(obj));
+                    _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
-            return selection;
+            return _objectSet;
         }
         private ObjectSet AddToSelectionDict<TKey, TValue>(IDictionary<TKey, TValue> objects)
         {
-            var selection = new ObjectSet(objects.Select(i => _pilotObjectMap.Wrap(i)).ToList());
-
-            return selection;
+            _objectSet.AddRange(objects.Select(i => _pilotObjectMap.Wrap(i)));
+            return _objectSet;
         }
         private async Task<ObjectSet> AddToSelection(object obj)
         {
             if (obj is Guid)
-                return new ObjectSet { _pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)) };
+            {
+                _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
+                return _objectSet;
+            }
             else
-                return new ObjectSet { _pilotObjectMap.Wrap(obj) };
+            {
+                _objectSet.Add(_pilotObjectMap.Wrap(obj));
+                return _objectSet;
+            }
         }
     }
 }

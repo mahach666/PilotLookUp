@@ -17,9 +17,8 @@ namespace PilotLookUp.Objects
         {
             _memberInfo = memberInfo;
         }
-        public ObjectSet(MemberInfo memberInfo, IEnumerable<PilotObjectHelper> collection)
+        public ObjectSet(IEnumerable<PilotObjectHelper> collection)
         {
-            _memberInfo = memberInfo;
             foreach (PilotObjectHelper item in collection)
             {
                 Add(item);

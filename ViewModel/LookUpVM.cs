@@ -59,8 +59,8 @@ namespace PilotLookUp.ViewModel
                 Info = await _lookUpModel.Info(_dataObjectSelected);
             });
         }
-        private Dictionary<string, ObjectSet> _info;
-        public Dictionary<string, ObjectSet> Info
+        private List<ObjectSet> _info;
+        public List<ObjectSet> Info
         {
             get => _info;
             set
