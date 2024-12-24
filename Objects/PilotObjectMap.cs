@@ -55,6 +55,7 @@ namespace PilotLookUp.Objects
                 IOrganisationUnit value => new OrganisationUnitHelper(value, _objectsRepository),
                 ITransition value => new TransitionHelper(value, _objectsRepository),
                 IStorageDataObject value => new StorageDataObjectHelper(value, _objectsRepository),
+                DataState value => new DataStateHelper(value, _objectsRepository),
                 null => new NullHelper(null), //new NullHelper(),
 
                 _ => null

@@ -7,7 +7,7 @@ namespace PilotLookUp.Objects.TypeHelpers
         public RelationHelper(IRelation obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
             _lookUpObject = obj;
-            _name = obj.Name;
+            _name = obj.Name is null ? obj.Id.ToString() : obj.Name;
             _isLookable = true;
             _stringId = obj.Id.ToString();
         }

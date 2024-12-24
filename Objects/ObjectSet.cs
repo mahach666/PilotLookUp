@@ -32,13 +32,14 @@ namespace PilotLookUp.Objects
         {
             get
             {
+                var firstObj = this.FirstOrDefault();
                 if (Count == 0) return "No objects";
                 else if (Count == 1)
                 {
-                    if (SenderMemberName.EndsWith("Id")) return this.FirstOrDefault()?.StringId ?? "Ошибка вычисления";
-                    return this.FirstOrDefault()?.Name ?? "NULL";
+                    if (SenderMemberName.EndsWith("Id")) return firstObj?.StringId ?? firstObj?.Name ?? "Ошибка вычисления";
+                    return firstObj?.Name ?? "NULL";
                 }
-                else return $"List<{this.FirstOrDefault()?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
+                else return $"List<{firstObj?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
             }
         }
 
@@ -70,7 +71,8 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                if (this.FirstOrDefault()?.IsLookable == true)
+                if (!this.Any()) return false;
+                else if (this.FirstOrDefault()?.IsLookable == true)
                 {
                     return true;
                 }
