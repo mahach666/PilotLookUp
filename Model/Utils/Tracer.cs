@@ -54,6 +54,12 @@ namespace PilotLookUp.Model.Utils
                     var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObject(keyVal.Key), keyVal.Value);
                     _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
                 }
+                else if (_objectSet.SenderMemberName.Contains("AllOrgUnits")
+                    && obj is int id)
+                {
+                    var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == id);
+                    _objectSet.Add(_pilotObjectMap.Wrap(unit));
+                }
                 else
                     _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
@@ -62,9 +68,9 @@ namespace PilotLookUp.Model.Utils
 
         private async Task<ObjectSet> AddToSelection(object obj)
         {
-            if ( obj is Guid
-                && (_senderObj is RelationHelper 
-                || _senderObj is FileHelper)                
+            if (obj is Guid
+                && (_senderObj is RelationHelper
+                || _senderObj is FileHelper)
                 && _objectSet.SenderMemberName == "Id")
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj.ToString()));
@@ -73,10 +79,19 @@ namespace PilotLookUp.Model.Utils
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
             }
-            //else if (_objectSet.SenderMemberName.Contains("InitializeLifetimeService"))
-            //{
-            //    _objectSet.Add(_pilotObjectMap.Wrap(obj.ToString()));
-            //}
+            else if (_senderObj is OrganisationUnitHelper 
+                && obj is int id
+                && _objectSet.SenderMemberName == "Id")
+            {
+                    _objectSet.Add(_pilotObjectMap.Wrap(_senderObj.LookUpObject));                
+            }
+            else if (_senderObj is OrganisationUnitHelper
+                && obj is int personId
+                && _objectSet.SenderMemberName == "Person")
+            {
+                var person = _objectsRepository.GetPeople().FirstOrDefault(i => i.Id == personId);
+                _objectSet.Add(_pilotObjectMap.Wrap(person));
+            }
             else
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
