@@ -60,6 +60,13 @@ namespace PilotLookUp.Model.Utils
                     var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == id);
                     _objectSet.Add(_pilotObjectMap.Wrap(unit));
                 }
+                else if (_senderObj is OrganisationUnitHelper
+&& obj is int childrenId
+&& _objectSet.SenderMemberName == "Children")
+                {
+                    var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == childrenId);
+                    _objectSet.Add(_pilotObjectMap.Wrap(unit));
+                }
                 else
                     _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
@@ -79,11 +86,11 @@ namespace PilotLookUp.Model.Utils
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
             }
-            else if (_senderObj is OrganisationUnitHelper 
+            else if (_senderObj is OrganisationUnitHelper
                 && obj is int id
                 && _objectSet.SenderMemberName == "Id")
             {
-                    _objectSet.Add(_pilotObjectMap.Wrap(_senderObj.LookUpObject));                
+                _objectSet.Add(_pilotObjectMap.Wrap(_senderObj.LookUpObject));
             }
             else if (_senderObj is OrganisationUnitHelper
                 && obj is int personId
