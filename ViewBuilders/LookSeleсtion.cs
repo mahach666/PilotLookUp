@@ -10,16 +10,11 @@ namespace PilotLookUp.ViewBuilders
 {
     public class LookSeleсtion
     {
-        private List<PilotObjectHelper> _dataObjects { get; }
-        private IObjectsRepository _objectsRepository { get; }
-
         public LookSeleсtion(ObjectSet dataObjects, IObjectsRepository objectsRepository)
         {
             if (!dataObjects.IsLookable) return;
 
-            _dataObjects = dataObjects;
-            _objectsRepository = objectsRepository;
-            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(_dataObjects, _objectsRepository)));
+            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(dataObjects, objectsRepository)));
             view.Show();
         }
     }

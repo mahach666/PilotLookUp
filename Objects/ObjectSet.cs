@@ -40,6 +40,7 @@ namespace PilotLookUp.Objects
                 {
                     return new SolidColorBrush(Colors.Blue);
                 }
+                else if (Discription.StartsWith("Error:")) return new SolidColorBrush(Colors.Red);
                 return new SolidColorBrush(Colors.Black);
             }
         }

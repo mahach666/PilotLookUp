@@ -22,7 +22,6 @@ namespace PilotLookUp.Core
                 // Поля
                 foreach (PropertyInfo property in _propertyes)
                 {
-                    //string name = property.Name;
                     object value = property.GetValue(dataObjects);
                     if (value == null) value = "null";
                     KeyValuePairs.Add(property, value);
@@ -34,9 +33,16 @@ namespace PilotLookUp.Core
                     // Проверяем, что метод не принимает параметры
                     if (method.GetParameters().Length == 0)
                     {
-                        //string methodName = method.Name + "()";
                         if (method.Name.Contains("get_")) continue;
-                        object result = method.Invoke(dataObjects, null);
+                        object result;
+                        try
+                        {
+                             result = method.Invoke(dataObjects, null);
+                        }
+                        catch (Exception e)
+                        {
+                            result = "Error: " + e.Message;
+                        }
                         if (result == null) result = "null";
                         KeyValuePairs.Add(method, result);
                     }

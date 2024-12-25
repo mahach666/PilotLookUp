@@ -46,7 +46,10 @@ namespace PilotLookUp.Model.Utils
         {
             foreach (object obj in objects)
             {
-                if (obj is Guid) _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
+                if (obj is Guid)
+                {
+                    _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
+                }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
                     var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObject(keyVal.Key), keyVal.Value);
@@ -85,7 +88,7 @@ namespace PilotLookUp.Model.Utils
                 _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
             }
             else if (_senderObj is OrganisationUnitHelper
-                && obj is int id
+                && obj is int
                 && _objectSet.SenderMemberName == "Id")
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(_senderObj.LookUpObject));

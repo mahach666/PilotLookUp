@@ -40,7 +40,7 @@ namespace PilotLookUp
         {
             var item = builder.AddItem("PilotLookUp", 1).WithHeader("PilotLookUp");
             item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
-            item.WithSubmenu().AddItem("LookDB", 0).WithHeader("LookDB");
+            item.WithSubmenu().AddItem("LookDB", 1).WithHeader("LookDB");
         }
         public void Build(IMenuBuilder builder, ObjectsViewContext context)
         {
@@ -109,15 +109,18 @@ namespace PilotLookUp
 
         private void ItemClick(string name)
         {
+            if (name == "LookDB")
+            {
+                var pilotObjectMap = new PilotObjectMap(_objectsRepository);
+                var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
+                new LookSeleсtion(repo, _objectsRepository);
+            }
+
             if (_convertSelection == null || !_convertSelection.Any()) return;
 
             if (name == "LookSelected")
             {
                 new LookSeleсtion(_convertSelection, _objectsRepository);
-            }
-            else if (name == "LookDB")
-            {
-                //LookDB(context);
             }
         }
 
@@ -138,7 +141,7 @@ namespace PilotLookUp
 
                 case ObjectsViewContext objectsViewContext:
                     var selectedDO = objectsViewContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection.AddRange( selectedDO.Any() ? selectedDO : _convertSelection);
+                    _convertSelection.AddRange(selectedDO.Any() ? selectedDO : _convertSelection);
                     return;
 
                 case TasksViewContext2 tasksViewContext:
