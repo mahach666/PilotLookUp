@@ -2,6 +2,7 @@
 using PilotLookUp.Objects.TypeHelpers;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.Remoting.Lifetime;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
@@ -9,13 +10,15 @@ namespace PilotLookUp.Objects
 {
     public class PilotObjectMap
     {
-        public PilotObjectMap(IObjectsRepository objectsRepository, PilotObjectHelper senderObj = null)
+        public PilotObjectMap(IObjectsRepository objectsRepository, PilotObjectHelper senderObj = null, MemberInfo senderMember = null)
         {
             _objectsRepository = objectsRepository;
             _senderObj = senderObj;
+            _senderMember = senderMember;
         }
-        private static IObjectsRepository _objectsRepository { get; set; }
-        private PilotObjectHelper _senderObj { get; set; }
+        private IObjectsRepository _objectsRepository { get; }
+        private PilotObjectHelper _senderObj { get; }
+        private MemberInfo _senderMember { get; }
 
 
         public PilotObjectHelper Wrap(object obj)
@@ -26,7 +29,7 @@ namespace PilotLookUp.Objects
                 Enum value => new EnumHelper(value, _objectsRepository),
                 string value => new StringHelper(value, _objectsRepository),
                 bool value => new BoolHelper(value, _objectsRepository),
-                int value => new IntHelper(value, _objectsRepository, _senderObj),
+                int value => new IntHelper(value, _objectsRepository, _senderObj, _senderMember),
                 long value => new LongHelper(value, _objectsRepository),
                 DateTime value => new DateTimeHelper(value, _objectsRepository),
                 ILease value => new LeaseHelper(value, _objectsRepository),

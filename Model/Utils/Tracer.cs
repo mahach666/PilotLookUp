@@ -16,7 +16,7 @@ namespace PilotLookUp.Model.Utils
         public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember)
         {
             _senderObj = senderObj;
-            _pilotObjectMap = new PilotObjectMap(objectsRepository, _senderObj);
+            _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             _objectsRepository = objectsRepository;
             _objectSet = new ObjectSet(senderMember);
         }
@@ -63,19 +63,19 @@ namespace PilotLookUp.Model.Utils
                     var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObject(keyVal.Key), keyVal.Value);
                     _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
                 }
-                else if (_objectSet.SenderMemberName.Contains("AllOrgUnits")
-                    && obj is int id)
-                {
-                    var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == id);
-                    _objectSet.Add(_pilotObjectMap.Wrap(unit));
-                }
-                else if (_senderObj is OrganisationUnitHelper
-                                    && obj is int childrenId
-                                    && _objectSet.SenderMemberName == "Children")
-                {
-                    var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == childrenId);
-                    _objectSet.Add(_pilotObjectMap.Wrap(unit));
-                }
+                //else if (_objectSet.SenderMemberName.Contains("AllOrgUnits")
+                //    && obj is int id)
+                //{
+                //    var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == id);
+                //    _objectSet.Add(_pilotObjectMap.Wrap(unit));
+                //}
+                //else if (_senderObj is OrganisationUnitHelper
+                //                    && obj is int childrenId
+                //                    && _objectSet.SenderMemberName == "Children")
+                //{
+                //    var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == childrenId);
+                //    _objectSet.Add(_pilotObjectMap.Wrap(unit));
+                //}
                 else
                     _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
@@ -96,19 +96,19 @@ namespace PilotLookUp.Model.Utils
                     _objectSet.Add(_pilotObjectMap.Wrap(guid.ToString()));
                 }
             }
-            else if (_senderObj is OrganisationUnitHelper
-                && obj is int
-                && _objectSet.SenderMemberName == "Id")
-            {
-                _objectSet.Add(_pilotObjectMap.Wrap(_senderObj.LookUpObject));
-            }
-            else if (_senderObj is OrganisationUnitHelper
-                && obj is int personId
-                && _objectSet.SenderMemberName == "Person")
-            {
-                var person = _objectsRepository.GetPeople().FirstOrDefault(i => i.Id == personId);
-                _objectSet.Add(_pilotObjectMap.Wrap(person));
-            }
+            //else if (_senderObj is OrganisationUnitHelper
+            //    && obj is int
+            //    && _objectSet.SenderMemberName == "Id")
+            //{
+            //    _objectSet.Add(_pilotObjectMap.Wrap(_senderObj.LookUpObject));
+            //}
+            //else if (_senderObj is OrganisationUnitHelper
+            //    && obj is int personId
+            //    && _objectSet.SenderMemberName == "Person")
+            //{
+            //    var person = _objectsRepository.GetPeople().FirstOrDefault(i => i.Id == personId);
+            //    _objectSet.Add(_pilotObjectMap.Wrap(person));
+            //}
             else
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
