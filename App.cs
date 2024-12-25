@@ -3,7 +3,6 @@ using Ascon.Pilot.SDK.Menu;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewBuilders;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 

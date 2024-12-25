@@ -1,8 +1,6 @@
-﻿using PilotLookUp.Model.Utils;
-using PilotLookUp.Objects;
+﻿using PilotLookUp.Objects;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace PilotLookUp.Core
