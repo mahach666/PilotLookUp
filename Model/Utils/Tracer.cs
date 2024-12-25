@@ -46,9 +46,17 @@ namespace PilotLookUp.Model.Utils
         {
             foreach (object obj in objects)
             {
-                if (obj is Guid)
+                if (obj is Guid guid)
                 {
-                    _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
+                    var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid);
+                    if (lodedObj != null)
+                    {
+                        _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
+                    }
+                    else
+                    {
+                        _objectSet.Add(_pilotObjectMap.Wrap(guid.ToString()));
+                    }
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
@@ -62,8 +70,8 @@ namespace PilotLookUp.Model.Utils
                     _objectSet.Add(_pilotObjectMap.Wrap(unit));
                 }
                 else if (_senderObj is OrganisationUnitHelper
-&& obj is int childrenId
-&& _objectSet.SenderMemberName == "Children")
+                                    && obj is int childrenId
+                                    && _objectSet.SenderMemberName == "Children")
                 {
                     var unit = _objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == childrenId);
                     _objectSet.Add(_pilotObjectMap.Wrap(unit));
@@ -76,16 +84,17 @@ namespace PilotLookUp.Model.Utils
 
         private async Task<ObjectSet> AddToSelection(object obj)
         {
-            if (obj is Guid
-                && (_senderObj is RelationHelper
-                || _senderObj is FileHelper)
-                && _objectSet.SenderMemberName == "Id")
+             if (obj is Guid guid)
             {
-                _objectSet.Add(_pilotObjectMap.Wrap(obj.ToString()));
-            }
-            else if (obj is Guid)
-            {
-                _objectSet.Add(_pilotObjectMap.Wrap(await _objectsRepository.GetObject((Guid)obj)));
+                var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid);
+                if (lodedObj != null)
+                {
+                    _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
+                }
+                else
+                {
+                    _objectSet.Add(_pilotObjectMap.Wrap(guid.ToString()));
+                }
             }
             else if (_senderObj is OrganisationUnitHelper
                 && obj is int

@@ -1,11 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace PilotLookUp.Extensions
 {
@@ -15,6 +11,11 @@ namespace PilotLookUp.Extensions
         {
             var loader = new ObjectLoader(objectsRepository);
             return  await loader.Load(id);
+        }
+        internal async static Task<IDataObject> GetObjectWithTimeout(this IObjectsRepository objectsRepository, Guid id, int timeoutMilliseconds = 300)
+        {
+            var loader = new ObjectLoader(objectsRepository);
+            return await loader.LoadWithTimeout(id);
         }
     }
 }
