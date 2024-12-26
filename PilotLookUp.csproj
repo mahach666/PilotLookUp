@@ -5,6 +5,7 @@
 		<TargetFramework>net48</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<AssemblyName>PilotLookUp.ext2</AssemblyName>
+		<Product>PilotLookUp</Product>
 		<Description>PilotLookUp</Description>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
 		<RootNamespace>PilotLookUp</RootNamespace>
@@ -60,7 +61,7 @@
 	<!-- Создаем архив на релизе -->
 	<Target Name="CreateZip" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<Delete Files="$(OutputPath)\*.pdb; $(OutputPath)\*.xml" />
-		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(AssemblyName).zip -Force&quot;" />
+		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(PilotLookUp).zip -Force&quot;" />
 	</Target>
 	<ItemGroup>
 	  <Compile Remove="Enums\**" />
