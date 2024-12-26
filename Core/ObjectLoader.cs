@@ -1,11 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.Core
@@ -29,6 +24,31 @@ namespace PilotLookUp.Core
             _subscription = _repository.SubscribeObjects(new[] { id }).Subscribe(this);
 
             return _tcs.Task;
+        }
+
+        private async Task<IDataObject> LoadData(Guid guid)
+        {
+            return await Load(guid);
+        }
+
+        public async Task<IDataObject> LoadWithTimeout(Guid guid, int timeoutMilliseconds = 300)
+        {
+            var loadTask = LoadData(guid);
+            var delayTask = Task.Delay(timeoutMilliseconds);
+
+            // Ожидаем завершения одной из задач — загрузки данных или таймаута
+            var completedTask = await Task.WhenAny(loadTask, delayTask);
+
+            if (completedTask == loadTask)
+            {
+                // Если загрузка завершилась, возвращаем результат
+                return await loadTask;
+            }
+            else
+            {
+                // Если завершился таймаут, возвращаем null
+                return null;
+            }
         }
 
         public void OnNext(IDataObject value)

@@ -1,18 +1,14 @@
 ﻿using Ascon.Pilot.SDK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class FilesSnapshotHelper : PilotObjectHelper
+    public class FilesSnapshotHelper : PilotObjectHelper
     {
-        public FilesSnapshotHelper(IFilesSnapshot obj)
+        public FilesSnapshotHelper(IFilesSnapshot obj, IObjectsRepository objectsRepository) : base(objectsRepository)
         {
-            LookUpObject = obj;
-            Name = obj.Created.ToString();
+            _lookUpObject = obj;
+            _name = obj.Created.ToString();
+            _isLookable = true;
         }
     }
 }

@@ -20,10 +20,9 @@ namespace PilotLookUp.Core
                 // Поля
                 foreach (PropertyInfo property in _propertyes)
                 {
-                    string name = property.Name;
                     object value = property.GetValue(dataObjects);
                     if (value == null) value = "null";
-                    KeyValuePairs.Add(name, value);
+                    KeyValuePairs.Add(property, value);
                 }
 
                 // Методы
@@ -32,11 +31,18 @@ namespace PilotLookUp.Core
                     // Проверяем, что метод не принимает параметры
                     if (method.GetParameters().Length == 0)
                     {
-                        string methodName = method.Name + "()";
-                        if (methodName.Contains("get_")) continue;
-                        object result = method.Invoke(dataObjects, null);
+                        if (method.Name.Contains("get_")) continue;
+                        object result;
+                        try
+                        {
+                             result = method.Invoke(dataObjects, null);
+                        }
+                        catch (Exception e)
+                        {
+                            result = "Error: " + e.Message;
+                        }
                         if (result == null) result = "null";
-                        KeyValuePairs.Add(methodName, result);
+                        KeyValuePairs.Add(method, result);
                     }
                 }
             }
@@ -44,12 +50,12 @@ namespace PilotLookUp.Core
 
         public static ObjReflection Empty()
         {
-            return new ObjReflection(PilotObjectMap.Wrap(null));
+            return new ObjReflection(PilotObjectMap.WrapNull());
         }
 
         private Type _objType { get; }
         private PropertyInfo[] _propertyes { get; }
         private MethodInfo[] _methods { get; }
-        public Dictionary<string, object> KeyValuePairs { get; } = new Dictionary<string, object>();
+        public Dictionary<MemberInfo, object> KeyValuePairs { get; } = new Dictionary<MemberInfo, object>();
     }
 }
