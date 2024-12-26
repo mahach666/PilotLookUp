@@ -61,7 +61,7 @@
 	<!-- Создаем архив на релизе -->
 	<Target Name="CreateZip" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
 		<Delete Files="$(OutputPath)\*.pdb; $(OutputPath)\*.xml" />
-		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(PilotLookUp).zip -Force&quot;" />
+		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(Product).zip -Force&quot;" />
 	</Target>
 	<ItemGroup>
 	  <Compile Remove="Enums\**" />
