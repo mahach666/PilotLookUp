@@ -164,7 +164,7 @@
                           HorizontalAlignment="Center"
                           VerticalAlignment="Stretch" />
 
-            <DataGrid ItemsSource="{Binding Info.KeyValuePairs}"
+            <DataGrid ItemsSource="{Binding Info}"
                       Grid.Column="2"
                       IsReadOnly="True"
                       SelectedItem="{Binding DataGridSelected}">
@@ -188,7 +188,7 @@
                                             Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Key, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                <TextBlock Text="{Binding SenderMemberName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
                                 </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -200,8 +200,10 @@
 
                             <DataTemplate>
                                 <TextBlock>
-                                <Hyperlink Command="{Binding DataContext.SelectedValueClickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}">
-                                    <TextBlock Text="{Binding Value, Mode=OneWay}" />
+                                <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           TextDecorations="{Binding Decoration}">
+                                    <TextBlock Text="{Binding Discription, Mode=OneWay}"
+                                               Foreground="{Binding Color}" />
                                 </Hyperlink>
                             </TextBlock>
                             </DataTemplate>

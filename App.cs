@@ -3,7 +3,6 @@ using Ascon.Pilot.SDK.Menu;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewBuilders;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 
@@ -27,7 +26,7 @@ namespace PilotLookUp
         , IMenu<LinkedTasksContext2>
     {
         private IObjectsRepository _objectsRepository;
-        private List<PilotObjectHelper> _convertSelection;
+        private ObjectSet _convertSelection;
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository)
@@ -40,7 +39,7 @@ namespace PilotLookUp
         {
             var item = builder.AddItem("PilotLookUp", 1).WithHeader("PilotLookUp");
             item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
-            item.WithSubmenu().AddItem("LookDB", 0).WithHeader("LookDB");
+            item.WithSubmenu().AddItem("LookDB", 1).WithHeader("LookDB");
         }
         public void Build(IMenuBuilder builder, ObjectsViewContext context)
         {
@@ -109,15 +108,18 @@ namespace PilotLookUp
 
         private void ItemClick(string name)
         {
+            if (name == "LookDB")
+            {
+                var pilotObjectMap = new PilotObjectMap(_objectsRepository);
+                var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
+                new LookSeleсtion(repo, _objectsRepository);
+            }
+
             if (_convertSelection == null || !_convertSelection.Any()) return;
 
             if (name == "LookSelected")
             {
                 new LookSeleсtion(_convertSelection, _objectsRepository);
-            }
-            else if (name == "LookDB")
-            {
-                //LookDB(context);
             }
         }
 
@@ -128,7 +130,8 @@ namespace PilotLookUp
 
         private void SelectUpdater(MarshalByRefObject context)
         {
-            PilotObjectMap.Updaate(_objectsRepository);
+            var pilotObjectMap = new PilotObjectMap(_objectsRepository);
+            _convertSelection = new ObjectSet(null);
 
             switch (context)
             {
@@ -136,28 +139,28 @@ namespace PilotLookUp
                     return;
 
                 case ObjectsViewContext objectsViewContext:
-                    var selectedDO = objectsViewContext.SelectedObjects?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedDO.Any() ? selectedDO : _convertSelection;
+                    var selectedDO = objectsViewContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
+                    _convertSelection.AddRange(selectedDO.Any() ? selectedDO : _convertSelection);
                     return;
 
                 case TasksViewContext2 tasksViewContext:
-                    var selectedT = tasksViewContext.SelectedTasks?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedT.Any() ? selectedT : _convertSelection;
+                    var selectedT = tasksViewContext.SelectedTasks?.Select(i => pilotObjectMap.Wrap(i)).ToList();
+                    _convertSelection.AddRange(selectedT.Any() ? selectedT : _convertSelection);
                     return;
 
                 case DocumentFilesContext documentFilesContext:
-                    var selectedF = documentFilesContext.SelectedObjects?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedF.Any() ? selectedF : _convertSelection;
+                    var selectedF = documentFilesContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
+                    _convertSelection.AddRange(selectedF.Any() ? selectedF : _convertSelection);
                     break;
 
                 case LinkedObjectsContext linkedObjectsContext:
-                    var selectedLO = linkedObjectsContext.SelectedObjects?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedLO.Any() ? selectedLO : _convertSelection;
+                    var selectedLO = linkedObjectsContext.SelectedObjects?.Select(i => pilotObjectMap.Wrap(i)).ToList();
+                    _convertSelection.AddRange(selectedLO.Any() ? selectedLO : _convertSelection);
                     break;
 
                 case LinkedTasksContext2 linkedTasksContext:
-                    var selectedLT = linkedTasksContext.SelectedTasks?.Select(i => PilotObjectMap.Wrap(i)).ToList();
-                    _convertSelection = selectedLT.Any() ? selectedLT : _convertSelection;
+                    var selectedLT = linkedTasksContext.SelectedTasks?.Select(i => pilotObjectMap.Wrap(i)).ToList();
+                    _convertSelection.AddRange(selectedLT.Any() ? selectedLT : _convertSelection);
                     break;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Model.Utils;
 using PilotLookUp.Objects;
+using PilotLookUp.ViewBuilders;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -20,10 +21,23 @@ namespace PilotLookUp.Model
         public List<PilotObjectHelper> SelectionDataObjects => _dataObjects;
 
 
-        public async Task DataGridSelector(PilotObjectHelper sender ,object obj)
+        public async Task DataGridSelector(ObjectSet obj)
         {
             if (obj == null) return;
-            new Tracer().Trace(_objectsRepository, sender, obj);
+            new LookSeleсtion(obj, _objectsRepository);
+        }
+
+        public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
+        {
+            var res = new List<ObjectSet>();
+
+            foreach (var pair in sender.Reflection.KeyValuePairs)
+            {
+                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender, pair.Key).Trace(pair.Value);
+                res.Add(newPilotObj);
+            }
+
+            return res;
         }
     }
 }

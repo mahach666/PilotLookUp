@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -20,7 +21,7 @@ namespace PilotLookUp.ViewModel
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
-            _dataObjectSelected = SelectionDataObjects.FirstOrDefault();
+            DataObjectSelected = SelectionDataObjects.FirstOrDefault();
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
@@ -33,15 +34,15 @@ namespace PilotLookUp.ViewModel
             {
                 if (_dataObjectSelected != value)
                 {
-                    _dataObjectSelected = value;  
-                    OnPropertyChanged("Info");
+                    _dataObjectSelected = value;
+                    UpdateInfo();
                     OnPropertyChanged();
                 }
             }
         }
 
-        private KeyValuePair<string, object> _dataGridSelected;
-        public KeyValuePair<string, object> DataGridSelected
+        private ObjectSet _dataGridSelected;
+        public ObjectSet DataGridSelected
         {
             get => _dataGridSelected;
             set
@@ -51,25 +52,43 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ObjReflection Info => _dataObjectSelected?.Reflection;
+        private void UpdateInfo()
+        {
+            Task.Run(async () =>
+            {
+                Info = await _lookUpModel.Info(_dataObjectSelected);
+            });
+        }
+        private List<ObjectSet> _info;
+        public List<ObjectSet> Info
+        {
+            get => _info;
+            set
+            {
+                _info = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void CopyToClipboard(string sender)
         {
-            if (sender == "List" && _dataObjectSelected != null)
+            if (_dataObjectSelected == null) Clipboard.SetText("Ошибка копирования, ничего не выбрано");
+
+            if (sender == "List")
             {
                 Clipboard.SetText(_dataObjectSelected.Name);
             }
-            else if (sender == "DataGridSelectName" && _dataGridSelected.Key != null)
+            else if (sender == "DataGridSelectName")
             {
-                Clipboard.SetText(_dataGridSelected.Key);
+                Clipboard.SetText(_dataGridSelected?.SenderMemberName);
             }
-            else if (sender == "DataGridSelectValue" && _dataGridSelected.Value != null)
+            else if (sender == "DataGridSelectValue")
             {
-                Clipboard.SetText(_dataGridSelected.Value.ToString());
+                Clipboard.SetText(_dataGridSelected?.Discription);
             }
-            else if (sender == "DataGridSelectLine" && _dataGridSelected.Key != null)
+            else if (sender == "DataGridSelectLine")
             {
-                Clipboard.SetText(_dataGridSelected.Key + "\t" + _dataGridSelected.Value.ToString());
+                Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
             }
             else
             {
@@ -79,7 +98,7 @@ namespace PilotLookUp.ViewModel
 
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueClickCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataObjectSelected, _dataGridSelected.Value));
+        public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 
 
 
