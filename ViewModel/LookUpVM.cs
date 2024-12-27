@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PilotLookUp.ViewModel
 {
@@ -96,6 +97,14 @@ namespace PilotLookUp.ViewModel
             }
         }
 
+
+        public Brush DefaultTextColor
+        {
+            get
+            {
+                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
+            }
+        }
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
         public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
