@@ -101,14 +101,6 @@ namespace PilotLookUp.ViewModel
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
         public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 
-        public Brush DefaultTextColor
-        {
-            get
-            {
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
-            }
-        }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
