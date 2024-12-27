@@ -98,14 +98,6 @@ namespace PilotLookUp.ViewModel
         }
 
 
-        public Brush DefaultTextColor
-        {
-            get
-            {
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
-            }
-        }
-
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
         public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 

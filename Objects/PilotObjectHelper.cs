@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Core;
+using System.Windows.Media;
 
 namespace PilotLookUp.Objects
 {
@@ -30,5 +31,14 @@ namespace PilotLookUp.Objects
 
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
+
+        // Цвет текста в листБоксе
+        public Brush DefaultTextColor
+        {
+            get
+            {
+                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
+            }
+        }
     }
 }
