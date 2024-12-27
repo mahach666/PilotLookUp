@@ -14,13 +14,12 @@ namespace PilotLookUp.Model.Utils
     {
         public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember)
         {
-            _senderObj = senderObj;
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             _objectsRepository = objectsRepository;
             _objectSet = new ObjectSet(senderMember);
         }
 
-        private PilotObjectHelper _senderObj { get; }
+        private int _adaptiveTimer = 300;
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
         private ObjectSet _objectSet { get; set; }
@@ -47,13 +46,14 @@ namespace PilotLookUp.Model.Utils
             {
                 if (obj is Guid guid)
                 {
-                    var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid);
+                    var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
                     if (lodedObj != null)
                     {
                         _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
                     }
                     else
                     {
+                        _adaptiveTimer = 20;
                         _objectSet.Add(_pilotObjectMap.Wrap(guid.ToString()));
                     }
                 }
@@ -72,7 +72,7 @@ namespace PilotLookUp.Model.Utils
         {
              if (obj is Guid guid)
             {
-                var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid);
+                var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
                 if (lodedObj != null)
                 {
                     _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));

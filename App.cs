@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
+using Ascon.Pilot.Themes;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewBuilders;
 using System;
@@ -27,11 +28,14 @@ namespace PilotLookUp
     {
         private IObjectsRepository _objectsRepository;
         private ObjectSet _convertSelection;
+        private static ThemeNames _theme { get; set; }
+        public static ThemeNames Theme { get=> _theme; }
 
         [ImportingConstructor]
-        public App(IObjectsRepository objectsRepository)
+        public App(IObjectsRepository objectsRepository, IPilotDialogService pilotDialogService)
         {
             _objectsRepository = objectsRepository;
+            _theme = pilotDialogService.Theme;
         }
 
         // Build
