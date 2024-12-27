@@ -33,6 +33,7 @@ namespace PilotLookUp.Objects
                 long value => new LongHelper(value, _objectsRepository),
                 DateTime value => new DateTimeHelper(value, _objectsRepository),
                 ILease value => new LeaseHelper(value, _objectsRepository),
+                Guid value => new GuidHelper(value, _objectsRepository, _senderObj, _senderMember),
 
                 // PilotTypes
                 IObjectsRepository value => new ObjectsRepositoryHelper(_objectsRepository),

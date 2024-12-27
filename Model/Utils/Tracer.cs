@@ -19,7 +19,7 @@ namespace PilotLookUp.Model.Utils
             _objectSet = new ObjectSet(senderMember);
         }
 
-        private int _adaptiveTimer = 300;
+        private int _adaptiveTimer = 200;
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
         private ObjectSet _objectSet { get; set; }
@@ -53,8 +53,8 @@ namespace PilotLookUp.Model.Utils
                     }
                     else
                     {
-                        _adaptiveTimer = 20;
-                        _objectSet.Add(_pilotObjectMap.Wrap(guid.ToString()));
+                        _adaptiveTimer = 10;
+                        _objectSet.Add(_pilotObjectMap.Wrap(guid));
                     }
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
@@ -79,7 +79,7 @@ namespace PilotLookUp.Model.Utils
                 }
                 else
                 {
-                    _objectSet.Add(_pilotObjectMap.Wrap(guid.ToString()));
+                    _objectSet.Add(_pilotObjectMap.Wrap(guid));
                 }
             }
             else
