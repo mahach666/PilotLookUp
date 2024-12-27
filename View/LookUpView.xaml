@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Стиль кнопок -->
-            <Style TargetType="{x:Type Button}"
+            <!--<Style TargetType="{x:Type Button}"
                    x:Key="Button_Style">
                 <Setter Property="Background"
                         Value="#86609B" />
@@ -78,13 +78,13 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
+            </Style>-->
 
             <Style TargetType="{x:Type ListBoxItem}">
                 <Setter Property="Background"
                         Value="Transparent" />
                 <Setter Property="Foreground"
-                        Value="Black" />
+                        Value="{Binding DefaultTextColor}" />
                 <Setter Property="HorizontalContentAlignment"
                         Value="Stretch" />
                 <Setter Property="Template">
@@ -95,21 +95,21 @@
                                 <ContentPresenter />
                             </Border>
                             <ControlTemplate.Triggers>
-                                <!-- Триггер для выделенного элемента -->
+                                 <!--Триггер для выделенного элемента--> 
                                 <Trigger Property="IsSelected"
                                          Value="True">
                                     <Setter Property="Background"
                                             Value="#D283E6" />
-                                    <!-- Светло-голубой -->
+                                     <!--Светло-голубой--> 
                                     <Setter Property="Foreground"
                                             Value="Black" />
                                 </Trigger>
-                                <!-- Триггер для наведения мыши -->
+                                 <!--Триггер для наведения мыши--> 
                                 <Trigger Property="IsMouseOver"
                                          Value="True">
                                     <Setter Property="Background"
                                             Value="#DCB2E6" />
-                                    <!-- Цвет при наведении -->
+                                     <!--Цвет при наведении--> 
                                     <Setter Property="Foreground"
                                             Value="Black" />
                                 </Trigger>
@@ -152,8 +152,7 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Name}"
-                                   TextDecorations="{Binding DefaultTextColor}">
+                        <TextBlock Text="{Binding Name}">
                         </TextBlock>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

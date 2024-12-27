@@ -31,14 +31,5 @@ namespace PilotLookUp.Objects
 
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
-
-        // Цвет текста в листБоксе
-        public Brush DefaultTextColor
-        {
-            get
-            {
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
-            }
-        }
     }
 }
