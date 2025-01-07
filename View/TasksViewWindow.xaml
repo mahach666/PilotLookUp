@@ -1,0 +1,49 @@
+﻿<Window x:Class="PilotLookUp.View.TasksViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tasks View" Height="400" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <!-- Секция с информацией о выбранном объекте -->
+            <RowDefinition Height="*" />
+            <!-- Основное содержимое: TreeView и свойства -->
+        </Grid.RowDefinitions>
+
+        <!-- Секция с информацией о выбранном объекте -->
+        <Border Background="LightGray" Padding="10">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="ID: " FontWeight="Bold" />
+                <TextBlock x:Name="IdStart" Margin="5,0" />
+
+                <TextBlock Text="Имя: " FontWeight="Bold" Margin="60,0,0,0" />
+                <TextBlock x:Name="NameDisplayStart" Margin="5,0" />
+            </StackPanel>
+        </Border>
+
+        <!-- Основное содержимое -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- TreeView для отображения иерархии -->
+            <TreeView Name="TreeViewObjects" Grid.Column="0" SelectedItemChanged="TreeViewObjects_SelectedItemChanged">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Отображение PNG-иконки -->
+                            <Image Width="16" Height="16" Source="{Binding PngPath}" Margin="0,0,5,0" />
+                            <!-- Условное форматирование для выделения начального объекта -->
+                            <TextBlock Text="{Binding DisplayName}" Margin="5,0" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+            <!-- Область для отображения свойств -->
+            <DataGrid Name="PropertiesGrid" Grid.Column="1" AutoGenerateColumns="True" />
+        </Grid>
+    </Grid>
+</Window>

@@ -73,6 +73,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
+    <PackageReference Include="Svg" Version="3.4.7" />
 		<PackageReference Include="System.Composition" Version="*" />
 	</ItemGroup>
 	
