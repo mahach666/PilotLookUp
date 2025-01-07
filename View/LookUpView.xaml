@@ -128,7 +128,9 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" />
+        <Grid Grid.Column="0" >
+            <Button x:Name="TaskButton" Content="Меню&#xD;&#xA;задач" HorizontalAlignment="Center" Margin="0,349,0,0" VerticalAlignment="Top" Height="50" Width="40" Command="{Binding OpenAllTasks}"/>
+        </Grid>
 
         <Grid Grid.Column="2">
             <Grid.ColumnDefinitions>
