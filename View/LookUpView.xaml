@@ -95,21 +95,21 @@
                                 <ContentPresenter />
                             </Border>
                             <ControlTemplate.Triggers>
-                                 <!--Триггер для выделенного элемента--> 
+                                <!--Триггер для выделенного элемента-->
                                 <Trigger Property="IsSelected"
                                          Value="True">
                                     <Setter Property="Background"
                                             Value="#D283E6" />
-                                     <!--Светло-голубой--> 
+                                    <!--Светло-голубой-->
                                     <Setter Property="Foreground"
                                             Value="Black" />
                                 </Trigger>
-                                 <!--Триггер для наведения мыши--> 
+                                <!--Триггер для наведения мыши-->
                                 <Trigger Property="IsMouseOver"
                                          Value="True">
                                     <Setter Property="Background"
                                             Value="#DCB2E6" />
-                                     <!--Цвет при наведении--> 
+                                    <!--Цвет при наведении-->
                                     <Setter Property="Foreground"
                                             Value="Black" />
                                 </Trigger>
@@ -136,27 +136,6 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
-            <ListBox ItemsSource="{Binding SelectionDataObjects}"
-                     Grid.Column="0"
-                     SelectedItem="{Binding DataObjectSelected}"
-                     ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
-
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать выделенное"
-                                  Command="{Binding CopyCommand}"
-                                  CommandParameter="List" />
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
 
             <GridSplitter Grid.Column="1"
                           ShowsPreview="False"
@@ -214,6 +193,9 @@
                 </DataGrid.Columns>
 
             </DataGrid>
+            <TreeView ItemsSource="{Binding SelectionDataObjectsForTree}"
+                      Grid.Column="0">
+            </TreeView>
 
         </Grid>
     </Grid>

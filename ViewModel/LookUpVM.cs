@@ -3,12 +3,15 @@ using PilotLookUp.Core;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -19,13 +22,35 @@ namespace PilotLookUp.ViewModel
         internal LookUpView _view;
         private LookUpModel _lookUpModel;
 
+        
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
+            UpdateTree();
         }
 
         public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
+
+
+        private void UpdateTree()
+        {
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                SelectionDataObjectsForTree = await _lookUpModel.GetExampleTree();
+            });
+        }
+        private List<TreeViewItem> _selectionDataObjectsForTree;
+        public List<TreeViewItem> SelectionDataObjectsForTree
+        {
+            get => _selectionDataObjectsForTree;
+            set
+            {
+                _selectionDataObjectsForTree = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private PilotObjectHelper _dataObjectSelected;
         public PilotObjectHelper DataObjectSelected
