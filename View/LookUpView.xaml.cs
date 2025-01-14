@@ -18,7 +18,11 @@ namespace PilotLookUp.View
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            frame.NavigationService.Navigate(new Page1(_vm));
+            if (page1 == null){ page1 = new LookUpPage(_vm); }
+            frame.NavigationService.Navigate(page1);
         }
+
+        LookUpPage page1 { get; set; }
+
     }
 }

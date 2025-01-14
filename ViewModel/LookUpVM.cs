@@ -14,7 +14,7 @@ using System.Windows.Media;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class LookUpVM : INotifyPropertyChanged
+    public class LookUpVM : INotifyPropertyChanged
     {
         //internal LookUpView _view;
         private LookUpModel _lookUpModel;

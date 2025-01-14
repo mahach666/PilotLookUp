@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Model
 {
-    internal class LookUpModel
+    public class LookUpModel
     {
         private List<PilotObjectHelper> _dataObjects { get; }
         private IObjectsRepository _objectsRepository { get; }

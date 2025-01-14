@@ -13,8 +13,9 @@ namespace PilotLookUp.ViewBuilders
         public LookSeleсtion(ObjectSet dataObjects, IObjectsRepository objectsRepository)
         {
             if (!dataObjects.IsLookable) return;
-
-            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(dataObjects, objectsRepository)));
+            var lookUpModel = new LookUpModel(dataObjects, objectsRepository);
+            var lookUpVM = new LookUpVM(lookUpModel);
+            var view = new LookUpView(lookUpVM);
             view.Show();
         }
     }
