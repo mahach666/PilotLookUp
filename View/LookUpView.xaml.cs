@@ -11,10 +11,14 @@ namespace PilotLookUp.View
 
         internal LookUpView(LookUpVM vm)
         {
-            InitializeComponent();
-            vm._view = this;
             _vm = vm;
             DataContext = _vm;
+            InitializeComponent();
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            frame.NavigationService.Navigate(new Page1(_vm));
         }
     }
 }

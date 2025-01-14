@@ -95,21 +95,21 @@
                                 <ContentPresenter />
                             </Border>
                             <ControlTemplate.Triggers>
-                                 <!--Триггер для выделенного элемента--> 
+                                <!--Триггер для выделенного элемента-->
                                 <Trigger Property="IsSelected"
                                          Value="True">
                                     <Setter Property="Background"
                                             Value="#D283E6" />
-                                     <!--Светло-голубой--> 
+                                    <!--Светло-голубой-->
                                     <Setter Property="Foreground"
                                             Value="Black" />
                                 </Trigger>
-                                 <!--Триггер для наведения мыши--> 
+                                <!--Триггер для наведения мыши-->
                                 <Trigger Property="IsMouseOver"
                                          Value="True">
                                     <Setter Property="Background"
                                             Value="#DCB2E6" />
-                                     <!--Цвет при наведении--> 
+                                    <!--Цвет при наведении-->
                                     <Setter Property="Foreground"
                                             Value="Black" />
                                 </Trigger>
@@ -122,100 +122,24 @@
     </controls:DialogWindow.Resources>
 
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" />
-
-        <Grid Grid.Column="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <ListBox ItemsSource="{Binding SelectionDataObjects}"
-                     Grid.Column="0"
-                     SelectedItem="{Binding DataObjectSelected}"
-                     ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
-
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать выделенное"
-                                  Command="{Binding CopyCommand}"
-                                  CommandParameter="List" />
-                    </ContextMenu>
-                </ListBox.ContextMenu>
-
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}">
-                        </TextBlock>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <GridSplitter Grid.Column="1"
-                          ShowsPreview="False"
-                          Width="3"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Stretch" />
-
-            <DataGrid ItemsSource="{Binding Info}"
-                      Grid.Column="2"
-                      IsReadOnly="True"
-                      SelectedItem="{Binding DataGridSelected}">
-
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать Name"
-                                  Command="{Binding CopyCommand}"
-                                  CommandParameter="DataGridSelectName" />
-                        <MenuItem Header="Копировать Value"
-                                  Command="{Binding CopyCommand}"
-                                  CommandParameter="DataGridSelectValue" />
-                        <MenuItem Header="Копировать строку"
-                                  Command="{Binding CopyCommand}"
-                                  CommandParameter="DataGridSelectLine" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Name"
-                                            Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding SenderMemberName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-                                </TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Value"
-                                            Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-
-                            <DataTemplate>
-                                <TextBlock>
-                                <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                           TextDecorations="{Binding Decoration}">
-                                    <TextBlock Text="{Binding Discription, Mode=OneWay}"
-                                               Foreground="{Binding Color}" />
-                                </Hyperlink>
-                            </TextBlock>
-                            </DataTemplate>
-
-                        </DataGridTemplateColumn.CellTemplate>
-
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-
-            </DataGrid>
-
+        <Grid Grid.Column="0">
+            <Button Content="Button"
+                    HorizontalAlignment="Left"
+                    Margin="25,104,0,0"
+                    VerticalAlignment="Top"
+                    Click="Button_Click" />
         </Grid>
+
+
+        <Frame x:Name="frame"
+               Grid.Column="2" />
     </Grid>
 
 </controls:DialogWindow>
