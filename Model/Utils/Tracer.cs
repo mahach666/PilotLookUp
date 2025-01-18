@@ -53,16 +53,17 @@ namespace PilotLookUp.Model.Utils
             {
                 if (obj is Guid guid)
                 {
-                    var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-                    if (lodedObj != null)
-                    {
-                        _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
-                    }
-                    else
-                    {
-                        _adaptiveTimer = 10;
-                        _objectSet.Add(_pilotObjectMap.Wrap(guid));
-                    }
+                    //var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
+                    //if (lodedObj != null)
+                    //{
+                    //    _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
+                    //}
+                    //else
+                    //{
+                    //    _adaptiveTimer = 10;
+                    //    _objectSet.Add(_pilotObjectMap.Wrap(guid));
+                    //}
+                    _objectSet.Add(await GuidLoder(guid));
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
@@ -77,17 +78,18 @@ namespace PilotLookUp.Model.Utils
 
         private async Task<ObjectSet> AddToSelection(object obj)
         {
-             if (obj is Guid guid)
+            if (obj is Guid guid)
             {
-                var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-                if (lodedObj != null)
-                {
-                    _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
-                }
-                else
-                {
-                    _objectSet.Add(_pilotObjectMap.Wrap(guid));
-                }
+                //var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
+                //if (lodedObj != null)
+                //{
+                //    _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
+                //}
+                //else
+                //{
+                //    _objectSet.Add(_pilotObjectMap.Wrap(guid));
+                //}
+                _objectSet.Add(await GuidLoder(guid));
             }
             else
             {
@@ -96,18 +98,22 @@ namespace PilotLookUp.Model.Utils
             return _objectSet;
         }
 
-        private async Task<object> GuidLoder(Guid guid)
+        private async Task<PilotObjectHelper> GuidLoder(Guid guid)
         {
             var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
             if (lodedObj != null)
             {
                 return _pilotObjectMap.Wrap(lodedObj);
             }
-            else
+
+            var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
+            if (lodedHistory != null)
             {
-                _adaptiveTimer = 10;
-                return _pilotObjectMap.Wrap(guid);
+                return _pilotObjectMap.Wrap(lodedObj);
             }
+
+            _adaptiveTimer = 10;
+            return _pilotObjectMap.Wrap(guid);
         }
     }
 }

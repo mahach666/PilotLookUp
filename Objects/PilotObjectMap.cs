@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using Ascon.Pilot.SDK.Data;
 using PilotLookUp.Objects.TypeHelpers;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace PilotLookUp.Objects
                 // PilotTypes
                 IObjectsRepository value => new ObjectsRepositoryHelper(_objectsRepository),
                 IDataObject value => new DataObjectHelper(value, _objectsRepository),
+                IHistoryItem value => new HistoryItemHelper(value, _objectsRepository),
                 IType type => new TypeHelper(type, _objectsRepository),
                 IPerson value => new PersonHelper(value, _objectsRepository),
                 IUserState value => new UserStateHelper(value, _objectsRepository),
