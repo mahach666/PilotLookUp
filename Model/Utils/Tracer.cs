@@ -17,6 +17,7 @@ namespace PilotLookUp.Model.Utils
         {
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             _objectsRepository = objectsRepository;
+            _memberInfo = senderMember;
             _objectSet = new ObjectSet(senderMember);
         }
 
@@ -24,6 +25,7 @@ namespace PilotLookUp.Model.Utils
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
         private ObjectSet _objectSet { get; set; }
+        private MemberInfo _memberInfo { get; }
         private IEnumerable<IUserState> _userStates { get; set; }
         private IEnumerable<IUserStateMachine> _userStateMachines { get; set; }
 
@@ -82,21 +84,24 @@ namespace PilotLookUp.Model.Utils
 
         private async Task<PilotObjectHelper> GuidLoder(Guid guid)
         {
+            if (_memberInfo.Name== "HistoryItems")
+            {
+                var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
+                if (lodedHistory != null)
+                {
+                    return _pilotObjectMap.Wrap(lodedHistory);
+                } 
+            }
+
             var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
             if (lodedObj != null)
             {
                 return _pilotObjectMap.Wrap(lodedObj);
             }
 
-            var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
-            if (lodedHistory != null)
-            {
-                return _pilotObjectMap.Wrap(lodedObj);
-            }
-
             _adaptiveTimer = 10;
 
-            var userState = _userStates.FirstOrDefault(i=>i.Id == guid);
+            var userState = _userStates.FirstOrDefault(i => i.Id == guid);
             if (userState != null)
             {
                 return _pilotObjectMap.Wrap(userState);
