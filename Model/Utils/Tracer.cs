@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace PilotLookUp.Model.Utils
 {
@@ -23,9 +24,15 @@ namespace PilotLookUp.Model.Utils
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
         private ObjectSet _objectSet { get; set; }
+        private IEnumerable<IUserState> _userStates { get; set; }
+        private IEnumerable<IUserState> _userStateMachines { get; set; }
+
 
         public async Task<ObjectSet> Trace(object obj)
         {
+            IEnumerable<IUserState> a = _objectsRepository.GetUserStates();
+            IEnumerable<IUserStateMachine> b = _objectsRepository.GetUserStateMachines();
+
             if (obj == null) return _objectSet;
 
             // Определение типа объекта и вызов соответствующей перегрузки
@@ -87,6 +94,20 @@ namespace PilotLookUp.Model.Utils
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
             return _objectSet;
+        }
+
+        private async Task<object> GuidLoder(Guid guid)
+        {
+            var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
+            if (lodedObj != null)
+            {
+                return _pilotObjectMap.Wrap(lodedObj);
+            }
+            else
+            {
+                _adaptiveTimer = 10;
+                return _pilotObjectMap.Wrap(guid);
+            }
         }
     }
 }
