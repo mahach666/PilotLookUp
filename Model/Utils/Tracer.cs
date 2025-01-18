@@ -25,14 +25,11 @@ namespace PilotLookUp.Model.Utils
         private IObjectsRepository _objectsRepository { get; }
         private ObjectSet _objectSet { get; set; }
         private IEnumerable<IUserState> _userStates { get; set; }
-        private IEnumerable<IUserState> _userStateMachines { get; set; }
+        private IEnumerable<IUserStateMachine> _userStateMachines { get; set; }
 
 
         public async Task<ObjectSet> Trace(object obj)
         {
-            IEnumerable<IUserState> a = _objectsRepository.GetUserStates();
-            IEnumerable<IUserStateMachine> b = _objectsRepository.GetUserStateMachines();
-
             if (obj == null) return _objectSet;
 
             // Определение типа объекта и вызов соответствующей перегрузки
@@ -53,16 +50,8 @@ namespace PilotLookUp.Model.Utils
             {
                 if (obj is Guid guid)
                 {
-                    //var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-                    //if (lodedObj != null)
-                    //{
-                    //    _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
-                    //}
-                    //else
-                    //{
-                    //    _adaptiveTimer = 10;
-                    //    _objectSet.Add(_pilotObjectMap.Wrap(guid));
-                    //}
+                    _userStates = _objectsRepository.GetUserStates();
+                    _userStateMachines = _objectsRepository.GetUserStateMachines();
                     _objectSet.Add(await GuidLoder(guid));
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
@@ -80,15 +69,8 @@ namespace PilotLookUp.Model.Utils
         {
             if (obj is Guid guid)
             {
-                //var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-                //if (lodedObj != null)
-                //{
-                //    _objectSet.Add(_pilotObjectMap.Wrap(lodedObj));
-                //}
-                //else
-                //{
-                //    _objectSet.Add(_pilotObjectMap.Wrap(guid));
-                //}
+                _userStates = _objectsRepository.GetUserStates();
+                _userStateMachines = _objectsRepository.GetUserStateMachines();
                 _objectSet.Add(await GuidLoder(guid));
             }
             else
@@ -113,6 +95,19 @@ namespace PilotLookUp.Model.Utils
             }
 
             _adaptiveTimer = 10;
+
+            var userState = _userStates.FirstOrDefault(i=>i.Id == guid);
+            if (userState != null)
+            {
+                return _pilotObjectMap.Wrap(userState);
+            }
+
+            var userStateMachine = _userStateMachines.FirstOrDefault(i => i.Id == guid);
+            if (userStateMachine != null)
+            {
+                return _pilotObjectMap.Wrap(userStateMachine);
+            }
+
             return _pilotObjectMap.Wrap(guid);
         }
     }
