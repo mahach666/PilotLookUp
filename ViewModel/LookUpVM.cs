@@ -25,7 +25,7 @@ namespace PilotLookUp.ViewModel
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
         }
 
-        public List<PilotObjectHelper> SelectionDataObjects => _lookUpModel.SelectionDataObjects;
+        public ObjectSet SelectionDataObjects => _lookUpModel.SelectionDataObjects;
 
         private PilotObjectHelper _dataObjectSelected;
         public PilotObjectHelper DataObjectSelected
