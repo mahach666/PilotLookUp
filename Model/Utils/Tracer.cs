@@ -54,7 +54,7 @@ namespace PilotLookUp.Model.Utils
                 {
                     _userStates = _objectsRepository.GetUserStates();
                     _userStateMachines = _objectsRepository.GetUserStateMachines();
-                    _objectSet.Add(await GuidLoder(guid));
+                    _objectSet.Add(await GuidHandler(guid));
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
@@ -73,7 +73,7 @@ namespace PilotLookUp.Model.Utils
             {
                 _userStates = _objectsRepository.GetUserStates();
                 _userStateMachines = _objectsRepository.GetUserStateMachines();
-                _objectSet.Add(await GuidLoder(guid));
+                _objectSet.Add(await GuidHandler(guid));
             }
             else
             {
@@ -82,7 +82,7 @@ namespace PilotLookUp.Model.Utils
             return _objectSet;
         }
 
-        private async Task<PilotObjectHelper> GuidLoder(Guid guid)
+        private async Task<PilotObjectHelper> GuidHandler(Guid guid)
         {
             if (_memberInfo.Name== "HistoryItems")
             {
