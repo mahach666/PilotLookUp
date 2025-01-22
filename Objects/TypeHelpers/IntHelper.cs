@@ -77,6 +77,15 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _isLookable = true;
                     _stringId = person.Id.ToString();
                 }
+                else if (sender.LookUpObject is IDataObject dObj
+                    && senderMember.Name == "Subscribers")
+                {
+                    var personSub = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
+                    _lookUpObject = personSub;
+                    _name = personSub?.DisplayName;
+                    _isLookable = true;
+                    _stringId = personSub?.Id.ToString();
+                }
 
                 else
                 {
