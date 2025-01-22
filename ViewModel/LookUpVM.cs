@@ -99,7 +99,7 @@ namespace PilotLookUp.ViewModel
 
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueCommand => new AsyncRelayCommand(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 
 
         public event PropertyChangedEventHandler PropertyChanged;

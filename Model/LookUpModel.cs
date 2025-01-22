@@ -21,7 +21,7 @@ namespace PilotLookUp.Model
         public ObjectSet SelectionDataObjects => _dataObjects;
 
 
-        public async Task DataGridSelector(ObjectSet obj)
+        public void DataGridSelector(ObjectSet obj)
         {
             if (obj == null) return;
             new LookSeleсtion(obj, _objectsRepository);
