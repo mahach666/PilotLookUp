@@ -8,6 +8,7 @@ namespace PilotLookUp.View.UserControls
     {
         public SearchPage()
         {
+
             InitializeComponent();
         }
 
