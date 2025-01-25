@@ -1,12 +1,113 @@
 ﻿<UserControl x:Class="PilotLookUp.View.UserControls.SearchPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type Button}"
+                   x:Key="Button_Style">
+                <Setter Property="Background"
+                        Value="#86609B" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="FontSize"
+                        Value="11" />
+                <Setter Property="FontFamily"
+                        Value="./#Segoe UI" />
+                <Setter Property="SnapsToDevicePixels"
+                        Value="True" />
+                <Setter Property="Margin"
+                        Value="0,5,0,0" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Right" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border CornerRadius="0"
+                                    Background="{TemplateBinding Background}">
+                                <Grid>
+                                    <ContentPresenter x:Name="MyContentPresenter"
+                                                      Content="{TemplateBinding Content}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Margin="0,0,0,0" />
+                                </Grid>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#86509B" />
+                                    <Setter Property="Foreground"
+                                            Value="White" />
+                                </Trigger>
+
+                                <Trigger Property="IsPressed"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#86309B" />
+                                    <Setter Property="Foreground"
+                                            Value="White" />
+                                </Trigger>
+
+                                <Trigger Property="IsEnabled"
+                                         Value="False">
+                                    <Setter Property="Background"
+                                            Value="LightGray" />
+                                    <Setter Property="Foreground"
+                                            Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBox Margin="20,30,60,30"
+                 Text="TextBox"
+                 FontSize="25" />
+        <Button ToolTip="LookDB"
+                Background="#86609B"
+                Command="{Binding LookDBCommand}"
+                Width="40"
+                Height="40"
+                Margin="20,30,20,30"
+                HorizontalAlignment="Right">
+            <Button.Style>
+                <Style BasedOn="{StaticResource ImageButtonStyle}">
+                    <Style.Triggers>
+                        <Trigger Property="UIElement.IsEnabled"
+                                 Value="True">
+                            <Setter Property="ContentControl.Content">
+                                <Setter.Value>
+                                    <Image Source="..\..\Resources\search.png"
+                                           Height="20"
+                                           Width="20"
+                                           IsEnabled="False" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 </UserControl>
