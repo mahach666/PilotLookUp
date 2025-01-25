@@ -64,6 +64,10 @@
 		<Delete Files="$(OutputPath)\*.pdb; $(OutputPath)\*.xml" />
 		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(AssemblyProduct).zip -Force&quot;" />
 	</Target>
+	<ItemGroup>
+	  <None Remove="Resources\databaseEnabled.png" />
+	  <None Remove="Resources\search.png" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
@@ -77,5 +81,10 @@
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="System.Xaml" />
 		<Reference Include="WindowsBase" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Resource Include="Resources\databaseEnabled.png" />
+	  <Resource Include="Resources\search.png" />
 	</ItemGroup>
 </Project>

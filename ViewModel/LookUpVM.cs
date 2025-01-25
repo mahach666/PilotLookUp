@@ -18,10 +18,23 @@ namespace PilotLookUp.ViewModel
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
+            SelectionDataObjects = _lookUpModel.SelectionDataObjects;
             DataObjectSelected = SelectionDataObjects.FirstOrDefault();
         }
 
-        public ObjectSet SelectionDataObjects => _lookUpModel.SelectionDataObjects;
+        private ObjectSet _selectionDataObjects;
+        public ObjectSet SelectionDataObjects
+        {
+            get => _selectionDataObjects;
+            set
+            {
+                if (value == null || !value.Any()) return;
+                _selectionDataObjects = value;
+                DataObjectSelected = value.FirstOrDefault();
+                UpdateInfo();
+                OnPropertyChanged();
+            }
+        }
 
         private PilotObjectHelper _dataObjectSelected;
         public PilotObjectHelper DataObjectSelected

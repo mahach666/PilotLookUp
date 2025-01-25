@@ -1,6 +1,9 @@
-﻿using PilotLookUp.Enums;
+﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Enums;
+using PilotLookUp.Extensions;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
+using PilotLookUp.Objects;
 using PilotLookUp.View.UserControls;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
@@ -10,10 +13,12 @@ namespace PilotLookUp.Utils
 {
     internal class PageController
     {
-        internal PageController(LookUpModel lookUpModel)
+        internal PageController(LookUpModel lookUpModel, PagesName startPage = PagesName.None)
         {
             _lookUpModel = lookUpModel;
             _controlsHolder = new List<IControl>();
+            if (startPage != PagesName.None)
+                GoToPage(startPage);
         }
         public IControl ActivePage { get; private set; }
         private List<IControl> _controlsHolder { get; }
@@ -21,8 +26,7 @@ namespace PilotLookUp.Utils
 
         public void GoToPage(PagesName pageName)
         {
-            if (ActivePage?.GetName() == pageName) { }
-            else if (_controlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
+            if (_controlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
             {
                 ActivePage = _controlsHolder.FirstOrDefault(i => i.GetName() == pageName);
             }
@@ -36,16 +40,24 @@ namespace PilotLookUp.Utils
             switch (pageName)
             {
                 case PagesName.LookUpPage:
-                    AddPage(_controlsHolder, new LookUpPage(new LookUpVM(_lookUpModel)));
+                    AddPage(new LookUpPage(new LookUpVM(_lookUpModel)));
                     GoToPage(pageName);
+                    break;
+                case PagesName.DBPage:
+                    var pilotObjectMap = new PilotObjectMap(_lookUpModel.ObjectsRepository);
+                    var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_lookUpModel.ObjectsRepository) };
+                    var vm = new LookUpVM(_lookUpModel);
+                    vm.SelectionDataObjects = repo;
+                    AddPage(new LookUpPage(vm));
+                    GoToPage(PagesName.LookUpPage);
                     break;
             }
         }
 
-        private void AddPage(List<IControl> list, IControl item)
+        private void AddPage(IControl item)
         {
-            list.RemoveAll(obj => obj.GetName() == item.GetName());
-            list.Add(item);
+            _controlsHolder.RemoveAll(obj => obj.GetName() == item.GetName());
+            _controlsHolder.Add(item);
         }
     }
 }

@@ -3,5 +3,7 @@
     enum PagesName
     {
         LookUpPage,
+        None,
+        DBPage
     }
 }

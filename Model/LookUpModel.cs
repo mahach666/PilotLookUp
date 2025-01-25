@@ -10,12 +10,12 @@ namespace PilotLookUp.Model
     internal class LookUpModel
     {
         private ObjectSet _dataObjects { get; }
-        private IObjectsRepository _objectsRepository { get; }
+        public IObjectsRepository ObjectsRepository { get; }
 
         public LookUpModel(ObjectSet dataObjects, IObjectsRepository objectsRepository)
         {
             _dataObjects = dataObjects;
-            _objectsRepository = objectsRepository;
+            ObjectsRepository = objectsRepository;
         }
 
         public ObjectSet SelectionDataObjects => _dataObjects;
@@ -24,7 +24,7 @@ namespace PilotLookUp.Model
         public void DataGridSelector(ObjectSet obj)
         {
             if (obj == null) return;
-            new LookSeleсtion(obj, _objectsRepository);
+            new LookSeleсtion(obj, ObjectsRepository);
         }
 
         public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
@@ -33,7 +33,7 @@ namespace PilotLookUp.Model
 
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender, pair.Key).Trace(pair.Value);
+                ObjectSet newPilotObj = await new Tracer(ObjectsRepository, sender, pair.Key).Trace(pair.Value);
                 res.Add(newPilotObj);
             }
 
