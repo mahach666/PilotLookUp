@@ -9,16 +9,16 @@ namespace PilotLookUp.Model
 {
     internal class LookUpModel
     {
-        private ObjectSet _dataObjects { get; }
+        //private ObjectSet _dataObjects { get; }
         private IObjectsRepository _objectsRepository { get; }
 
         public LookUpModel(ObjectSet dataObjects, IObjectsRepository objectsRepository)
         {
-            _dataObjects = dataObjects;
+            //_dataObjects = dataObjects;
             _objectsRepository = objectsRepository;
         }
 
-        public ObjectSet SelectionDataObjects => _dataObjects;
+        //public ObjectSet SelectionDataObjects => _dataObjects;
 
 
         public void DataGridSelector(ObjectSet obj)

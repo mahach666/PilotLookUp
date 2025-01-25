@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace PilotLookUp.Model.Utils
+namespace PilotLookUp.Utils
 {
     public class Tracer
     {

@@ -1,18 +1,15 @@
-﻿<controls:DialogWindow xmlns:controls="clr-namespace:Ascon.Pilot.Theme.Controls;assembly=Ascon.Pilot.Theme"
-                       x:Class="PilotLookUp.View.LookUpView"
-                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:local="clr-namespace:PilotLookUp.View"
-                       mc:Ignorable="d"
-                       d:DesignHeight="450"
-                       d:DesignWidth="800"
-                       Title="PilotLookUp"
-                       ShowInTaskbar="True">
+﻿<UserControl x:Class="PilotLookUp.View.LookUpPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PilotLookUp.View"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
 
     <!-- Экспорт словарей ресурсов Pilot -->
-    <controls:DialogWindow.Resources>
+    <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Resources\StyleDictionary.xaml" />
@@ -119,21 +116,97 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-    </controls:DialogWindow.Resources>
+    </UserControl.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" />
+            <ListBox ItemsSource="{Binding SelectionDataObjects}"
+                     Grid.Column="0"
+                     SelectedItem="{Binding DataObjectSelected}"
+                     ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
 
-        <Grid Grid.Column="1">
-            <ContentPresenter Content="{Binding UserInterface}" />
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Копировать выделенное"
+                                  Command="{Binding CopyCommand}"
+                                  CommandParameter="List" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}">
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <GridSplitter Grid.Column="1"
+                          ShowsPreview="False"
+                          Width="3"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Stretch" />
+
+            <DataGrid ItemsSource="{Binding Info}"
+                      Grid.Column="2"
+                      IsReadOnly="True"
+                      SelectedItem="{Binding DataGridSelected}">
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Копировать Name"
+                                  Command="{Binding CopyCommand}"
+                                  CommandParameter="DataGridSelectName" />
+                        <MenuItem Header="Копировать Value"
+                                  Command="{Binding CopyCommand}"
+                                  CommandParameter="DataGridSelectValue" />
+                        <MenuItem Header="Копировать строку"
+                                  Command="{Binding CopyCommand}"
+                                  CommandParameter="DataGridSelectLine" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Name"
+                                            Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding SenderMemberName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
+                                </TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Value"
+                                            Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+
+                            <DataTemplate>
+                                <TextBlock>
+                                <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           TextDecorations="{Binding Decoration}">
+                                    <TextBlock Text="{Binding Discription, Mode=OneWay}"
+                                               Foreground="{Binding Color}" />
+                                </Hyperlink>
+                            </TextBlock>
+                            </DataTemplate>
+
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
         </Grid>
     </Grid>
 
-</controls:DialogWindow>
+</UserControl>
     
     

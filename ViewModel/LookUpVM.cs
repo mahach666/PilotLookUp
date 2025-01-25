@@ -16,16 +16,18 @@ namespace PilotLookUp.ViewModel
 {
     internal class LookUpVM : INotifyPropertyChanged
     {
-        internal LookUpView _view;
+        //internal LookUpView _view;
         private LookUpModel _lookUpModel;
+        private ObjectSet _dataObjects { get; }
 
-        public LookUpVM(LookUpModel lookUpModel)
+        public LookUpVM(LookUpModel lookUpModel, ObjectSet dataObjects)
         {
             _lookUpModel = lookUpModel;
-            DataObjectSelected = SelectionDataObjects.FirstOrDefault();
+            _dataObjects = dataObjects;
+            DataObjectSelected = _dataObjects.FirstOrDefault();
         }
 
-        public ObjectSet SelectionDataObjects => _lookUpModel.SelectionDataObjects;
+        //public ObjectSet SelectionDataObjects => _lookUpModel.SelectionDataObjects;
 
         private PilotObjectHelper _dataObjectSelected;
         public PilotObjectHelper DataObjectSelected

@@ -1,15 +1,17 @@
-﻿using PilotLookUp.ViewModel;
+﻿using PilotLookUp.Interfaces;
+using PilotLookUp.ViewModel;
+using System.Windows.Controls;
 
 namespace PilotLookUp.View
 {
     /// <summary>
     /// Логика взаимодействия для LookUpView.xaml
     /// </summary>
-    public partial class LookUpView
+    public partial class LookUpPage : UserControl
     {
         LookUpVM _vm { get; set; }
 
-        internal LookUpView(LookUpVM vm)
+        internal LookUpPage(LookUpVM vm)
         {
             InitializeComponent();
             _vm = vm;
