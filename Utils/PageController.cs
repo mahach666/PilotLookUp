@@ -1,7 +1,6 @@
 ﻿using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
-using PilotLookUp.View;
 using PilotLookUp.View.UserControls;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
@@ -14,18 +13,18 @@ namespace PilotLookUp.Utils
         internal PageController(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
-            ControlsHolder = new List<IControl>();
+            _controlsHolder = new List<IControl>();
         }
         public IControl ActivePage { get; private set; }
-        private List<IControl> ControlsHolder { get; }
+        private List<IControl> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }
 
         public void GoToPage(PagesName pageName)
         {
             if (ActivePage?.GetName() == pageName) { }
-            else if (ControlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
+            else if (_controlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
             {
-                ActivePage = ControlsHolder.FirstOrDefault(i => i.GetName() == pageName);
+                ActivePage = _controlsHolder.FirstOrDefault(i => i.GetName() == pageName);
             }
             else
             {
@@ -37,9 +36,16 @@ namespace PilotLookUp.Utils
             switch (pageName)
             {
                 case PagesName.LookUpPage:
-                    ActivePage = new LookUpPage(new LookUpVM(_lookUpModel));
+                    AddPage(_controlsHolder, new LookUpPage(new LookUpVM(_lookUpModel)));
+                    GoToPage(pageName);
                     break;
             }
+        }
+
+        private void AddPage(List<IControl> list, IControl item)
+        {
+            list.RemoveAll(obj => obj.GetName() == item.GetName());
+            list.Add(item);
         }
     }
 }
