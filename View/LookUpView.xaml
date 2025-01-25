@@ -140,7 +140,7 @@
 
         <Frame x:Name="frame"
                Grid.Column="2"
-               NavigationUIVisibility="Visible" />
+               NavigationUIVisibility="Hidden" />
     </Grid>
 
 </controls:DialogWindow>
