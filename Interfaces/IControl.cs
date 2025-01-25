@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PilotLookUp.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace PilotLookUp.Interfaces
 {
     interface IControl
     {
-        void Deactivate();
+        PagesName GetName();
     }
 }

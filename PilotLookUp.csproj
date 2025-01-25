@@ -64,12 +64,6 @@
 		<Delete Files="$(OutputPath)\*.pdb; $(OutputPath)\*.xml" />
 		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(AssemblyProduct).zip -Force&quot;" />
 	</Target>
-	<ItemGroup>
-	  <Compile Remove="Enums\**" />
-	  <EmbeddedResource Remove="Enums\**" />
-	  <None Remove="Enums\**" />
-	  <Page Remove="Enums\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
