@@ -1,7 +1,10 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
 using PilotLookUp.Core;
+using PilotLookUp.Objects;
 using System;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Extensions
@@ -23,6 +26,31 @@ namespace PilotLookUp.Extensions
         {
             var loader = new HistoryItemLoader(objectsRepository);
             return await loader.LoadWithTimeout(id, timeoutMilliseconds);
+        }
+
+        internal async static Task<object> ObjByGuid(this IObjectsRepository objectsRepository,Guid guid)
+        {
+            var lodedObj = await objectsRepository.GetObjectWithTimeout(guid);
+            if (lodedObj != null)
+            {
+                return lodedObj;
+            }
+
+            var userStates = objectsRepository.GetUserStates();
+            var userState = userStates.FirstOrDefault(i => i.Id == guid);
+            if (userState != null)
+            {
+                return userState;
+            }
+
+            var userStateMachines = objectsRepository.GetUserStateMachines();
+            var userStateMachine = userStateMachines.FirstOrDefault(i => i.Id == guid);
+            if (userStateMachine != null)
+            {
+                return userStateMachines;
+            }
+
+            return null;
         }
     }
 }

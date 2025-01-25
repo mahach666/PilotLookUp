@@ -57,7 +57,7 @@ namespace PilotLookUp.Utils
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
-                    var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObject(keyVal.Key), keyVal.Value);
+                    var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObjectWithTimeout(keyVal.Key), keyVal.Value);
                     _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
                 }
                 else

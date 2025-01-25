@@ -4,6 +4,7 @@
     {
         LookUpPage,
         None,
-        DBPage
+        DBPage,
+        SearchPage
     }
 }
