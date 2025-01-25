@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Enums;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
@@ -14,7 +15,9 @@ namespace PilotLookUp.ViewBuilders
         {
             if (!dataObjects.IsLookable) return;
 
-            LookUpView view = new LookUpView(new LookUpVM(new LookUpModel(dataObjects, objectsRepository)));
+            var model = new LookUpModel(dataObjects, objectsRepository);
+            var vm = new MainVM(model, PagesName.LookUpPage);
+            LookUpView view = new LookUpView(vm);
             view.Show();
         }
     }

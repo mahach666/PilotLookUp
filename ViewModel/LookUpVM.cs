@@ -18,12 +18,11 @@ namespace PilotLookUp.ViewModel
     {
         //internal LookUpView _view;
         private LookUpModel _lookUpModel;
-        private ObjectSet _dataObjects { get; }
 
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
-            DataObjectSelected = _dataObjects.FirstOrDefault();
+            DataObjectSelected = SelectionDataObjects.FirstOrDefault();
         }
 
         public ObjectSet SelectionDataObjects => _lookUpModel.SelectionDataObjects;

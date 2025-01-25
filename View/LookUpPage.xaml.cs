@@ -10,12 +10,12 @@ namespace PilotLookUp.View
     /// </summary>
     public partial class LookUpPage : UserControl, IControl
     {
-        LookUpVM _vm { get; set; }
+        //LookUpVM _vm { get; set; }
         internal LookUpPage(LookUpVM vm)
         {
             InitializeComponent();
-            _vm = vm;
-            DataContext = _vm;
+            //_vm = vm;
+            DataContext = vm;
         }
 
         PagesName IControl.GetName()

@@ -130,7 +130,7 @@
         <Grid Grid.Column="0" />
 
         <Grid Grid.Column="1">
-            <ContentPresenter Content="{Binding UserInterface}" />
+            <ContentPresenter Content="{Binding SelectedControl}" />
         </Grid>
     </Grid>
 

@@ -1,5 +1,6 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Core;
+using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
@@ -25,12 +26,22 @@ namespace PilotLookUp.ViewModel
         private LookUpModel _lookUpModel { get; }
         private PageController _pageController { get; }
 
-        public MainVM(LookUpModel lookUpModel, IControl startPage = null)
+        public MainVM(LookUpModel lookUpModel, PagesName startPage)
         {
             _lookUpModel = lookUpModel;
-            _pageController = new PageController();
+            _pageController = new PageController(_lookUpModel);
+            _pageController.GoToPage(startPage);
         }
 
+        public UserControl SelectedControl
+        {
+            get
+            {
+                if (_pageController.ActivePage is UserControl userControl)
+                    return userControl;
+                return null;
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

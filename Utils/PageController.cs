@@ -8,19 +8,20 @@ using System.Linq;
 
 namespace PilotLookUp.Utils
 {
-    class PageController
+    internal class PageController
     {
-        PageController(LookUpModel lookUpModel)
+        internal PageController(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
+            ControlsHolder = new List<IControl>();
         }
         public IControl ActivePage { get; private set; }
         private List<IControl> ControlsHolder { get; }
-        private LookUpModel _lookUpModel {  get; }
+        private LookUpModel _lookUpModel { get; }
 
         public void GoToPage(PagesName pageName)
         {
-            if (ActivePage.GetName() == pageName) { }
+            if (ActivePage?.GetName() == pageName) { }
             else if (ControlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
             {
                 ActivePage = ControlsHolder.FirstOrDefault(i => i.GetName() == pageName);
@@ -35,7 +36,7 @@ namespace PilotLookUp.Utils
             switch (pageName)
             {
                 case PagesName.LookUpPage:
-                    ActivePage =  new LookUpPage(new LookUpVM(_lookUpModel));
+                    ActivePage = new LookUpPage(new LookUpVM(_lookUpModel));
                     break;
             }
         }

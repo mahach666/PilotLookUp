@@ -7,13 +7,13 @@ namespace PilotLookUp.View
     /// </summary>
     public partial class LookUpView
     {
-        LookUpVM _vm { get; set; }
+        //private MainVM _vm { get; set; }
 
-        internal LookUpView(LookUpVM vm)
+        internal LookUpView(MainVM vm)
         {
             InitializeComponent();
-            _vm = vm;
-            DataContext = _vm;
+            //_vm = vm;
+            DataContext = vm;
         }
     }
 }
