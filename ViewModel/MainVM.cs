@@ -37,6 +37,14 @@ namespace PilotLookUp.ViewModel
 
         public ICommand LookDBCommand => new RelayCommand<object>(_ => LookDB());
 
+        private void Search()
+        {
+            _pageController.CreatePage(PagesName.SearchPage);
+            OnPropertyChanged("SelectedControl");
+        }
+
+        public ICommand SearchCommand => new RelayCommand<object>(_ => Search());
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

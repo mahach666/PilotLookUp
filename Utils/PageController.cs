@@ -52,7 +52,7 @@ namespace PilotLookUp.Utils
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new LookUpPage(new LookUpVM(_lookUpModel)));
+                    AddPage(new SearchPage(new SearchVM(_lookUpModel)));
                     GoToPage(pageName);
                     break;
             }

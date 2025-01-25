@@ -109,5 +109,7 @@
                 </Style>
             </Button.Style>
         </Button>
+        <StackPanel x:Name="asd"
+                    Grid.Row="1" />
     </Grid>
 </UserControl>
