@@ -16,7 +16,6 @@ namespace PilotLookUp.ViewModel
 {
     internal class LookUpVM : INotifyPropertyChanged
     {
-        //internal LookUpView _view;
         private LookUpModel _lookUpModel;
 
         public LookUpVM(LookUpModel lookUpModel)

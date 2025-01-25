@@ -22,7 +22,6 @@ namespace PilotLookUp.ViewModel
 {
     internal class MainVM : INotifyPropertyChanged
     {
-        //internal LookUpView _view;
         private LookUpModel _lookUpModel { get; }
         private PageController _pageController { get; }
 

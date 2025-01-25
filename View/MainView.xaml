@@ -1,5 +1,5 @@
 ﻿<controls:DialogWindow xmlns:controls="clr-namespace:Ascon.Pilot.Theme.Controls;assembly=Ascon.Pilot.Theme"
-                       x:Class="PilotLookUp.View.LookUpView"
+                       x:Class="PilotLookUp.View.MainView"
                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"

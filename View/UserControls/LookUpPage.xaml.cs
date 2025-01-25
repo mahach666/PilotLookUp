@@ -3,18 +3,13 @@ using PilotLookUp.Interfaces;
 using PilotLookUp.ViewModel;
 using System.Windows.Controls;
 
-namespace PilotLookUp.View
+namespace PilotLookUp.View.UserControls
 {
-    /// <summary>
-    /// Логика взаимодействия для LookUpView.xaml
-    /// </summary>
     public partial class LookUpPage : UserControl, IControl
     {
-        //LookUpVM _vm { get; set; }
         internal LookUpPage(LookUpVM vm)
         {
             InitializeComponent();
-            //_vm = vm;
             DataContext = vm;
         }
 
