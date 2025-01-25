@@ -1,22 +1,9 @@
-﻿using PilotLookUp.Commands;
-using PilotLookUp.Core;
-using PilotLookUp.Enums;
-using PilotLookUp.Interfaces;
+﻿using PilotLookUp.Enums;
 using PilotLookUp.Model;
-using PilotLookUp.Objects;
 using PilotLookUp.Utils;
-using PilotLookUp.View;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PilotLookUp.ViewModel
 {

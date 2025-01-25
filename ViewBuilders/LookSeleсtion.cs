@@ -18,6 +18,7 @@ namespace PilotLookUp.ViewBuilders
             var model = new LookUpModel(dataObjects, objectsRepository);
             var vm = new MainVM(model, PagesName.LookUpPage);
             MainView view = new MainView(vm);
+
             view.Show();
         }
     }
