@@ -55,14 +55,16 @@ namespace PilotLookUp.Model
             }
             else if (int.TryParse(request, out var intId))
             {
-                var res = new ObjectSet(null);
+                var res = new List<PilotObjectHelper>();
                 var person = _objectsRepository.GetPerson(intId);
                 var orgUnit = _objectsRepository.GetOrganisationUnit(intId);
                 var iType = _objectsRepository.GetType(intId);
                 if (person != null) { res.AddRange(await tracer.Trace(person)); }
                 if (orgUnit != null) { res.AddRange(await tracer.Trace(orgUnit)); }
                 if (iType != null) { res.AddRange(await tracer.Trace(iType)); }
-                return res;
+                var oSet = new ObjectSet(null);
+                oSet.AddRange(res.Distinct());
+                return oSet;
             }
             return null;
         }
