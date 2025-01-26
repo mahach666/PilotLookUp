@@ -170,6 +170,7 @@
                 MinHeight="40"
                 MaxWidth="40"
                 MaxHeight="40"
+                Visibility="{Binding CanGo}"
                 Command="{Binding GoObjCommand}">
             <Button.Style>
                 <Style BasedOn="{StaticResource ImageButtonStyle}">

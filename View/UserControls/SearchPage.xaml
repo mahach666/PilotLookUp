@@ -81,11 +81,12 @@
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0">
             <TextBox Margin="20,30,60,30"
                      Text="{Binding Text}"
-                     FontSize="25" />
+                     FontSize="20"
+                     HorizontalScrollBarVisibility="Hidden" />
             <Button ToolTip="LookDB"
                     Background="#86609B"
                     Command="{Binding SearchCommand}"
@@ -112,7 +113,7 @@
                 </Button.Style>
             </Button>
         </Grid>
-        
+
         <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Result}">
