@@ -30,7 +30,7 @@ namespace PilotLookUp
         private ITabServiceProvider _tabServiceProvider;
         private ObjectSet _convertSelection;
         private static ThemeNames _theme { get; set; }
-        public static ThemeNames Theme { get=> _theme; }
+        public static ThemeNames Theme { get => _theme; }
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, IPilotDialogService pilotDialogService)
@@ -118,14 +118,14 @@ namespace PilotLookUp
             {
                 var pilotObjectMap = new PilotObjectMap(_objectsRepository);
                 var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
-                new LookSeleсtion(repo, _objectsRepository);
+                new LookSeleсtion(repo, _objectsRepository,_tabServiceProvider);
             }
 
             if (_convertSelection == null || !_convertSelection.Any()) return;
 
             if (name == "LookSelected")
             {
-                new LookSeleсtion(_convertSelection, _objectsRepository);
+                new LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
             }
         }
 

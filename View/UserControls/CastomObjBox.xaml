@@ -160,8 +160,7 @@
             </Button.Style>
         </Button>
 
-        <Button 
-                Margin="0,20,20,0"
+        <Button Margin="0,20,20,0"
                 VerticalAlignment="Top"
                 Height="40"
                 Background="#86609B"
@@ -170,8 +169,8 @@
                 MinWidth="40"
                 MinHeight="40"
                 MaxWidth="40"
-                MaxHeight="40" 
-            >
+                MaxHeight="40"
+                Command="{Binding GoObjCommand}">
             <Button.Style>
                 <Style BasedOn="{StaticResource ImageButtonStyle}">
                     <Style.Triggers>

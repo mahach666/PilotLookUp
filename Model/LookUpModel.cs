@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using PilotLookUp.ViewModel;
+using System.Windows.Controls;
 
 
 namespace PilotLookUp.Model
@@ -16,11 +17,13 @@ namespace PilotLookUp.Model
     {
         private ObjectSet _dataObjects { get; }
         private IObjectsRepository _objectsRepository { get; }
+        private ITabServiceProvider _tabServiceProvider { get; }
 
-        public LookUpModel(ObjectSet dataObjects, IObjectsRepository objectsRepository)
+        public LookUpModel(ObjectSet dataObjects, IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
         {
             _dataObjects = dataObjects;
             _objectsRepository = objectsRepository;
+            _tabServiceProvider = tabServiceProvider;
         }
 
         public ObjectSet SelectionDataObjects => _dataObjects;
@@ -29,7 +32,7 @@ namespace PilotLookUp.Model
         public void DataGridSelector(ObjectSet obj)
         {
             if (obj == null) return;
-            new LookSeleсtion(obj, _objectsRepository);
+            new LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
         }
 
         public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
@@ -82,6 +85,11 @@ namespace PilotLookUp.Model
             var vm = new LookUpVM(this);
             vm.SelectionDataObjects = repo;
             return vm;
+        }
+
+        public void GoTo(IDataObject dataObject)
+        {
+            _tabServiceProvider.ShowElement(dataObject.Id);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using PilotLookUp.Commands;
+﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Commands;
 using PilotLookUp.Enums;
+using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
 using System;
@@ -15,11 +17,14 @@ namespace PilotLookUp.ViewModel
 {
     internal class CastomObjBoxVM : INotifyPropertyChanged
     {
+        private LookUpModel _lookUpModel;
+
         private PilotObjectHelper _dataObj;
         private MainVM _mainVM { get; }
 
-        internal CastomObjBoxVM(PilotObjectHelper pilotObjectHelper, MainVM mainVM)
+        internal CastomObjBoxVM(LookUpModel lookUpModel, PilotObjectHelper pilotObjectHelper, MainVM mainVM)
         {
+            _lookUpModel = lookUpModel;
             _dataObj = pilotObjectHelper;
             _mainVM = mainVM;
         }
@@ -33,6 +38,14 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand GoPageCommand => new RelayCommand<object>(_ => GoPage());
+
+        private void GoObj()
+        {
+            if (_dataObj.LookUpObject is IDataObject dataObj)
+                _lookUpModel.GoTo(dataObj);
+        }
+
+        public ICommand GoObjCommand => new RelayCommand<object>(_ => GoObj());
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

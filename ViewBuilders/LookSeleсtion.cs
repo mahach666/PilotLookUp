@@ -11,11 +11,11 @@ namespace PilotLookUp.ViewBuilders
 {
     public class LookSeleсtion
     {
-        public LookSeleсtion(ObjectSet dataObjects, IObjectsRepository objectsRepository)
+        public LookSeleсtion(ObjectSet dataObjects, IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
         {
             if (!dataObjects.IsLookable) return;
 
-            var model = new LookUpModel(dataObjects, objectsRepository);
+            var model = new LookUpModel(dataObjects, objectsRepository, tabServiceProvider);
             var vm = new MainVM(model, PagesName.LookUpPage);
             MainView view = new MainView(vm);
 

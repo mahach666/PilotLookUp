@@ -60,7 +60,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<CastomObjBox>();
             foreach (var item in objectSet)
             {
-                res.Add(new CastomObjBox(new CastomObjBoxVM(item, _mainVM)));
+                res.Add(new CastomObjBox(new CastomObjBoxVM(_lookUpModel, item, _mainVM)));
             }
             Result = res;
         }
