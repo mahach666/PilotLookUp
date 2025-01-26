@@ -10,35 +10,186 @@
              Height="80"
              MinHeight="80"
              MaxHeight="80">
+
+    <!-- Экспорт словарей ресурсов Pilot -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Стиль кнопок -->
+            <Style TargetType="{x:Type Button}"
+                   x:Key="Button_Style">
+                <Setter Property="Background"
+                        Value="#86609B" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="FontSize"
+                        Value="11" />
+                <Setter Property="FontFamily"
+                        Value="./#Segoe UI" />
+                <Setter Property="SnapsToDevicePixels"
+                        Value="True" />
+                <Setter Property="Margin"
+                        Value="0,5,0,0" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Right" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border CornerRadius="0"
+                                    Background="{TemplateBinding Background}">
+                                <Grid>
+                                    <ContentPresenter x:Name="MyContentPresenter"
+                                                      Content="{TemplateBinding Content}"
+                                                      HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"
+                                                      Margin="0,0,0,0" />
+                                </Grid>
+                            </Border>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#86509B" />
+                                    <Setter Property="Foreground"
+                                            Value="White" />
+                                </Trigger>
+
+                                <Trigger Property="IsPressed"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#86309B" />
+                                    <Setter Property="Foreground"
+                                            Value="White" />
+                                </Trigger>
+
+                                <Trigger Property="IsEnabled"
+                                         Value="False">
+                                    <Setter Property="Background"
+                                            Value="LightGray" />
+                                    <Setter Property="Foreground"
+                                            Value="White" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Background"
+                        Value="Transparent" />
+                <Setter Property="Foreground"
+                        Value="{Binding DefaultTextColor}" />
+                <Setter Property="HorizontalContentAlignment"
+                        Value="Stretch" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="5">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <!--Триггер для выделенного элемента-->
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#D283E6" />
+                                    <!--Светло-голубой-->
+                                    <Setter Property="Foreground"
+                                            Value="Black" />
+                                </Trigger>
+                                <!--Триггер для наведения мыши-->
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#DCB2E6" />
+                                    <!--Цвет при наведении-->
+                                    <Setter Property="Foreground"
+                                            Value="Black" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid>
         <Label Content="{Binding Name}"
                Margin="60,10,100,0"
                VerticalAlignment="Top"
                FontSize="15" />
-        <Label Content="{Binding StringId}"
+        <Label Content="{Binding Id}"
                Margin="60,0,100,10"
                VerticalAlignment="Bottom"
                FontSize="15" />
-        <Button Content="Button"
-                HorizontalAlignment="Right"
-                Margin="0,20,60,0"
-                VerticalAlignment="Top"
-                Height="40"
-                Width="40"
-                MinWidth="40"
-                MinHeight="40"
-                MaxWidth="40"
-                MaxHeight="40" />
-        <Button Content="Button"
+        <Button                HorizontalAlignment="Right"
+                               Margin="0,20,60,0"
+                               VerticalAlignment="Top"
+                               Height="40"
+                               Width="40"
+                               Background="#86609B"
+                               MinWidth="40"
+                               MinHeight="40"
+                               MaxWidth="40"
+                               MaxHeight="40"
+                               Command="{Binding GoPageCommand}">
+            <Button.Style>
+                <Style BasedOn="{StaticResource ImageButtonStyle}">
+                    <Style.Triggers>
+                        <Trigger Property="UIElement.IsEnabled"
+                                 Value="True">
+                            <Setter Property="ContentControl.Content">
+                                <Setter.Value>
+                                    <Image Source="..\..\Resources\search.png"
+                                           Height="20"
+                                           Width="20"
+                                           IsEnabled="False" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Button 
                 Margin="0,20,20,0"
                 VerticalAlignment="Top"
                 Height="40"
+                Background="#86609B"
                 HorizontalAlignment="Right"
                 Width="40"
                 MinWidth="40"
                 MinHeight="40"
                 MaxWidth="40"
-                MaxHeight="40" />
+                MaxHeight="40" 
+            >
+            <Button.Style>
+                <Style BasedOn="{StaticResource ImageButtonStyle}">
+                    <Style.Triggers>
+                        <Trigger Property="UIElement.IsEnabled"
+                                 Value="True">
+                            <Setter Property="ContentControl.Content">
+                                <Setter.Value>
+                                    <Image Source="..\..\Resources\goTo.png"
+                                           Height="20"
+                                           Width="20"
+                                           IsEnabled="False" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
 
     </Grid>
 </UserControl>

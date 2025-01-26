@@ -66,6 +66,7 @@
 	</Target>
 	<ItemGroup>
 	  <None Remove="Resources\databaseEnabled.png" />
+	  <None Remove="Resources\goTo.png" />
 	  <None Remove="Resources\search.png" />
 	</ItemGroup>
 
@@ -85,6 +86,7 @@
 	
 	<ItemGroup>
 	  <Resource Include="Resources\databaseEnabled.png" />
+	  <Resource Include="Resources\goTo.png" />
 	  <Resource Include="Resources\search.png" />
 	</ItemGroup>
 </Project>

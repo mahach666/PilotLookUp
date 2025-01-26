@@ -18,10 +18,12 @@ namespace PilotLookUp.ViewModel
     internal class SearchVM : INotifyPropertyChanged
     {
         private LookUpModel _lookUpModel { get; }
+        private MainVM _mainVM { get; }
 
-        public SearchVM(LookUpModel lookUpModel)
+        public SearchVM(LookUpModel lookUpModel, MainVM mainVM)
         {
             _lookUpModel = lookUpModel;
+            _mainVM = mainVM;
         }
 
         private List<CastomObjBox> _result;
@@ -58,7 +60,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<CastomObjBox>();
             foreach (var item in objectSet)
             {
-                res.Add(new CastomObjBox(item));
+                res.Add(new CastomObjBox(new CastomObjBoxVM(item, _mainVM)));
             }
             Result = res;
         }

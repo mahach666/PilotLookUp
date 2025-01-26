@@ -67,10 +67,18 @@ namespace PilotLookUp.Model
             return null;
         }
 
-        public LookUpVM GetDBVM()
+        public LookUpVM GetDBLookUpVM()
         {
             var pilotObjectMap = new PilotObjectMap(_objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
+            var vm = new LookUpVM(this);
+            vm.SelectionDataObjects = repo;
+            return vm;
+        }
+
+        public LookUpVM GetCastomLookUpVM(PilotObjectHelper pilotObjectHelper)
+        {
+            var repo = new ObjectSet(null) { pilotObjectHelper };
             var vm = new LookUpVM(this);
             vm.SelectionDataObjects = repo;
             return vm;

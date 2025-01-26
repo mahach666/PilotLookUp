@@ -13,9 +13,10 @@ namespace PilotLookUp.Utils
 {
     internal class PageController
     {
-        internal PageController(LookUpModel lookUpModel, PagesName startPage = PagesName.None)
+        internal PageController(LookUpModel lookUpModel, MainVM mainVM, PagesName startPage = PagesName.None)
         {
             _lookUpModel = lookUpModel;
+            _mainVM = mainVM;
             _controlsHolder = new List<IControl>();
             if (startPage != PagesName.None)
                 GoToPage(startPage);
@@ -23,6 +24,8 @@ namespace PilotLookUp.Utils
         public IControl ActivePage { get; private set; }
         private List<IControl> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }
+        private MainVM _mainVM { get; }
+
 
         public void GoToPage(PagesName pageName)
         {
@@ -44,16 +47,25 @@ namespace PilotLookUp.Utils
                     GoToPage(pageName);
                     break;
                 case PagesName.DBPage:
-                    //var pilotObjectMap = new PilotObjectMap(_lookUpModel._objectsRepository);
-                    //var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_lookUpModel._objectsRepository) };
-                    //vm.SelectionDataObjects = repo;
-                    var vm = _lookUpModel.GetDBVM();
+                    var vm = _lookUpModel.GetDBLookUpVM();
                     AddPage(new LookUpPage(vm));
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchPage(new SearchVM(_lookUpModel)));
+                    AddPage(new SearchPage(new SearchVM(_lookUpModel, _mainVM)));
                     GoToPage(pageName);
+                    break;
+            }
+        }
+
+        public void CreatePage(PagesName pageName, PilotObjectHelper dataObj)
+        {
+            switch (pageName)
+            {
+                case PagesName.LookUpPage:
+                    var vm = _lookUpModel.GetCastomLookUpVM(dataObj);
+                    AddPage(new LookUpPage(vm));
+                    GoToPage(PagesName.LookUpPage);
                     break;
             }
         }

@@ -1,7 +1,9 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Model;
+using PilotLookUp.Objects;
 using PilotLookUp.Utils;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
@@ -17,7 +19,7 @@ namespace PilotLookUp.ViewModel
         public MainVM(LookUpModel lookUpModel, PagesName startPage = PagesName.None)
         {
             _lookUpModel = lookUpModel;
-            _pageController = new PageController(_lookUpModel, startPage);
+            _pageController = new PageController(_lookUpModel,this, startPage);
         }
 
         public UserControl SelectedControl
@@ -40,6 +42,12 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => Search());
+
+        public void ChangePage(PilotObjectHelper pageType)
+        {
+            _pageController.CreatePage(PagesName.LookUpPage, pageType);
+            OnPropertyChanged("SelectedControl");
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

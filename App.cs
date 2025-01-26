@@ -27,14 +27,16 @@ namespace PilotLookUp
         , IMenu<LinkedTasksContext2>
     {
         private IObjectsRepository _objectsRepository;
+        private ITabServiceProvider _tabServiceProvider;
         private ObjectSet _convertSelection;
         private static ThemeNames _theme { get; set; }
         public static ThemeNames Theme { get=> _theme; }
 
         [ImportingConstructor]
-        public App(IObjectsRepository objectsRepository, IPilotDialogService pilotDialogService)
+        public App(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, IPilotDialogService pilotDialogService)
         {
             _objectsRepository = objectsRepository;
+            _tabServiceProvider = tabServiceProvider;
             _theme = pilotDialogService.Theme;
         }
 
