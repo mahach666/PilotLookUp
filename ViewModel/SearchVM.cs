@@ -1,9 +1,16 @@
-﻿using PilotLookUp.Commands;
+﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Commands;
 using PilotLookUp.Model;
+using PilotLookUp.Objects;
+using PilotLookUp.View.UserControls;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -17,8 +24,8 @@ namespace PilotLookUp.ViewModel
             _lookUpModel = lookUpModel;
         }
 
-        private UIElementCollection _result;
-        public UIElementCollection Result
+        private List<CastomObjBox> _result;
+        public List<CastomObjBox> Result
         {
             get => _result;
             set
@@ -36,8 +43,26 @@ namespace PilotLookUp.ViewModel
         }
         private void Search()
         {
-            MessageBox.Show(Text);
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                var res = new List<CastomObjBox>();
+                var searchRes = await _lookUpModel.SearchByString(Text);
+                {
+                    SetRes(searchRes);
+                }
+            });
         }
+
+        private void SetRes(ObjectSet objectSet)
+        {
+            var res = new List<CastomObjBox>();
+            foreach (var item in objectSet)
+            {
+                res.Add(new CastomObjBox(item));
+            }
+            Result = res;
+        }
+
         public ICommand SearchCommand => new RelayCommand<object>(_ => Search());
 
         public event PropertyChangedEventHandler PropertyChanged;

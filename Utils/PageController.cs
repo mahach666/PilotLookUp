@@ -44,10 +44,10 @@ namespace PilotLookUp.Utils
                     GoToPage(pageName);
                     break;
                 case PagesName.DBPage:
-                    var pilotObjectMap = new PilotObjectMap(_lookUpModel.ObjectsRepository);
-                    var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_lookUpModel.ObjectsRepository) };
-                    var vm = new LookUpVM(_lookUpModel);
-                    vm.SelectionDataObjects = repo;
+                    //var pilotObjectMap = new PilotObjectMap(_lookUpModel._objectsRepository);
+                    //var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_lookUpModel._objectsRepository) };
+                    //vm.SelectionDataObjects = repo;
+                    var vm = _lookUpModel.GetDBVM();
                     AddPage(new LookUpPage(vm));
                     GoToPage(PagesName.LookUpPage);
                     break;

@@ -2,9 +2,7 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Model;
 using PilotLookUp.Utils;
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,13 +18,11 @@ namespace PilotLookUp.ViewModel
         {
             _lookUpModel = lookUpModel;
             _pageController = new PageController(_lookUpModel, startPage);
-            //SelectedControl = _pageController.ActivePage as UserControl;
         }
 
-        //private UserControl _selectedControl;
         public UserControl SelectedControl
         {
-            get=> _pageController.ActivePage as UserControl;
+            get => _pageController.ActivePage as UserControl;
         }
 
         private void LookDB()
@@ -39,7 +35,7 @@ namespace PilotLookUp.ViewModel
 
         private void Search()
         {
-            _pageController.CreatePage(PagesName.SearchPage);
+            _pageController.GoToPage(PagesName.SearchPage);
             OnPropertyChanged("SelectedControl");
         }
 

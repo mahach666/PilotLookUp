@@ -14,7 +14,8 @@ namespace PilotLookUp.Objects.TypeHelpers
             {
                 if (senderMember.Name.Contains("AllOrgUnits"))
                 {
-                    var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
+                    //var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
+                    var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
                     _isLookable = true;
@@ -24,7 +25,8 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IOrganisationUnit
                                     && senderMember.Name == "Children")
                 {
-                    var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
+                    //var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
+                    var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
                     _isLookable = true;
@@ -43,7 +45,8 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IOrganisationUnit
                     && senderMember.Name == "Person")
                 {
-                    var person = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
+                    //var person = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
+                    var person = objectsRepository.GetPerson(value);
                     _lookUpObject = person;
                     _name = person?.DisplayName;
                     _isLookable = true;
@@ -80,7 +83,8 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IPerson
                     && senderMember.Name == "Groups")
                 {
-                    var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
+                    //var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
+                    var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
                     _isLookable = true;
@@ -89,7 +93,8 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IDataObject dObj
                     && senderMember.Name == "Subscribers")
                 {
-                    var personSub = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
+                    //var personSub = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
+                    var personSub = objectsRepository.GetPerson(value);
                     _lookUpObject = personSub;
                     _name = personSub?.DisplayName;
                     _isLookable = true;

@@ -81,35 +81,49 @@
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBox Margin="20,30,60,30"
-                 Text="{Binding Text}"
-                 FontSize="25" />
-        <Button ToolTip="LookDB"
-                Background="#86609B"
-                Command="{Binding SearchCommand}"
-                Width="40"
-                Height="40"
-                Margin="20,30,20,30"
-                HorizontalAlignment="Right">
-            <Button.Style>
-                <Style BasedOn="{StaticResource ImageButtonStyle}">
-                    <Style.Triggers>
-                        <Trigger Property="UIElement.IsEnabled"
-                                 Value="True">
-                            <Setter Property="ContentControl.Content">
-                                <Setter.Value>
-                                    <Image Source="..\..\Resources\search.png"
-                                           Height="20"
-                                           Width="20"
-                                           IsEnabled="False" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-        <StackPanel x:Name="asd"
-                    Grid.Row="1" />
+        
+        <Grid Grid.Row="0">
+            <TextBox Margin="20,30,60,30"
+                     Text="{Binding Text}"
+                     FontSize="25" />
+            <Button ToolTip="LookDB"
+                    Background="#86609B"
+                    Command="{Binding SearchCommand}"
+                    Width="40"
+                    Height="40"
+                    Margin="20,30,20,30"
+                    HorizontalAlignment="Right">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource ImageButtonStyle}">
+                        <Style.Triggers>
+                            <Trigger Property="UIElement.IsEnabled"
+                                     Value="True">
+                                <Setter Property="ContentControl.Content">
+                                    <Setter.Value>
+                                        <Image Source="..\..\Resources\search.png"
+                                               Height="20"
+                                               Width="20"
+                                               IsEnabled="False" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Result}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
     </Grid>
 </UserControl>

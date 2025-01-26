@@ -11,9 +11,7 @@ namespace PilotLookUp.View.UserControls
         {
             InitializeComponent();
             DataContext = vm;
-        }
-
-        
+        }        
 
         PagesName IControl.GetName()
         {

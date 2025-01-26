@@ -15,7 +15,7 @@
                Margin="60,10,100,0"
                VerticalAlignment="Top"
                FontSize="15" />
-        <Label Content="{Binding Id}"
+        <Label Content="{Binding StringId}"
                Margin="60,0,100,10"
                VerticalAlignment="Bottom"
                FontSize="15" />
