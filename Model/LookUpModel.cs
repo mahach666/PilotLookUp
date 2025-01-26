@@ -35,13 +35,11 @@ namespace PilotLookUp.Model
         public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
         {
             var res = new List<ObjectSet>();
-
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
                 ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender, pair.Key).Trace(pair.Value);
                 res.Add(newPilotObj);
             }
-
             return res;
         }
 
