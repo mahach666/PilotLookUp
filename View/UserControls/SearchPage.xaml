@@ -82,11 +82,11 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBox Margin="20,30,60,30"
-                 Text="TextBox"
+                 Text="{Binding Text}"
                  FontSize="25" />
         <Button ToolTip="LookDB"
                 Background="#86609B"
-                Command="{Binding LookDBCommand}"
+                Command="{Binding SearchCommand}"
                 Width="40"
                 Height="40"
                 Margin="20,30,20,30"

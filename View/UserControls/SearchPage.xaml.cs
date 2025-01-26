@@ -11,8 +11,6 @@ namespace PilotLookUp.View.UserControls
         {
             InitializeComponent();
             DataContext = vm;
-            asd.Children.Add(new CastomObjBox());
-            asd.Children.Add(new CastomObjBox());
         }
 
         
