@@ -6,11 +6,11 @@ using PilotLookUp.View;
 using PilotLookUp.ViewModel;
 
 
-namespace PilotLookUp.ViewBuilders
+namespace PilotLookUp
 {
-    public class LookSeleсtion
+    public static class ViewBuilder
     {
-        public LookSeleсtion(ObjectSet dataObjects, IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public static void LookSeleсtion(ObjectSet dataObjects, IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
         {
             if (!dataObjects.IsLookable) return;
 
@@ -21,7 +21,7 @@ namespace PilotLookUp.ViewBuilders
             view.Show();
         }
 
-        public LookSeleсtion(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public static void LookSeleсtion(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
         {
             var pilotObjectMap = new PilotObjectMap(objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(objectsRepository) };

@@ -2,7 +2,6 @@
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.Themes;
 using PilotLookUp.Objects;
-using PilotLookUp.ViewBuilders;
 using System;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -113,14 +112,14 @@ namespace PilotLookUp
         {
             if (name == "LookDB")
             {
-                new LookSeleсtion(_objectsRepository, _tabServiceProvider);
+                ViewBuilder.LookSeleсtion(_objectsRepository, _tabServiceProvider);
             }
 
             if (_convertSelection == null || !_convertSelection.Any()) return;
 
             if (name == "LookSelected")
             {
-                new LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
+                ViewBuilder.LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
             }
         }
 

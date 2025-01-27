@@ -2,13 +2,11 @@
 using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
-using PilotLookUp.ViewBuilders;
+using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using PilotLookUp.ViewModel;
-using System.Windows.Controls;
+using System.Threading.Tasks;
 
 
 namespace PilotLookUp.Model
@@ -32,7 +30,7 @@ namespace PilotLookUp.Model
         public void DataGridSelector(ObjectSet obj)
         {
             if (obj == null) return;
-            new LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
+            ViewBuilder.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
         }
 
         public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
@@ -74,9 +72,6 @@ namespace PilotLookUp.Model
         {
             var pilotObjectMap = new PilotObjectMap(_objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
-            //var vm = new LookUpVM(this);
-            //vm.SelectionDataObjects = repo;
-            //return vm;
             return GetCastomLookUpVM(repo.FirstOrDefault());
         }
 
