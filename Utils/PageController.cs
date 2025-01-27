@@ -28,7 +28,7 @@ namespace PilotLookUp.Utils
             ? control
             : null;
 
-        private readonly Action<UserControl> _updateCurrentPage;
+        private Action<UserControl> _updateCurrentPage { get; }
 
         private List<IControl> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }

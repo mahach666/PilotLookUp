@@ -123,9 +123,10 @@
 
     <Grid>
         <Rectangle Margin="5,5,5,5"
-                   Stroke="LightGray"
+                   Stroke="#eae3ed"
                    StrokeThickness="50" />
-        
+
+
         <Label Content="{Binding Name}"
                Margin="60,10,100,0"
                VerticalAlignment="Top"
