@@ -38,7 +38,7 @@ namespace PilotLookUp.Objects
             {
                 if (IsLookable == true)
                 {
-                    return new SolidColorBrush(Colors.Blue);
+                    return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Blue : Colors.SteelBlue);
                 }
                 else if (Discription.StartsWith("Error:")) return new SolidColorBrush(Colors.Red);
                 return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
