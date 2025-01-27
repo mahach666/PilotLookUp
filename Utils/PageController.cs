@@ -22,7 +22,7 @@ namespace PilotLookUp.Utils
                 GoToPage(startPage);
         }
         private IControl _activePage { get; set; }
-        public  UserControl ActivePage => _activePage is UserControl control ? control : null;
+        public UserControl ActivePage => _activePage is UserControl control ? control : null;
 
         private readonly Action<UserControl> _updateCurrentPage;
 
@@ -42,12 +42,13 @@ namespace PilotLookUp.Utils
                 CreatePage(pageName);
             }
         }
-        public void CreatePage(PagesName pageName)
+        public void CreatePage(PagesName pageName, PilotObjectHelper dataObj = null)
         {
             switch (pageName)
             {
                 case PagesName.LookUpPage:
-                    AddPage(new LookUpPage(new LookUpVM(_lookUpModel)));
+                    var lookVM = dataObj == null ? new LookUpVM(_lookUpModel) : _lookUpModel.GetCastomLookUpVM(dataObj);
+                    AddPage(new LookUpPage(lookVM));
                     GoToPage(pageName);
                     break;
                 case PagesName.DBPage:
@@ -56,20 +57,8 @@ namespace PilotLookUp.Utils
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchPage(new SearchVM(_lookUpModel)));
+                    AddPage(new SearchPage(new SearchVM(_lookUpModel, this)));
                     GoToPage(pageName);
-                    break;
-            }
-        }
-
-        public void CreatePage(PagesName pageName, PilotObjectHelper dataObj)
-        {
-            switch (pageName)
-            {
-                case PagesName.LookUpPage:
-                    var vm = _lookUpModel.GetCastomLookUpVM(dataObj);
-                    AddPage(new LookUpPage(vm));
-                    GoToPage(PagesName.LookUpPage);
                     break;
             }
         }
