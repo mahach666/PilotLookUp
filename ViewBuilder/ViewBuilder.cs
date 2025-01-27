@@ -21,7 +21,7 @@ namespace PilotLookUp
             view.Show();
         }
 
-        public static void LookSeleсtion(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public static void LookDB(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
         {
             var pilotObjectMap = new PilotObjectMap(objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(objectsRepository) };

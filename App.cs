@@ -45,6 +45,7 @@ namespace PilotLookUp
             var item = builder.AddItem("PilotLookUp", 1).WithHeader("PilotLookUp");
             item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
             item.WithSubmenu().AddItem("LookDB", 1).WithHeader("LookDB");
+            item.WithSubmenu().AddItem("Search", 2).WithHeader("Search");
         }
         public void Build(IMenuBuilder builder, ObjectsViewContext context)
         {
@@ -112,7 +113,13 @@ namespace PilotLookUp
         {
             if (name == "LookDB")
             {
-                ViewBuilder.LookSeleсtion(_objectsRepository, _tabServiceProvider);
+                ViewBuilder.LookDB(_objectsRepository, _tabServiceProvider);
+                return;
+            }
+            else if (name == "Search")
+            {
+                ViewBuilder.LookDB(_objectsRepository, _tabServiceProvider);
+                return;
             }
 
             if (_convertSelection == null || !_convertSelection.Any()) return;
@@ -120,7 +127,9 @@ namespace PilotLookUp
             if (name == "LookSelected")
             {
                 ViewBuilder.LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
+                return;
             }
+
         }
 
         private void ContextButtunBuilder(IMenuBuilder builder)
