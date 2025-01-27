@@ -4,7 +4,6 @@ using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
 using PilotLookUp.ViewModel;
-using System.Collections.Generic;
 
 
 namespace PilotLookUp.ViewBuilders
@@ -17,7 +16,19 @@ namespace PilotLookUp.ViewBuilders
 
             var model = new LookUpModel(dataObjects, objectsRepository, tabServiceProvider);
             var vm = new MainVM(model, PagesName.LookUpPage);
-            MainView view = new MainView(vm);
+            var view = new MainView(vm);
+
+            view.Show();
+        }
+
+        public LookSeleсtion(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        {
+            var pilotObjectMap = new PilotObjectMap(objectsRepository);
+            var repo = new ObjectSet(null) { pilotObjectMap.Wrap(objectsRepository) };
+
+            var model = new LookUpModel(repo, objectsRepository, tabServiceProvider);
+            var vm = new MainVM(model, PagesName.LookUpPage);
+            var view = new MainView(vm);
 
             view.Show();
         }

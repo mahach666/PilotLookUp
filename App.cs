@@ -109,16 +109,11 @@ namespace PilotLookUp
             ItemClick(name);
         }
 
-
-
-
         private void ItemClick(string name)
         {
             if (name == "LookDB")
             {
-                var pilotObjectMap = new PilotObjectMap(_objectsRepository);
-                var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
-                new LookSeleсtion(repo, _objectsRepository,_tabServiceProvider);
+                new LookSeleсtion(_objectsRepository, _tabServiceProvider);
             }
 
             if (_convertSelection == null || !_convertSelection.Any()) return;
@@ -170,6 +165,5 @@ namespace PilotLookUp
                     break;
             }
         }
-
     }
 }

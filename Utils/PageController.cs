@@ -13,7 +13,9 @@ namespace PilotLookUp.Utils
 {
     internal class PageController : IPageController
     {
-        internal PageController(LookUpModel lookUpModel, PagesName startPage, Action<UserControl> updateCurrentPage)
+        internal PageController(LookUpModel lookUpModel
+            , PagesName startPage
+            , Action<UserControl> updateCurrentPage)
         {
             _updateCurrentPage = updateCurrentPage;
             _lookUpModel = lookUpModel;
@@ -22,7 +24,9 @@ namespace PilotLookUp.Utils
                 GoToPage(startPage);
         }
         private IControl _activePage { get; set; }
-        public UserControl ActivePage => _activePage is UserControl control ? control : null;
+        public UserControl ActivePage => _activePage is UserControl control
+            ? control
+            : null;
 
         private readonly Action<UserControl> _updateCurrentPage;
 
@@ -47,7 +51,10 @@ namespace PilotLookUp.Utils
             switch (pageName)
             {
                 case PagesName.LookUpPage:
-                    var lookVM = dataObj == null ? new LookUpVM(_lookUpModel) : _lookUpModel.GetCastomLookUpVM(dataObj);
+                    var lookVM = dataObj == null
+                        ? new LookUpVM(_lookUpModel)
+                        : _lookUpModel.GetCastomLookUpVM(dataObj);
+
                     AddPage(new LookUpPage(lookVM));
                     GoToPage(pageName);
                     break;
