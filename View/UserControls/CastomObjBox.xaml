@@ -122,6 +122,10 @@
     </UserControl.Resources>
 
     <Grid>
+        <Rectangle Margin="5,5,5,5"
+                   Stroke="LightGray"
+                   StrokeThickness="50" />
+        
         <Label Content="{Binding Name}"
                Margin="60,10,100,0"
                VerticalAlignment="Top"
@@ -130,17 +134,17 @@
                Margin="60,0,100,10"
                VerticalAlignment="Bottom"
                FontSize="15" />
-        <Button                HorizontalAlignment="Right"
-                               Margin="0,20,60,0"
-                               VerticalAlignment="Top"
-                               Height="40"
-                               Width="40"
-                               Background="#86609B"
-                               MinWidth="40"
-                               MinHeight="40"
-                               MaxWidth="40"
-                               MaxHeight="40"
-                               Command="{Binding GoPageCommand}">
+        <Button HorizontalAlignment="Right"
+                Margin="0,20,60,0"
+                VerticalAlignment="Top"
+                Height="40"
+                Width="40"
+                Background="#86609B"
+                MinWidth="40"
+                MinHeight="40"
+                MaxWidth="40"
+                MaxHeight="40"
+                Command="{Binding GoPageCommand}">
             <Button.Style>
                 <Style BasedOn="{StaticResource ImageButtonStyle}">
                     <Style.Triggers>
@@ -190,6 +194,7 @@
                 </Style>
             </Button.Style>
         </Button>
+
 
     </Grid>
 </UserControl>
