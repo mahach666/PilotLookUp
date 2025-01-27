@@ -1,37 +1,41 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Enums;
-using PilotLookUp.Extensions;
+﻿using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View.UserControls;
 using PilotLookUp.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace PilotLookUp.Utils
 {
-    internal class PageController
+    internal class PageController : IPageController
     {
-        internal PageController(LookUpModel lookUpModel, MainVM mainVM, PagesName startPage = PagesName.None)
+        internal PageController(LookUpModel lookUpModel, PagesName startPage, Action<UserControl> updateCurrentPage)
         {
+            _updateCurrentPage = updateCurrentPage;
             _lookUpModel = lookUpModel;
-            _mainVM = mainVM;
             _controlsHolder = new List<IControl>();
             if (startPage != PagesName.None)
                 GoToPage(startPage);
         }
-        public IControl ActivePage { get; private set; }
+        private IControl _activePage { get; set; }
+        public  UserControl ActivePage => _activePage is UserControl control ? control : null;
+
+        private readonly Action<UserControl> _updateCurrentPage;
+
         private List<IControl> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }
-        private MainVM _mainVM { get; }
 
 
         public void GoToPage(PagesName pageName)
         {
             if (_controlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
             {
-                ActivePage = _controlsHolder.FirstOrDefault(i => i.GetName() == pageName);
+                _activePage = _controlsHolder.FirstOrDefault(i => i.GetName() == pageName);
+                _updateCurrentPage(ActivePage);
             }
             else
             {
@@ -52,7 +56,7 @@ namespace PilotLookUp.Utils
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchPage(new SearchVM(_lookUpModel, _mainVM)));
+                    AddPage(new SearchPage(new SearchVM(_lookUpModel)));
                     GoToPage(pageName);
                     break;
             }

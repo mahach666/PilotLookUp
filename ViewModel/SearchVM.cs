@@ -1,16 +1,12 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Commands;
+﻿using PilotLookUp.Commands;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.View.UserControls;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -18,12 +14,12 @@ namespace PilotLookUp.ViewModel
     internal class SearchVM : INotifyPropertyChanged
     {
         private LookUpModel _lookUpModel { get; }
-        private MainVM _mainVM { get; }
+        private IPageController _pageController { get; }
 
-        public SearchVM(LookUpModel lookUpModel, MainVM mainVM)
+        public SearchVM(LookUpModel lookUpModel, IPageController pageController)
         {
             _lookUpModel = lookUpModel;
-            _mainVM = mainVM;
+            _pageController = pageController;
         }
 
         private List<CastomObjBox> _result;
@@ -60,7 +56,8 @@ namespace PilotLookUp.ViewModel
             var res = new List<CastomObjBox>();
             foreach (var item in objectSet)
             {
-                res.Add(new CastomObjBox(new CastomObjBoxVM(_lookUpModel, item, _mainVM)));
+                var vm = new CastomObjBoxVM(_lookUpModel, _pageController, item);
+                res.Add(new CastomObjBox(vm));
             }
             Result = res;
         }

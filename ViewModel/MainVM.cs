@@ -1,9 +1,8 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
-using PilotLookUp.Objects;
 using PilotLookUp.Utils;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
@@ -14,40 +13,40 @@ namespace PilotLookUp.ViewModel
     internal class MainVM : INotifyPropertyChanged
     {
         private LookUpModel _lookUpModel { get; }
-        private PageController _pageController { get; }
+        private IPageController _pageController { get; }
 
         public MainVM(LookUpModel lookUpModel, PagesName startPage = PagesName.None)
         {
             _lookUpModel = lookUpModel;
-            _pageController = new PageController(_lookUpModel,this, startPage);
+            _pageController = new PageController(_lookUpModel, startPage, page => SelectedControl = page);
         }
 
+        private UserControl _selectedControl;
         public UserControl SelectedControl
         {
-            get => _pageController.ActivePage as UserControl;
+            get => _selectedControl;
+            set
+            {
+                _selectedControl = value;
+                OnPropertyChanged();
+            }
         }
 
-        private void LookDB()
+        private void GoLookDBPage()
         {
             _pageController.CreatePage(PagesName.DBPage);
             OnPropertyChanged("SelectedControl");
         }
 
-        public ICommand LookDBCommand => new RelayCommand<object>(_ => LookDB());
+        public ICommand LookDBCommand => new RelayCommand<object>(_ => GoLookDBPage());
 
-        private void Search()
+        private void GoSearchPage()
         {
             _pageController.GoToPage(PagesName.SearchPage);
             OnPropertyChanged("SelectedControl");
         }
 
-        public ICommand SearchCommand => new RelayCommand<object>(_ => Search());
-
-        public void ChangePage(PilotObjectHelper pageType)
-        {
-            _pageController.CreatePage(PagesName.LookUpPage, pageType);
-            OnPropertyChanged("SelectedControl");
-        }
+        public ICommand SearchCommand => new RelayCommand<object>(_ => GoSearchPage());
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

@@ -1,16 +1,9 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Commands;
+﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using PilotLookUp.Utils;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
@@ -19,16 +12,17 @@ namespace PilotLookUp.ViewModel
 {
     internal class CastomObjBoxVM : INotifyPropertyChanged
     {
-        private LookUpModel _lookUpModel;
+        private LookUpModel _lookUpModel { get; }
 
-        private PilotObjectHelper _dataObj;
-        private MainVM _mainVM { get; }
+        private PilotObjectHelper _dataObj { get; }
+        private IPageController _pageController { get; }
 
-        internal CastomObjBoxVM(LookUpModel lookUpModel, PilotObjectHelper pilotObjectHelper, MainVM mainVM)
+
+        internal CastomObjBoxVM(LookUpModel lookUpModel, IPageController pageController, PilotObjectHelper pilotObjectHelper)
         {
             _lookUpModel = lookUpModel;
             _dataObj = pilotObjectHelper;
-            _mainVM = mainVM;
+            _pageController = pageController;
         }
 
         public string Name => _dataObj.Name;
@@ -37,7 +31,7 @@ namespace PilotLookUp.ViewModel
 
         private void GoPage()
         {
-            _mainVM.ChangePage(_dataObj);
+            _pageController.CreatePage(PagesName.LookUpPage, _dataObj);
         }
 
         public ICommand GoPageCommand => new RelayCommand<object>(_ => GoPage());
@@ -51,9 +45,5 @@ namespace PilotLookUp.ViewModel
         public ICommand GoObjCommand => new RelayCommand<object>(_ => GoObj());
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
