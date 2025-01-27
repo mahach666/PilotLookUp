@@ -20,6 +20,24 @@ namespace PilotLookUp.ViewModel
         {
             _lookUpModel = lookUpModel;
             _pageController = pageController;
+            ClipboardCheck();
+        }
+
+        private void ClipboardCheck()
+        {
+            string clipboardText = Clipboard.GetText();
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                var res = new List<CastomObjBox>();
+                var searchRes = await _lookUpModel.SearchByString(clipboardText);
+                {
+                    if (searchRes.Count > 0)
+                    {
+                        Text = clipboardText;
+                        SetRes(searchRes);
+                    }
+                }
+            });
         }
 
         private List<CastomObjBox> _result;

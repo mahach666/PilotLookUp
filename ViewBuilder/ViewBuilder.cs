@@ -32,5 +32,15 @@ namespace PilotLookUp
 
             view.Show();
         }
+
+        public static void SearchPage(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        {
+            var emptySet = new ObjectSet(null);
+            var model = new LookUpModel(emptySet, objectsRepository, tabServiceProvider);
+            var vm = new MainVM(model, PagesName.SearchPage);
+            var view = new MainView(vm);
+
+            view.Show();
+        }
     }
 }

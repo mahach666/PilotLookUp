@@ -19,7 +19,7 @@ namespace PilotLookUp.ViewModel
         {
             _lookUpModel = lookUpModel;
             SelectionDataObjects = _lookUpModel.SelectionDataObjects;
-            DataObjectSelected = SelectionDataObjects.FirstOrDefault();
+            DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
         private ObjectSet _selectionDataObjects;
@@ -30,7 +30,7 @@ namespace PilotLookUp.ViewModel
             {
                 if (value == null || !value.Any()) return;
                 _selectionDataObjects = value;
-                DataObjectSelected = value.FirstOrDefault();
+                DataObjectSelected = value?.FirstOrDefault();
                 UpdateInfo();
                 OnPropertyChanged();
             }

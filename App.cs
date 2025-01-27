@@ -118,7 +118,7 @@ namespace PilotLookUp
             }
             else if (name == "Search")
             {
-                ViewBuilder.LookDB(_objectsRepository, _tabServiceProvider);
+                ViewBuilder.SearchPage(_objectsRepository, _tabServiceProvider);
                 return;
             }
 
