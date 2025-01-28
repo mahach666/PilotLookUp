@@ -64,9 +64,7 @@ namespace PilotLookUp.ViewModel
             {
                 var res = new List<SearchResBox>();
                 var searchRes = await _lookUpModel.SearchByString(Text);
-                {
-                    SetRes(searchRes);
-                }
+                SetRes(searchRes);
             });
         }
 

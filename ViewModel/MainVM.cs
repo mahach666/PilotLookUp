@@ -35,6 +35,7 @@ namespace PilotLookUp.ViewModel
         private void GoLookDBPage()
         {
             _pageController.CreatePage(PagesName.DBPage);
+            OnPropertyChanged();
         }
 
         public ICommand LookDBCommand => new RelayCommand<object>(_ => GoLookDBPage());

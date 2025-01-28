@@ -1,5 +1,4 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Core;
+﻿using PilotLookUp.Core;
 using System.Windows.Media;
 
 namespace PilotLookUp.Objects
@@ -21,6 +20,10 @@ namespace PilotLookUp.Objects
         // Можно ли заглянуть в объект
         protected bool _isLookable { get; set; }
         public bool IsLookable { get => _lookUpObject != null ? _isLookable : false; }
+
+        // Путь к PNG
+        protected string _pngPath { get; set; }
+        public string PngPath { get => _pngPath; }
 
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }

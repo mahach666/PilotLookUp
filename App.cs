@@ -2,6 +2,7 @@
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.Themes;
 using PilotLookUp.Objects;
+using PilotLookUp.Utils;
 using System;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace PilotLookUp
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, IPilotDialogService pilotDialogService)
         {
+            AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
             _theme = pilotDialogService.Theme;

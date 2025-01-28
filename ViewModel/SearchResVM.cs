@@ -26,6 +26,7 @@ namespace PilotLookUp.ViewModel
 
         public string Name => "DisplayName : " + _dataObj.Name;
         public string Id => "Id : " + _dataObj.StringId;
+        public string TypeIcon => _dataObj.PngPath;
         public Visibility CanGo => (_dataObj?.LookUpObject is IDataObject) ? Visibility.Visible : Visibility.Hidden;
 
         private void GoPage()

@@ -195,6 +195,11 @@
                 </Style>
             </Button.Style>
         </Button>
+        <Image HorizontalAlignment="Left"
+               Margin="20,20,0,20"
+               Width="40"
+               Height="40"
+               Source="{Binding TypeIcon}" />
 
 
     </Grid>

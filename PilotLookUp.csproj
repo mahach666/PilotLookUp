@@ -67,12 +67,13 @@
 	<ItemGroup>
 	  <None Remove="Resources\databaseEnabled.png" />
 	  <None Remove="Resources\goTo.png" />
+	  <None Remove="Resources\personIcon.png" />
 	  <None Remove="Resources\search.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
-		<PackageReference Include="Svg.Skia" Version="2.0.0.4" />
+		<PackageReference Include="Svg" Version="3.4.7" />
 		<PackageReference Include="System.Composition" Version="*" />
 	</ItemGroup>
 	
@@ -88,6 +89,7 @@
 	<ItemGroup>
 	  <Resource Include="Resources\databaseEnabled.png" />
 	  <Resource Include="Resources\goTo.png" />
+	  <Resource Include="Resources\personIcon.png" />
 	  <Resource Include="Resources\search.png" />
 	</ItemGroup>
 </Project>
