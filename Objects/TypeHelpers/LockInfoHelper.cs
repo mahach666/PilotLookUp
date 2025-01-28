@@ -4,7 +4,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class LockInfoHelper : PilotObjectHelper
     {
-        public LockInfoHelper(ILockInfo value, IObjectsRepository objectsRepository) : base(objectsRepository)
+        public LockInfoHelper(ILockInfo value, IObjectsRepository objectsRepository)
         {
             _lookUpObject = value;
             _name = value.ToString();

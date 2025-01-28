@@ -4,7 +4,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class TransitionHelper : PilotObjectHelper
     {
-        public TransitionHelper(ITransition obj, IObjectsRepository objectsRepository) : base(objectsRepository)
+        public TransitionHelper(ITransition obj, IObjectsRepository objectsRepository) 
         {
             _lookUpObject = obj;
             _name = obj.DisplayName;

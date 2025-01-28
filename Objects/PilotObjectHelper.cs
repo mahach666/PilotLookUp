@@ -6,10 +6,6 @@ namespace PilotLookUp.Objects
 {
     public abstract class PilotObjectHelper
     {
-        public PilotObjectHelper(IObjectsRepository objectsRepository)
-        {
-            ObjectsRepository = objectsRepository;
-        }
         // Отображаемое "Красивое" имя
         protected string _name { get; set; }
         public string Name { get => _name; }
@@ -25,9 +21,6 @@ namespace PilotLookUp.Objects
         // Можно ли заглянуть в объект
         protected bool _isLookable { get; set; }
         public bool IsLookable { get => _lookUpObject != null ? _isLookable : false; }
-
-        // DB Pilot
-        public IObjectsRepository ObjectsRepository { get; }
 
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }

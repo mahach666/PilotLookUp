@@ -3,14 +3,13 @@ using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class SearchResVM : INotifyPropertyChanged
+    internal class SearchResVM
     {
         private LookUpModel _lookUpModel { get; }
 
@@ -43,7 +42,5 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand GoObjCommand => new RelayCommand<object>(_ => GoObj());
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

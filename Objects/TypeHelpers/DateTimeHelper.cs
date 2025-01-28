@@ -5,7 +5,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class DateTimeHelper : PilotObjectHelper
     {
-        public DateTimeHelper(DateTime obj, IObjectsRepository objectsRepository) : base(objectsRepository)
+        public DateTimeHelper(DateTime obj, IObjectsRepository objectsRepository)
         {
             _lookUpObject = obj;
             _name = obj.ToString();

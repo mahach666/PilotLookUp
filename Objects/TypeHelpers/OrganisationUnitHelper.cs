@@ -4,7 +4,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class OrganisationUnitHelper : PilotObjectHelper
     {
-        public OrganisationUnitHelper(IOrganisationUnit obj, IObjectsRepository objectsRepository): base(objectsRepository)
+        public OrganisationUnitHelper(IOrganisationUnit obj, IObjectsRepository objectsRepository)
         {
             _lookUpObject = obj;
             _name = obj.Title;

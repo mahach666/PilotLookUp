@@ -4,7 +4,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class DataStateHelper : PilotObjectHelper
     {
-        public DataStateHelper(DataState obj, IObjectsRepository objectsRepository) : base(objectsRepository)
+        public DataStateHelper(DataState obj, IObjectsRepository objectsRepository)
         {
             _lookUpObject = obj;
             _name = obj.ToString();

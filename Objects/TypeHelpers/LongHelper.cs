@@ -4,7 +4,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class LongHelper : PilotObjectHelper
     {
-        public LongHelper(long value, IObjectsRepository objectsRepository) : base(objectsRepository)
+        public LongHelper(long value, IObjectsRepository objectsRepository)
         {
             _lookUpObject = value;
             _name = value.ToString();

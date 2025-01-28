@@ -10,7 +10,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class GuidHelper : PilotObjectHelper
     {
-        public GuidHelper(Guid value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember) : base(objectsRepository)
+        public GuidHelper(Guid value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
         {
             if (senderMember != null)
             {

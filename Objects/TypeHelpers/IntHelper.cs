@@ -8,7 +8,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class IntHelper : PilotObjectHelper
     {
-        public IntHelper(int value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember) : base(objectsRepository)
+        public IntHelper(int value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
         {
             if (senderMember != null)
             {
