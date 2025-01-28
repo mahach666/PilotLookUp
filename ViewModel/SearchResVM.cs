@@ -10,7 +10,7 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class CastomObjBoxVM : INotifyPropertyChanged
+    internal class SearchResVM : INotifyPropertyChanged
     {
         private LookUpModel _lookUpModel { get; }
 
@@ -18,7 +18,7 @@ namespace PilotLookUp.ViewModel
         private IPageController _pageController { get; }
 
 
-        internal CastomObjBoxVM(LookUpModel lookUpModel, IPageController pageController, PilotObjectHelper pilotObjectHelper)
+        internal SearchResVM(LookUpModel lookUpModel, IPageController pageController, PilotObjectHelper pilotObjectHelper)
         {
             _lookUpModel = lookUpModel;
             _dataObj = pilotObjectHelper;

@@ -2,11 +2,12 @@
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using PilotLookUp.View.UserControls;
+using PilotLookUp.View.CastomUIElemens;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -28,7 +29,7 @@ namespace PilotLookUp.ViewModel
             string clipboardText = Clipboard.GetText();
             Application.Current.Dispatcher.Invoke(async () =>
             {
-                var res = new List<CastomObjBox>();
+                var res = new List<UserControl>();
                 var searchRes = await _lookUpModel.SearchByString(clipboardText);
                 {
                     if (searchRes.Count > 0)
@@ -40,8 +41,8 @@ namespace PilotLookUp.ViewModel
             });
         }
 
-        private List<CastomObjBox> _result;
-        public List<CastomObjBox> Result
+        private List<UserControl> _result;
+        public List<UserControl> Result
         {
             get => _result;
             set
@@ -61,7 +62,7 @@ namespace PilotLookUp.ViewModel
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {
-                var res = new List<CastomObjBox>();
+                var res = new List<SearchResBox>();
                 var searchRes = await _lookUpModel.SearchByString(Text);
                 {
                     SetRes(searchRes);
@@ -71,11 +72,11 @@ namespace PilotLookUp.ViewModel
 
         private void SetRes(ObjectSet objectSet)
         {
-            var res = new List<CastomObjBox>();
+            var res = new List<UserControl>();
             foreach (var item in objectSet)
             {
-                var vm = new CastomObjBoxVM(_lookUpModel, _pageController, item);
-                res.Add(new CastomObjBox(vm));
+                var vm = new SearchResVM(_lookUpModel, _pageController, item);
+                res.Add(new SearchResBox(vm));
             }
             Result = res;
         }
