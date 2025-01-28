@@ -32,7 +32,7 @@ namespace PilotLookUp.ViewModel
                 var res = new List<UserControl>();
                 var searchRes = await _lookUpModel.SearchByString(clipboardText);
                 {
-                    if (searchRes.Count > 0)
+                    if (searchRes?.Count > 0)
                     {
                         Text = clipboardText;
                         SetRes(searchRes);
