@@ -8,6 +8,12 @@
              d:DesignHeight="450"
              d:DesignWidth="800">
 
+    <!--<UserControl.InputBindings>
+        <KeyBinding Key="Enter"
+                    Modifiers="Control"
+                    Command="{Binding SearchCommand}" />
+    </UserControl.InputBindings>-->
+
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -86,7 +92,13 @@
             <TextBox Margin="20,30,60,30"
                      Text="{Binding Text}"
                      FontSize="20"
-                     HorizontalScrollBarVisibility="Hidden" />
+                     HorizontalScrollBarVisibility="Hidden">
+                <!--<TextBox.InputBindings>
+                    <KeyBinding Key="Enter"
+                                Modifiers="Control"
+                                Command="{Binding SearchCommand}" />
+                </TextBox.InputBindings>-->
+            </TextBox>
             <Button ToolTip="LookDB"
                     Background="#86609B"
                     Command="{Binding SearchCommand}"
