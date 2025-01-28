@@ -101,7 +101,7 @@
                                      Value="True">
                                 <Setter Property="ContentControl.Content">
                                     <Setter.Value>
-                                        <Image Source="..\..\Resources\search.png"
+                                        <Image Source="..\..\Resources\UI\search.png"
                                                Height="20"
                                                Width="20"
                                                IsEnabled="False" />

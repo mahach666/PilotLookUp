@@ -88,10 +88,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Resource Include="Resources\databaseEnabled.png" />
-	  <Resource Include="Resources\goTo.png" />
-	  <Resource Include="Resources\organisationUnitIcon.png" />
-	  <Resource Include="Resources\personIcon.png" />
-	  <Resource Include="Resources\search.png" />
+	  <Resource Include="Resources\UI\databaseEnabled.png" />
+	  <Resource Include="Resources\UI\goTo.png" />
+	  <Resource Include="Resources\TypeIcons\organisationUnitIcon.png" />
+	  <Resource Include="Resources\TypeIcons\personIcon.png" />
+	  <Resource Include="Resources\UI\search.png" />
 	</ItemGroup>
 </Project>
