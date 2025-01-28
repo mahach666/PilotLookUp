@@ -1,10 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -34,6 +31,11 @@ namespace PilotLookUp.Objects.TypeHelpers
                 _name = value.ToString();
                 _isLookable = false;
             }
+        }
+
+        public override BitmapImage GetImage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

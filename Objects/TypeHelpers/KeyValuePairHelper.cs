@@ -1,8 +1,8 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
@@ -45,6 +45,11 @@ namespace PilotLookUp.Objects.TypeHelpers
             _lookUpObject = keyValuePair.Value;
             _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Title ?? "invalid";
             _isLookable = true;
+        }
+
+        public override BitmapImage GetImage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

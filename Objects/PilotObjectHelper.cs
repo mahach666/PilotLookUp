@@ -1,5 +1,6 @@
 ﻿using PilotLookUp.Core;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects
 {
@@ -22,8 +23,8 @@ namespace PilotLookUp.Objects
         public bool IsLookable { get => _lookUpObject != null ? _isLookable : false; }
 
         // Путь к PNG
-        protected string _pngPath { get; set; }
-        public string PngPath { get => _pngPath; }
+        //protected BitmapImage _icon { get; set; }
+        //public BitmapImage Icon { get => _icon; }
 
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
@@ -36,5 +37,6 @@ namespace PilotLookUp.Objects
                 return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
             }
         }
+        abstract public BitmapImage GetImage();
     }
 }

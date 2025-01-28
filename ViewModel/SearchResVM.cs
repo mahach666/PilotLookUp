@@ -5,6 +5,7 @@ using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
@@ -26,7 +27,7 @@ namespace PilotLookUp.ViewModel
 
         public string Name => "DisplayName : " + _dataObj.Name;
         public string Id => "Id : " + _dataObj.StringId;
-        public string TypeIcon => _dataObj.PngPath;
+        public BitmapImage TypeIcon => _dataObj.GetImage();
         public Visibility CanGo => (_dataObj?.LookUpObject is IDataObject) ? Visibility.Visible : Visibility.Hidden;
 
         private void GoPage()
