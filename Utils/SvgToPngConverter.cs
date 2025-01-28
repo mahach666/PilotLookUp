@@ -1,9 +1,7 @@
 ﻿using Svg;
-using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 
 namespace PilotLookUp.Utils
 {
@@ -15,47 +13,11 @@ namespace PilotLookUp.Utils
             if (!fileName.Contains(".png")) fileName += ".png";
 
             string path = Path.Combine(Path.GetTempPath(), fileName);
+
             byte[] newPngBytes = ConvertSvgToPng(svgBytes, width, height); // Преобразование
-
-            if (File.Exists(path))
-            {
-                byte[] oldPngBytes = File.ReadAllBytes(path);
-                if (oldPngBytes.SequenceEqual(newPngBytes))
-                {
-                    return path;
-                }
-                File.Delete(path);
-            }
-
             File.WriteAllBytes(path, newPngBytes); // Сохранение PNG
             return path;
         }
-
-        //private static byte[] ConvertSvgToPng(byte[] svgBytes, int width = 50, int height = 50)
-        //{
-        //    // Преобразуем байты SVG в строку
-        //    var svgString = System.Text.Encoding.UTF8.GetString(svgBytes);
-
-        //    // Загружаем SVG
-        //    using var svg = new SKSvg();
-        //    svg.Load(svgString);
-
-        //    // Устанавливаем размеры
-        //    var svgPicture = svg.Picture;
-        //    var info = new SKImageInfo(width, height);
-
-        //    // Рисуем PNG
-        //    using var surface = SKSurface.Create(info);
-        //    var canvas = surface.Canvas;
-        //    canvas.Clear(SKColors.Transparent); // Прозрачный фон
-        //    canvas.DrawPicture(svgPicture);
-        //    canvas.Flush();
-
-        //    // Получаем PNG в байтах
-        //    using var image = surface.Snapshot();
-        //    using var data = image.Encode(SKEncodedImageFormat.Png, 100);
-        //    return data.ToArray();
-        //}
 
         private static byte[] ConvertSvgToPng(byte[] svgBytes, int width = 50, int height = 50)
         {
