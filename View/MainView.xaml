@@ -11,6 +11,7 @@
                        Title="PilotLookUp"
                        ShowInTaskbar="True">
 
+    
     <!-- Экспорт словарей ресурсов Pilot -->
     <controls:DialogWindow.Resources>
         <ResourceDictionary>

@@ -5,6 +5,7 @@ using PilotLookUp.Model;
 using PilotLookUp.Utils;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -35,7 +36,6 @@ namespace PilotLookUp.ViewModel
         private void GoLookDBPage()
         {
             _pageController.CreatePage(PagesName.DBPage);
-            OnPropertyChanged();
         }
 
         public ICommand LookDBCommand => new RelayCommand<object>(_ => GoLookDBPage());
@@ -46,6 +46,7 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => GoSearchPage());
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
