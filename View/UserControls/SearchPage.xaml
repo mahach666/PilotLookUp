@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
+             xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"             
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -129,6 +130,14 @@
         <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Result}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <views:SearchResBox />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />

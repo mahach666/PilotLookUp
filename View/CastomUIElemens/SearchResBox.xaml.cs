@@ -1,14 +1,12 @@
-﻿using PilotLookUp.ViewModel;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace PilotLookUp.View.CastomUIElemens
 {
     public partial class SearchResBox : UserControl
     {
-        internal SearchResBox(SearchResVM vm)
+        public SearchResBox()
         {
-            InitializeComponent();
-            DataContext = vm;           
+            InitializeComponent();          
         }
     }
 }

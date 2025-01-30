@@ -41,8 +41,8 @@ namespace PilotLookUp.ViewModel
             });
         }
 
-        private List<UserControl> _result;
-        public List<UserControl> Result
+        private List<SearchResVM> _result;
+        public List<SearchResVM> Result
         {
             get => _result;
             set
@@ -62,7 +62,6 @@ namespace PilotLookUp.ViewModel
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {
-                var res = new List<SearchResBox>();
                 var searchRes = await _lookUpModel.SearchByString(Text);
                 SetRes(searchRes);
             });
@@ -70,11 +69,11 @@ namespace PilotLookUp.ViewModel
 
         private void SetRes(ObjectSet objectSet)
         {
-            var res = new List<UserControl>();
+            var res = new List<SearchResVM>();
             foreach (var item in objectSet)
             {
                 var vm = new SearchResVM(_lookUpModel, _pageController, item);
-                res.Add(new SearchResBox(vm));
+                res.Add(vm);
             }
             Result = res;
         }
