@@ -15,7 +15,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            throw new System.NotImplementedException();
+            return null;
         }
     }
 }

@@ -18,12 +18,12 @@ namespace PilotLookUp.ViewModel
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
-            SelectionDataObjects = _lookUpModel.SelectionDataObjects;
+            SelectionDataObjects = _lookUpModel.SelectionDataObjects.Select(x => new ListItemVM(x)).ToList();
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
-        private ObjectSet _selectionDataObjects;
-        public ObjectSet SelectionDataObjects
+        private List<ListItemVM> _selectionDataObjects;
+        public List<ListItemVM> SelectionDataObjects
         {
             get => _selectionDataObjects;
             set
@@ -36,8 +36,8 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private PilotObjectHelper _dataObjectSelected;
-        public PilotObjectHelper DataObjectSelected
+        private ListItemVM _dataObjectSelected;
+        public ListItemVM DataObjectSelected
         {
             get => _dataObjectSelected;
             set
@@ -66,7 +66,7 @@ namespace PilotLookUp.ViewModel
         {
             Task.Run(async () =>
             {
-                Info = await _lookUpModel.Info(_dataObjectSelected);
+                Info = await _lookUpModel.Info(_dataObjectSelected.PilotObjectHelper);
             });
         }
         private List<ObjectSet> _info;
@@ -86,7 +86,7 @@ namespace PilotLookUp.ViewModel
 
             if (sender == "List")
             {
-                Clipboard.SetText(_dataObjectSelected.Name);
+                Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
             }
             else if (sender == "DataGridSelectName")
             {

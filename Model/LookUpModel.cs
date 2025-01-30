@@ -2,6 +2,7 @@
 using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
+using PilotLookUp.View.CastomUIElemens;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace PilotLookUp.Model
         {
             var repo = new ObjectSet(null) { pilotObjectHelper };
             var vm = new LookUpVM(this);
-            vm.SelectionDataObjects = repo;
+            vm.SelectionDataObjects = repo.Select(x => new ListItemVM(x)).ToList(); ;
             return vm;
         }
 
