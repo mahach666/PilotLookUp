@@ -70,6 +70,10 @@
 	  <None Remove="Resources\organisationUnitIcon.png" />
 	  <None Remove="Resources\personIcon.png" />
 	  <None Remove="Resources\search.png" />
+	  <None Remove="Resources\TypeIcons\accessIcon.png" />
+	  <None Remove="Resources\TypeIcons\attrIcon.png" />
+	  <None Remove="Resources\TypeIcons\boolIcon.png" />
+	  <None Remove="Resources\TypeIcons\stateIcon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -88,6 +92,10 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <Resource Include="Resources\TypeIcons\accessIcon.png" />
+	  <Resource Include="Resources\TypeIcons\attrIcon.png" />
+	  <Resource Include="Resources\TypeIcons\boolIcon.png" />
+	  <Resource Include="Resources\TypeIcons\stateIcon.png" />
 	  <Resource Include="Resources\UI\databaseEnabled.png" />
 	  <Resource Include="Resources\UI\goTo.png" />
 	  <Resource Include="Resources\TypeIcons\organisationUnitIcon.png" />

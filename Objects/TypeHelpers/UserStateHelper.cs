@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Utils;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
@@ -15,7 +16,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            return null;
+           return SvgToPngConverter.GetBitmapImageBySvg(((IUserState)_lookUpObject).Icon);
         }
     }
 }
