@@ -12,7 +12,7 @@ namespace PilotLookUp.Objects.TypeHelpers
         public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IObjectsRepository objectsRepository, IDataObject sender)
         {
             _lookUpObject = keyValuePair;
-            _name = sender.Type.Attributes.FirstOrDefault(i=>i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
+            _name = sender.Type.Attributes.FirstOrDefault(i => i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
             _isLookable = true;
         }
 
@@ -49,6 +49,20 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
+            if (_lookUpObject is KeyValuePair<string, object>
+                || _lookUpObject is KeyValuePair<Guid, int>
+                || _lookUpObject is KeyValuePair<IDataObject, int>)
+            {
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\keyValuePairIcon.png", UriKind.RelativeOrAbsolute));
+            }
+            else if (_lookUpObject is IAccess)
+            {
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\accessIcon.png", UriKind.RelativeOrAbsolute));
+            }
+            else if (_lookUpObject is IEnumerable<ITransition>)
+            {
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\transitionIcon.png", UriKind.RelativeOrAbsolute));
+            }
             return null;
         }
     }

@@ -1,5 +1,4 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
 using PilotLookUp.Utils;
 using System;
 using System.Collections.Generic;
@@ -50,7 +49,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _lookUpObject = organisationUnit;
                     _name = organisationUnit.Title;
                     _isLookable = true;
-                    _stringId = organisationUnit.Id.ToString(); 
+                    _stringId = organisationUnit.Id.ToString();
                 }
 
                 else if (sender.LookUpObject is IOrganisationUnit
@@ -136,69 +135,17 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            if (_senderMember != null)
+            if (_lookUpObject is IOrganisationUnit)
             {
-                if (_senderMember.Name.Contains("AllOrgUnits"))
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
-                }
-
-                else if (_sender.LookUpObject is IOrganisationUnit
-                                    && _senderMember.Name == "Children")
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
-                }
-
-                else if (_sender.LookUpObject is IOrganisationUnit organisationUnit
-                                    && _senderMember.Name == "Id")
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
-                }
-
-                else if (_sender.LookUpObject is IOrganisationUnit
-                    && _senderMember.Name == "Person")
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
-                }
-
-                else if (_sender.LookUpObject is IType type
-                    && _senderMember.Name == "Id")
-                {
-                    return SvgToPngConverter.GetBitmapImageBySvg(type.SvgIcon);
-                }
-
-                else if (_sender.LookUpObject is IType
-                    && _senderMember.Name == "Children")
-                {
-                    var typeObj = _objectsRepository.GetType(_value);
-                    return SvgToPngConverter.GetBitmapImageBySvg(typeObj?.SvgIcon);
-                }
-
-                else if (_sender.LookUpObject is IPerson person
-                    && _senderMember.Name == "Id")
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
-                }
-                else if (_sender.LookUpObject is IPerson
-                    && _senderMember.Name == "Groups")
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
-                }
-                else if (_sender.LookUpObject is IDataObject dObj
-                    && _senderMember.Name == "Subscribers")
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
-                }
-                else
-                {
-                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\intIcon.png", UriKind.RelativeOrAbsolute));
-                }
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
             }
-
-            else if (_sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair
-                && keyValuePair.Key.Type.Id == _value)
+            else if (_lookUpObject is IPerson)
             {
-                return SvgToPngConverter.GetBitmapImageBySvg(keyValuePair.Key.Type.SvgIcon);
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
+            }
+            else if (_lookUpObject is IType type)
+            {
+                return SvgToPngConverter.GetBitmapImageBySvg(type.SvgIcon);
             }
             else
             {

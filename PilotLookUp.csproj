@@ -73,7 +73,20 @@
 	  <None Remove="Resources\TypeIcons\accessIcon.png" />
 	  <None Remove="Resources\TypeIcons\attrIcon.png" />
 	  <None Remove="Resources\TypeIcons\boolIcon.png" />
+	  <None Remove="Resources\TypeIcons\dateTimeIcon.png" />
+	  <None Remove="Resources\TypeIcons\enumIcon.png" />
+	  <None Remove="Resources\TypeIcons\fileIcon.png" />
+	  <None Remove="Resources\TypeIcons\fileSnapshotIcon.png" />
+	  <None Remove="Resources\TypeIcons\guidIcon.png" />
+	  <None Remove="Resources\TypeIcons\historyItemIcon.png" />
+	  <None Remove="Resources\TypeIcons\intIcon.png" />
+	  <None Remove="Resources\TypeIcons\keyValuePairIcon.png" />
+	  <None Remove="Resources\TypeIcons\relationIcon.png" />
 	  <None Remove="Resources\TypeIcons\stateIcon.png" />
+	  <None Remove="Resources\TypeIcons\stateMachineIcon.png" />
+	  <None Remove="Resources\TypeIcons\storageIcon.png" />
+	  <None Remove="Resources\TypeIcons\stringIcon.png" />
+	  <None Remove="Resources\TypeIcons\transitionIcon.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -95,7 +108,20 @@
 	  <Resource Include="Resources\TypeIcons\accessIcon.png" />
 	  <Resource Include="Resources\TypeIcons\attrIcon.png" />
 	  <Resource Include="Resources\TypeIcons\boolIcon.png" />
+	  <Resource Include="Resources\TypeIcons\dateTimeIcon.png" />
+	  <Resource Include="Resources\TypeIcons\enumIcon.png" />
+	  <Resource Include="Resources\TypeIcons\fileIcon.png" />
+	  <Resource Include="Resources\TypeIcons\fileSnapshotIcon.png" />
+	  <Resource Include="Resources\TypeIcons\guidIcon.png" />
+	  <Resource Include="Resources\TypeIcons\historyItemIcon.png" />
+	  <Resource Include="Resources\TypeIcons\intIcon.png" />
+	  <Resource Include="Resources\TypeIcons\keyValuePairIcon.png" />
+	  <Resource Include="Resources\TypeIcons\relationIcon.png" />
 	  <Resource Include="Resources\TypeIcons\stateIcon.png" />
+	  <Resource Include="Resources\TypeIcons\stateMachineIcon.png" />
+	  <Resource Include="Resources\TypeIcons\storageIcon.png" />
+	  <Resource Include="Resources\TypeIcons\stringIcon.png" />
+	  <Resource Include="Resources\TypeIcons\transitionIcon.png" />
 	  <Resource Include="Resources\UI\databaseEnabled.png" />
 	  <Resource Include="Resources\UI\goTo.png" />
 	  <Resource Include="Resources\TypeIcons\organisationUnitIcon.png" />
