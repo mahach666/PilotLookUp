@@ -7,8 +7,13 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class GuidHelper : PilotObjectHelper
     {
+        private PilotObjectHelper _sender { get; }
+        private MemberInfo _senderMember { get; }
         public GuidHelper(Guid value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
         {
+            _sender = sender;
+            _senderMember = senderMember;
+
             if (senderMember != null)
             {
                 if (senderMember.Name == "Id")
@@ -17,25 +22,24 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = sender.Name;
                     _isLookable = true;
                     _stringId = sender.StringId;
-                }
-                else
-                {
-                    _lookUpObject = value;
-                    _name = value.ToString();
-                    _isLookable = false;
+                    return;
                 }
             }
-            else
-            {
-                _lookUpObject = value;
-                _name = value.ToString();
-                _isLookable = false;
-            }
+            _lookUpObject = value;
+            _name = value.ToString();
+            _isLookable = false;
         }
 
         public override BitmapImage GetImage()
         {
-            return null;
+            if (_senderMember != null)
+            {
+                if (_senderMember.Name == "Id")
+                {
+                    return _sender.GetImage();
+                }
+            }
+            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\guidIcon.png", UriKind.RelativeOrAbsolute));
         }
     }
 }

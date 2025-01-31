@@ -1,4 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Extensions;
+using PilotLookUp.Utils;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Media.Imaging;
@@ -8,13 +11,22 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class IntHelper : PilotObjectHelper
     {
+        private PilotObjectHelper _sender { get; }
+        private MemberInfo _senderMember { get; }
+        private IObjectsRepository _objectsRepository { get; }
+        private int _value { get; }
+
         public IntHelper(int value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
         {
+            _sender = sender;
+            _senderMember = senderMember;
+            _objectsRepository = objectsRepository;
+            _value = value;
+
             if (senderMember != null)
             {
                 if (senderMember.Name.Contains("AllOrgUnits"))
                 {
-                    //var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
                     var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
@@ -25,7 +37,6 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IOrganisationUnit
                                     && senderMember.Name == "Children")
                 {
-                    //var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
                     var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
@@ -39,13 +50,12 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _lookUpObject = organisationUnit;
                     _name = organisationUnit.Title;
                     _isLookable = true;
-                    _stringId = organisationUnit.Id.ToString(); ;
+                    _stringId = organisationUnit.Id.ToString(); 
                 }
 
                 else if (sender.LookUpObject is IOrganisationUnit
                     && senderMember.Name == "Person")
                 {
-                    //var person = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
                     var person = objectsRepository.GetPerson(value);
                     _lookUpObject = person;
                     _name = person?.DisplayName;
@@ -83,7 +93,6 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IPerson
                     && senderMember.Name == "Groups")
                 {
-                    //var unit = objectsRepository.GetOrganisationUnits().FirstOrDefault(i => i.Id == value);
                     var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
@@ -93,7 +102,6 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IDataObject dObj
                     && senderMember.Name == "Subscribers")
                 {
-                    //var personSub = objectsRepository.GetPeople().FirstOrDefault(i => i.Id == value);
                     var personSub = objectsRepository.GetPerson(value);
                     _lookUpObject = personSub;
                     _name = personSub?.DisplayName;
@@ -128,7 +136,74 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            return null;
+            if (_senderMember != null)
+            {
+                if (_senderMember.Name.Contains("AllOrgUnits"))
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+                }
+
+                else if (_sender.LookUpObject is IOrganisationUnit
+                                    && _senderMember.Name == "Children")
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+                }
+
+                else if (_sender.LookUpObject is IOrganisationUnit organisationUnit
+                                    && _senderMember.Name == "Id")
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+                }
+
+                else if (_sender.LookUpObject is IOrganisationUnit
+                    && _senderMember.Name == "Person")
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
+                }
+
+                else if (_sender.LookUpObject is IType type
+                    && _senderMember.Name == "Id")
+                {
+                    return SvgToPngConverter.GetBitmapImageBySvg(type.SvgIcon);
+                }
+
+                else if (_sender.LookUpObject is IType
+                    && _senderMember.Name == "Children")
+                {
+                    var typeObj = _objectsRepository.GetType(_value);
+                    return SvgToPngConverter.GetBitmapImageBySvg(typeObj?.SvgIcon);
+                }
+
+                else if (_sender.LookUpObject is IPerson person
+                    && _senderMember.Name == "Id")
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
+                }
+                else if (_sender.LookUpObject is IPerson
+                    && _senderMember.Name == "Groups")
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+                }
+                else if (_sender.LookUpObject is IDataObject dObj
+                    && _senderMember.Name == "Subscribers")
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
+                }
+                else
+                {
+                    return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\intIcon.png", UriKind.RelativeOrAbsolute));
+                }
+            }
+
+            else if (_sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair
+                && keyValuePair.Key.Type.Id == _value)
+            {
+                return SvgToPngConverter.GetBitmapImageBySvg(keyValuePair.Key.Type.SvgIcon);
+            }
+            else
+            {
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\intIcon.png", UriKind.RelativeOrAbsolute));
+            }
         }
     }
 }
