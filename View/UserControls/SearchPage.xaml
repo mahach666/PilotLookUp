@@ -18,67 +18,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\..\Resources\StyleDictionary.xaml" />
+                <ResourceDictionary Source="..\..\Resources\VMMap.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="{x:Type Button}"
-                   x:Key="Button_Style">
-                <Setter Property="Background"
-                        Value="#86609B" />
-                <Setter Property="Foreground"
-                        Value="White" />
-                <Setter Property="FontSize"
-                        Value="11" />
-                <Setter Property="FontFamily"
-                        Value="./#Segoe UI" />
-                <Setter Property="SnapsToDevicePixels"
-                        Value="True" />
-                <Setter Property="Margin"
-                        Value="0,5,0,0" />
-                <Setter Property="HorizontalAlignment"
-                        Value="Right" />
-
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border CornerRadius="0"
-                                    Background="{TemplateBinding Background}">
-                                <Grid>
-                                    <ContentPresenter x:Name="MyContentPresenter"
-                                                      Content="{TemplateBinding Content}"
-                                                      HorizontalAlignment="Center"
-                                                      VerticalAlignment="Center"
-                                                      Margin="0,0,0,0" />
-                                </Grid>
-                            </Border>
-
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver"
-                                         Value="True">
-                                    <Setter Property="Background"
-                                            Value="#86509B" />
-                                    <Setter Property="Foreground"
-                                            Value="White" />
-                                </Trigger>
-
-                                <Trigger Property="IsPressed"
-                                         Value="True">
-                                    <Setter Property="Background"
-                                            Value="#86309B" />
-                                    <Setter Property="Foreground"
-                                            Value="White" />
-                                </Trigger>
-
-                                <Trigger Property="IsEnabled"
-                                         Value="False">
-                                    <Setter Property="Background"
-                                            Value="LightGray" />
-                                    <Setter Property="Foreground"
-                                            Value="White" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -130,13 +71,6 @@
         <Grid Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Result}">
-
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <views:SearchResBox />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-
 
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

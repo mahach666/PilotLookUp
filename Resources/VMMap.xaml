@@ -1,0 +1,24 @@
+﻿<ResourceDictionary  
+                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:vm="clr-namespace:PilotLookUp.ViewModel"
+                     xmlns:view="clr-namespace:PilotLookUp.View"
+                     xmlns:castomview="clr-namespace:PilotLookUp.View.CastomUIElemens">
+
+    <DataTemplate DataType="{x:Type vm:ListItemVM}">
+        <castomview:ListItemBox />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SearchResVM}">
+        <castomview:SearchResBox />
+    </DataTemplate>
+
+</ResourceDictionary>
+
+<!--<Application.Resources>
+        <DataTemplate DataType="{x:Type vm:ListItemVM}">
+            <view:ListItemBox />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SearchResVM}">
+            <view:SearchResBox />
+        </DataTemplate>
+    </Application.Resources>-->
