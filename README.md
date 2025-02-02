@@ -1,8 +1,9 @@
 # PilotLookUp
 Инструмент для разработчиков и администраторов, позволяющий легко просматривать и изучать объекты Pilot.
 
-![image](https://github.com/user-attachments/assets/1cbe8ce4-d640-44a7-9442-aa44342ebaad)
+![image](https://github.com/user-attachments/assets/97e35c30-0b5d-4482-8561-61168fcec61b)
 
+![image](https://github.com/user-attachments/assets/d7e85ddd-1df4-421c-9818-f9b9440d0cce)
 
 # Установка
 
