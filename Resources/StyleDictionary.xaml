@@ -160,8 +160,32 @@
                 Value="Stretch" />
         <Setter Property="Button.BorderBrush"
                 Value="LightGray" />
+        
     </Style>
 
+    <Style x:Key="CastomImageButton"
+           TargetType="Button"
+           BasedOn="{StaticResource ImageButtonStyle}">
+        <Setter Property="Background"
+                Value="#86609B" />
+        <Setter Property="Width"
+                Value="40" />
+        <Setter Property="Height"
+                Value="40" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="Margin"
+                Value="0,5,0,5" />
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Image Source="{Binding}"
+                           Height="20"
+                           Width="20" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- Стиль кнопки Выполнить -->
     <Style x:Key="ExecuteButton_Style">

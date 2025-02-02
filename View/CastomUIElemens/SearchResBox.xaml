@@ -37,63 +37,18 @@
         <Button HorizontalAlignment="Right"
                 Margin="0,20,60,0"
                 VerticalAlignment="Top"
-                Height="40"
-                Width="40"
-                Background="#86609B"
-                MinWidth="40"
-                MinHeight="40"
-                MaxWidth="40"
-                MaxHeight="40"
-                Command="{Binding GoPageCommand}">
-            <Button.Style>
-                <Style BasedOn="{StaticResource ImageButtonStyle}">
-                    <Style.Triggers>
-                        <Trigger Property="UIElement.IsEnabled"
-                                 Value="True">
-                            <Setter Property="ContentControl.Content">
-                                <Setter.Value>
-                                    <Image Source="..\..\Resources\UI\search.png"
-                                           Height="20"
-                                           Width="20"
-                                           IsEnabled="False" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+                Command="{Binding GoPageCommand}"
+                Style="{StaticResource CastomImageButton}"
+                Content="..\Resources\UI\search.png" />
 
         <Button Margin="0,20,20,0"
                 VerticalAlignment="Top"
-                Height="40"
-                Background="#86609B"
                 HorizontalAlignment="Right"
-                Width="40"
-                MinWidth="40"
-                MinHeight="40"
-                MaxWidth="40"
-                MaxHeight="40"
                 Visibility="{Binding CanGo}"
-                Command="{Binding GoObjCommand}">
-            <Button.Style>
-                <Style BasedOn="{StaticResource ImageButtonStyle}">
-                    <Style.Triggers>
-                        <Trigger Property="UIElement.IsEnabled"
-                                 Value="True">
-                            <Setter Property="ContentControl.Content">
-                                <Setter.Value>
-                                    <Image Source="..\..\Resources\UI\goTo.png"
-                                           Height="20"
-                                           Width="20"
-                                           IsEnabled="False" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
+                Command="{Binding GoObjCommand}"
+                Style="{StaticResource CastomImageButton}"
+                Content="..\Resources\UI\goTo.png" />
+
         <Image HorizontalAlignment="Left"
                Margin="20,20,0,20"
                Width="40"
