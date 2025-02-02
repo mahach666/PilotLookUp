@@ -31,6 +31,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = unit?.Title;
                     _isLookable = true;
                     _stringId = unit?.Id.ToString();
+                    return;
                 }
 
                 else if (sender.LookUpObject is IOrganisationUnit
@@ -41,6 +42,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = unit?.Title;
                     _isLookable = true;
                     _stringId = unit?.Id.ToString();
+                    return;
                 }
 
                 else if (sender.LookUpObject is IOrganisationUnit organisationUnit
@@ -50,6 +52,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = organisationUnit.Title;
                     _isLookable = true;
                     _stringId = organisationUnit.Id.ToString();
+                    return;
                 }
 
                 else if (sender.LookUpObject is IOrganisationUnit
@@ -60,6 +63,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = person?.DisplayName;
                     _isLookable = true;
                     _stringId = person?.Id.ToString();
+                    return;
                 }
 
                 else if (sender.LookUpObject is IType type
@@ -69,6 +73,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = type.Title;
                     _isLookable = true;
                     _stringId = type.Id.ToString();
+                    return;
                 }
 
                 else if (sender.LookUpObject is IType
@@ -79,6 +84,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = typeObj?.Title;
                     _isLookable = true;
                     _stringId = typeObj?.Id.ToString();
+                    return;
                 }
 
                 else if (sender.LookUpObject is IPerson person
@@ -88,15 +94,17 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = person.DisplayName;
                     _isLookable = true;
                     _stringId = person.Id.ToString();
+                    return;
                 }
                 else if (sender.LookUpObject is IPerson
-                    && senderMember.Name == "Groups")
+                    && senderMember.Name.Contains("Groups"))
                 {
                     var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
                     _name = unit?.Title;
                     _isLookable = true;
                     _stringId = unit?.Id.ToString();
+                    return;
                 }
                 else if (sender.LookUpObject is IDataObject dObj
                     && senderMember.Name == "Subscribers")
@@ -106,13 +114,30 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _name = personSub?.DisplayName;
                     _isLookable = true;
                     _stringId = personSub?.Id.ToString();
+                    return;
                 }
 
-                else
+                else if ((sender.LookUpObject is ISignatureRequest || sender.LookUpObject is ISignature)
+                    && senderMember.Name.Contains("PositionId"))
                 {
-                    _lookUpObject = value;
-                    _name = value.ToString();
-                    _isLookable = false;
+                    var unit = objectsRepository.GetOrganisationUnit(value);
+                    _lookUpObject = unit;
+                    _name = unit?.Title;
+                    _isLookable = true;
+                    _stringId = unit?.Id.ToString();
+                    return;
+                }
+
+                else if (sender.LookUpObject is IAccessRecord
+                        && (senderMember.Name.Contains("OrgUnitId")
+                        || senderMember.Name.Contains("RecordOwner")))
+                {
+                    var unit = objectsRepository.GetOrganisationUnit(value);
+                    _lookUpObject = unit;
+                    _name = unit?.Title;
+                    _isLookable = true;
+                    _stringId = unit?.Id.ToString();
+                    return;
                 }
             }
 
@@ -123,14 +148,12 @@ namespace PilotLookUp.Objects.TypeHelpers
                 _name = keyValuePair.Key.Type.Title;
                 _isLookable = true;
                 _stringId = keyValuePair.Key.Type.Id.ToString();
+                return;
             }
 
-            else
-            {
-                _lookUpObject = value;
-                _name = value.ToString();
-                _isLookable = false;
-            }
+            _lookUpObject = value;
+            _name = value.ToString();
+            _isLookable = false;
         }
 
         public override BitmapImage GetImage()

@@ -84,27 +84,35 @@ namespace PilotLookUp.ViewModel
 
         private void CopyToClipboard(string sender)
         {
-            if (_dataObjectSelected == null) Clipboard.SetText("Ошибка копирования, ничего не выбрано");
+            var errorText = "Упс, ничего не выбрано.";
+            if (_dataObjectSelected == null) MessageBox.Show(errorText);
 
-            if (sender == "List")
+            try
             {
-                Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
+                if (sender == "List")
+                {
+                    Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
+                }
+                else if (sender == "DataGridSelectName")
+                {
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName);
+                }
+                else if (sender == "DataGridSelectValue")
+                {
+                    Clipboard.SetText(_dataGridSelected?.Discription);
+                }
+                else if (sender == "DataGridSelectLine")
+                {
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+                }
+                else
+                {
+                    MessageBox.Show(errorText);
+                }
             }
-            else if (sender == "DataGridSelectName")
+            catch
             {
-                Clipboard.SetText(_dataGridSelected?.SenderMemberName);
-            }
-            else if (sender == "DataGridSelectValue")
-            {
-                Clipboard.SetText(_dataGridSelected?.Discription);
-            }
-            else if (sender == "DataGridSelectLine")
-            {
-                Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
-            }
-            else
-            {
-                Clipboard.SetText("Ошибка копирования, ничего не выбрано");
+                MessageBox.Show(errorText);
             }
         }
 
