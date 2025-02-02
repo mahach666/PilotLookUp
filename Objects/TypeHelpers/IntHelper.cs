@@ -156,6 +156,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             _isLookable = false;
         }
 
+
         public override BitmapImage GetImage()
         {
             if (_lookUpObject is IOrganisationUnit)
