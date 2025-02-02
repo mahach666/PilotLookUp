@@ -3,7 +3,8 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:vm="clr-namespace:PilotLookUp.ViewModel"
                      xmlns:view="clr-namespace:PilotLookUp.View"
-                     xmlns:castomview="clr-namespace:PilotLookUp.View.CastomUIElemens">
+                     xmlns:castomview="clr-namespace:PilotLookUp.View.CastomUIElemens"
+                    xmlns:page="clr-namespace:PilotLookUp.View.UserControls">
 
     <DataTemplate DataType="{x:Type vm:ListItemVM}">
         <castomview:ListItemBox />
@@ -11,14 +12,12 @@
     <DataTemplate DataType="{x:Type vm:SearchResVM}">
         <castomview:SearchResBox />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SearchVM}">
+        <page:SearchPage />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:LookUpVM}">
+        <page:LookUpPage />
+    </DataTemplate>
 
 </ResourceDictionary>
 
-<!--<Application.Resources>
-        <DataTemplate DataType="{x:Type vm:ListItemVM}">
-            <view:ListItemBox />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:SearchResVM}">
-            <view:SearchResBox />
-        </DataTemplate>
-    </Application.Resources>-->

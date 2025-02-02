@@ -1,21 +1,12 @@
-﻿using PilotLookUp.Enums;
-using PilotLookUp.Interfaces;
-using PilotLookUp.ViewModel;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace PilotLookUp.View.UserControls
 {
-    public partial class SearchPage : UserControl, IControl
+    public partial class SearchPage : UserControl
     {
-        internal SearchPage(SearchVM vm)
+        internal SearchPage()
         {
             InitializeComponent();
-            DataContext = vm;
         }        
-
-        PagesName IControl.GetName()
-        {
-            return PagesName.SearchPage;
-        }
     }
 }

@@ -5,8 +5,6 @@ using PilotLookUp.Model;
 using PilotLookUp.Utils;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -22,8 +20,8 @@ namespace PilotLookUp.ViewModel
             _pageController = new PageController(_lookUpModel, startPage, page => SelectedControl = page);
         }
 
-        private UserControl _selectedControl;
-        public UserControl SelectedControl
+        private IPage _selectedControl;
+        public IPage SelectedControl
         {
             get => _selectedControl;
             set

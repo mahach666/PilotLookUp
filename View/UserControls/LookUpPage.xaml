@@ -29,13 +29,16 @@
 
 
             <ListBox ItemsSource="{Binding SelectionDataObjects}"
-                      VirtualizingPanel.IsVirtualizing="True"
-                      VirtualizingPanel.VirtualizationMode="Recycling"
-                      ScrollViewer.CanContentScroll="True"
-                      Grid.Column="0"
-                      SelectedItem="{Binding DataObjectSelected}"
-                      ItemContainerStyle="{StaticResource {x:Type ListBoxItem}}">
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     ScrollViewer.CanContentScroll="True"
+                     Grid.Column="0"
+                     SelectedItem="{Binding DataObjectSelected}">
 
+                <ListBox.ItemContainerStyle>
+                    <StaticResource ResourceKey="ListBoxItem_Style" />
+                </ListBox.ItemContainerStyle>
+                
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Копировать выделенное"
@@ -44,11 +47,6 @@
                     </ContextMenu>
                 </ListBox.ContextMenu>
 
-                <!--<ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <views:ListItemBox />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>-->
             </ListBox>
 
 

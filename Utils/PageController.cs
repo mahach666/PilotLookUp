@@ -2,12 +2,10 @@
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using PilotLookUp.View.UserControls;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace PilotLookUp.Utils
 {
@@ -15,22 +13,20 @@ namespace PilotLookUp.Utils
     {
         internal PageController(LookUpModel lookUpModel
             , PagesName startPage
-            , Action<UserControl> updateCurrentPage)
+            , Action<IPage> updateCurrentPage)
         {
             _updateCurrentPage = updateCurrentPage;
             _lookUpModel = lookUpModel;
-            _controlsHolder = new List<IControl>();
+            _controlsHolder = new List<IPage>();
             if (startPage != PagesName.None)
                 GoToPage(startPage);
         }
-        private IControl _activePage { get; set; }
-        public UserControl ActivePage => _activePage is UserControl control
-            ? control
-            : null;
+        private IPage _activePage { get; set; }
+        public IPage ActivePage => _activePage;
 
-        private Action<UserControl> _updateCurrentPage { get; }
+        private Action<IPage> _updateCurrentPage { get; }
 
-        private List<IControl> _controlsHolder { get; }
+        private List<IPage> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }
 
 
@@ -55,22 +51,22 @@ namespace PilotLookUp.Utils
                         ? new LookUpVM(_lookUpModel)
                         : _lookUpModel.GetCastomLookUpVM(dataObj);
 
-                    AddPage(new LookUpPage(lookVM));
+                    AddPage(lookVM);
                     GoToPage(pageName);
                     break;
                 case PagesName.DBPage:
                     var vm = _lookUpModel.GetDBLookUpVM();
-                    AddPage(new LookUpPage(vm));
+                    AddPage(vm);
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchPage(new SearchVM(_lookUpModel, this)));
+                    AddPage(new SearchVM(_lookUpModel, this));
                     GoToPage(pageName);
                     break;
             }
         }
 
-        private void AddPage(IControl item)
+        private void AddPage(IPage item)
         {
             _controlsHolder.RemoveAll(obj => obj.GetName() == item.GetName());
             _controlsHolder.Add(item);

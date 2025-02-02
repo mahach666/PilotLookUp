@@ -1,8 +1,8 @@
 ﻿using PilotLookUp.Commands;
+using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using PilotLookUp.View.CastomUIElemens;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class SearchVM : INotifyPropertyChanged
+    internal class SearchVM : INotifyPropertyChanged , IPage
     {
         private LookUpModel _lookUpModel { get; }
         private IPageController _pageController { get; }
@@ -84,6 +84,11 @@ namespace PilotLookUp.ViewModel
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        PagesName IPage.GetName()
+        {
+            return PagesName.SearchPage;
         }
     }
 }

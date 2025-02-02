@@ -1,4 +1,6 @@
 ﻿using PilotLookUp.Commands;
+using PilotLookUp.Enums;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class LookUpVM : INotifyPropertyChanged
+    internal class LookUpVM : INotifyPropertyChanged, IPage
     {
         private LookUpModel _lookUpModel;
 
@@ -106,7 +108,6 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
         public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 
@@ -115,6 +116,11 @@ namespace PilotLookUp.ViewModel
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        PagesName IPage.GetName()
+        {
+            return PagesName.LookUpPage;
         }
     }
 }
