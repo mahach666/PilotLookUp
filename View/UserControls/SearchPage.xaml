@@ -41,6 +41,14 @@
                                 Command="{Binding SearchCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
+            <Label Margin="20,30,60,30"
+                     FontSize="20"                    
+                     IsEnabled="False"
+                     Content="Введите Id или GUID"
+                     Visibility="{Binding PromtVisibility}"
+                     Foreground ="Gray"
+                     IsHitTestVisible ="False">
+            </Label>
             <Button                    Command="{Binding SearchCommand}"
                                        Margin="20,30,20,30"
                                        HorizontalAlignment="Right"
