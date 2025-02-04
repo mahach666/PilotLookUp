@@ -93,7 +93,7 @@
                         <Trigger Property="IsSelected"
                                  Value="True">
                             <Setter Property="Background"
-                                    Value="#D283E6" />
+                                    Value="{DynamicResource SelectedBackground}" />
                             <!--Светло-голубой-->
                             <Setter Property="Foreground"
                                     Value="Black" />
@@ -102,7 +102,7 @@
                         <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter Property="Background"
-                                    Value="#DCB2E6" />
+                                    Value="{DynamicResource HoverBackground}" />
                             <!--Цвет при наведении-->
                             <Setter Property="Foreground"
                                     Value="Black" />
@@ -186,7 +186,30 @@
            TargetType="Button"
            BasedOn="{StaticResource ImageButtonStyle}">
         <Setter Property="Background"
-                Value="#86609B" />
+                Value="{DynamicResource ButtonDefaultBackgroundBrush}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="5">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!--Триггер для наведения мыши-->
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource ButtonDefaultHoverBackground}" />
+                            <!--Цвет при наведении-->
+                            <Setter Property="Foreground"
+                                    Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="Width"
                 Value="40" />
         <Setter Property="Height"
