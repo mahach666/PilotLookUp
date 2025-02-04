@@ -27,7 +27,7 @@
                Margin="30,0,65,0"
                FontSize="12"
                VerticalContentAlignment="Center"
-               Foreground="{Binding Color}" />
+               Style="{StaticResource Label_Style}"/>
         <Image Source="{Binding ObjImage}"
                HorizontalAlignment="Left"
                Margin="5,5,0,5"

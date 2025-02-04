@@ -22,10 +22,6 @@ namespace PilotLookUp.Objects
         protected bool _isLookable { get; set; }
         public bool IsLookable { get => _lookUpObject != null ? _isLookable : false; }
 
-        // Путь к PNG
-        //protected BitmapImage _icon { get; set; }
-        //public BitmapImage Icon { get => _icon; }
-
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
 

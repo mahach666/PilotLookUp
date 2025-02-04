@@ -31,6 +31,21 @@
                 Value="Stretch" />
     </Style>
 
+    <!-- Стиль лейбла -->
+    <Style TargetType="Label"
+           x:Key="Label_Style">
+        <Setter Property="Foreground"
+                Value="{DynamicResource NormalForeground}" />
+        <Setter Property="FontSize"
+                Value="{DynamicResource DefaultFontSize}" />
+        <Setter Property="Margin"
+                Value="0,2,0,2" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch" />
+    </Style>
+
 
     <!-- Стиль списка -->
     <Style TargetType="ListView"
@@ -44,6 +59,7 @@
                 Value="0,2,0,2" />
     </Style>
 
+    <!-- Стиль ЛистБокса -->
     <Style TargetType="ListBox"
            x:Key="ListBox_Style">
         <Setter Property="Background"
@@ -55,6 +71,8 @@
                 Value="0,2,0,2" />
     </Style>
 
+
+    <!-- Стиль ЛистИтема -->
     <Style TargetType="ListBoxItem"
            x:Key="ListBoxItem_Style">
         <Setter Property="Background"
@@ -163,6 +181,7 @@
         
     </Style>
 
+    <!-- Кастомный стиль кнопки с картинкой -->
     <Style x:Key="CastomImageButton"
            TargetType="Button"
            BasedOn="{StaticResource ImageButtonStyle}">

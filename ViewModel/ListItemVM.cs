@@ -11,6 +11,5 @@ namespace PilotLookUp.ViewModel
         public PilotObjectHelper PilotObjectHelper { get; }
         public string ObjName => PilotObjectHelper.Name;
         public BitmapImage ObjImage => PilotObjectHelper.GetImage();
-        public Brush Color =>  new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
     }
 }
