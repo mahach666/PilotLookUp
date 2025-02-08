@@ -128,7 +128,7 @@ namespace PilotLookUp.Model
             var children = await GetChildrensWithTimeout(_objectsRepository, sad);  // Метод получения детей по ID
             foreach (var child in children)
             {
-                DataObjectHelper dataObjectHelper = new DataObjectHelper(sad, _objectsRepository);
+                DataObjectHelper dataObjectHelper = new DataObjectHelper(child, _objectsRepository);
                 var childNode = new ListItemVM(dataObjectHelper);
                 if (lastParrent.Children != null)
                 {
