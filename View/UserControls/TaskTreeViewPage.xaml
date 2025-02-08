@@ -27,10 +27,10 @@
         <!-- Новый верхний Grid -->
         <Grid Background="LightGray" Grid.Row="0">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <TextBlock Text="Выбранное задание Id: " FontWeight="Bold" />
-                <TextBlock x:Name="IdStart" Margin="5,0" />
-                <TextBlock Text="Имя: " FontWeight="Bold" Margin="100,0,0,0" />
-                <TextBlock x:Name="NameDisplayStart" Margin="5,0" />
+                <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" />
+                <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
+                <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />
+                <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" />
             </StackPanel>
         </Grid>
 

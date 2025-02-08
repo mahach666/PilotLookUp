@@ -25,6 +25,23 @@ namespace PilotLookUp.ViewModel
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
+        #region Информация о выбранном задании
+        public string IdSelectedItem
+        {
+            get
+            {
+                return _objectHelper.StringId;
+            }
+        }
+        public string NameSelectedItem
+        {
+            get
+            {
+                return _objectHelper.Name;
+            }
+        }
+        #endregion
+
         private List<ListItemVM> _selectionDataObjects;
         public List<ListItemVM> SelectionDataObjects
         {

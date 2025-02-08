@@ -42,7 +42,7 @@
                         Content="..\Resources\UI\search.png" />
                 <Button ToolTip="Task"
                         Style="{StaticResource CastomImageButton}"
-                        Command="{Binding GoTaskTreePage}"
+                        Command="{Binding TaskTreeCommand}"
                         Content="..\Resources\UI\task.png" />
             </UniformGrid>
         </Grid>

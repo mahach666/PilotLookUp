@@ -88,6 +88,7 @@
 	  <None Remove="Resources\TypeIcons\storageIcon.png" />
 	  <None Remove="Resources\TypeIcons\stringIcon.png" />
 	  <None Remove="Resources\TypeIcons\transitionIcon.png" />
+	  <None Remove="Resources\UI\task.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -130,5 +131,6 @@
 	  <Resource Include="Resources\TypeIcons\organisationUnitIcon.png" />
 	  <Resource Include="Resources\TypeIcons\personIcon.png" />
 	  <Resource Include="Resources\UI\search.png" />
+	  <Resource Include="Resources\UI\task.png" />
 	</ItemGroup>
 </Project>

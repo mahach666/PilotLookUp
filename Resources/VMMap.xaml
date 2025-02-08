@@ -18,6 +18,9 @@
     <DataTemplate DataType="{x:Type vm:LookUpVM}">
         <page:LookUpPage />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:TaskTreeVM}">
+        <page:TaskTreeViewPage />
+    </DataTemplate>
 
 </ResourceDictionary>
 
