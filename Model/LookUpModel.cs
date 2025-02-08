@@ -1,13 +1,17 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Core;
 using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
+using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.Utils;
 using PilotLookUp.View.CastomUIElemens;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 
 namespace PilotLookUp.Model
@@ -87,6 +91,71 @@ namespace PilotLookUp.Model
         public void GoTo(IDataObject dataObject)
         {
             _tabServiceProvider.ShowElement(dataObject.Id);
+        }
+        /// <summary>
+        /// Метод по поиску последнего родителя для элемента
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public async Task<DataObjectHelper> FindLastParrent(PilotObjectHelper objHelper)
+        {
+            // Если объекта нет, выводим ошибку
+            if (objHelper == null)
+            {
+                return null;
+            }
+            IDataObject dataObject = objHelper.LookUpObject as IDataObject;
+            // Ищем самого верхнего родителя
+
+
+            while (dataObject.ParentId != null && dataObject.ParentId.ToString() != "00000000-0000-0000-0000-000000000000")
+            {
+                dataObject = await _objectsRepository.GetObjectWithTimeout(dataObject.ParentId);
+            }
+            DataObjectHelper dataObjectHelper = new DataObjectHelper(dataObject, _objectsRepository);
+            return dataObjectHelper;
+        }
+
+        public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
+        {
+            await BuildChildNodes(lastParrent);
+            return lastParrent;
+        }
+
+        public async Task BuildChildNodes(ListItemVM lastParrent)
+        {
+            IDataObject sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
+            var children = await GetChildrensWithTimeout(_objectsRepository, sad);  // Метод получения детей по ID
+            foreach (var child in children)
+            {
+                DataObjectHelper dataObjectHelper = new DataObjectHelper(sad, _objectsRepository);
+                var childNode = new ListItemVM(dataObjectHelper);
+                if (lastParrent.Children != null)
+                {
+                    lastParrent.Children.Add(childNode);
+                }
+                else
+                {
+                    lastParrent.Children = new ObservableCollection<ListItemVM>()
+                    {
+                        childNode
+                    };
+                }
+                await BuildChildNodes(childNode); // Рекурсия для вложенных детей
+
+            }
+        }
+        internal async Task<List<IDataObject>> GetChildrensWithTimeout(IObjectsRepository objectsRepository, IDataObject currentObject, int timeoutMilliseconds = 300)
+        {
+            var loader = new ObjectLoader(objectsRepository);
+            var childrensId = currentObject.Children;
+            List<IDataObject> childrens = new List<IDataObject>();
+            foreach (var child in childrensId)
+            {
+                var childObj = await loader.LoadWithTimeout(child);
+                childrens.Add(childObj);
+            }
+            return childrens;
         }
     }
 }

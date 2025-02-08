@@ -1,5 +1,6 @@
 ﻿using PilotLookUp.Objects;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,10 +16,6 @@ namespace PilotLookUp.ViewModel
         public BitmapImage ObjImage => PilotObjectHelper.GetImage();
 
         public ListItemVM Parrent;
-        public List<ListItemVM> Children;
-
-        
-
-
+        public ObservableCollection<ListItemVM> Children;
     }
 }

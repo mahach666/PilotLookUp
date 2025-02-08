@@ -4,9 +4,11 @@ using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -21,8 +23,14 @@ namespace PilotLookUp.ViewModel
         {
             _lookUpModel = lookUpModel;
             _objectHelper = pilotObjectHelper;
-            //SelectionDataObjects = _lookUpModel.SelectionDataObjects.Select(x => new ListItemVM(x)).ToList();
-            DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
+            Task.Run(async () =>
+            {
+                LastParrent = await _lookUpModel.FindLastParrent(_objectHelper);
+                ListItemVM rootNode = new ListItemVM(LastParrent);
+                rootNode =await lookUpModel.FillChild(rootNode);
+                FirstParrentNode = new ObservableCollection<ListItemVM> { rootNode };
+
+            });
         }
 
         #region Информация о выбранном задании
@@ -42,100 +50,25 @@ namespace PilotLookUp.ViewModel
         }
         #endregion
 
-        private List<ListItemVM> _selectionDataObjects;
-        public List<ListItemVM> SelectionDataObjects
+        #region Дерево процесса
+
+        private PilotObjectHelper LastParrent { get;set; }
+
+        private ObservableCollection<ListItemVM> _firstParrentNode;
+
+        public ObservableCollection<ListItemVM> FirstParrentNode
         {
-            get => _selectionDataObjects;
+
+            get => _firstParrentNode;
             set
             {
-                if (value == null || !value.Any()) return;
-                _selectionDataObjects = value;
-                DataObjectSelected = value?.FirstOrDefault();
-                UpdateInfo();
+                _firstParrentNode = value;
                 OnPropertyChanged();
             }
         }
+        #endregion
 
-        private ListItemVM _dataObjectSelected;
-        public ListItemVM DataObjectSelected
-        {
-            get => _dataObjectSelected;
-            set
-            {
-                if (_dataObjectSelected != value)
-                {
-                    _dataObjectSelected = value;
-                    UpdateInfo();
-                    OnPropertyChanged();
-                }
-            }
-        }
 
-        private ObjectSet _dataGridSelected;
-        public ObjectSet DataGridSelected
-        {
-            get => _dataGridSelected;
-            set
-            {
-                _dataGridSelected = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private void UpdateInfo()
-        {
-            Task.Run(async () =>
-            {
-                //Info = await _lookUpModel.Info(_dataObjectSelected.PilotObjectHelper);
-            });
-        }
-        private List<ObjectSet> _info;
-        public List<ObjectSet> Info
-        {
-            get => _info;
-            set
-            {
-                _info = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private void CopyToClipboard(string sender)
-        {
-            var errorText = "Упс, ничего не выбрано.";
-            if (_dataObjectSelected == null) MessageBox.Show(errorText);
-
-            try
-            {
-                if (sender == "List")
-                {
-                    Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
-                }
-                else if (sender == "DataGridSelectName")
-                {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName);
-                }
-                else if (sender == "DataGridSelectValue")
-                {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
-                }
-                else if (sender == "DataGridSelectLine")
-                {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
-                }
-                else
-                {
-                    MessageBox.Show(errorText);
-                }
-            }
-            catch
-            {
-                MessageBox.Show(errorText);
-            }
-        }
-
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        //public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
 
 
         public event PropertyChangedEventHandler PropertyChanged;
