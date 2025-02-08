@@ -63,6 +63,12 @@ namespace PilotLookUp.Utils
                     AddPage(new SearchVM(_lookUpModel, this));
                     GoToPage(pageName);
                     break;
+                case PagesName.TaskTree:
+                    LookUpVM selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
+                    PilotObjectHelper itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
+                    AddPage(new TaskTreeVM(_lookUpModel, itemOne));
+                    GoToPage(pageName);
+                    break;
             }
         }
 

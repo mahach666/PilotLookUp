@@ -29,7 +29,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
-            <UniformGrid Rows="2"
+            <UniformGrid Rows="3"
                          VerticalAlignment="Top">
                 <Button ToolTip="LookDB"
                         Style="{StaticResource CastomImageButton}"
@@ -40,6 +40,10 @@
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding SearchCommand}"
                         Content="..\Resources\UI\search.png" />
+                <Button ToolTip="Task"
+                        Style="{StaticResource CastomImageButton}"
+                        Command="{Binding GoTaskTreePage}"
+                        Content="..\Resources\UI\task.png" />
             </UniformGrid>
         </Grid>
 

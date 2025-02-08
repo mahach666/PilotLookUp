@@ -45,6 +45,13 @@ namespace PilotLookUp.ViewModel
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => GoSearchPage());
 
+        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => GoTaskTreePage());
+
+        private void GoTaskTreePage()
+        {
+            _pageController.CreatePage(PagesName.TaskTree);
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

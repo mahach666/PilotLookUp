@@ -5,6 +5,7 @@
         LookUpPage,
         None,
         DBPage,
-        SearchPage
+        SearchPage,
+        TaskTree
     }
 }
