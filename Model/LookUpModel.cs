@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows.Documents;
 
 
 
@@ -115,6 +117,45 @@ namespace PilotLookUp.Model
             DataObjectHelper dataObjectHelper = new DataObjectHelper(dataObject, _objectsRepository);
             return dataObjectHelper;
         }
+        public async Task<DataObjectHelper> FindLastParrent(IDataObject dataObject)
+        {
+            while (dataObject.ParentId != null && dataObject.ParentId.ToString() != "00000000-0000-0000-0000-000000000000")
+            {
+                dataObject = await _objectsRepository.GetObjectWithTimeout(dataObject.ParentId);
+            }
+            DataObjectHelper dataObjectHelper = new DataObjectHelper(dataObject, _objectsRepository);
+            return dataObjectHelper;
+        }
+
+
+        /// <summary>
+        /// Метод определяет является ли объект заданием в пилоте или нет
+        /// </summary>
+        /// <param name="objHelper"></param>
+        /// <returns></returns>
+        public bool IsTask(PilotObjectHelper objHelper)
+        {
+            try
+            {
+                // Если объекта нет, выводим ошибку
+                if (objHelper == null)
+                {
+                    return false;
+                }
+                IDataObject dataObject = objHelper.LookUpObject as IDataObject;
+                // Если это не IDataObject выкидываем ошибку
+                if (dataObject == null)
+                {
+                    return false;
+                }
+                return dataObject.Type.Name.StartsWith("task_");
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
 
         public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
         {
@@ -156,6 +197,57 @@ namespace PilotLookUp.Model
                 childrens.Add(childObj);
             }
             return childrens;
+        }
+
+        internal bool IsCard(PilotObjectHelper objectHelper)
+        {
+            try
+            {
+                // Если объекта нет, выводим ошибку
+                if (objectHelper == null)
+                {
+                    return false;
+                }
+                IDataObject dataObject = objectHelper.LookUpObject as IDataObject;
+                // Если это не IDataObject выкидываем ошибку
+                if (dataObject == null)
+                {
+                    return false;
+                }
+                return !string.IsNullOrEmpty(dataObject.Type.Name);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /// <summary>
+        /// По карточке объекта ищет всязи связи с типо задания. Если задание в процессе то добавляет уникальный процесс, а не задания
+        /// </summary>
+        /// <param name="objectHelper"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        internal async Task<List<PilotObjectHelper>> FindAllLastParrent(PilotObjectHelper objectHelper)
+        {
+            List< PilotObjectHelper> pilotObjectHelpers = new List<PilotObjectHelper> ();
+            var loader = new ObjectLoader(_objectsRepository);
+            IDataObject dataObject = objectHelper.LookUpObject as IDataObject;
+            var listId =dataObject.Relations.Where(it => it.Type==ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
+            foreach (var child in listId)
+            {
+                IDataObject taskObject = await loader.LoadWithTimeout(child);
+                bool isTask = taskObject.Type.Name.StartsWith("task_");
+                if (isTask)
+                {
+                    DataObjectHelper lastParrent = await FindLastParrent(taskObject);
+                    if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
+                    {
+                        pilotObjectHelpers.Add(lastParrent);
+                    }
+                }
+
+            }
+            return pilotObjectHelpers;
         }
     }
 }

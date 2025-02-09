@@ -3,6 +3,7 @@ using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -47,15 +48,38 @@ namespace PilotLookUp.ViewModel
         #region Дерево процесса
         private async Task LoadDataAsync()
         {
-            LastParrent = await _lookUpModel.FindLastParrent(_objectHelper);
-            var rootNode = new ListItemVM(LastParrent);
-            rootNode = await _lookUpModel.FillChild(rootNode);
-            // Обновляем UI-поток
-            Application.Current.Dispatcher.Invoke(() =>
+            bool isTask = _lookUpModel.IsTask(_objectHelper);
+            bool isCerdObject = _lookUpModel.IsCard(_objectHelper);
+            if (isTask)
             {
+                LastParrent = await _lookUpModel.FindLastParrent(_objectHelper);
+                var rootNode = new ListItemVM(LastParrent);
+                rootNode = await _lookUpModel.FillChild(rootNode);
+                // Обновляем UI-поток
+                Application.Current.Dispatcher.Invoke(() =>
+                {
                     FirstParrentNode.Clear();
                     FirstParrentNode = new ObservableCollection<ListItemVM> { rootNode };
-            });
+                });
+                return;
+            }
+            else if (isCerdObject)
+            {
+                ObservableCollection<ListItemVM> treeItems = new ObservableCollection<ListItemVM>();
+                List<PilotObjectHelper> allLastParrent = await _lookUpModel.FindAllLastParrent(_objectHelper);
+                foreach (PilotObjectHelper item in allLastParrent)
+                {
+                    var rootNode = new ListItemVM(item);
+                    rootNode = await _lookUpModel.FillChild(rootNode);
+                    treeItems.Add(rootNode);
+                }
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    FirstParrentNode.Clear();
+                    FirstParrentNode = treeItems;
+                });
+                return;
+            }
         }
         private PilotObjectHelper LastParrent { get;set; }
 
