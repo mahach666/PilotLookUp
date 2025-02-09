@@ -246,7 +246,7 @@ namespace PilotLookUp.Model
                         if (atrState != null)
                         {
                             Guid guidState = new Guid(atrState.ToString());
-                            var stateName = await _objectsRepository.GetObjByGuid(guidState);
+                            var stateName = await _objectsRepository.GetObjByGuid(guidState,0);
                             IUserState userState = stateName as IUserState;
                             if (userState != null)
                             {

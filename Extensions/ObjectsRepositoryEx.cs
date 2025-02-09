@@ -28,9 +28,9 @@ namespace PilotLookUp.Extensions
             return await loader.LoadWithTimeout(id, timeoutMilliseconds);
         }
 
-        internal async static Task<object> GetObjByGuid(this IObjectsRepository objectsRepository,Guid guid)
+        internal async static Task<object> GetObjByGuid(this IObjectsRepository objectsRepository,Guid guid, int timeoutMilliseconds = 300)
         {
-            var lodedObj = await objectsRepository.GetObjectWithTimeout(guid);
+            var lodedObj = await objectsRepository.GetObjectWithTimeout(guid, timeoutMilliseconds);
             if (lodedObj != null)
             {
                 return lodedObj;
