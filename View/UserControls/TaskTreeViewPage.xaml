@@ -33,6 +33,7 @@
                 <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
                 <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />
                 <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" />
+                <CheckBox  Content="Отозванные задания" IsChecked="{Binding RevokedTask}" Visibility="{Binding RevokedTaskVisible}" Margin="5,0" />
             </StackPanel>
         </Grid>
 

@@ -21,6 +21,7 @@ namespace PilotLookUp.Model
     internal class LookUpModel
     {
         private ObjectSet _dataObjects { get; }
+        private const string _revokedTaskState = "revoked";
         private IObjectsRepository _objectsRepository { get; }
         private ITabServiceProvider _tabServiceProvider { get; }
 
@@ -227,7 +228,7 @@ namespace PilotLookUp.Model
         /// <param name="objectHelper"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal async Task<List<PilotObjectHelper>> FindAllLastParrent(PilotObjectHelper objectHelper)
+        internal async Task<List<PilotObjectHelper>> FindAllLastParrent(PilotObjectHelper objectHelper, bool findRevoked=false)
         {
             List< PilotObjectHelper> pilotObjectHelpers = new List<PilotObjectHelper> ();
             var loader = new ObjectLoader(_objectsRepository);
@@ -239,6 +240,25 @@ namespace PilotLookUp.Model
                 bool isTask = taskObject.Type.Name.StartsWith("task_");
                 if (isTask)
                 {
+                    if (!findRevoked) // Пропуск отозванных заданий
+                    {
+                        var atrState = taskObject.Attributes["state"];
+                        if (atrState != null)
+                        {
+                            Guid guidState = new Guid(atrState.ToString());
+                            var stateName = await _objectsRepository.GetObjByGuid(guidState);
+                            IUserState userState = stateName as IUserState;
+                            if (userState != null)
+                            {
+                                if (userState.Name==_revokedTaskState)
+                                {
+                                    continue;
+                                }
+                                
+                            }
+
+                        }
+                    }
                     DataObjectHelper lastParrent = await FindLastParrent(taskObject);
                     if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
                     {

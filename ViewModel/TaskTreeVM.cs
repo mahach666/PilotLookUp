@@ -22,6 +22,7 @@ namespace PilotLookUp.ViewModel
         private PilotObjectHelper _objectHelper;
         public TaskTreeVM(LookUpModel lookUpModel, PilotObjectHelper pilotObjectHelper)
         {
+            _revokedTask = false;
             _lookUpModel = lookUpModel;
             _objectHelper = pilotObjectHelper;
             FirstParrentNode = new ObservableCollection<ListItemVM>();
@@ -43,6 +44,34 @@ namespace PilotLookUp.ViewModel
                 return _objectHelper.Name;
             }
         }
+
+
+        private bool _revokedTask;
+        public bool RevokedTask
+        {
+
+            get => _revokedTask;
+            set
+            {
+                _revokedTask = value;
+                _ = LoadDataAsync();
+                OnPropertyChanged();
+            }
+        }
+
+        private Visibility _revokedTaskVisible;
+        public Visibility RevokedTaskVisible
+        {
+
+            get => _revokedTaskVisible;
+            set
+            {
+                _revokedTaskVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
+        
         #endregion
 
         #region Дерево процесса
@@ -58,6 +87,7 @@ namespace PilotLookUp.ViewModel
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+                    RevokedTaskVisible = Visibility.Hidden;
                     FirstParrentNode.Clear();
                     FirstParrentNode = new ObservableCollection<ListItemVM> { rootNode };
                 });
@@ -66,7 +96,7 @@ namespace PilotLookUp.ViewModel
             else if (isCerdObject)
             {
                 ObservableCollection<ListItemVM> treeItems = new ObservableCollection<ListItemVM>();
-                List<PilotObjectHelper> allLastParrent = await _lookUpModel.FindAllLastParrent(_objectHelper);
+                List<PilotObjectHelper> allLastParrent = await _lookUpModel.FindAllLastParrent(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
                     var rootNode = new ListItemVM(item);
