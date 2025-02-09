@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviorutils="clr-namespace:PilotLookUp.Utils"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -42,9 +44,17 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TreeView Name="TreeViewObjects" Grid.Column="0" ItemsSource="{Binding FirstParrentNode}">
+            <TreeView ItemsSource="{Binding FirstParrentNode}">
+                <i:Interaction.Behaviors>
+                    <behaviorutils:TreeViewSelectedItemBehavior SelectedItem="{Binding DataObjectSelected, Mode=TwoWay}" />
+                </i:Interaction.Behaviors>
+
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding ObjImage}" Width="16" Height="16" Margin="2"/>
+                            <TextBlock Text="{Binding ObjName}" Margin="5,0,0,0"/>
+                        </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
