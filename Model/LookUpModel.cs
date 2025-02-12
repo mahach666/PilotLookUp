@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows.Documents;
+using System.Web.UI;
 
 
 
@@ -166,11 +167,11 @@ namespace PilotLookUp.Model
 
         public async Task BuildChildNodes(ListItemVM lastParrent)
         {
-            IDataObject sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
-            var children = await GetChildrensWithTimeout(_objectsRepository, sad);  // Метод получения детей по ID
-            foreach (var child in children)
+            var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
+            List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
+            ObjectSet newPilotObj = await new Tracer(_objectsRepository, null, null).Trace(children);
+            foreach (var dataObjectHelper in newPilotObj)
             {
-                DataObjectHelper dataObjectHelper = new DataObjectHelper(child, _objectsRepository);
                 var childNode = new ListItemVM(dataObjectHelper);
                 if (lastParrent.Children != null)
                 {

@@ -83,7 +83,7 @@ namespace PilotLookUp.Utils
 
         private async Task<PilotObjectHelper> GuidHandler(Guid guid)
         {
-            if (_memberInfo.Name== "HistoryItems")
+            if (_memberInfo?.Name== "HistoryItems")
             {
                 var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
                 if (lodedHistory != null)
