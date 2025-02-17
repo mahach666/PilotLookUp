@@ -50,7 +50,6 @@ namespace PilotLookUp.Utils
                     var lookVM = dataObj == null
                         ? new LookUpVM(_lookUpModel)
                         : _lookUpModel.GetCastomLookUpVM(dataObj);
-
                     AddPage(lookVM);
                     GoToPage(pageName);
                     break;

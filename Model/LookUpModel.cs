@@ -4,16 +4,12 @@ using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.Utils;
-using PilotLookUp.View.CastomUIElemens;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Windows.Documents;
-using System.Web.UI;
 
 
 
@@ -63,16 +59,16 @@ namespace PilotLookUp.Model
             }
             else if (int.TryParse(request, out var intId))
             {
-                var res = new List<PilotObjectHelper>();
+                var res = new ObjectSet(null);
                 var person = _objectsRepository.GetPerson(intId);
                 var orgUnit = _objectsRepository.GetOrganisationUnit(intId);
                 var iType = _objectsRepository.GetType(intId);
                 if (person != null) { res.AddRange(await tracer.Trace(person)); }
                 if (orgUnit != null) { res.AddRange(await tracer.Trace(orgUnit)); }
                 if (iType != null) { res.AddRange(await tracer.Trace(iType)); }
-                var oSet = new ObjectSet(null);
-                oSet.AddRange(res.Distinct());
-                return oSet;
+                var distSet = new ObjectSet(null);
+                distSet.AddRange(res.Distinct());              
+                return distSet;
             }
             return null;
         }
@@ -96,67 +92,16 @@ namespace PilotLookUp.Model
         {
             _tabServiceProvider.ShowElement(dataObject.Id);
         }
-        /// <summary>
-        /// Метод по поиску последнего родителя для элемента
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public async Task<DataObjectHelper> FindLastParrent(PilotObjectHelper objHelper)
+
+        public async Task<DataObjectHelper> FindLastParentHelper(IDataObject dataObject)
         {
-            // Если объекта нет, выводим ошибку
-            if (objHelper == null)
+            if (dataObject != null)
             {
-                return null;
+                var parent = await dataObject.FindLastParrent(_objectsRepository);
+                var objSet = await new Tracer(_objectsRepository, null, null).Trace(parent);
+                return objSet.FirstOrDefault() is DataObjectHelper result ? result : null;
             }
-            IDataObject dataObject = objHelper.LookUpObject as IDataObject;
-            // Ищем самого верхнего родителя
-
-
-            while (dataObject.ParentId != null && dataObject.ParentId.ToString() != "00000000-0000-0000-0000-000000000000")
-            {
-                dataObject = await _objectsRepository.GetObjectWithTimeout(dataObject.ParentId);
-            }
-            DataObjectHelper dataObjectHelper = new DataObjectHelper(dataObject, _objectsRepository);
-            return dataObjectHelper;
-        }
-        public async Task<DataObjectHelper> FindLastParrent(IDataObject dataObject)
-        {
-            while (dataObject.ParentId != null && dataObject.ParentId.ToString() != "00000000-0000-0000-0000-000000000000")
-            {
-                dataObject = await _objectsRepository.GetObjectWithTimeout(dataObject.ParentId);
-            }
-            DataObjectHelper dataObjectHelper = new DataObjectHelper(dataObject, _objectsRepository);
-            return dataObjectHelper;
-        }
-
-
-        /// <summary>
-        /// Метод определяет является ли объект заданием в пилоте или нет
-        /// </summary>
-        /// <param name="objHelper"></param>
-        /// <returns></returns>
-        public bool IsTask(PilotObjectHelper objHelper)
-        {
-            try
-            {
-                // Если объекта нет, выводим ошибку
-                if (objHelper == null)
-                {
-                    return false;
-                }
-                IDataObject dataObject = objHelper.LookUpObject as IDataObject;
-                // Если это не IDataObject выкидываем ошибку
-                if (dataObject == null)
-                {
-                    return false;
-                }
-                return dataObject.Type.Name.StartsWith("task_");
-            }
-            catch
-            {
-                return false;
-            }
-
+            return null;
         }
 
         public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
@@ -201,40 +146,18 @@ namespace PilotLookUp.Model
             return childrens;
         }
 
-        internal bool IsCard(PilotObjectHelper objectHelper)
-        {
-            try
-            {
-                // Если объекта нет, выводим ошибку
-                if (objectHelper == null)
-                {
-                    return false;
-                }
-                IDataObject dataObject = objectHelper.LookUpObject as IDataObject;
-                // Если это не IDataObject выкидываем ошибку
-                if (dataObject == null)
-                {
-                    return false;
-                }
-                return !string.IsNullOrEmpty(dataObject.Type.Name);
-            }
-            catch
-            {
-                return false;
-            }
-        }
         /// <summary>
         /// По карточке объекта ищет всязи связи с типо задания. Если задание в процессе то добавляет уникальный процесс, а не задания
         /// </summary>
         /// <param name="objectHelper"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal async Task<List<PilotObjectHelper>> FindAllLastParrent(PilotObjectHelper objectHelper, bool findRevoked=false)
+        internal async Task<List<PilotObjectHelper>> FindAllLastParrent(PilotObjectHelper objectHelper, bool findRevoked = false)
         {
-            List< PilotObjectHelper> pilotObjectHelpers = new List<PilotObjectHelper> ();
+            List<PilotObjectHelper> pilotObjectHelpers = new List<PilotObjectHelper>();
             var loader = new ObjectLoader(_objectsRepository);
             IDataObject dataObject = objectHelper.LookUpObject as IDataObject;
-            var listId =dataObject.Relations.Where(it => it.Type==ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
+            var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
             foreach (var child in listId)
             {
                 IDataObject taskObject = await loader.LoadWithTimeout(child);
@@ -247,20 +170,18 @@ namespace PilotLookUp.Model
                         if (atrState != null)
                         {
                             Guid guidState = new Guid(atrState.ToString());
-                            var stateName = await _objectsRepository.GetObjByGuid(guidState,0);
+                            var stateName = await _objectsRepository.GetObjByGuid(guidState, 0);
                             IUserState userState = stateName as IUserState;
                             if (userState != null)
                             {
-                                if (userState.Name==_revokedTaskState)
+                                if (userState.Name == _revokedTaskState)
                                 {
                                     continue;
                                 }
-                                
                             }
-
                         }
                     }
-                    DataObjectHelper lastParrent = await FindLastParrent(taskObject);
+                    DataObjectHelper lastParrent = await FindLastParentHelper(taskObject);
                     if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
                     {
                         pilotObjectHelpers.Add(lastParrent);

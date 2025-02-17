@@ -3,16 +3,16 @@ using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
-using System.Collections;
+using PilotLookUp.Objects.TypeHelpers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using IDataObject = Ascon.Pilot.SDK.IDataObject;
+
 
 namespace PilotLookUp.ViewModel
 {
@@ -71,17 +71,23 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        
+
         #endregion
 
         #region Дерево процесса
         private async Task LoadDataAsync()
         {
-            bool isTask = _lookUpModel.IsTask(_objectHelper);
-            bool isCerdObject = _lookUpModel.IsCard(_objectHelper);
-            if (isTask)
+            bool isTask;
+
+            if (_objectHelper is DataObjectHelper dataObjectHelper)
             {
-                LastParrent = await _lookUpModel.FindLastParrent(_objectHelper);
+                isTask = dataObjectHelper.IsTask;
+            }
+            else return;
+
+            if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
+            {
+                LastParrent = await _lookUpModel.FindLastParentHelper(dataObject);
                 var rootNode = new ListItemVM(LastParrent);
                 rootNode = await _lookUpModel.FillChild(rootNode);
                 // Обновляем UI-поток
@@ -93,7 +99,7 @@ namespace PilotLookUp.ViewModel
                 });
                 return;
             }
-            else if (isCerdObject)
+            else
             {
                 ObservableCollection<ListItemVM> treeItems = new ObservableCollection<ListItemVM>();
                 List<PilotObjectHelper> allLastParrent = await _lookUpModel.FindAllLastParrent(_objectHelper, RevokedTask);
@@ -111,7 +117,7 @@ namespace PilotLookUp.ViewModel
                 return;
             }
         }
-        private PilotObjectHelper LastParrent { get;set; }
+        private PilotObjectHelper LastParrent { get; set; }
 
         private ObservableCollection<ListItemVM> _firstParrentNode;
 

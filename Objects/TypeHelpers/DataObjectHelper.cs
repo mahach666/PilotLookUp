@@ -18,5 +18,17 @@ namespace PilotLookUp.Objects.TypeHelpers
         {
             return SvgToPngConverter.GetBitmapImageBySvg(((IDataObject)_lookUpObject).Type.SvgIcon);
         }
+
+        public bool IsTask
+        {
+            get
+            {
+                if (_lookUpObject != null && _lookUpObject is IDataObject dataObject)
+                {
+                    return dataObject.Type.Name.StartsWith("task_");
+                }
+                return false;
+            }
+        }     
     }
 }
