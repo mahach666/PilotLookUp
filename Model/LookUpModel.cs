@@ -18,7 +18,7 @@ namespace PilotLookUp.Model
     internal class LookUpModel
     {
         private ObjectSet _dataObjects { get; }
-        private const string _revokedTaskState = "revoked";
+        //private const string _revokedTaskState = "revoked";
         private IObjectsRepository _objectsRepository { get; }
         private ITabServiceProvider _tabServiceProvider { get; }
 
@@ -67,7 +67,7 @@ namespace PilotLookUp.Model
                 if (orgUnit != null) { res.AddRange(await tracer.Trace(orgUnit)); }
                 if (iType != null) { res.AddRange(await tracer.Trace(iType)); }
                 var distSet = new ObjectSet(null);
-                distSet.AddRange(res.Distinct());              
+                distSet.AddRange(res.Distinct());
                 return distSet;
             }
             return null;
@@ -152,39 +152,35 @@ namespace PilotLookUp.Model
         /// <param name="objectHelper"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        internal async Task<List<PilotObjectHelper>> FindAllLastParrent(PilotObjectHelper objectHelper, bool findRevoked = false)
+        internal async Task<ObjectSet> FindAllLastParrent(PilotObjectHelper objectHelper, bool findRevoked = false)
         {
-            List<PilotObjectHelper> pilotObjectHelpers = new List<PilotObjectHelper>();
-            var loader = new ObjectLoader(_objectsRepository);
-            IDataObject dataObject = objectHelper.LookUpObject as IDataObject;
-            var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
-            foreach (var child in listId)
+            ObjectSet pilotObjectHelpers = new ObjectSet(null);
+            ObjectSet childrenSet;
+
+            if (objectHelper.LookUpObject is IDataObject dataObject)
             {
-                IDataObject taskObject = await loader.LoadWithTimeout(child);
-                bool isTask = taskObject.Type.Name.StartsWith("task_");
-                if (isTask)
+                childrenSet = await new Tracer(_objectsRepository, null, null).Trace(dataObject.Children);
+            }
+            else return null;
+
+            foreach (var child in childrenSet)
+            {
+                if (child is DataObjectHelper dataHelp)
                 {
-                    if (!findRevoked) // Пропуск отозванных заданий
+                    if (dataHelp.IsTask)
                     {
-                        var atrState = taskObject.Attributes["state"];
-                        if (atrState != null)
+                        if (!findRevoked) // Пропуск отозванных заданий
                         {
-                            Guid guidState = new Guid(atrState.ToString());
-                            var stateName = await _objectsRepository.GetObjByGuid(guidState, 0);
-                            IUserState userState = stateName as IUserState;
-                            if (userState != null)
+                            if (dataHelp.IsRevokedTask)
                             {
-                                if (userState.Name == _revokedTaskState)
-                                {
-                                    continue;
-                                }
+                                continue;
                             }
                         }
-                    }
-                    DataObjectHelper lastParrent = await FindLastParentHelper(taskObject);
-                    if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
-                    {
-                        pilotObjectHelpers.Add(lastParrent);
+                        DataObjectHelper lastParrent = await FindLastParentHelper(dataHelp);
+                        if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
+                        {
+                            pilotObjectHelpers.Add(lastParrent);
+                        }
                     }
                 }
 

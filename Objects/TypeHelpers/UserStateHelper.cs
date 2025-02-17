@@ -16,7 +16,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-           return SvgToPngConverter.GetBitmapImageBySvg(((IUserState)_lookUpObject).Icon);
+            return SvgToPngConverter.GetBitmapImageBySvg(((IUserState)_lookUpObject).Icon);
         }
     }
 }
