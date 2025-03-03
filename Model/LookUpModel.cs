@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Core;
 using PilotLookUp.Extensions;
+using PilotLookUp.Model.Utils;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.Utils;
@@ -18,7 +19,6 @@ namespace PilotLookUp.Model
     internal class LookUpModel
     {
         private ObjectSet _dataObjects { get; }
-        //private const string _revokedTaskState = "revoked";
         private IObjectsRepository _objectsRepository { get; }
         private ITabServiceProvider _tabServiceProvider { get; }
 
@@ -49,29 +49,8 @@ namespace PilotLookUp.Model
             return res;
         }
 
-        public async Task<ObjectSet> SearchByString(string request)
-        {
-            var tracer = new Tracer(_objectsRepository, null, null);
-            if (Guid.TryParse(request, out var id))
-            {
-                var res = await tracer.Trace(await _objectsRepository.GetObjByGuid(id));
-                return res;
-            }
-            else if (int.TryParse(request, out var intId))
-            {
-                var res = new ObjectSet(null);
-                var person = _objectsRepository.GetPerson(intId);
-                var orgUnit = _objectsRepository.GetOrganisationUnit(intId);
-                var iType = _objectsRepository.GetType(intId);
-                if (person != null) { res.AddRange(await tracer.Trace(person)); }
-                if (orgUnit != null) { res.AddRange(await tracer.Trace(orgUnit)); }
-                if (iType != null) { res.AddRange(await tracer.Trace(iType)); }
-                var distSet = new ObjectSet(null);
-                distSet.AddRange(res.Distinct());
-                return distSet;
-            }
-            return null;
-        }
+        public async Task<ObjectSet> SearchByString(string request) => await SearchUtils.ByString(_objectsRepository, request);
+
 
         public LookUpVM GetDBLookUpVM()
         {
@@ -104,47 +83,46 @@ namespace PilotLookUp.Model
             return null;
         }
 
-        public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
-        {
-            await BuildChildNodes(lastParrent);
-            return lastParrent;
-        }
+        public async Task<ListItemVM> FillChild(ListItemVM lastParrent) => await TreeViewUtils.FillChild(_objectsRepository,lastParrent);
+        //{
+        //    await BuildChildNodes(lastParrent);
+        //    return lastParrent;
+        //}
 
-        public async Task BuildChildNodes(ListItemVM lastParrent)
-        {
-            var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
-            List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
-            ObjectSet newPilotObj = await new Tracer(_objectsRepository, null, null).Trace(children);
-            foreach (var dataObjectHelper in newPilotObj)
-            {
-                var childNode = new ListItemVM(dataObjectHelper);
-                if (lastParrent.Children != null)
-                {
-                    lastParrent.Children.Add(childNode);
-                }
-                else
-                {
-                    lastParrent.Children = new ObservableCollection<ListItemVM>()
-                    {
-                        childNode
-                    };
-                }
-                await BuildChildNodes(childNode); // Рекурсия для вложенных детей
-
-            }
-        }
-        internal async Task<List<IDataObject>> GetChildrensWithTimeout(IObjectsRepository objectsRepository, IDataObject currentObject, int timeoutMilliseconds = 300)
-        {
-            var loader = new ObjectLoader(objectsRepository);
-            var childrensId = currentObject.Children;
-            List<IDataObject> childrens = new List<IDataObject>();
-            foreach (var child in childrensId)
-            {
-                var childObj = await loader.LoadWithTimeout(child);
-                childrens.Add(childObj);
-            }
-            return childrens;
-        }
+        //public async Task BuildChildNodes(ListItemVM lastParrent)
+        //{
+        //    var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
+        //    List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
+        //    ObjectSet newPilotObj = await new Tracer(_objectsRepository, null, null).Trace(children);
+        //    foreach (var dataObjectHelper in newPilotObj)
+        //    {
+        //        var childNode = new ListItemVM(dataObjectHelper);
+        //        if (lastParrent.Children != null)
+        //        {
+        //            lastParrent.Children.Add(childNode);
+        //        }
+        //        else
+        //        {
+        //            lastParrent.Children = new ObservableCollection<ListItemVM>()
+        //            {
+        //                childNode
+        //            };
+        //        }
+        //        await BuildChildNodes(childNode); // Рекурсия для вложенных детей
+        //    }
+        //}
+        //internal async Task<List<IDataObject>> GetChildrensWithTimeout(IObjectsRepository objectsRepository, IDataObject currentObject, int timeoutMilliseconds = 300)
+        //{
+        //    var loader = new ObjectLoader(objectsRepository);
+        //    var childrensId = currentObject.Children;
+        //    List<IDataObject> childrens = new List<IDataObject>();
+        //    foreach (var child in childrensId)
+        //    {
+        //        var childObj = await loader.LoadWithTimeout(child);
+        //        childrens.Add(childObj);
+        //    }
+        //    return childrens;
+        //}
 
         /// <summary>
         /// По карточке объекта ищет всязи связи с типо задания. Если задание в процессе то добавляет уникальный процесс, а не задания
@@ -176,14 +154,13 @@ namespace PilotLookUp.Model
                                 continue;
                             }
                         }
-                        DataObjectHelper lastParrent = await FindLastParentHelper(dataHelp);
+                        DataObjectHelper lastParrent = await FindLastParentHelper(dataObject);
                         if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
                         {
                             pilotObjectHelpers.Add(lastParrent);
                         }
                     }
                 }
-
             }
             return pilotObjectHelpers;
         }
