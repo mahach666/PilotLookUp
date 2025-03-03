@@ -34,14 +34,15 @@ namespace PilotLookUp.Utils
             return null;
         }
 
-        static public async Task<ObjectSet> GetBaseParentsOfChildren(IObjectsRepository objectsRepository, PilotObjectHelper objectHelper, bool findRevoked = false)
+        static public async Task<ObjectSet> GetBaseParentsOfRelations(IObjectsRepository objectsRepository, PilotObjectHelper objectHelper, bool findRevoked = false)
         {
             ObjectSet pilotObjectHelpers = new ObjectSet(null);
             ObjectSet childrenSet;
 
             if (objectHelper.LookUpObject is IDataObject dataObject)
             {
-                childrenSet = await new Tracer(objectsRepository, null, null).Trace(dataObject.Children);
+                var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
+                childrenSet = await new Tracer(objectsRepository, null, null).Trace(listId);
             }
             else return null;
 

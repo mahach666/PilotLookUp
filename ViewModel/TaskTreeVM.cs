@@ -102,7 +102,7 @@ namespace PilotLookUp.ViewModel
             else
             {
                 ObservableCollection<ListItemVM> treeItems = new ObservableCollection<ListItemVM>();
-                List<PilotObjectHelper> allLastParrent = await _lookUpModel.SearchBaseParentsOfChildren(_objectHelper, RevokedTask);
+                List<PilotObjectHelper> allLastParrent = await _lookUpModel.SearchBaseParentsOfRelations(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
                     var rootNode = new ListItemVM(item);

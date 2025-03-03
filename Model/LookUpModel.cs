@@ -76,7 +76,7 @@ namespace PilotLookUp.Model
         public async Task<DataObjectHelper> SearchLastParent(IDataObject dataObject)
            => await SearchUtils.GetLastParent(_objectsRepository, dataObject);
 
-        public async Task<ObjectSet> SearchBaseParentsOfChildren(PilotObjectHelper objectHelper, bool findRevoked = false)
-            => await SearchUtils.GetBaseParentsOfChildren(_objectsRepository, objectHelper, findRevoked);
+        public async Task<ObjectSet> SearchBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
+            => await SearchUtils.GetBaseParentsOfRelations(_objectsRepository, objectHelper, findRevoked);
     }
 }
