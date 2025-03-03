@@ -8,7 +8,7 @@
 		<AssemblyProduct>PilotLookUp</AssemblyProduct>
 		<Product>PilotLookUp</Product>
 		<Description>PilotLookUp</Description>
-		<AssemblyVersion>2.3.1.0</AssemblyVersion>
+		<AssemblyVersion>2.4.0.0</AssemblyVersion>
 		<RootNamespace>PilotLookUp</RootNamespace>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
@@ -88,6 +88,7 @@
 	  <None Remove="Resources\TypeIcons\storageIcon.png" />
 	  <None Remove="Resources\TypeIcons\stringIcon.png" />
 	  <None Remove="Resources\TypeIcons\transitionIcon.png" />
+	  <None Remove="Resources\UI\lookUpView.png" />
 	  <None Remove="Resources\UI\task.png" />
 	</ItemGroup>
 
@@ -131,6 +132,7 @@
 	  <Resource Include="Resources\UI\goTo.png" />
 	  <Resource Include="Resources\TypeIcons\organisationUnitIcon.png" />
 	  <Resource Include="Resources\TypeIcons\personIcon.png" />
+	  <Resource Include="Resources\UI\lookUpView.png" />
 	  <Resource Include="Resources\UI\search.png" />
 	  <Resource Include="Resources\UI\task.png" />
 	</ItemGroup>

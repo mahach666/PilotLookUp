@@ -32,17 +32,17 @@ namespace PilotLookUp.ViewModel
         }
 
         private void GoLookDBPage() => _pageController.CreatePage(PagesName.DBPage);
-
         public ICommand LookDBCommand => new RelayCommand<object>(_ => GoLookDBPage());
 
+
         private void GoSearchPage() => _pageController.GoToPage(PagesName.SearchPage);
-
-
         public ICommand SearchCommand => new RelayCommand<object>(_ => GoSearchPage());
 
-        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => GoTaskTreePage());
+        private void GoLookUpPage() => _pageController.GoToPage(PagesName.LookUpPage);
+        public ICommand LookUpPageCommand => new RelayCommand<object>(_ => GoLookUpPage());
 
         private void GoTaskTreePage() => _pageController.CreatePage(PagesName.TaskTree);
+        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => GoTaskTreePage());
 
 
         public event PropertyChangedEventHandler PropertyChanged;
