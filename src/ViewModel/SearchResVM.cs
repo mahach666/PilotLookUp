@@ -32,7 +32,7 @@ namespace PilotLookUp.ViewModel
 
         private void GoPage()
         {
-            _pageController.CreatePage(PagesName.LookUpPage, _dataObj);
+            _pageController.CreatePage(PagesName.LookUpPage, new ObjectSet(null) { _dataObj });
         }
 
         public ICommand GoPageCommand => new RelayCommand<object>(_ => GoPage());

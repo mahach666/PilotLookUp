@@ -1,8 +1,6 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
-using PilotLookUp.Services;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -11,13 +9,13 @@ namespace PilotLookUp.ViewModel
 {
     internal class MainVM : INotifyPropertyChanged
     {
-        private LookUpModel _lookUpModel { get; }
         private IPageService _pageController { get; }
 
-        public MainVM(LookUpModel lookUpModel, PagesName startPage = PagesName.None)
+        public MainVM(IPageService pageService)
         {
-            _lookUpModel = lookUpModel;
-            _pageController = new PageController(_lookUpModel, startPage, page => SelectedControl = page);
+            _pageController= pageService;
+            _pageController.PageChanged += page => SelectedControl = page;
+            SelectedControl = _pageController.ActivePage;
         }
 
         private IPage _selectedControl;
@@ -31,18 +29,13 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void GoLookDBPage() => _pageController.CreatePage(PagesName.DBPage);
-        public ICommand LookDBCommand => new RelayCommand<object>(_ => GoLookDBPage());
+        public ICommand LookDBCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.DBPage));
 
+        public ICommand SearchCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.SearchPage));
 
-        private void GoSearchPage() => _pageController.GoToPage(PagesName.SearchPage);
-        public ICommand SearchCommand => new RelayCommand<object>(_ => GoSearchPage());
+        public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
 
-        private void GoLookUpPage() => _pageController.GoToPage(PagesName.LookUpPage);
-        public ICommand LookUpPageCommand => new RelayCommand<object>(_ => GoLookUpPage());
-
-        private void GoTaskTreePage() => _pageController.CreatePage(PagesName.TaskTree);
-        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => GoTaskTreePage());
+        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
 
 
         public event PropertyChangedEventHandler PropertyChanged;

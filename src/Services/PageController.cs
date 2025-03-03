@@ -1,4 +1,5 @@
-﻿using PilotLookUp.Enums;
+﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Objects;
@@ -11,20 +12,21 @@ namespace PilotLookUp.Services
 {
     internal class PageController : IPageService
     {
-        internal PageController(LookUpModel lookUpModel
+        internal PageController(
+            LookUpModel lookUpModel
             , PagesName startPage
-            , Action<IPage> updateCurrentPage)
+             , ObjectSet dataObj = null)
         {
-            _updateCurrentPage = updateCurrentPage;
             _lookUpModel = lookUpModel;
             _controlsHolder = new List<IPage>();
             if (startPage != PagesName.None)
-                GoToPage(startPage);
+                CreatePage(startPage, dataObj);
         }
-        private IPage _activePage { get; set; }
-        public IPage ActivePage => _activePage;
 
-        private Action<IPage> _updateCurrentPage { get; }
+        public event Action<IPage> PageChanged;
+
+        private IPage _activePage { get; set; }
+        public IPage ActivePage { get { return _activePage; } }
 
         private List<IPage> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }
@@ -35,14 +37,14 @@ namespace PilotLookUp.Services
             if (_controlsHolder.FirstOrDefault(i => i.GetName() == pageName) != null)
             {
                 _activePage = _controlsHolder.FirstOrDefault(i => i.GetName() == pageName);
-                _updateCurrentPage(ActivePage);
+                PageChanged?.Invoke(_activePage);
             }
             else
             {
                 CreatePage(pageName);
             }
         }
-        public void CreatePage(PagesName pageName, PilotObjectHelper dataObj = null)
+        public void CreatePage(PagesName pageName, ObjectSet dataObj = null)
         {
             switch (pageName)
             {

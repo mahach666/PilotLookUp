@@ -20,7 +20,6 @@ namespace PilotLookUp.ViewModel
         public LookUpVM(LookUpModel lookUpModel)
         {
             _lookUpModel = lookUpModel;
-            SelectionDataObjects = _lookUpModel.SelectionDataObjects.Select(x => new ListItemVM(x)).ToList();
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
