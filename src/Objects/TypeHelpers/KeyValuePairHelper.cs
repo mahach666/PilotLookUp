@@ -53,15 +53,15 @@ namespace PilotLookUp.Objects.TypeHelpers
                 || _lookUpObject is KeyValuePair<Guid, int>
                 || _lookUpObject is KeyValuePair<IDataObject, int>)
             {
-                return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\keyValuePairIcon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\keyValuePairIcon.png", UriKind.RelativeOrAbsolute));
             }
             else if (_lookUpObject is IAccess)
             {
-                return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\accessIcon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\accessIcon.png", UriKind.RelativeOrAbsolute));
             }
             else if (_lookUpObject is IEnumerable<ITransition>)
             {
-                return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\transitionIcon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\transitionIcon.png", UriKind.RelativeOrAbsolute));
             }
             return null;
         }

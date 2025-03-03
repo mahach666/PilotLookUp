@@ -16,8 +16,8 @@
     <controls:DialogWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\..\Resources\StyleDictionary.xaml" />
-                <ResourceDictionary Source="..\..\Resources\VMMap.xaml" />
+                <ResourceDictionary Source="..\Resources\StyleDictionary.xaml" />
+                <ResourceDictionary Source="..\Resources\VMMap.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </controls:DialogWindow.Resources>

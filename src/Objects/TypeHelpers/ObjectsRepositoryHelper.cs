@@ -15,7 +15,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\..\Resources\UI\databaseEnabled.png", UriKind.RelativeOrAbsolute));
+            return new BitmapImage(new Uri(@"..\..\Resources\UI\databaseEnabled.png", UriKind.RelativeOrAbsolute));
         }
     }
 }

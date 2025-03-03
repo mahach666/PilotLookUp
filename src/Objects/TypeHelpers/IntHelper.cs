@@ -161,11 +161,11 @@ namespace PilotLookUp.Objects.TypeHelpers
         {
             if (_lookUpObject is IOrganisationUnit)
             {
-                return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
             }
             else if (_lookUpObject is IPerson)
             {
-                return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
             }
             else if (_lookUpObject is IType type)
             {
@@ -173,7 +173,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             }
             else
             {
-                return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\intIcon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\intIcon.png", UriKind.RelativeOrAbsolute));
             }
         }
     }

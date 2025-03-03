@@ -39,7 +39,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                     return _sender.GetImage();
                 }
             }
-            return new BitmapImage(new Uri(@"..\..\..\Resources\TypeIcons\guidIcon.png", UriKind.RelativeOrAbsolute));
+            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\guidIcon.png", UriKind.RelativeOrAbsolute));
         }
     }
 }
