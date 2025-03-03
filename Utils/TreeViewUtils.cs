@@ -1,6 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Objects;
-using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PilotLookUp.Model.Utils
+namespace PilotLookUp.Utils
 {
     static class TreeViewUtils
     {

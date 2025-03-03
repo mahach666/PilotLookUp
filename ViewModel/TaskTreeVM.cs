@@ -87,7 +87,7 @@ namespace PilotLookUp.ViewModel
 
             if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
             {
-                LastParrent = await _lookUpModel.FindLastParentHelper(dataObject);
+                LastParrent = await _lookUpModel.SearchLastParent(dataObject);
                 var rootNode = new ListItemVM(LastParrent);
                 rootNode = await _lookUpModel.FillChild(rootNode);
                 // Обновляем UI-поток
@@ -102,7 +102,7 @@ namespace PilotLookUp.ViewModel
             else
             {
                 ObservableCollection<ListItemVM> treeItems = new ObservableCollection<ListItemVM>();
-                List<PilotObjectHelper> allLastParrent = await _lookUpModel.FindAllLastParrent(_objectHelper, RevokedTask);
+                List<PilotObjectHelper> allLastParrent = await _lookUpModel.SearchBaseParentsOfChildren(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
                     var rootNode = new ListItemVM(item);

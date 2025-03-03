@@ -1,10 +1,9 @@
 ﻿using PilotLookUp.Enums;
 using PilotLookUp.Objects;
-using System.Windows.Controls;
 
 namespace PilotLookUp.Interfaces
 {
-    internal interface IPageController
+    internal interface IPageService
     {
         public IPage ActivePage { get; }
         public void GoToPage(PagesName pageName);

@@ -12,7 +12,7 @@ namespace PilotLookUp.ViewModel
     internal class MainVM : INotifyPropertyChanged
     {
         private LookUpModel _lookUpModel { get; }
-        private IPageController _pageController { get; }
+        private IPageService _pageController { get; }
 
         public MainVM(LookUpModel lookUpModel, PagesName startPage = PagesName.None)
         {

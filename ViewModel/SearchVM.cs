@@ -15,9 +15,9 @@ namespace PilotLookUp.ViewModel
     internal class SearchVM : INotifyPropertyChanged , IPage
     {
         private LookUpModel _lookUpModel { get; }
-        private IPageController _pageController { get; }
+        private IPageService _pageController { get; }
 
-        public SearchVM(LookUpModel lookUpModel, IPageController pageController)
+        public SearchVM(LookUpModel lookUpModel, IPageService pageController)
         {
             _lookUpModel = lookUpModel;
             _pageController = pageController;

@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PilotLookUp.Utils
+namespace PilotLookUp.Services
 {
-    internal class PageController : IPageController
+    internal class PageController : IPageService
     {
         internal PageController(LookUpModel lookUpModel
             , PagesName startPage

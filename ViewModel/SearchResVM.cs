@@ -15,10 +15,10 @@ namespace PilotLookUp.ViewModel
         private LookUpModel _lookUpModel { get; }
 
         private PilotObjectHelper _dataObj { get; }
-        private IPageController _pageController { get; }
+        private IPageService _pageController { get; }
 
 
-        internal SearchResVM(LookUpModel lookUpModel, IPageController pageController, PilotObjectHelper pilotObjectHelper)
+        internal SearchResVM(LookUpModel lookUpModel, IPageService pageController, PilotObjectHelper pilotObjectHelper)
         {
             _lookUpModel = lookUpModel;
             _dataObj = pilotObjectHelper;
