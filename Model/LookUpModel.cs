@@ -1,15 +1,11 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-
 
 namespace PilotLookUp.Model
 {
@@ -68,10 +64,8 @@ namespace PilotLookUp.Model
         public void GoTo(IDataObject dataObject)
            => _tabServiceProvider.ShowElement(dataObject.Id);
 
-
         public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
             => await TreeViewUtils.FillChild(_objectsRepository, lastParrent);
-
 
         public async Task<DataObjectHelper> SearchLastParent(IDataObject dataObject)
            => await SearchUtils.GetLastParent(_objectsRepository, dataObject);
