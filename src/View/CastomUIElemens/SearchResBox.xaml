@@ -1,0 +1,60 @@
+﻿<UserControl x:Class="PilotLookUp.View.CastomUIElemens.SearchResBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PilotLookUp.View.CastomUIElemens"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Height="80"
+             MinHeight="80"
+             MaxHeight="80">
+
+    <!-- Экспорт словарей ресурсов Pilot -->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\..\Resources\StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Rectangle Margin="5,5,5,5"
+                   Stroke="{DynamicResource HoverBackground}"
+                   StrokeThickness="50" />
+
+
+        <Label Content="{Binding Name}"
+               Margin="60,10,100,0"
+               VerticalAlignment="Top"
+               FontSize="15" />
+        <Label Content="{Binding Id}"
+               Margin="60,0,100,10"
+               VerticalAlignment="Bottom"
+               FontSize="15" />
+        <Button HorizontalAlignment="Right"
+                Margin="0,20,60,0"
+                VerticalAlignment="Top"
+                Command="{Binding GoPageCommand}"
+                Style="{StaticResource CastomImageButton}"
+                Content="..\Resources\UI\search.png" />
+
+        <Button Margin="0,20,20,0"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Visibility="{Binding CanGo}"
+                Command="{Binding GoObjCommand}"
+                Style="{StaticResource CastomImageButton}"
+                Content="..\Resources\UI\goTo.png" />
+
+        <Image HorizontalAlignment="Left"
+               Margin="20,20,0,20"
+               Width="40"
+               Height="40"
+               Source="{Binding TypeIcon}" />
+
+
+    </Grid>
+</UserControl>
