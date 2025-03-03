@@ -31,26 +31,18 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void GoLookDBPage()
-        {
-            _pageController.CreatePage(PagesName.DBPage);
-        }
+        private void GoLookDBPage() => _pageController.CreatePage(PagesName.DBPage);
 
         public ICommand LookDBCommand => new RelayCommand<object>(_ => GoLookDBPage());
 
-        private void GoSearchPage()
-        {
-            _pageController.GoToPage(PagesName.SearchPage);
-        }
+        private void GoSearchPage() => _pageController.GoToPage(PagesName.SearchPage);
+
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => GoSearchPage());
 
         public ICommand TaskTreeCommand => new RelayCommand<object>(_ => GoTaskTreePage());
 
-        private void GoTaskTreePage()
-        {
-            _pageController.CreatePage(PagesName.TaskTree);
-        }
+        private void GoTaskTreePage() => _pageController.CreatePage(PagesName.TaskTree);
 
 
         public event PropertyChangedEventHandler PropertyChanged;
