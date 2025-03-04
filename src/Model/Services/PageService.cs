@@ -11,23 +11,26 @@ namespace PilotLookUp.Model.Services
 {
     public class PageService : IPageService
     {
-        private LookUpModel _lookUpModel { get; }
+        private IRepoService _lookUpModel { get; }
         private ICastomSearchService _searchService { get; }
         private ITabService _tabService { get; }
         private IWindowService _windowService { get; }
+        private ITreeItemService _treeItemService { get; }
 
         public PageService(
-            LookUpModel lookUpModel
+            IRepoService lookUpModel
             , StartViewInfo startViewInfo
             , ICastomSearchService searchService
             , ITabService tabService
-            , IWindowService windowService)
+            , IWindowService windowService
+            , ITreeItemService treeItemService)
         {
             _lookUpModel = lookUpModel;
             _searchService = searchService;
             _tabService = tabService;
-            _controlsHolder = new List<IPage>();
             _windowService = windowService;
+            _treeItemService = treeItemService;
+            _controlsHolder = new List<IPage>();
 
             if (startViewInfo.PageName != PagesName.None)
                 CreatePage(startViewInfo.PageName, startViewInfo.SelectedObject);
@@ -72,13 +75,13 @@ namespace PilotLookUp.Model.Services
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchVM(_lookUpModel, this, _searchService, _tabService));
+                    AddPage(new SearchVM( this, _searchService, _tabService));
                     GoToPage(pageName);
                     break;
                 case PagesName.TaskTree:
                     LookUpVM selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
                     PilotObjectHelper itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
-                    AddPage(new TaskTreeVM(_lookUpModel, itemOne, _searchService, _windowService));
+                    AddPage(new TaskTreeVM(_lookUpModel, itemOne, _searchService, _windowService, _treeItemService));
                     GoToPage(pageName);
                     break;
             }

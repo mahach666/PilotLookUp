@@ -1,7 +1,7 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
+using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using System.Collections.Generic;
@@ -18,22 +18,25 @@ namespace PilotLookUp.ViewModel
 {
     internal class TaskTreeVM : INotifyPropertyChanged, IPage
     {
-        private LookUpModel _lookUpModel;
+        private IRepoService _lookUpModel;
         private PilotObjectHelper _objectHelper;
         private ICastomSearchService _searchService;
         private IWindowService _windowService;
+        private ITreeItemService _treeItemService;
 
 
-        public TaskTreeVM(LookUpModel lookUpModel
+        public TaskTreeVM(IRepoService lookUpModel
             , PilotObjectHelper pilotObjectHelper
             , ICastomSearchService searchService
-            ,IWindowService windowService)
+            , IWindowService windowService
+            , ITreeItemService treeItemService)
         {
             _revokedTask = false;
             _lookUpModel = lookUpModel;
             _objectHelper = pilotObjectHelper;
             _searchService = searchService;
             _windowService = windowService;
+            _treeItemService = treeItemService;
             FirstParrentNode = new ObservableCollection<ICastomTree>();
             _ = LoadDataAsync();
         }
@@ -98,7 +101,7 @@ namespace PilotLookUp.ViewModel
             {
                 LastParrent = await _searchService.GetLastParent(dataObject);
                 ICastomTree rootNode = new ListItemVM(LastParrent);
-                rootNode = await _lookUpModel.FillChild(rootNode);
+                rootNode = await _treeItemService.FillChild(rootNode);
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -115,7 +118,7 @@ namespace PilotLookUp.ViewModel
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
                     ICastomTree rootNode = new ListItemVM(item);
-                    rootNode = await _lookUpModel.FillChild(rootNode);
+                    rootNode = await _treeItemService.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }
                 Application.Current.Dispatcher.Invoke(() =>

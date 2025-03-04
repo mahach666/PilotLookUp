@@ -2,16 +2,17 @@
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PilotLookUp.Model
+namespace PilotLookUp.Model.Services
 {
-    public class LookUpModel
+    public class RepoService : IRepoService
     {
         private IObjectsRepository _objectsRepository { get; }
 
-        public LookUpModel(IObjectsRepository objectsRepository)
+        public RepoService(IObjectsRepository objectsRepository)
         {
             _objectsRepository = objectsRepository;
         }
@@ -26,16 +27,15 @@ namespace PilotLookUp.Model
             }
             return res;
         }
-
-
         public ObjectSet GetWrapedRepo()
         {
             var pilotObjectMap = new PilotObjectMap(_objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
             return repo;
         }
-
-        public async Task<ICastomTree> FillChild(ICastomTree lastParrent)
-            => await TreeViewUtils.FillChild(_objectsRepository, lastParrent);
+        public async Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids)
+        {
+            return await new Tracer(_objectsRepository, null, null).Trace(guids);
+        }
     }
 }

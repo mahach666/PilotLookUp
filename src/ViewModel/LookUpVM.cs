@@ -1,7 +1,7 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
+using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +15,10 @@ namespace PilotLookUp.ViewModel
 {
     public class LookUpVM : INotifyPropertyChanged, IPage
     {
-        private LookUpModel _lookUpModel;
+        private IRepoService _lookUpModel;
         private IWindowService _windowService;
 
-        public LookUpVM(LookUpModel lookUpModel, IWindowService windowService)
+        public LookUpVM(IRepoService lookUpModel, IWindowService windowService)
         {
             _lookUpModel = lookUpModel;
             _windowService = windowService;

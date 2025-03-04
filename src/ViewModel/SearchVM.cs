@@ -1,7 +1,6 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,17 +13,15 @@ namespace PilotLookUp.ViewModel
 {
     internal class SearchVM : INotifyPropertyChanged, IPage
     {
-        private LookUpModel _lookUpModel { get; }
         private IPageService _pageController { get; }
         private ICastomSearchService _searchService { get; }
         private ITabService _tabService { get; }
 
-        public SearchVM(LookUpModel lookUpModel
-            , IPageService pageController
+        public SearchVM(
+            IPageService pageController
             , ICastomSearchService searchService
             , ITabService tabService)
         {
-            _lookUpModel = lookUpModel;
             _pageController = pageController;
             _searchService = searchService;
             _tabService = tabService;
@@ -81,7 +78,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<SearchResVM>();
             foreach (var item in objectSet)
             {
-                var vm = new SearchResVM(_lookUpModel, _pageController, _tabService, item);
+                var vm = new SearchResVM( _pageController, _tabService, item);
                 res.Add(vm);
             }
             Result = res;

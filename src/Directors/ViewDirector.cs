@@ -2,7 +2,6 @@
 using PilotLookUp.Contracts;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
 using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
@@ -20,9 +19,12 @@ namespace PilotLookUp
         {
             if (!selectedObjects.IsLookable) return;
 
-            var startInfo = new StartViewInfo() 
-            {PageName = PagesName.LookUpPage
-            , SelectedObject = selectedObjects };
+            var startInfo = new StartViewInfo()
+            {
+                PageName = PagesName.LookUpPage
+            ,
+                SelectedObject = selectedObjects
+            };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
@@ -30,7 +32,7 @@ namespace PilotLookUp
         public static void LookDB(IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
-            var startInfo = new StartViewInfo() 
+            var startInfo = new StartViewInfo()
             { PageName = PagesName.DBPage };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
@@ -39,7 +41,7 @@ namespace PilotLookUp
         public static void SearchPage(IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
-            var startInfo = new StartViewInfo() 
+            var startInfo = new StartViewInfo()
             { PageName = PagesName.SearchPage };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
@@ -67,10 +69,11 @@ namespace PilotLookUp
             container.RegisterInstance(tabServiceProvider);
             container.RegisterInstance(startViewInfo);
 
+            container.Register<IRepoService, RepoService>();
             container.Register<ICastomSearchService, SearchService>();
             container.Register<ITabService, TabService>();
             container.Register<IWindowService, WindowService>();
-            container.Register<LookUpModel>();
+            container.Register<ITreeItemService, TreeItemService>();
             container.Register<IPageService, PageService>();
             container.Register<MainVM>();
             container.Register<MainView>();

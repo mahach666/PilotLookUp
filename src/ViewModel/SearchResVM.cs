@@ -1,8 +1,6 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
-using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using System.Windows;
 using System.Windows.Input;
@@ -13,18 +11,17 @@ namespace PilotLookUp.ViewModel
 {
     internal class SearchResVM
     {
-        private LookUpModel _lookUpModel { get; }
         private PilotObjectHelper _dataObj { get; }
         private IPageService _pageController { get; }
         private ITabService _tabService { get; }
 
 
-        internal SearchResVM(LookUpModel lookUpModel
-            , IPageService pageController
+        internal SearchResVM(
+             IPageService pageController
             , ITabService tabService
             , PilotObjectHelper pilotObjectHelper)
         {
-            _lookUpModel = lookUpModel;
+           
             _dataObj = pilotObjectHelper;
             _pageController = pageController;
             _tabService = tabService;
