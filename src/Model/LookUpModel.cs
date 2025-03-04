@@ -26,7 +26,7 @@ namespace PilotLookUp.Model
             ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
         }
 
-        public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)
+        public async Task<List<ObjectSet>> GetObjInfo(PilotObjectHelper sender)
         {
             var res = new List<ObjectSet>();
             foreach (var pair in sender.Reflection.KeyValuePairs)

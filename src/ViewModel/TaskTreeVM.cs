@@ -154,7 +154,7 @@ namespace PilotLookUp.ViewModel
         {
             Task.Run(async () =>
             {
-                Info = await _lookUpModel.Info(_dataObjectSelected.PilotObjectHelper);
+                Info = await _lookUpModel.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
             });
         }
 
