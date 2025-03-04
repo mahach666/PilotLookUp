@@ -1,7 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
-using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
@@ -15,7 +13,8 @@ namespace PilotLookUp.Model
         private IObjectsRepository _objectsRepository { get; }
         private ITabServiceProvider _tabServiceProvider { get; }
 
-        public LookUpModel(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public LookUpModel(IObjectsRepository objectsRepository
+            , ITabServiceProvider tabServiceProvider)
         {
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
@@ -52,12 +51,12 @@ namespace PilotLookUp.Model
         public LookUpVM GetCastomLookUpVM(ObjectSet pilotObjectHelper)
         {
             var vm = new LookUpVM(this);
-            vm.SelectionDataObjects = pilotObjectHelper.Select(x => new ListItemVM(x)).ToList(); ;
+            vm.SelectionDataObjects = pilotObjectHelper.Select(x => new ListItemVM(x)).ToList(); 
             return vm;
         }
 
-        public void GoTo(IDataObject dataObject)
-           => _tabServiceProvider.ShowElement(dataObject.Id);
+        //public void GoTo(IDataObject dataObject)
+        //   => _tabServiceProvider.ShowElement(dataObject.Id);
 
         public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
             => await TreeViewUtils.FillChild(_objectsRepository, lastParrent);

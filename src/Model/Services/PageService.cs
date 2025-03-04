@@ -11,10 +11,14 @@ namespace PilotLookUp.Model.Services
 {
     public class PageService : IPageService
     {
-        public PageService(LookUpModel lookUpModel, StartViewInfo startViewInfo, ICastomSearchService searchService)
+        public PageService(LookUpModel lookUpModel
+            , StartViewInfo startViewInfo
+            , ICastomSearchService searchService
+            , ITabService tabService)
         {
             _lookUpModel = lookUpModel;
             _searchService = searchService;
+            _tabService = tabService;
             _controlsHolder = new List<IPage>();
 
             if (startViewInfo.PageName != PagesName.None)
@@ -29,6 +33,7 @@ namespace PilotLookUp.Model.Services
         private List<IPage> _controlsHolder { get; }
         private LookUpModel _lookUpModel { get; }
         private ICastomSearchService _searchService { get; }
+        private ITabService _tabService { get; }
 
 
         public void GoToPage(PagesName pageName)
@@ -60,7 +65,7 @@ namespace PilotLookUp.Model.Services
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchVM(_lookUpModel, this, _searchService));
+                    AddPage(new SearchVM(_lookUpModel, this, _searchService, _tabService));
                     GoToPage(pageName);
                     break;
                 case PagesName.TaskTree:

@@ -2,6 +2,7 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
+using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using System.Windows;
 using System.Windows.Input;
@@ -13,16 +14,20 @@ namespace PilotLookUp.ViewModel
     internal class SearchResVM
     {
         private LookUpModel _lookUpModel { get; }
-
         private PilotObjectHelper _dataObj { get; }
         private IPageService _pageController { get; }
+        private ITabService _tabService { get; }
 
 
-        internal SearchResVM(LookUpModel lookUpModel, IPageService pageController, PilotObjectHelper pilotObjectHelper)
+        internal SearchResVM(LookUpModel lookUpModel
+            , IPageService pageController
+            , ITabService tabService
+            , PilotObjectHelper pilotObjectHelper)
         {
             _lookUpModel = lookUpModel;
             _dataObj = pilotObjectHelper;
             _pageController = pageController;
+            _tabService = tabService;
         }
 
         public string Name => "DisplayName : " + _dataObj.Name;
@@ -40,7 +45,7 @@ namespace PilotLookUp.ViewModel
         private void GoObj()
         {
             if (_dataObj?.LookUpObject is IDataObject dataObj)
-                _lookUpModel.GoTo(dataObj);
+                _tabService.GoTo(dataObj);
         }
 
         public ICommand GoObjCommand => new RelayCommand<object>(_ => GoObj());
