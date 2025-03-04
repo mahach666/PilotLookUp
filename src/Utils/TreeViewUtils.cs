@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
 using System;
@@ -11,13 +12,13 @@ namespace PilotLookUp.Utils
 {
     static class TreeViewUtils
     {
-        public static async Task<ListItemVM> FillChild(IObjectsRepository objectsRepository, ListItemVM lastParrent)
+        public static async Task<ICastomTree> FillChild(IObjectsRepository objectsRepository, ICastomTree lastParrent)
         {
             await BuildChildNodes(objectsRepository, lastParrent);
             return lastParrent;
         }
 
-        private static async Task BuildChildNodes(IObjectsRepository objectsRepository, ListItemVM lastParrent)
+        private static async Task BuildChildNodes(IObjectsRepository objectsRepository, ICastomTree lastParrent)
         {
             var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
             List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
@@ -31,7 +32,7 @@ namespace PilotLookUp.Utils
                 }
                 else
                 {
-                    lastParrent.Children = new ObservableCollection<ListItemVM>()
+                    lastParrent.Children = new ObservableCollection<ICastomTree>()
                     {
                         childNode
                     };

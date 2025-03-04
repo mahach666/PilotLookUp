@@ -1,9 +1,9 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Model
@@ -11,20 +11,11 @@ namespace PilotLookUp.Model
     public class LookUpModel
     {
         private IObjectsRepository _objectsRepository { get; }
-        private ITabServiceProvider _tabServiceProvider { get; }
 
-        public LookUpModel(IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider)
+        public LookUpModel(IObjectsRepository objectsRepository)
         {
             _objectsRepository = objectsRepository;
-            _tabServiceProvider = tabServiceProvider;
         }
-
-        //public void DataGridSelector(ObjectSet obj)
-        //{
-        //    if (obj == null) return;
-        //    ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
-        //}
 
         public async Task<List<ObjectSet>> GetObjInfo(PilotObjectHelper sender)
         {
@@ -37,34 +28,15 @@ namespace PilotLookUp.Model
             return res;
         }
 
-        //public async Task<ObjectSet> SearchByString(string request)
-        //    => await SearchService.GetObjByString(_objectsRepository, request);
 
-
-        public ObjectSet GeWrapedRepo()
+        public ObjectSet GetWrapedRepo()
         {
             var pilotObjectMap = new PilotObjectMap(_objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
             return repo;
         }
 
-        //public LookUpVM GetCastomLookUpVM(ObjectSet pilotObjectHelper)
-        //{
-        //    var vm = new LookUpVM(this);
-        //    vm.SelectionDataObjects = pilotObjectHelper.Select(x => new ListItemVM(x)).ToList(); 
-        //    return vm;
-        //}
-
-        //public void GoTo(IDataObject dataObject)
-        //   => _tabServiceProvider.ShowElement(dataObject.Id);
-
-        public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
+        public async Task<ICastomTree> FillChild(ICastomTree lastParrent)
             => await TreeViewUtils.FillChild(_objectsRepository, lastParrent);
-
-        //public async Task<DataObjectHelper> SearchLastParent(IDataObject dataObject)
-        //   => await SearchService.GetLastParent(_objectsRepository, dataObject);
-
-        //public async Task<ObjectSet> SearchBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
-        //    => await SearchService.GetBaseParentsOfRelations(_objectsRepository, objectHelper, findRevoked);
     }
 }

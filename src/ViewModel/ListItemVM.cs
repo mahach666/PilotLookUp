@@ -1,4 +1,5 @@
-﻿using PilotLookUp.Objects;
+﻿using PilotLookUp.Interfaces;
+using PilotLookUp.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -6,20 +7,20 @@ using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.ViewModel
 {
-    public class ListItemVM : INotifyPropertyChanged
+    public class ListItemVM : INotifyPropertyChanged, ICastomTree
     {
         public ListItemVM(PilotObjectHelper pilotObjectHelper)
         {
             PilotObjectHelper = pilotObjectHelper;
-            Children = new ObservableCollection<ListItemVM>();
+            Children = new ObservableCollection<ICastomTree>();
         }
 
         public PilotObjectHelper PilotObjectHelper { get; }
         public string ObjName => PilotObjectHelper.Name;
         public BitmapImage ObjImage => PilotObjectHelper.GetImage();
 
-        private ObservableCollection<ListItemVM> _children;
-        public ObservableCollection<ListItemVM> Children
+        private ObservableCollection<ICastomTree> _children;
+        public ObservableCollection<ICastomTree> Children
         {
             get => _children;
             set
@@ -29,7 +30,7 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ListItemVM Parrent { get; set; }
+        public ICastomTree Parrent { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

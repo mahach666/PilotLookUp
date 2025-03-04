@@ -92,7 +92,7 @@ namespace PilotLookUp.Model.Services
 
         private LookUpVM GetDBLookUpVM()
         {
-            var repo = _lookUpModel.GeWrapedRepo();
+            var repo = _lookUpModel.GetWrapedRepo();
             return GetCastomLookUpVM(repo);
         }
 

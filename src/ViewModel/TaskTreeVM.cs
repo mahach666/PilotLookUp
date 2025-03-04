@@ -34,7 +34,7 @@ namespace PilotLookUp.ViewModel
             _objectHelper = pilotObjectHelper;
             _searchService = searchService;
             _windowService = windowService;
-            FirstParrentNode = new ObservableCollection<ListItemVM>();
+            FirstParrentNode = new ObservableCollection<ICastomTree>();
             _ = LoadDataAsync();
         }
 
@@ -97,24 +97,24 @@ namespace PilotLookUp.ViewModel
             if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
             {
                 LastParrent = await _searchService.GetLastParent(dataObject);
-                var rootNode = new ListItemVM(LastParrent);
+                ICastomTree rootNode = new ListItemVM(LastParrent);
                 rootNode = await _lookUpModel.FillChild(rootNode);
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     RevokedTaskVisible = Visibility.Hidden;
                     FirstParrentNode.Clear();
-                    FirstParrentNode = new ObservableCollection<ListItemVM> { rootNode };
+                    FirstParrentNode = new ObservableCollection<ICastomTree> { rootNode };
                 });
                 return;
             }
             else
             {
-                ObservableCollection<ListItemVM> treeItems = new ObservableCollection<ListItemVM>();
+                var treeItems = new ObservableCollection<ICastomTree>();
                 List<PilotObjectHelper> allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
-                    var rootNode = new ListItemVM(item);
+                    ICastomTree rootNode = new ListItemVM(item);
                     rootNode = await _lookUpModel.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }
@@ -128,9 +128,9 @@ namespace PilotLookUp.ViewModel
         }
         private PilotObjectHelper LastParrent { get; set; }
 
-        private ObservableCollection<ListItemVM> _firstParrentNode;
+        private ObservableCollection<ICastomTree> _firstParrentNode;
 
-        public ObservableCollection<ListItemVM> FirstParrentNode
+        public ObservableCollection<ICastomTree> FirstParrentNode
         {
 
             get => _firstParrentNode;
