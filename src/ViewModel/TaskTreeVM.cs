@@ -1,7 +1,6 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using System.Collections.Generic;
@@ -18,15 +17,16 @@ namespace PilotLookUp.ViewModel
 {
     internal class TaskTreeVM : INotifyPropertyChanged, IPage
     {
-        private IRepoService _lookUpModel;
         private PilotObjectHelper _objectHelper;
+        private IRepoService _lookUpModel;
         private ICastomSearchService _searchService;
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
 
 
-        public TaskTreeVM(IRepoService lookUpModel
-            , PilotObjectHelper pilotObjectHelper
+        public TaskTreeVM(
+             PilotObjectHelper pilotObjectHelper
+            , IRepoService lookUpModel
             , ICastomSearchService searchService
             , IWindowService windowService
             , ITreeItemService treeItemService)
@@ -114,7 +114,7 @@ namespace PilotLookUp.ViewModel
             else
             {
                 var treeItems = new ObservableCollection<ICastomTree>();
-                List<PilotObjectHelper> allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
+                ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
                     ICastomTree rootNode = new ListItemVM(item);
