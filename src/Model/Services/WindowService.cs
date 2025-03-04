@@ -16,7 +16,7 @@ namespace PilotLookUp.Model.Services
             _tabServiceProvider = tabServiceProvider;
         }
 
-        public void DataGridSelector(ObjectSet obj)
+        public void CreateNewMainWindiw(ObjectSet obj)
         {
             if (obj == null) return;
             ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
