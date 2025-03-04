@@ -14,30 +14,40 @@ namespace PilotLookUp
 {
     public static class ViewDirector
     {
-        public static void LookSeleсtion(ObjectSet selectedObjects, IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public static void LookSeleсtion(ObjectSet selectedObjects
+            , IObjectsRepository objectsRepository
+            , ITabServiceProvider tabServiceProvider)
         {
             if (!selectedObjects.IsLookable) return;
 
-            var startInfo = new StartViewInfo() {PageName = PagesName.LookUpPage, SelectedObject = selectedObjects };
+            var startInfo = new StartViewInfo() 
+            {PageName = PagesName.LookUpPage
+            , SelectedObject = selectedObjects };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
 
-        public static void LookDB(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public static void LookDB(IObjectsRepository objectsRepository
+            , ITabServiceProvider tabServiceProvider)
         {
-            var startInfo = new StartViewInfo() { PageName = PagesName.DBPage };
+            var startInfo = new StartViewInfo() 
+            { PageName = PagesName.DBPage };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
 
-        public static void SearchPage(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
+        public static void SearchPage(IObjectsRepository objectsRepository
+            , ITabServiceProvider tabServiceProvider)
         {
-            var startInfo = new StartViewInfo() { PageName = PagesName.SearchPage };
+            var startInfo = new StartViewInfo() 
+            { PageName = PagesName.SearchPage };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
 
-        private static void ShowView(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, StartViewInfo startViewInfo)
+        private static void ShowView(IObjectsRepository objectsRepository
+            , ITabServiceProvider tabServiceProvider
+            , StartViewInfo startViewInfo)
         {
             var container = ConfigureContainer(objectsRepository, tabServiceProvider, startViewInfo);
 
@@ -47,7 +57,9 @@ namespace PilotLookUp
             window.Show();
         }
 
-        private static Container ConfigureContainer(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, StartViewInfo startViewInfo)
+        private static Container ConfigureContainer(IObjectsRepository objectsRepository
+            , ITabServiceProvider tabServiceProvider
+            , StartViewInfo startViewInfo)
         {
             var container = new Container();
 
