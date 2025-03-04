@@ -1,8 +1,12 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
+using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.View.UserControls;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -13,7 +17,7 @@ namespace PilotLookUp.ViewModel
 
         public MainVM(IPageService pageService)
         {
-            _pageController= pageService;
+            _pageController = pageService;
             _pageController.PageChanged += page => SelectedControl = page;
             SelectedControl = _pageController.ActivePage;
         }
@@ -26,6 +30,18 @@ namespace PilotLookUp.ViewModel
             {
                 _selectedControl = value;
                 OnPropertyChanged();
+                OnPropertyChanged("TaskButtVisibilities");
+            }
+        }
+        public Visibility TaskButtVisibilities
+        {
+            get
+            {
+                if (SelectedControl is LookUpVM lookUpVM
+                        && lookUpVM.DataObjectSelected is ICastomTree castomTree
+                        && castomTree.PilotObjectHelper is DataObjectHelper)
+                    return Visibility.Visible;
+                return Visibility.Hidden;
             }
         }
 

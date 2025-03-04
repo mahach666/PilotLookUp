@@ -49,7 +49,8 @@
                 <Button ToolTip="Task"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding TaskTreeCommand}"
-                        Content="..\Resources\UI\task.png" />
+                        Content="..\Resources\UI\task.png"
+                        Visibility="{Binding TaskButtVisibilities}"/>
             </UniformGrid>
         </Grid>
 
