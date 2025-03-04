@@ -1,29 +1,38 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Extensions;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Utils;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PilotLookUp.Utils
+namespace PilotLookUp.Model.Services
 {
-    static class SearchUtils
+    public class SearchService : ICastomSearchService
     {
-        static public async Task<ObjectSet> GetObjByString(IObjectsRepository objectsRepository, string request)
+        private IObjectsRepository _objectsRepository { get; }
+
+        public SearchService(IObjectsRepository objectsRepository)
         {
-            var tracer = new Tracer(objectsRepository, null, null);
+            _objectsRepository = objectsRepository;
+        }
+
+        public async Task<ObjectSet> GetObjByString(string request)
+        {
+            var tracer = new Tracer(_objectsRepository, null, null);
             if (Guid.TryParse(request, out var id))
             {
-                var res = await tracer.Trace(await objectsRepository.GetObjByGuid(id));
+                var res = await tracer.Trace(await _objectsRepository.GetObjByGuid(id));
                 return res;
             }
             else if (int.TryParse(request, out var intId))
             {
                 var res = new ObjectSet(null);
-                var person = objectsRepository.GetPerson(intId);
-                var orgUnit = objectsRepository.GetOrganisationUnit(intId);
-                var iType = objectsRepository.GetType(intId);
+                var person = _objectsRepository.GetPerson(intId);
+                var orgUnit = _objectsRepository.GetOrganisationUnit(intId);
+                var iType = _objectsRepository.GetType(intId);
                 if (person != null) { res.AddRange(await tracer.Trace(person)); }
                 if (orgUnit != null) { res.AddRange(await tracer.Trace(orgUnit)); }
                 if (iType != null) { res.AddRange(await tracer.Trace(iType)); }
@@ -34,7 +43,7 @@ namespace PilotLookUp.Utils
             return null;
         }
 
-        static public async Task<ObjectSet> GetBaseParentsOfRelations(IObjectsRepository objectsRepository, PilotObjectHelper objectHelper, bool findRevoked = false)
+        public async Task<ObjectSet> GetBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
         {
             ObjectSet pilotObjectHelpers = new ObjectSet(null);
             ObjectSet childrenSet;
@@ -42,7 +51,7 @@ namespace PilotLookUp.Utils
             if (objectHelper.LookUpObject is IDataObject dataObject)
             {
                 var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
-                childrenSet = await new Tracer(objectsRepository, null, null).Trace(listId);
+                childrenSet = await new Tracer(_objectsRepository, null, null).Trace(listId);
             }
             else return null;
 
@@ -59,7 +68,7 @@ namespace PilotLookUp.Utils
                                 continue;
                             }
                         }
-                        DataObjectHelper lastParrent = await GetLastParent(objectsRepository, dataObj);
+                        DataObjectHelper lastParrent = await GetLastParent(dataObj);
                         if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
                         {
                             pilotObjectHelpers.Add(lastParrent);
@@ -70,12 +79,12 @@ namespace PilotLookUp.Utils
             return pilotObjectHelpers;
         }
 
-        static public async Task<DataObjectHelper> GetLastParent(IObjectsRepository objectsRepository, IDataObject dataObject)
+        public async Task<DataObjectHelper> GetLastParent(IDataObject dataObject)
         {
             if (dataObject != null)
             {
-                var parent = await dataObject.FindLastParrent(objectsRepository);
-                var objSet = await new Tracer(objectsRepository, null, null).Trace(parent);
+                var parent = await dataObject.FindLastParrent(_objectsRepository);
+                var objSet = await new Tracer(_objectsRepository, null, null).Trace(parent);
                 return objSet.FirstOrDefault() is DataObjectHelper result ? result : null;
             }
             return null;

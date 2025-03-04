@@ -67,6 +67,7 @@ namespace PilotLookUp
             container.RegisterInstance(tabServiceProvider);
             container.RegisterInstance(startViewInfo);
 
+            container.Register<ICastomSearchService, SearchService>();
             container.Register<LookUpModel>();
             container.Register<IPageService, PageService>();
             container.Register<MainVM>();

@@ -16,11 +16,15 @@ namespace PilotLookUp.ViewModel
     {
         private LookUpModel _lookUpModel { get; }
         private IPageService _pageController { get; }
+        private ICastomSearchService _searchService { get; }
 
-        public SearchVM(LookUpModel lookUpModel, IPageService pageController)
+        public SearchVM(LookUpModel lookUpModel
+            , IPageService pageController
+            , ICastomSearchService searchService)
         {
             _lookUpModel = lookUpModel;
             _pageController = pageController;
+            _searchService = searchService;
             ClipboardCheck();
         }
 
@@ -30,7 +34,7 @@ namespace PilotLookUp.ViewModel
             Application.Current.Dispatcher.Invoke(async () =>
             {
                 var res = new List<UserControl>();
-                var searchRes = await _lookUpModel.SearchByString(clipboardText);
+                var searchRes = await _searchService.GetObjByString(clipboardText);
                 {
                     if (searchRes?.Count > 0)
                     {
@@ -64,7 +68,7 @@ namespace PilotLookUp.ViewModel
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {
-                var searchRes = await _lookUpModel.SearchByString(Text);
+                var searchRes = await _searchService.GetObjByString(Text);
                 SetRes(searchRes);
             });
         }

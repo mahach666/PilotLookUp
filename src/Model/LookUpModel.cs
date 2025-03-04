@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using PilotLookUp.Utils;
@@ -37,8 +38,8 @@ namespace PilotLookUp.Model
             return res;
         }
 
-        public async Task<ObjectSet> SearchByString(string request)
-            => await SearchUtils.GetObjByString(_objectsRepository, request);
+        //public async Task<ObjectSet> SearchByString(string request)
+        //    => await SearchService.GetObjByString(_objectsRepository, request);
 
 
         public LookUpVM GetDBLookUpVM()
@@ -61,10 +62,10 @@ namespace PilotLookUp.Model
         public async Task<ListItemVM> FillChild(ListItemVM lastParrent)
             => await TreeViewUtils.FillChild(_objectsRepository, lastParrent);
 
-        public async Task<DataObjectHelper> SearchLastParent(IDataObject dataObject)
-           => await SearchUtils.GetLastParent(_objectsRepository, dataObject);
+        //public async Task<DataObjectHelper> SearchLastParent(IDataObject dataObject)
+        //   => await SearchService.GetLastParent(_objectsRepository, dataObject);
 
-        public async Task<ObjectSet> SearchBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
-            => await SearchUtils.GetBaseParentsOfRelations(_objectsRepository, objectHelper, findRevoked);
+        //public async Task<ObjectSet> SearchBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
+        //    => await SearchService.GetBaseParentsOfRelations(_objectsRepository, objectHelper, findRevoked);
     }
 }
