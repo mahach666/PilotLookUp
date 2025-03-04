@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class MainVM : INotifyPropertyChanged
+    public class MainVM : INotifyPropertyChanged
     {
         private IPageService _pageController { get; }
 

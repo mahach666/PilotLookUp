@@ -4,7 +4,7 @@ using System;
 
 namespace PilotLookUp.Interfaces
 {
-    internal interface IPageService
+    public interface IPageService
     {
         public IPage ActivePage { get; }
         public event Action<IPage> PageChanged;

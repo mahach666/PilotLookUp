@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Model
 {
-    internal class LookUpModel
+    public class LookUpModel
     {
         private IObjectsRepository _objectsRepository { get; }
         private ITabServiceProvider _tabServiceProvider { get; }
@@ -23,7 +23,7 @@ namespace PilotLookUp.Model
         public void DataGridSelector(ObjectSet obj)
         {
             if (obj == null) return;
-            ViewBuilder.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
+            ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
         }
 
         public async Task<List<ObjectSet>> Info(PilotObjectHelper sender)

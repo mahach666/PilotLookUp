@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class LookUpVM : INotifyPropertyChanged, IPage
+    public class LookUpVM : INotifyPropertyChanged, IPage
     {
         private LookUpModel _lookUpModel;
 

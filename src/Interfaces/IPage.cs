@@ -2,7 +2,7 @@
 
 namespace PilotLookUp.Interfaces
 {
-    interface IPage
+    public interface IPage
     {
         PagesName GetName();
     }

@@ -1,26 +1,23 @@
-﻿using Ascon.Pilot.SDK;
+﻿using PilotLookUp.Contracts;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PilotLookUp.Services
+namespace PilotLookUp.Model.Services
 {
-    internal class PageController : IPageService
+    public class PageService : IPageService
     {
-        internal PageController(
-            LookUpModel lookUpModel
-            , PagesName startPage
-             , ObjectSet dataObj = null)
+        public PageService(LookUpModel lookUpModel, StartViewInfo startViewInfo)
         {
             _lookUpModel = lookUpModel;
             _controlsHolder = new List<IPage>();
-            if (startPage != PagesName.None)
-                CreatePage(startPage, dataObj);
+
+            if (startViewInfo.PageName != PagesName.None)
+                CreatePage(startViewInfo.PageName, startViewInfo.SelectedObject);
         }
 
         public event Action<IPage> PageChanged;

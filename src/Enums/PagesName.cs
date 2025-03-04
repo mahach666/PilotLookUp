@@ -1,6 +1,6 @@
 ﻿namespace PilotLookUp.Enums
 {
-    enum PagesName
+    public enum PagesName
     {
         LookUpPage,
         None,

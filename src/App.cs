@@ -38,6 +38,8 @@ namespace PilotLookUp
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
+
+
             _theme = pilotDialogService.Theme;
         }
 
@@ -115,12 +117,12 @@ namespace PilotLookUp
         {
             if (name == "LookDB")
             {
-                ViewBuilder.LookDB(_objectsRepository, _tabServiceProvider);
+                ViewDirector.LookDB(_objectsRepository, _tabServiceProvider);
                 return;
             }
             else if (name == "Search")
             {
-                ViewBuilder.SearchPage(_objectsRepository, _tabServiceProvider);
+                ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider);
                 return;
             }
 
@@ -128,7 +130,7 @@ namespace PilotLookUp
 
             if (name == "LookSelected")
             {
-                ViewBuilder.LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
+                ViewDirector.LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
                 return;
             }
 

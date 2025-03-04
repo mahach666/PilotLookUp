@@ -96,6 +96,7 @@
 		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="SimpleInjector" Version="5.5.0" />
 		<PackageReference Include="Svg" Version="3.4.7" />
 		<PackageReference Include="System.Composition" Version="*" />
 	</ItemGroup>
@@ -135,5 +136,9 @@
 	  <Resource Include="Resources\UI\lookUpView.png" />
 	  <Resource Include="Resources\UI\search.png" />
 	  <Resource Include="Resources\UI\task.png" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="ViewModel\Commands\" />
 	</ItemGroup>
 </Project>

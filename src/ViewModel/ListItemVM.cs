@@ -10,7 +10,7 @@ using Brush = System.Windows.Media.Brush;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class ListItemVM : INotifyPropertyChanged
+    public class ListItemVM : INotifyPropertyChanged
     {
         public ListItemVM(PilotObjectHelper pilotObjectHelper)
         {
