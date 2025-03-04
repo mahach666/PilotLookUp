@@ -21,15 +21,19 @@ namespace PilotLookUp.ViewModel
         private LookUpModel _lookUpModel;
         private PilotObjectHelper _objectHelper;
         private ICastomSearchService _searchService;
+        private IWindowService _windowService;
+
 
         public TaskTreeVM(LookUpModel lookUpModel
             , PilotObjectHelper pilotObjectHelper
-            , ICastomSearchService searchService)
+            , ICastomSearchService searchService
+            ,IWindowService windowService)
         {
             _revokedTask = false;
             _lookUpModel = lookUpModel;
             _objectHelper = pilotObjectHelper;
             _searchService = searchService;
+            _windowService = windowService;
             FirstParrentNode = new ObservableCollection<ListItemVM>();
             _ = LoadDataAsync();
         }
@@ -183,7 +187,7 @@ namespace PilotLookUp.ViewModel
                 OnPropertyChanged();
             }
         }
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _lookUpModel.DataGridSelector(_dataGridSelected));
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.DataGridSelector(_dataGridSelected));
 
         private void CopyToClipboard(string sender)
         {

@@ -1,12 +1,8 @@
 ﻿using PilotLookUp.Objects;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Brush = System.Windows.Media.Brush;
 
 namespace PilotLookUp.ViewModel
 {

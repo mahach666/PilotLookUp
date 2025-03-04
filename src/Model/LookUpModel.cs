@@ -20,11 +20,11 @@ namespace PilotLookUp.Model
             _tabServiceProvider = tabServiceProvider;
         }
 
-        public void DataGridSelector(ObjectSet obj)
-        {
-            if (obj == null) return;
-            ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
-        }
+        //public void DataGridSelector(ObjectSet obj)
+        //{
+        //    if (obj == null) return;
+        //    ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
+        //}
 
         public async Task<List<ObjectSet>> GetObjInfo(PilotObjectHelper sender)
         {
@@ -41,19 +41,19 @@ namespace PilotLookUp.Model
         //    => await SearchService.GetObjByString(_objectsRepository, request);
 
 
-        public LookUpVM GetDBLookUpVM()
+        public ObjectSet GeWrapedRepo()
         {
             var pilotObjectMap = new PilotObjectMap(_objectsRepository);
             var repo = new ObjectSet(null) { pilotObjectMap.Wrap(_objectsRepository) };
-            return GetCastomLookUpVM(repo);
+            return repo;
         }
 
-        public LookUpVM GetCastomLookUpVM(ObjectSet pilotObjectHelper)
-        {
-            var vm = new LookUpVM(this);
-            vm.SelectionDataObjects = pilotObjectHelper.Select(x => new ListItemVM(x)).ToList(); 
-            return vm;
-        }
+        //public LookUpVM GetCastomLookUpVM(ObjectSet pilotObjectHelper)
+        //{
+        //    var vm = new LookUpVM(this);
+        //    vm.SelectionDataObjects = pilotObjectHelper.Select(x => new ListItemVM(x)).ToList(); 
+        //    return vm;
+        //}
 
         //public void GoTo(IDataObject dataObject)
         //   => _tabServiceProvider.ShowElement(dataObject.Id);
