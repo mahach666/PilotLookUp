@@ -13,7 +13,8 @@ namespace PilotLookUp
 {
     public static class ViewDirector
     {
-        public static void LookSeleсtion(ObjectSet selectedObjects
+        public static void LookSeleсtion(
+            ObjectSet selectedObjects
             , IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
@@ -21,15 +22,15 @@ namespace PilotLookUp
 
             var startInfo = new StartViewInfo()
             {
-                PageName = PagesName.LookUpPage
-            ,
+                PageName = PagesName.LookUpPage,
                 SelectedObject = selectedObjects
             };
 
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
 
-        public static void LookDB(IObjectsRepository objectsRepository
+        public static void LookDB(
+            IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
             var startInfo = new StartViewInfo()
@@ -38,7 +39,8 @@ namespace PilotLookUp
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
 
-        public static void SearchPage(IObjectsRepository objectsRepository
+        public static void SearchPage(
+            IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
             var startInfo = new StartViewInfo()
@@ -47,7 +49,8 @@ namespace PilotLookUp
             ShowView(objectsRepository, tabServiceProvider, startInfo);
         }
 
-        private static void ShowView(IObjectsRepository objectsRepository
+        private static void ShowView(
+            IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider
             , StartViewInfo startViewInfo)
         {
@@ -59,7 +62,8 @@ namespace PilotLookUp
             window.Show();
         }
 
-        private static Container ConfigureContainer(IObjectsRepository objectsRepository
+        private static Container ConfigureContainer(
+            IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider
             , StartViewInfo startViewInfo)
         {
