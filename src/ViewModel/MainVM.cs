@@ -2,9 +2,7 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects.TypeHelpers;
-using PilotLookUp.View.UserControls;
 using System.ComponentModel;
-using System.Diagnostics.Eventing.Reader;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
