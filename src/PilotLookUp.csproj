@@ -83,6 +83,7 @@
 	  <None Remove="Resources\TypeIcons\intIcon.png" />
 	  <None Remove="Resources\TypeIcons\keyValuePairIcon.png" />
 	  <None Remove="Resources\TypeIcons\relationIcon.png" />
+	  <None Remove="Resources\TypeIcons\reportIcon.png" />
 	  <None Remove="Resources\TypeIcons\signatureIcon.png" />
 	  <None Remove="Resources\TypeIcons\stateIcon.png" />
 	  <None Remove="Resources\TypeIcons\stateMachineIcon.png" />
@@ -124,6 +125,7 @@
 	  <Resource Include="Resources\TypeIcons\intIcon.png" />
 	  <Resource Include="Resources\TypeIcons\keyValuePairIcon.png" />
 	  <Resource Include="Resources\TypeIcons\relationIcon.png" />
+	  <Resource Include="Resources\TypeIcons\reportIcon.png" />
 	  <Resource Include="Resources\TypeIcons\signatureIcon.png" />
 	  <Resource Include="Resources\TypeIcons\stateIcon.png" />
 	  <Resource Include="Resources\TypeIcons\stateMachineIcon.png" />

@@ -62,6 +62,7 @@ namespace PilotLookUp.Objects
                 IStateInfo value => new StateInfoHelper(value, _objectsRepository),
                 ILockInfo value => new LockInfoHelper(value, _objectsRepository),
                 ISignatureRequest value => new SignatureRequestHelper(value),
+                IReportItem value => new ReportItemHelper(value),
                 ISignature value => new SignatureHelper(value),
                 null => new NullHelper(null),
 
