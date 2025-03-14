@@ -17,7 +17,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\UI\reportIcon.png", UriKind.RelativeOrAbsolute));
+            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\reportIcon.png", UriKind.RelativeOrAbsolute));
         }
     }
 }
