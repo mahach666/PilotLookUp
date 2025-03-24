@@ -27,28 +27,40 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <!-- TextBox занимает столько, сколько нужно -->
+                    <RowDefinition Height="*" />
+                    <!-- ListBox занимает все оставшееся место -->
+                </Grid.RowDefinitions>
 
-            <ListBox ItemsSource="{Binding SelectionDataObjects}"
-                     VirtualizingPanel.IsVirtualizing="True"
-                     VirtualizingPanel.VirtualizationMode="Recycling"
-                     ScrollViewer.CanContentScroll="True"
-                     Grid.Column="0"
-                     SelectedItem="{Binding DataObjectSelected}">
-
-                <ListBox.ItemContainerStyle>
-                    <StaticResource ResourceKey="ListBoxItem_Style" />
-                </ListBox.ItemContainerStyle>
+                <TextBox Grid.Row="0"
+                           Text="MMMMMMMMMMMMMMMM">
+                </TextBox>
                 
-                <ListBox.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Копировать выделенное"
-                                  Command="{Binding CopyCommand}"
-                                  CommandParameter="List" />
-                    </ContextMenu>
-                </ListBox.ContextMenu>
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding SelectionDataObjects}"
+                         VirtualizingPanel.IsVirtualizing="True"
+                         VirtualizingPanel.VirtualizationMode="Recycling"
+                         ScrollViewer.CanContentScroll="True"
+                         SelectedItem="{Binding DataObjectSelected}">
 
-            </ListBox>
+                    <ListBox.ItemContainerStyle>
+                        <StaticResource ResourceKey="ListBoxItem_Style" />
+                    </ListBox.ItemContainerStyle>
 
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Копировать выделенное"
+                                      Command="{Binding CopyCommand}"
+                                      CommandParameter="List" />
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+
+                </ListBox>
+
+            </Grid>
 
             <GridSplitter Grid.Column="1"
                           ShowsPreview="False"
