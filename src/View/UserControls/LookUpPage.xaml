@@ -36,11 +36,11 @@
                 </Grid.RowDefinitions>
 
                 <TextBox Grid.Row="0"
-                           Text="MMMMMMMMMMMMMMMM">
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
                 
                 <ListBox Grid.Row="1"
-                         ItemsSource="{Binding SelectionDataObjects}"
+                         ItemsSource="{Binding FiltredDataObjects}"
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.VirtualizationMode="Recycling"
                          ScrollViewer.CanContentScroll="True"

@@ -17,6 +17,7 @@ namespace PilotLookUp.ViewModel
 
         public PilotObjectHelper PilotObjectHelper { get; }
         public string ObjName => PilotObjectHelper.Name;
+        public string StrId => PilotObjectHelper.StringId;
         public BitmapImage ObjImage => PilotObjectHelper.GetImage();
 
         private ObservableCollection<ICastomTree> _children;

@@ -33,10 +33,49 @@ namespace PilotLookUp.ViewModel
                 if (value == null || !value.Any()) return;
                 _selectionDataObjects = value;
                 DataObjectSelected = value?.FirstOrDefault();
-                UpdateInfo();
                 OnPropertyChanged();
             }
         }
+
+        private string _searchText;
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                OnPropertyChanged("FiltredDataObjects");
+            }
+        }
+
+        public List<ListItemVM> FiltredDataObjects
+        {
+            get
+            {
+                if (SearchText?.Length >= 2)
+                {
+                    return SelectionDataObjects.Where(i=>i.ObjName.ToUpper().Contains(SearchText.ToUpper())
+                    || i.StrId.ToUpper().Contains(SearchText.ToUpper())).ToList();
+                }
+                else 
+                    return SelectionDataObjects;
+            }
+        }
+
+        //private List<ListItemVM> _userVisableDataObjects;
+        //public List<ListItemVM> UserVisableDataObjects
+        //{
+        //    get => _userVisableDataObjects;
+        //    set
+        //    {
+        //        if (value == null || !value.Any()) return;
+        //        _filtredDataObjects = value;
+        //        DataObjectSelected = value?.FirstOrDefault();
+        //        //UpdateInfo();
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         private ListItemVM _dataObjectSelected;
         public ListItemVM DataObjectSelected
