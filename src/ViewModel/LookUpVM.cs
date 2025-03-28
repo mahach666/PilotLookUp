@@ -2,7 +2,6 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,7 +9,6 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 using Application = System.Windows.Application;
 
 namespace PilotLookUp.ViewModel
@@ -49,7 +47,6 @@ namespace PilotLookUp.ViewModel
                 _searchText = value;
                 OnPropertyChanged();
                 OnPropertyChanged("PromtVisibility");
-                //OnPropertyChanged("FiltredDataObjects");
                 UpdateFiltredDataObjectsAsync();
             }
         }
@@ -85,20 +82,6 @@ namespace PilotLookUp.ViewModel
                 Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = SelectionDataObjects);
             }
         }
-
-        //private List<ListItemVM> _userVisableDataObjects;
-        //public List<ListItemVM> UserVisableDataObjects
-        //{
-        //    get => _userVisableDataObjects;
-        //    set
-        //    {
-        //        if (value == null || !value.Any()) return;
-        //        _filtredDataObjects = value;
-        //        DataObjectSelected = value?.FirstOrDefault();
-        //        //UpdateInfo();
-        //        OnPropertyChanged();
-        //    }
-        //}
 
         private ListItemVM _dataObjectSelected;
         public ListItemVM DataObjectSelected
