@@ -38,6 +38,15 @@
                 <TextBox Grid.Row="0"
                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
                 </TextBox>
+
+                <Label Grid.Row="0"
+                       IsEnabled="False"
+                       Content="Введите Id или GUID"
+                       Visibility="{Binding PromtVisibility}"
+                       Foreground="Gray"
+                       IsHitTestVisible="False"
+                       VerticalAlignment="Center">
+                </Label>
                 
                 <ListBox Grid.Row="1"
                          ItemsSource="{Binding FiltredDataObjects}"

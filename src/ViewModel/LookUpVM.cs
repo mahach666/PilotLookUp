@@ -45,9 +45,12 @@ namespace PilotLookUp.ViewModel
             {
                 _searchText = value;
                 OnPropertyChanged();
+                OnPropertyChanged("PromtVisibility");
                 OnPropertyChanged("FiltredDataObjects");
             }
         }
+
+        public Visibility PromtVisibility => string.IsNullOrEmpty(_searchText) ? Visibility.Visible : Visibility.Hidden;
 
         public List<ListItemVM> FiltredDataObjects
         {
