@@ -35,6 +35,7 @@ namespace PilotLookUp.ViewModel
                 _selectionDataObjects = value;
                 DataObjectSelected = value?.FirstOrDefault();
                 OnPropertyChanged();
+                UpdateFiltredDataObjectsAsync();
             }
         }
 
