@@ -9,30 +9,31 @@ namespace PilotLookUp.Extensions
 {
     internal static class ObjectsRepositoryEx
     {
-        internal async static Task<IDataObject> GetObject(this IObjectsRepository objectsRepository, Guid id)
+        internal async static Task<IDataObject> GetObject(this IObjectsRepository objectsRepository,
+            Guid id)
         {
             var loader = new ObjectLoader(objectsRepository);
-            return  await loader.Load(id);
+            return await loader.Load(id);
         }
-        internal async static Task<IDataObject> GetObjectWithTimeout(this IObjectsRepository objectsRepository
-            , Guid id
-            , int timeoutMilliseconds = 300)
+        internal async static Task<IDataObject> GetObjectWithTimeout(this IObjectsRepository objectsRepository,
+            Guid id,
+            int timeoutMilliseconds = 300)
         {
             var loader = new ObjectLoader(objectsRepository);
             return await loader.LoadWithTimeout(id, timeoutMilliseconds);
         }
 
-        internal async static Task<IHistoryItem> GetHistoryItemWithTimeout(this IObjectsRepository objectsRepository
-            , Guid id
-            , int timeoutMilliseconds = 300)
+        internal async static Task<IHistoryItem> GetHistoryItemWithTimeout(this IObjectsRepository objectsRepository,
+            Guid id,
+            int timeoutMilliseconds = 300)
         {
             var loader = new HistoryItemLoader(objectsRepository);
             return await loader.LoadWithTimeout(id, timeoutMilliseconds);
         }
 
-        internal async static Task<object> GetObjByGuid(this IObjectsRepository objectsRepository
-            ,Guid guid
-            , int timeoutMilliseconds = 300)
+        internal async static Task<object> GetObjByGuid(this IObjectsRepository objectsRepository,
+            Guid guid,
+            int timeoutMilliseconds = 300)
         {
             var lodedObj = await objectsRepository.GetObjectWithTimeout(guid, timeoutMilliseconds);
             if (lodedObj != null)
