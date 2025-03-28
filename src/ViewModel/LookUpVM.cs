@@ -2,6 +2,7 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -9,6 +10,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
+using Application = System.Windows.Application;
 
 namespace PilotLookUp.ViewModel
 {
@@ -46,23 +49,40 @@ namespace PilotLookUp.ViewModel
                 _searchText = value;
                 OnPropertyChanged();
                 OnPropertyChanged("PromtVisibility");
-                OnPropertyChanged("FiltredDataObjects");
+                //OnPropertyChanged("FiltredDataObjects");
+                UpdateFiltredDataObjectsAsync();
             }
         }
 
         public Visibility PromtVisibility => string.IsNullOrEmpty(_searchText) ? Visibility.Visible : Visibility.Hidden;
 
+        private List<ListItemVM> _filtredDataObjects;
         public List<ListItemVM> FiltredDataObjects
         {
-            get
+            get => _filtredDataObjects;
+            private set
             {
-                if (SearchText?.Length >= 2)
-                {
-                    return SelectionDataObjects.Where(i=>i.ObjName.ToUpper().Contains(SearchText.ToUpper())
-                    || i.StrId.ToUpper().Contains(SearchText.ToUpper())).ToList();
-                }
-                else 
-                    return SelectionDataObjects;
+                _filtredDataObjects = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public async Task UpdateFiltredDataObjectsAsync()
+        {
+            if (SearchText?.Length >= 2)
+            {
+                var filtered = await Task.Run(() =>
+                    SelectionDataObjects
+                        .Where(i => i.ObjName.ToUpper().Contains(SearchText.ToUpper())
+                                 || i.StrId.ToUpper().Contains(SearchText.ToUpper()))
+                        .ToList()
+                );
+
+                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = filtered);
+            }
+            else
+            {
+                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = SelectionDataObjects);
             }
         }
 
