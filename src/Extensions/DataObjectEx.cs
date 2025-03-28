@@ -7,7 +7,7 @@ namespace PilotLookUp.Extensions
     {
         static public async Task<IDataObject> FindLastParrent(this IDataObject dataObject, IObjectsRepository objectsRepository)
         {
-            while (dataObject.ParentId != null && dataObject.ParentId.ToString() != "00000000-0000-0000-0000-000000000000")
+            while (dataObject.ParentId != null && dataObject.ParentId != default)
             {
                 dataObject = await objectsRepository.GetObjectWithTimeout(dataObject.ParentId);
             }

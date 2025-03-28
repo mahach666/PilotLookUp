@@ -7,7 +7,6 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class DataObjectHelper : PilotObjectHelper
     {
-        private readonly Guid revokedId = new Guid("abdbe49a-7094-4084-9673-eb5fb3f95262");
         public DataObjectHelper(IDataObject obj, IObjectsRepository objectsRepository)
         {
             _lookUpObject = obj;
@@ -31,7 +30,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             {
                 if (_lookUpObject != null && _lookUpObject is IDataObject dataObject)
                 {
-                    return dataObject.Type.Name.StartsWith("task_");
+                    return dataObject.Type.Name.StartsWith(SystemTypeNames.TASK_PREFIX);
                 }
                 return false;
             }
@@ -43,8 +42,8 @@ namespace PilotLookUp.Objects.TypeHelpers
             {
                 if (IsTask
                     && _lookUpObject is IDataObject dataObject
-                    && dataObject.Attributes.ContainsKey("state")
-                    && dataObject.Attributes["state"].ToString() == revokedId.ToString())
+                    && dataObject.Attributes.TryGetValue("state", out var res)
+                    && res.ToString() == SystemStates.TASK_REVOKED_STATE_ID.ToString())
                     return true;
                 return false;
             }
