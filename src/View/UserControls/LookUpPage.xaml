@@ -41,7 +41,7 @@
 
                 <Label Grid.Row="0"
                        IsEnabled="False"
-                       Content="Введите Id или GUID"
+                       Content="Введите имя или Id"
                        Visibility="{Binding PromtVisibility}"
                        Foreground="Gray"
                        IsHitTestVisible="False"
