@@ -190,7 +190,7 @@ namespace PilotLookUp.ViewModel
                 OnPropertyChanged();
             }
         }
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindiw(_dataGridSelected));
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindow(_dataGridSelected));
 
         private void CopyToClipboard(string sender)
         {

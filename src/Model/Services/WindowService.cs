@@ -16,10 +16,10 @@ namespace PilotLookUp.Model.Services
             _tabServiceProvider = tabServiceProvider;
         }
 
-        public void CreateNewMainWindiw(ObjectSet obj)
+        public void CreateNewMainWindow(ObjectSet obj)
         {
             if (obj == null) return;
-            ViewDirector.LookSeleсtion(obj, _objectsRepository, _tabServiceProvider);
+            ViewDirector.LookSelection(obj, _objectsRepository, _tabServiceProvider);
         }
     }
 }

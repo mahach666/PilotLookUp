@@ -130,7 +130,7 @@ namespace PilotLookUp
 
             if (name == "LookSelected")
             {
-                ViewDirector.LookSeleсtion(_convertSelection, _objectsRepository, _tabServiceProvider);
+                ViewDirector.LookSelection(_convertSelection, _objectsRepository, _tabServiceProvider);
                 return;
             }
 
