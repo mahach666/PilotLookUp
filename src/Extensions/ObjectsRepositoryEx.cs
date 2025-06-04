@@ -52,7 +52,7 @@ namespace PilotLookUp.Extensions
             var userStateMachine = userStateMachines.FirstOrDefault(i => i.Id == guid);
             if (userStateMachine != null)
             {
-                return userStateMachines;
+                return userStateMachine;
             }
 
             return null;
