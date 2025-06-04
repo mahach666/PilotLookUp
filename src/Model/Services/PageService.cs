@@ -30,7 +30,6 @@ namespace PilotLookUp.Model.Services
             _tabService = tabService;
             _windowService = windowService;
             _treeItemService = treeItemService;
-            _windowService = windowService;
             _controlsHolder = new List<IPage>();
 
             if (startViewInfo.PageName != PagesName.None)

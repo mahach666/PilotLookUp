@@ -13,7 +13,7 @@ namespace PilotLookUp
 {
     public static class ViewDirector
     {
-        public static void LookSeleсtion(
+        public static void LookSelection(
             ObjectSet selectedObjects
             , IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)

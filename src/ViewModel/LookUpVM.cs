@@ -163,7 +163,7 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindiw(_dataGridSelected));
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindow(_dataGridSelected));
 
 
         public event PropertyChangedEventHandler PropertyChanged;
