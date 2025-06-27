@@ -18,21 +18,20 @@ namespace PilotLookUp.ViewModel
     internal class TaskTreeVM : INotifyPropertyChanged, IPage
     {
         private PilotObjectHelper _objectHelper;
-        private IRepoService _lookUpModel;
+        private IRepoService _repoService;
         private ICastomSearchService _searchService;
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
 
-
         public TaskTreeVM(
-             PilotObjectHelper pilotObjectHelper
-            , IRepoService lookUpModel
-            , ICastomSearchService searchService
-            , IWindowService windowService
-            , ITreeItemService treeItemService)
+             PilotObjectHelper pilotObjectHelper,
+             IRepoService lookUpModel,
+             ICastomSearchService searchService,
+             IWindowService windowService,
+             ITreeItemService treeItemService)
         {
             _revokedTask = false;
-            _lookUpModel = lookUpModel;
+            _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;
             _searchService = searchService;
             _windowService = windowService;
@@ -161,7 +160,7 @@ namespace PilotLookUp.ViewModel
         {
             Task.Run(async () =>
             {
-                Info = await _lookUpModel.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
+                Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
             });
         }
 
@@ -234,9 +233,7 @@ namespace PilotLookUp.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        PagesName IPage.GetName()
-        {
-            return PagesName.TaskTree;
-        }
+        PagesName IPage.GetName() =>
+             PagesName.TaskTree;
     }
 }

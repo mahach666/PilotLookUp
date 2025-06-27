@@ -5,7 +5,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class OtherHelper : PilotObjectHelper
     {
-        public OtherHelper(object obj, IObjectsRepository objectsRepository) 
+        public OtherHelper(object obj) 
         {
             _lookUpObject = obj;
             _name = obj.ToString();

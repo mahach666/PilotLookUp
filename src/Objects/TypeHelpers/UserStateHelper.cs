@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class UserStateHelper : PilotObjectHelper
     {
-        public UserStateHelper(IUserState obj, IObjectsRepository objectsRepository)
+        public UserStateHelper(IUserState obj)
         {
             _lookUpObject = obj;
             _name = obj.Title;

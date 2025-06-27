@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class PersonHelper : PilotObjectHelper
     {
-        public PersonHelper(IPerson obj, IObjectsRepository objectsRepository)
+        public PersonHelper(IPerson obj)
         {
             _lookUpObject = obj;
             _name = obj.DisplayName;

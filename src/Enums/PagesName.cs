@@ -6,6 +6,7 @@
         None,
         DBPage,
         SearchPage,
-        TaskTree
+        TaskTree,
+        AttrPage
     }
 }

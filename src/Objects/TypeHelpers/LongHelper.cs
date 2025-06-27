@@ -1,11 +1,10 @@
-﻿using Ascon.Pilot.SDK;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
     public class LongHelper : PilotObjectHelper
     {
-        public LongHelper(long value, IObjectsRepository objectsRepository)
+        public LongHelper(long value)
         {
             _lookUpObject = value;
             _name = value.ToString();

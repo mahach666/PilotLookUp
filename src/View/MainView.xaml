@@ -47,7 +47,7 @@
                         Command="{Binding LookUpPageCommand}"
                         Content="..\Resources\UI\lookUpView.png" />
                 
-                <Button ToolTip="Task"
+                <Button ToolTip="Tasks"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding TaskTreeCommand}"
                         Content="..\Resources\UI\task.png"

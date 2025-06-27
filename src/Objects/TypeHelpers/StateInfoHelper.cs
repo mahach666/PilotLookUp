@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class StateInfoHelper : PilotObjectHelper
     {
-        public StateInfoHelper(IStateInfo obj, IObjectsRepository objectsRepository)
+        public StateInfoHelper(IStateInfo obj)
         {
             _lookUpObject = obj;
             _name = obj.State.ToString();

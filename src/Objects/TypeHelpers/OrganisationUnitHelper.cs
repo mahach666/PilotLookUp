@@ -4,9 +4,9 @@ using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class OrganisationUnitHelper : PilotObjectHelper
+    public class OrganizationUnitHelper : PilotObjectHelper
     {
-        public OrganisationUnitHelper(IOrganisationUnit obj, IObjectsRepository objectsRepository)
+        public OrganizationUnitHelper(IOrganisationUnit obj)
         {
             _lookUpObject = obj;
             _name = obj.Title;

@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class StorageDataObjectHelper : PilotObjectHelper
     {
-        public StorageDataObjectHelper(IStorageDataObject obj, IObjectsRepository objectsRepository)
+        public StorageDataObjectHelper(IStorageDataObject obj)
         {
             _lookUpObject = obj;
             _name = obj.DataObject.DisplayName;

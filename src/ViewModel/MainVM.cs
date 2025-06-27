@@ -43,6 +43,8 @@ namespace PilotLookUp.ViewModel
             }
         }
 
+        public Visibility AttrButtVisibilities => TaskButtVisibilities;
+
         public ICommand LookDBCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.DBPage));
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.SearchPage));

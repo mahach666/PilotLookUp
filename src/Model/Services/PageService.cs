@@ -59,6 +59,9 @@ namespace PilotLookUp.Model.Services
         }
         public void CreatePage(PagesName pageName, ObjectSet dataObj = null)
         {
+            LookUpVM selectedItemVM;
+            PilotObjectHelper itemOne;
+
             switch (pageName)
             {
                 case PagesName.LookUpPage:
@@ -78,9 +81,15 @@ namespace PilotLookUp.Model.Services
                     GoToPage(pageName);
                     break;
                 case PagesName.TaskTree:
-                    LookUpVM selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
-                    PilotObjectHelper itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
+                    selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
+                    itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
                     AddPage(new TaskTreeVM(itemOne, _repoService, _searchService, _windowService, _treeItemService));
+                    GoToPage(pageName);
+                    break;
+                case PagesName.AttrPage:
+                    selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
+                    itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
+                    AddPage(new AttrVM(itemOne));
                     GoToPage(pageName);
                     break;
             }

@@ -7,7 +7,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class HistoryItemHelper : PilotObjectHelper
     {
-        public HistoryItemHelper(IHistoryItem obj, IObjectsRepository objectsRepository)
+        public HistoryItemHelper(IHistoryItem obj)
         {
             _lookUpObject = obj;
             _name = obj.Created.ToString();

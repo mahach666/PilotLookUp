@@ -15,12 +15,13 @@ namespace PilotLookUp.ViewModel
 {
     public class LookUpVM : INotifyPropertyChanged, IPage
     {
-        private IRepoService _lookUpModel;
+        private IRepoService _repoService;
         private IWindowService _windowService;
 
-        public LookUpVM(IRepoService lookUpModel, IWindowService windowService)
+        public LookUpVM(IRepoService lookUpModel, 
+            IWindowService windowService)
         {
-            _lookUpModel = lookUpModel;
+            _repoService = lookUpModel;
             _windowService = windowService;
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
@@ -114,7 +115,7 @@ namespace PilotLookUp.ViewModel
         {
             Task.Run(async () =>
             {
-                Info = await _lookUpModel.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
+                Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
             });
         }
         private List<ObjectSet> _info;
@@ -172,9 +173,7 @@ namespace PilotLookUp.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        PagesName IPage.GetName()
-        {
-            return PagesName.LookUpPage;
-        }
+        PagesName IPage.GetName() =>
+             PagesName.LookUpPage;
     }
 }

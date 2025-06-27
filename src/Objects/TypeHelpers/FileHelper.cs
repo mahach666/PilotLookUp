@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class FileHelper : PilotObjectHelper
     {
-        public FileHelper(IFile obj, IObjectsRepository objectsRepository)
+        public FileHelper(IFile obj)
         {
             _lookUpObject = obj;
             _name = obj.Name;

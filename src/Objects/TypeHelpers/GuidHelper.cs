@@ -9,7 +9,7 @@ namespace PilotLookUp.Objects.TypeHelpers
     {
         private PilotObjectHelper _sender { get; }
         private MemberInfo _senderMember { get; }
-        public GuidHelper(Guid value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
+        public GuidHelper(Guid value, PilotObjectHelper sender, MemberInfo senderMember)
         {
             _sender = sender;
             _senderMember = senderMember;

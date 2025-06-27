@@ -7,7 +7,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class DataObjectHelper : PilotObjectHelper
     {
-        public DataObjectHelper(IDataObject obj, IObjectsRepository objectsRepository)
+        public DataObjectHelper(IDataObject obj)
         {
             _lookUpObject = obj;
             _name = obj.DisplayName;

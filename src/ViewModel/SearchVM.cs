@@ -78,7 +78,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<SearchResVM>();
             foreach (var item in objectSet)
             {
-                var vm = new SearchResVM( _pageController, _tabService, item);
+                var vm = new SearchResVM(_pageController, _tabService, item);
                 res.Add(vm);
             }
             Result = res;
@@ -92,9 +92,7 @@ namespace PilotLookUp.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        PagesName IPage.GetName()
-        {
-            return PagesName.SearchPage;
-        }
+        PagesName IPage.GetName() =>
+            PagesName.SearchPage;
     }
 }

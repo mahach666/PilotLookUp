@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class AccessHelper : PilotObjectHelper
     {
-        public AccessHelper(IAccess obj, IObjectsRepository objectsRepository)
+        public AccessHelper(IAccess obj)
         {
             _lookUpObject = obj;
             _name = obj.AccessLevel.ToString();

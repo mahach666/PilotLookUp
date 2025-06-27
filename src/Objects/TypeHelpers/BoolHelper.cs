@@ -6,7 +6,7 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class BoolHelper : PilotObjectHelper
     {
-        public BoolHelper(bool obj, IObjectsRepository objectsRepository)
+        public BoolHelper(bool obj)
         {
             _lookUpObject = obj;
             _name = obj.ToString();
