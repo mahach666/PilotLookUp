@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Interfaces
 {
-    public interface ICastomSearchService
+    public interface ICustomSearchService
     {
         public Task<ObjectSet> GetObjByString(string request);
 

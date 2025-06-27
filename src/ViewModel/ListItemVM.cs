@@ -7,12 +7,12 @@ using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.ViewModel
 {
-    public class ListItemVM : INotifyPropertyChanged, ICastomTree
+    public class ListItemVM : INotifyPropertyChanged, ICustomTree
     {
         public ListItemVM(PilotObjectHelper pilotObjectHelper)
         {
             PilotObjectHelper = pilotObjectHelper;
-            Children = new ObservableCollection<ICastomTree>();
+            Children = new ObservableCollection<ICustomTree>();
         }
 
         public PilotObjectHelper PilotObjectHelper { get; }
@@ -20,8 +20,8 @@ namespace PilotLookUp.ViewModel
         public string StrId => PilotObjectHelper.StringId;
         public BitmapImage ObjImage => PilotObjectHelper.GetImage();
 
-        private ObservableCollection<ICastomTree> _children;
-        public ObservableCollection<ICastomTree> Children
+        private ObservableCollection<ICustomTree> _children;
+        public ObservableCollection<ICustomTree> Children
         {
             get => _children;
             set
@@ -31,7 +31,7 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ICastomTree Parrent { get; set; }
+        public ICustomTree Parrent { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

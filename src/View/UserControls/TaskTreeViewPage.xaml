@@ -28,7 +28,7 @@
 
         <!-- Новый верхний Grid -->
         <Grid Background="{DynamicResource HoverBackground}">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
                 <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" />
                 <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
                 <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />

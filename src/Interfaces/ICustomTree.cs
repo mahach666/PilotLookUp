@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 
 namespace PilotLookUp.Interfaces
 {
-    public interface ICastomTree
+    public interface ICustomTree
     {
-        public ObservableCollection<ICastomTree> Children { get; set; }
-        public ICastomTree Parrent { get; set; }
+        public ObservableCollection<ICustomTree> Children { get; set; }
+        public ICustomTree Parrent { get; set; }
         public PilotObjectHelper PilotObjectHelper { get; }
 
     }

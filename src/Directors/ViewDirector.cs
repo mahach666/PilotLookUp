@@ -74,10 +74,11 @@ namespace PilotLookUp
             container.RegisterInstance(startViewInfo);
 
             container.Register<IRepoService, RepoService>();
-            container.Register<ICastomSearchService, SearchService>();
+            container.Register<ICustomSearchService, SearchService>();
             container.Register<ITabService, TabService>();
             container.Register<IWindowService, WindowService>();
             container.Register<ITreeItemService, TreeItemService>();
+            container.Register<IDataObjectService, DataObjectService>();
             container.Register<IPageService, PageService>();
             container.Register<MainVM>();
             container.Register<MainView>();

@@ -14,12 +14,12 @@ namespace PilotLookUp.ViewModel
     internal class SearchVM : INotifyPropertyChanged, IPage
     {
         private IPageService _pageController { get; }
-        private ICastomSearchService _searchService { get; }
+        private ICustomSearchService _searchService { get; }
         private ITabService _tabService { get; }
 
         public SearchVM(
             IPageService pageController
-            , ICastomSearchService searchService
+            , ICustomSearchService searchService
             , ITabService tabService)
         {
             _pageController = pageController;

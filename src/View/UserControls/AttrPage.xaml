@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <!-- Экспорт словарей ресурсов Pilot -->
     <UserControl.Resources>
         <ResourceDictionary>
@@ -16,14 +16,29 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid>
-        <DataGrid ItemsSource="{Binding Info}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Background="{DynamicResource HoverBackground}">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
+                <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" />
+                <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
+                <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />
+                <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <DataGrid ItemsSource="{Binding Attrs}"
            Grid.Column="2"
            IsReadOnly="True"
            SelectedItem="{Binding DataGridSelected}">
 
-            <!--<DataGrid.ContextMenu>
+                <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Копировать Name"
                        Command="{Binding CopyCommand}"
@@ -31,42 +46,42 @@
                     <MenuItem Header="Копировать Value"
                        Command="{Binding CopyCommand}"
                        CommandParameter="DataGridSelectValue" />
-                    <MenuItem Header="Копировать строку"
+                    <MenuItem Header="Копировать Title"
                        Command="{Binding CopyCommand}"
-                       CommandParameter="DataGridSelectLine" />
+                       CommandParameter="DataGridSelectTitle" />
                 </ContextMenu>
-            </DataGrid.ContextMenu>-->
+            </DataGrid.ContextMenu>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name"
+                                            Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                <DataGridTextColumn Header="Title"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="Title"
+                                            Binding="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                <DataGridTextColumn Header="Value"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="Value"
+                                            Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                <DataGridTextColumn Header="IsObligatory"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="IsObligatory"
+                                            Binding="{Binding IsObligatory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                <DataGridTextColumn Header="IsService"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="IsService"
+                                            Binding="{Binding IsService, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                <DataGridTextColumn Header="Type"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="Type"
+                                            Binding="{Binding Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                <DataGridTextColumn Header="IsValid"
-                                            Binding="{Binding linkName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridTextColumn Header="IsValid"
+                                            Binding="{Binding IsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
-        
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

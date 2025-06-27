@@ -19,14 +19,14 @@ namespace PilotLookUp.ViewModel
     {
         private PilotObjectHelper _objectHelper;
         private IRepoService _repoService;
-        private ICastomSearchService _searchService;
+        private ICustomSearchService _searchService;
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
 
         public TaskTreeVM(
              PilotObjectHelper pilotObjectHelper,
              IRepoService lookUpModel,
-             ICastomSearchService searchService,
+             ICustomSearchService searchService,
              IWindowService windowService,
              ITreeItemService treeItemService)
         {
@@ -36,7 +36,7 @@ namespace PilotLookUp.ViewModel
             _searchService = searchService;
             _windowService = windowService;
             _treeItemService = treeItemService;
-            FirstParrentNode = new ObservableCollection<ICastomTree>();
+            FirstParrentNode = new ObservableCollection<ICustomTree>();
             _ = LoadDataAsync();
         }
 
@@ -99,24 +99,24 @@ namespace PilotLookUp.ViewModel
             if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
             {
                 LastParrent = await _searchService.GetLastParent(dataObject);
-                ICastomTree rootNode = new ListItemVM(LastParrent);
+                ICustomTree rootNode = new ListItemVM(LastParrent);
                 rootNode = await _treeItemService.FillChild(rootNode);
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     RevokedTaskVisible = Visibility.Hidden;
                     FirstParrentNode.Clear();
-                    FirstParrentNode = new ObservableCollection<ICastomTree> { rootNode };
+                    FirstParrentNode = new ObservableCollection<ICustomTree> { rootNode };
                 });
                 return;
             }
             else
             {
-                var treeItems = new ObservableCollection<ICastomTree>();
+                var treeItems = new ObservableCollection<ICustomTree>();
                 ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
-                    ICastomTree rootNode = new ListItemVM(item);
+                    ICustomTree rootNode = new ListItemVM(item);
                     rootNode = await _treeItemService.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }
@@ -130,9 +130,9 @@ namespace PilotLookUp.ViewModel
         }
         private PilotObjectHelper LastParrent { get; set; }
 
-        private ObservableCollection<ICastomTree> _firstParrentNode;
+        private ObservableCollection<ICustomTree> _firstParrentNode;
 
-        public ObservableCollection<ICastomTree> FirstParrentNode
+        public ObservableCollection<ICustomTree> FirstParrentNode
         {
 
             get => _firstParrentNode;

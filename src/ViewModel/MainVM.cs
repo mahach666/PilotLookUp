@@ -28,7 +28,8 @@ namespace PilotLookUp.ViewModel
             {
                 _selectedControl = value;
                 OnPropertyChanged();
-                OnPropertyChanged("TaskButtVisibilities");
+                OnPropertyChanged(nameof(TaskButtVisibilities));
+                OnPropertyChanged(nameof(AttrButtVisibilities));
             }
         }
         public Visibility TaskButtVisibilities
@@ -36,7 +37,7 @@ namespace PilotLookUp.ViewModel
             get
             {
                 if (SelectedControl is LookUpVM lookUpVM
-                        && lookUpVM.DataObjectSelected is ICastomTree castomTree
+                        && lookUpVM.DataObjectSelected is ICustomTree castomTree
                         && castomTree.PilotObjectHelper is DataObjectHelper)
                     return Visibility.Visible;
                 return Visibility.Hidden;
@@ -52,6 +53,7 @@ namespace PilotLookUp.ViewModel
         public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
 
         public ICommand TaskTreeCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
+        public ICommand AttrCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.AttrPage));
 
 
         public event PropertyChangedEventHandler PropertyChanged;

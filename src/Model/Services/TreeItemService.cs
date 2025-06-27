@@ -19,13 +19,13 @@ namespace PilotLookUp.Model.Services
             _lookUpModel = lookUpModel;
         }
 
-        public async Task<ICastomTree> FillChild(ICastomTree lastParrent)
+        public async Task<ICustomTree> FillChild(ICustomTree lastParrent)
         {
             await BuildChildNodes(lastParrent);
             return lastParrent;
         }
 
-        private async Task BuildChildNodes(ICastomTree lastParrent)
+        private async Task BuildChildNodes(ICustomTree lastParrent)
         {
             var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
             List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
@@ -41,7 +41,7 @@ namespace PilotLookUp.Model.Services
                 }
                 else
                 {
-                    lastParrent.Children = new ObservableCollection<ICastomTree>()
+                    lastParrent.Children = new ObservableCollection<ICustomTree>()
                     {
                         childNode
                     };

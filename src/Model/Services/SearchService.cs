@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Model.Services
 {
-    public class SearchService : ICastomSearchService
+    public class SearchService : ICustomSearchService
     {
         private IObjectsRepository _objectsRepository { get; }
 
