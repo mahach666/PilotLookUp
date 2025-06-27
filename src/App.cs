@@ -144,6 +144,7 @@ namespace PilotLookUp
                 ObjectsViewContext c => c.SelectedObjects?.Cast<object>(),
                 DocumentFilesContext c => c.SelectedObjects?.Cast<object>(),
                 LinkedObjectsContext c => c.SelectedObjects?.Cast<object>(),
+                StorageContext c => c.SelectedObjects?.Cast<object>(),
 
                 TasksViewContext2 c => c.SelectedTasks?.Cast<object>(),
                 LinkedTasksContext2 c => c.SelectedTasks?.Cast<object>(),
