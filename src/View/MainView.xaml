@@ -24,13 +24,14 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="45" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="0">
             <UniformGrid Rows="4"
-                         VerticalAlignment="Top">
+                         VerticalAlignment="Top"
+                         HorizontalAlignment="Left" Margin="0,-5,0,0">
                 <Button ToolTip="LookDB"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding LookDBCommand}"
