@@ -5,6 +5,7 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="clr-namespace:PilotLookUp.View"
+                       xmlns:enums="clr-namespace:PilotLookUp.Enums"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800"
@@ -33,27 +34,32 @@
                          VerticalAlignment="Top"
                          HorizontalAlignment="Left" Margin="0,-5,0,0">
                 <Button ToolTip="LookDB"
+                        Tag="{x:Static enums:PagesName.DBPage}"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding LookDBCommand}"
                         Content="..\Resources\UI\databaseEnabled.png" />
 
                 <Button ToolTip="Search"
+                        Tag="{x:Static enums:PagesName.SearchPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding SearchCommand}"
                         Content="..\Resources\UI\search.png" />
 
                 <Button ToolTip="LookUpView"
+                        Tag="{x:Static enums:PagesName.LookUpPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding LookUpPageCommand}"
                         Content="..\Resources\UI\lookUpView.png" />
                 
                 <Button ToolTip="Tasks"
+                        Tag="{x:Static enums:PagesName.TaskTree}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding TaskTreeCommand}"
                         Content="..\Resources\UI\task.png"
                         Visibility="{Binding TaskButtVisibilities}"/>
 
                 <Button ToolTip="Attr"
+                        Tag="{x:Static enums:PagesName.AttrPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding AttrCommand}"
                         Content="..\Resources\UI\attr.png"

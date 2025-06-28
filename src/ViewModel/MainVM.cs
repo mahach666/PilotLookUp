@@ -30,8 +30,12 @@ namespace PilotLookUp.ViewModel
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(TaskButtVisibilities));
                 OnPropertyChanged(nameof(AttrButtVisibilities));
+                OnPropertyChanged(nameof(ActivePage));
             }
         }
+
+        public PagesName ActivePage => _pageController.ActivePage.GetName();
+
         public Visibility TaskButtVisibilities
         {
             get
@@ -40,6 +44,8 @@ namespace PilotLookUp.ViewModel
                         && lookUpVM.DataObjectSelected is ICustomTree castomTree
                         && castomTree.PilotObjectHelper is DataObjectHelper)
                     return Visibility.Visible;
+                else if (SelectedControl is TaskTreeVM || SelectedControl is AttrVM)
+                    return Visibility.Visible;
                 return Visibility.Hidden;
             }
         }
@@ -47,11 +53,8 @@ namespace PilotLookUp.ViewModel
         public Visibility AttrButtVisibilities => TaskButtVisibilities;
 
         public ICommand LookDBCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.DBPage));
-
         public ICommand SearchCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.SearchPage));
-
         public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
-
         public ICommand TaskTreeCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
         public ICommand AttrCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.AttrPage));
 

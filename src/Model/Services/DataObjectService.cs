@@ -24,7 +24,8 @@ namespace PilotLookUp.Model.Services
                 IsObligatory = attr.IsObligatory.ToString(),
                 IsService = attr.IsService.ToString(),
                 Type = attr.Type.ToString(),
-                IsValid = true.ToString()
+                IsInitialized = objAttr.ContainsKey(attr.Name),
+                IsValid = true
             }).ToList();
 
             res.AddRange(objAttr.Where(attr => !typeAttr.Any(typeAttrItem => typeAttrItem.Name == attr.Key))
@@ -35,8 +36,8 @@ namespace PilotLookUp.Model.Services
                     Value = attr.Value?.ToString() ?? string.Empty,
                     IsObligatory = "Unknown",
                     IsService = "Unknown",
-                    Type = "Unknown",
-                    IsValid = false.ToString()
+                    Type = "Unknown",      
+                    IsValid = false
                 }));
 
             return res;

@@ -8,6 +8,7 @@
         public string IsObligatory { get; set; }
         public string IsService { get; set; }
         public string Type { get; set; }
-        public string IsValid { get; set; }
+        public bool IsInitialized { get; set; }
+        public bool IsValid { get; set; }
     }
 }

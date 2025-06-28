@@ -2,7 +2,8 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Ascon.Pilot.Theme.Controls;assembly=Ascon.Pilot.Theme"
-                    xmlns:tools="clr-namespace:Ascon.Pilot.Theme.Tools;assembly=Ascon.Pilot.Theme">
+                    xmlns:tools="clr-namespace:Ascon.Pilot.Theme.Tools;assembly=Ascon.Pilot.Theme"
+                    xmlns:converters="clr-namespace:PilotLookUp.Model">
 
 
     <!-- Ресурсы Pilot -->
@@ -12,6 +13,9 @@
         <tools:SharedResourceDictionary Source="/Ascon.Pilot.Theme;component/Themes/standardcontrols/textblock.xaml" />
         <tools:SharedResourceDictionary Source="/Ascon.Pilot.Theme;component/Themes/standardcontrols/togglebutton.xaml" />
     </ResourceDictionary.MergedDictionaries>
+
+
+    <converters:EqualityConverter x:Key="EqualityConverter"/>
 
 
     <!-- Стиль текста -->
@@ -178,7 +182,7 @@
                 Value="Stretch" />
         <Setter Property="Button.BorderBrush"
                 Value="LightGray" />
-        
+
     </Style>
 
     <!-- Кастомный стиль кнопки с картинкой -->
@@ -210,6 +214,7 @@
             </Setter.Value>
         </Setter>
 
+
         <Setter Property="Width"
                 Value="40" />
         <Setter Property="Height"
@@ -227,6 +232,28 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+
+        <!--‑‑ НОВЫЙ блок: подсветка “активной” страницы ‑‑-->
+        <Style.Triggers>
+            <!-- Сравниваем Tag кнопки и ActivePage из VM -->
+            <DataTrigger Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding Converter="{StaticResource EqualityConverter}">
+                        <!-- Tag самой кнопки -->
+                        <Binding RelativeSource="{RelativeSource Self}"
+                             Path="Tag" />
+                        <!-- Текущая страница во ViewModel -->
+                        <Binding Path="ActivePage" />
+                    </MultiBinding>
+                </DataTrigger.Binding>
+
+                <!-- Что меняем, когда страница активна -->
+                <Setter Property="Background"
+                    Value="{DynamicResource SelectedBackground}" />
+                <Setter Property="Foreground"
+                    Value="White" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Стиль кнопки Выполнить -->

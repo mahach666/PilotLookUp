@@ -77,6 +77,10 @@
                                             Binding="{Binding Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
+                    <DataGridTextColumn Header="IsInitialized"
+                                            Binding="{Binding IsInitialized, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                            Width="*" />
+                    
                     <DataGridTextColumn Header="IsValid"
                                             Binding="{Binding IsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
