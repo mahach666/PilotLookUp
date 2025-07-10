@@ -2,8 +2,8 @@ using Ascon.Pilot.SDK;
 using PilotLookUp.Contracts;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
-using PilotLookUp.View;
+using PilotLookUp.Core.Objects;
+using PilotLookUp.UI.View;
 using SimpleInjector;
 
 namespace PilotLookUp.Plugin

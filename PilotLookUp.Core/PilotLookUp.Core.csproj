@@ -1,19 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
+    <UseWPF>true</UseWPF>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <AssemblyName>PilotLookUp.Core</AssemblyName>
     <RootNamespace>PilotLookUp.Core</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
-  <!-- Скомпилировать исходные файлы, лежащие пока в старом проекте 'src' -->
   <ItemGroup>
-    <Compile Include="..\src\Enums\**\*.cs" Link="Enums\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Include="..\\src\\Core\\**\\*.cs" Link="Core\\%(RecursiveDir)%(Filename)%(Extension)" />
-    <Compile Remove="..\\src\\Core\\ObjReflection.cs" />
-    <!-- Contracts moved to Infrastructure -->
-    <!-- Objects moved to Infrastructure -->
+    <Compile Include="Objects\**\*.cs" />
+    <Compile Include="Interfaces\**\*.cs" />
+    <Compile Include="Contracts\**\*.cs" />
+    <Compile Include="Utils\**\*.cs" />
+    <Compile Include="Extensions\**\*.cs" />
+    <Compile Include="Core\**\*.cs" />
+    <Compile Include="Enums\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,12 +7,13 @@
     <!-- Pilot plugin assemblies must end with .ext2 -->
     <AssemblyName>PilotLookUp.ext2</AssemblyName>
     <RootNamespace>PilotLookUp.Plugin</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Подвязываем исходники интеграционного слоя -->
-    <Compile Include="..\src\App.cs" Link="App.cs" />
-    <Compile Include="..\src\Directors\**\*.cs" Link="Directors\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="App.cs" />
+    <Compile Include="DependencyInjection.cs" />
+    <Compile Include="NavigationService.cs" />
   </ItemGroup>
 
   <ItemGroup>

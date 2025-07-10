@@ -1,0 +1,26 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:PilotLookUp.UI.ViewModel;assembly=PilotLookUp.UI"
+                    xmlns:lookup="clr-namespace:PilotLookUp.UI.View.UserControls;assembly=PilotLookUp.UI"
+                    xmlns:search="clr-namespace:PilotLookUp.UI.View.UserControls;assembly=PilotLookUp.UI"
+                    xmlns:tasktree="clr-namespace:PilotLookUp.UI.View.UserControls;assembly=PilotLookUp.UI"
+                    xmlns:attr="clr-namespace:PilotLookUp.UI.View.UserControls;assembly=PilotLookUp.UI">
+
+    <!-- DataTemplate для ViewModel -->
+    <DataTemplate DataType="{x:Type vm:LookUpVM}">
+        <lookup:LookUpPage />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:SearchVM}">
+        <search:SearchPage />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:TaskTreeVM}">
+        <tasktree:TaskTreeViewPage />
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type vm:AttrVM}">
+        <attr:AttrPage />
+    </DataTemplate>
+
+</ResourceDictionary> 
