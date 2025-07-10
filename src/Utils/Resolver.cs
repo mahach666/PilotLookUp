@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace PilotLookUp.Utils
 {
-    internal static class Resolver
+    public static class Resolver
     {
-        internal static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
+        public static Assembly ResolveAssembly(object sender, ResolveEventArgs args)
         {
             string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string assemblyName = new AssemblyName(args.Name).Name + ".dll";

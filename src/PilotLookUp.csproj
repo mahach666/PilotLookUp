@@ -96,7 +96,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="SimpleInjector" Version="5.5.0" />
@@ -111,6 +110,14 @@
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="System.Xaml" />
 		<Reference Include="WindowsBase" />
+		<Reference Include="Ascon.Pilot.SDK">
+		  <HintPath>C:\Program Files\ASCON\Pilot-ICE Enterprise\Ascon.Pilot.SDK.dll</HintPath>
+		  <Private>false</Private>
+		</Reference>
+		<Reference Include="Ascon.Pilot.Theme">
+		  <HintPath>C:\Program Files\ASCON\Pilot-ICE Enterprise\Ascon.Pilot.Theme.dll</HintPath>
+		  <Private>false</Private>
+		</Reference>
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -145,5 +152,31 @@
 	
 	<ItemGroup>
 	  <Folder Include="ViewModel\Commands\" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <Compile Remove="Enums\**\*.cs" />
+    <Compile Remove="Contracts\**\*.cs" />
+    <Compile Remove="Objects\**\*.cs" />
+    <Compile Remove="Interfaces\**\*.cs" />
+    <Compile Remove="Utils\**\*.cs" />
+    <Compile Remove="Model\Services\**\*.cs" />
+    <Compile Remove="Extensions\**\*.cs" />
+    <Compile Remove="ViewModel\**\*.cs" />
+    <Compile Remove="Commands\**\*.cs" />
+    <Compile Remove="View\**\*.cs" />
+    <Compile Remove="App.cs" />
+    <Compile Remove="Directors\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Remove="View\**\*.xaml" />
+    <Page Remove="Resources\VMMap.xaml" />
+    <Resource Remove="Resources\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PilotLookUp.Core\PilotLookUp.Core.csproj" />
+    <ProjectReference Include="..\PilotLookUp.Infrastructure\PilotLookUp.Infrastructure.csproj" />
+    <ProjectReference Include="..\\PilotLookUp.UI\\PilotLookUp.UI.csproj" />
 	</ItemGroup>
 </Project>

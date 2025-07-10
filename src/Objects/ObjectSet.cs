@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
+using PilotLookUp.Infrastructure;
 
 namespace PilotLookUp.Objects
 {
@@ -38,10 +39,10 @@ namespace PilotLookUp.Objects
             {
                 if (IsLookable == true)
                 {
-                    return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Blue : Colors.SteelBlue);
+                    return new SolidColorBrush(ThemeService.CurrentTheme == PilotLookUp.Infrastructure.ThemeService.ThemeNames.Jedi ? Colors.Blue : Colors.SteelBlue);
                 }
                 else if (Discription.StartsWith("Error:")) return new SolidColorBrush(Colors.Red);
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
+                return new SolidColorBrush(ThemeService.CurrentTheme == PilotLookUp.Infrastructure.ThemeService.ThemeNames.Jedi ? Colors.Black : Colors.White);
             }
         }
 

@@ -3,7 +3,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:Ascon.Pilot.Theme.Controls;assembly=Ascon.Pilot.Theme"
                     xmlns:tools="clr-namespace:Ascon.Pilot.Theme.Tools;assembly=Ascon.Pilot.Theme"
-                    xmlns:converters="clr-namespace:PilotLookUp.Model">
+                    xmlns:converters="clr-namespace:PilotLookUp.Model;assembly=PilotLookUp.UI">
 
 
     <!-- Ресурсы Pilot -->

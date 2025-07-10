@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
 namespace PilotLookUp.ViewModel
 {
@@ -16,22 +17,28 @@ namespace PilotLookUp.ViewModel
         private IPageService _pageController { get; }
         private ICustomSearchService _searchService { get; }
         private ITabService _tabService { get; }
+        private IClipboardService _clipboard { get; }
+        private IDispatcherService _dispatcher { get; }
 
         public SearchVM(
             IPageService pageController
             , ICustomSearchService searchService
-            , ITabService tabService)
+            , ITabService tabService
+            , IClipboardService clipboardService
+            , IDispatcherService dispatcherService)
         {
             _pageController = pageController;
             _searchService = searchService;
             _tabService = tabService;
+            _clipboard = clipboardService;
+            _dispatcher = dispatcherService;
             ClipboardCheck();
         }
 
         private void ClipboardCheck()
         {
-            string clipboardText = Clipboard.GetText();
-            Application.Current.Dispatcher.Invoke(async () =>
+            string clipboardText = _clipboard.GetText();
+            _ = _dispatcher.InvokeAsync(async () =>
             {
                 var res = new List<UserControl>();
                 var searchRes = await _searchService.GetObjByString(clipboardText);
@@ -66,7 +73,7 @@ namespace PilotLookUp.ViewModel
         }
         private void Search()
         {
-            Application.Current.Dispatcher.Invoke(async () =>
+            _ = _dispatcher.InvokeAsync(async () =>
             {
                 var searchRes = await _searchService.GetObjByString(Text);
                 SetRes(searchRes);

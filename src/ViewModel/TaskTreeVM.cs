@@ -22,13 +22,17 @@ namespace PilotLookUp.ViewModel
         private ICustomSearchService _searchService;
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
+        private readonly IClipboardService _clipboard;
+        private readonly IDispatcherService _dispatcher;
 
         public TaskTreeVM(
              PilotObjectHelper pilotObjectHelper,
              IRepoService lookUpModel,
              ICustomSearchService searchService,
              IWindowService windowService,
-             ITreeItemService treeItemService)
+            ITreeItemService treeItemService,
+            IClipboardService clipboardService,
+            IDispatcherService dispatcherService)
         {
             _revokedTask = false;
             _repoService = lookUpModel;
@@ -36,6 +40,8 @@ namespace PilotLookUp.ViewModel
             _searchService = searchService;
             _windowService = windowService;
             _treeItemService = treeItemService;
+            _clipboard = clipboardService;
+            _dispatcher = dispatcherService;
             FirstParrentNode = new ObservableCollection<ICustomTree>();
             _ = LoadDataAsync();
         }
@@ -102,7 +108,7 @@ namespace PilotLookUp.ViewModel
                 ICustomTree rootNode = new ListItemVM(LastParrent);
                 rootNode = await _treeItemService.FillChild(rootNode);
                 // Обновляем UI-поток
-                Application.Current.Dispatcher.Invoke(() =>
+                _dispatcher.Invoke(() =>
                 {
                     RevokedTaskVisible = Visibility.Hidden;
                     FirstParrentNode.Clear();
@@ -120,7 +126,7 @@ namespace PilotLookUp.ViewModel
                     rootNode = await _treeItemService.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }
-                Application.Current.Dispatcher.Invoke(() =>
+                _dispatcher.Invoke(() =>
                 {
                     FirstParrentNode.Clear();
                     FirstParrentNode = treeItems;
@@ -200,19 +206,19 @@ namespace PilotLookUp.ViewModel
             {
                 if (sender == "List")
                 {
-                    Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
+                    _clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
                 }
                 else if (sender == "DataGridSelectName")
                 {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName);
+                    _clipboard.SetText(_dataGridSelected?.SenderMemberName);
                 }
                 else if (sender == "DataGridSelectValue")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
+                    _clipboard.SetText(_dataGridSelected?.Discription);
                 }
                 else if (sender == "DataGridSelectLine")
                 {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+                    _clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
                 }
                 else
                 {

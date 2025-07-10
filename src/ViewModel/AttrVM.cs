@@ -16,11 +16,13 @@ namespace PilotLookUp.ViewModel
     {
         private PilotObjectHelper _objectHelper;
         private IDataObjectService _dataObjectService;
+        private readonly IClipboardService _clipboard;
 
-        public AttrVM(PilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService)
+        public AttrVM(PilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IClipboardService clipboardService)
         {
             _objectHelper = pilotObjectHelper;
             _dataObjectService = dataObjectService;
+            _clipboard = clipboardService;
         }
 
         public IEnumerable<AttrDTO> Attrs
@@ -68,15 +70,15 @@ namespace PilotLookUp.ViewModel
             {
              if (sender == "DataGridSelectName")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Name);
+                    _clipboard.SetText(_dataGridSelected?.Name);
                 }
                 else if (sender == "DataGridSelectValue")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Value);
+                    _clipboard.SetText(_dataGridSelected?.Value);
                 }
                 else if (sender == "DataGridSelectTitle")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Title);
+                    _clipboard.SetText(_dataGridSelected?.Title);
                 }
                 else
                 {

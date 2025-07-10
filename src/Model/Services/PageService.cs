@@ -17,14 +17,19 @@ namespace PilotLookUp.Model.Services
         private IWindowService _windowService { get; }
         private ITreeItemService _treeItemService { get; }
         private IDataObjectService _dataObjectService { get; }
+        private IClipboardService _clipboardService { get; }
+        private IDispatcherService _dispatcherService { get; }
 
         public PageService(
              StartViewInfo startViewInfo,
              IRepoService repoService,
              ICustomSearchService searchService,
-             ITabService tabService, IWindowService windowService,
+             ITabService tabService,
+             IWindowService windowService,
              ITreeItemService treeItemService,
-            IDataObjectService dataObjectService)
+             IDataObjectService dataObjectService,
+             IClipboardService clipboardService,
+             IDispatcherService dispatcherService)
         {
             _repoService = repoService;
             _searchService = searchService;
@@ -32,6 +37,8 @@ namespace PilotLookUp.Model.Services
             _windowService = windowService;
             _treeItemService = treeItemService;
             _dataObjectService = dataObjectService;
+            _clipboardService = clipboardService;
+            _dispatcherService = dispatcherService;
             _controlsHolder = new List<IPage>();
 
             if (startViewInfo.PageName != PagesName.None)
@@ -68,7 +75,7 @@ namespace PilotLookUp.Model.Services
             {
                 case PagesName.LookUpPage:
                     var lookVM = dataObj == null
-                        ? new LookUpVM(_repoService, _windowService)
+                        ? new LookUpVM(_repoService, _windowService, _clipboardService, _dispatcherService)
                         : GetCustomLookUpVM(dataObj);
                     AddPage(lookVM);
                     GoToPage(pageName);
@@ -79,19 +86,19 @@ namespace PilotLookUp.Model.Services
                     GoToPage(PagesName.LookUpPage);
                     break;
                 case PagesName.SearchPage:
-                    AddPage(new SearchVM(this, _searchService, _tabService));
+                    AddPage(new SearchVM(this, _searchService, _tabService, _clipboardService, _dispatcherService));
                     GoToPage(pageName);
                     break;
                 case PagesName.TaskTree:
                     selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
                     itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
-                    AddPage(new TaskTreeVM(itemOne, _repoService, _searchService, _windowService, _treeItemService));
+                    AddPage(new TaskTreeVM(itemOne, _repoService, _searchService, _windowService, _treeItemService, _clipboardService, _dispatcherService));
                     GoToPage(pageName);
                     break;
                 case PagesName.AttrPage:
                     selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
                     itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
-                    AddPage(new AttrVM(itemOne, _dataObjectService));
+                    AddPage(new AttrVM(itemOne, _dataObjectService, _clipboardService));
                     GoToPage(pageName);
                     break;
             }
@@ -111,7 +118,7 @@ namespace PilotLookUp.Model.Services
 
         private LookUpVM GetCustomLookUpVM(ObjectSet pilotObjectHelper)
         {
-            var vm = new LookUpVM(_repoService, _windowService);
+            var vm = new LookUpVM(_repoService, _windowService, _clipboardService, _dispatcherService);
             vm.SelectionDataObjects = pilotObjectHelper.Select(x => new ListItemVM(x)).ToList();
             return vm;
         }

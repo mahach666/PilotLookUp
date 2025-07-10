@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PilotLookUp.UI</AssemblyName>
+    <RootNamespace>PilotLookUp.UI</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\src\ViewModel\**\*.cs" Link="ViewModel\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\src\Commands\**\*.cs" Link="Commands\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\\src\\Model\\Services\\PageService.cs" Link="Model\\Services\\PageService.cs" />
+    <Compile Include="..\\src\\Model\\Services\\TreeItemService.cs" Link="Model\\Services\\TreeItemService.cs" />
+    <Compile Include="..\\src\\Model\\EqualityConverter.cs" Link="Model\\EqualityConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="..\src\View\**\*.xaml" Link="View\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\src\View\**\*.xaml.cs" Link="View\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Resource Include="..\src\Resources\**\*.*" Link="Resources\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="..\src\Resources\VMMap.xaml" Link="Resources\VMMap.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PilotLookUp.Core\PilotLookUp.Core.csproj" />
+    <ProjectReference Include="..\PilotLookUp.Infrastructure\PilotLookUp.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Ascon.Pilot.Theme">
+      <HintPath>C:\Program Files\ASCON\Pilot-ICE Enterprise\Ascon.Pilot.Theme.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Ascon.Pilot.SDK">
+      <HintPath>C:\Program Files\ASCON\Pilot-ICE Enterprise\Ascon.Pilot.SDK.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project> 

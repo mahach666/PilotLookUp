@@ -17,12 +17,18 @@ namespace PilotLookUp.ViewModel
     {
         private IRepoService _repoService;
         private IWindowService _windowService;
+        private readonly IClipboardService _clipboard;
+        private readonly IDispatcherService _dispatcher;
 
         public LookUpVM(IRepoService lookUpModel, 
-            IWindowService windowService)
+            IWindowService windowService,
+            IClipboardService clipboardService,
+            IDispatcherService dispatcherService)
         {
             _repoService = lookUpModel;
             _windowService = windowService;
+            _clipboard = clipboardService;
+            _dispatcher = dispatcherService;
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
@@ -77,11 +83,11 @@ namespace PilotLookUp.ViewModel
                         .ToList()
                 );
 
-                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = filtered);
+                _dispatcher.Invoke(() => FiltredDataObjects = filtered);
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = SelectionDataObjects);
+                _dispatcher.Invoke(() => FiltredDataObjects = SelectionDataObjects);
             }
         }
 
@@ -138,19 +144,19 @@ namespace PilotLookUp.ViewModel
             {
                 if (sender == "List")
                 {
-                    Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
+                    _clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
                 }
                 else if (sender == "DataGridSelectName")
                 {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName);
+                    _clipboard.SetText(_dataGridSelected?.SenderMemberName);
                 }
                 else if (sender == "DataGridSelectValue")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
+                    _clipboard.SetText(_dataGridSelected?.Discription);
                 }
                 else if (sender == "DataGridSelectLine")
                 {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+                    _clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
                 }
                 else
                 {

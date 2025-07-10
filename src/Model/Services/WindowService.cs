@@ -1,25 +1,21 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Interfaces;
+﻿using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 
 namespace PilotLookUp.Model.Services
 {
     public class WindowService : IWindowService
     {
-        private IObjectsRepository _objectsRepository;
-        private ITabServiceProvider _tabServiceProvider;
+        private readonly INavigationService _navigationService;
 
-        public WindowService(IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider)
+        public WindowService(INavigationService navigationService)
         {
-            _objectsRepository = objectsRepository;
-            _tabServiceProvider = tabServiceProvider;
+            _navigationService = navigationService;
         }
 
         public void CreateNewMainWindow(ObjectSet obj)
         {
             if (obj == null) return;
-            ViewDirector.LookSelection(obj, _objectsRepository, _tabServiceProvider);
+            _navigationService.LookSelection(obj);
         }
     }
 }

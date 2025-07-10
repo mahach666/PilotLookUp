@@ -1,9 +1,10 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.SDK.Toolbar;
-using Ascon.Pilot.Themes;
+using PilotLookUp.Infrastructure;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
+using PilotLookUp.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -37,25 +38,47 @@ namespace PilotLookUp
         IToolbar<TasksViewContext2>,
         IToolbar<DocumentFilesContext>,
         IToolbar<LinkedObjectsContext>,
-        IToolbar<LinkedTasksContext2>
+        IToolbar<LinkedTasksContext2>,
+        IPartImportsSatisfiedNotification
     {
         private IObjectsRepository _objectsRepository;
         private ITabServiceProvider _tabServiceProvider;
+        private INavigationService _navigationService;
         private ObjectSet _convertSelection;
-        private static ThemeNames _theme { get; set; }
-        public static ThemeNames Theme { get => _theme; }
+        private static ThemeService.ThemeNames _theme { get; set; }
+        public static ThemeService.ThemeNames Theme { get => _theme; }
 
-        [ImportingConstructor]
-        public App(IObjectsRepository objectsRepository,
-            ITabServiceProvider tabServiceProvider,
-            IPilotDialogService pilotDialogService)
+        public App()
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
-            _objectsRepository = objectsRepository;
-            _tabServiceProvider = tabServiceProvider;
+            // DI и остальные сервисы будут инициализированы после того,
+            // как MEF введёт зависимости через свойства (см. OnImportsSatisfied)
+        }
 
+        [Import]
+        private IObjectsRepository ObjectsRepository
+        {
+            get => _objectsRepository;
+            set => _objectsRepository = value;
+        }
 
-            _theme = pilotDialogService.Theme;
+        [Import]
+        private ITabServiceProvider TabServiceProvider
+        {
+            get => _tabServiceProvider;
+            set => _tabServiceProvider = value;
+        }
+
+        // MEF вызовет этот метод, когда все [Import]-свойства будут установлены
+        public void OnImportsSatisfied()
+        {
+            // инициализируем DI контейнер один раз
+            var theme = ThemeService.ThemeNames.Jedi; // mapping placeholder
+
+            var container = PilotLookUp.Plugin.DependencyInjection.Initialize(_objectsRepository, _tabServiceProvider, theme);
+
+            _navigationService = container.GetInstance<INavigationService>();
+            _theme = theme;
         }
 
         // Build
@@ -110,12 +133,12 @@ namespace PilotLookUp
         {
             if (name == "LookDB")
             {
-                ViewDirector.LookDB(_objectsRepository, _tabServiceProvider);
+                _navigationService.LookDB();
                 return;
             }
             else if (name == "Search")
             {
-                ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider);
+                _navigationService.SearchPage();
                 return;
             }
 
@@ -123,7 +146,7 @@ namespace PilotLookUp
 
             if (name == "LookSelected")
             {
-                ViewDirector.LookSelection(_convertSelection, _objectsRepository, _tabServiceProvider);
+                _navigationService.LookSelection(_convertSelection);
                 return;
             }
 

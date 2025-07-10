@@ -1,6 +1,7 @@
 ﻿using PilotLookUp.Core;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using PilotLookUp.Infrastructure;
 
 namespace PilotLookUp.Objects
 {
@@ -30,7 +31,7 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
+                return new SolidColorBrush(ThemeService.CurrentTheme == PilotLookUp.Infrastructure.ThemeService.ThemeNames.Jedi ? Colors.Black : Colors.White);
             }
         }
         abstract public BitmapImage GetImage();

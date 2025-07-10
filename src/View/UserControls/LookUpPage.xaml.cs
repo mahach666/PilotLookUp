@@ -4,7 +4,7 @@ namespace PilotLookUp.View.UserControls
 {
     public partial class LookUpPage : UserControl
     {
-        internal LookUpPage()
+        public LookUpPage()
         {
             InitializeComponent();
         }

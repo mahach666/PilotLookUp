@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PilotLookUp.Infrastructure</AssemblyName>
+    <RootNamespace>PilotLookUp.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\src\Interfaces\**\*.cs" Link="Interfaces\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\src\Utils\**\*.cs" Link="Utils\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\src\Model\Services\**\*.cs" Link="Model\Services\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\src\Extensions\**\*.cs" Link="Extensions\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\src\Objects\**\*.cs" Link="Objects\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\\src\\Contracts\\**\\*.cs" Link="Contracts\\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\\src\\Core\\ObjReflection.cs" Link="Core\\ObjReflection.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Include="Svg" Version="3.4.7" />
+    <Reference Include="Ascon.Pilot.SDK">
+      <HintPath>C:\Program Files\ASCON\Pilot-ICE Enterprise\Ascon.Pilot.SDK.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PilotLookUp.Core\PilotLookUp.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Exclude UI-dependent services to UI project -->
+  <ItemGroup>
+    <Compile Remove="..\src\Model\Services\PageService.cs" />
+    <Compile Remove="..\src\Model\Services\TreeItemService.cs" />
+  </ItemGroup>
+
+</Project> 

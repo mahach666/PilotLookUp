@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PilotLookUp.Core</AssemblyName>
+    <RootNamespace>PilotLookUp.Core</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Скомпилировать исходные файлы, лежащие пока в старом проекте 'src' -->
+  <ItemGroup>
+    <Compile Include="..\src\Enums\**\*.cs" Link="Enums\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\\src\\Core\\**\\*.cs" Link="Core\\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Remove="..\\src\\Core\\ObjReflection.cs" />
+    <!-- Contracts moved to Infrastructure -->
+    <!-- Objects moved to Infrastructure -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Ascon.Pilot.SDK">
+      <HintPath>C:\Program Files\ASCON\Pilot-ICE Enterprise\Ascon.Pilot.SDK.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Пока подключаем только внутренний код; классы будут перенесены позднее -->
+</Project> 
