@@ -12,13 +12,13 @@ namespace PilotLookUp.Utils
         private static IObjectsRepository _globalObjectsRepository;
         private static ITabServiceProvider _globalTabServiceProvider;
 
-        public static Container CreateContainer(IObjectsRepository objectsRepository = null, ITabServiceProvider tabServiceProvider = null)
+        public static Container CreateContainer(IObjectsRepository objectsRepository = null, ITabServiceProvider tabServiceProvider = null, Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
             // Создаем новый контейнер для каждого окна
             var container = new Container();
             
             // Настраиваем базовые сервисы
-            ConfigureBaseServices(container);
+            ConfigureBaseServices(container, theme);
             
             // Регистрируем внешние сервисы (используем переданные или глобальные)
             var repo = objectsRepository ?? _globalObjectsRepository;
@@ -35,7 +35,7 @@ namespace PilotLookUp.Utils
             return container;
         }
 
-        private static void ConfigureBaseServices(Container container)
+        private static void ConfigureBaseServices(Container container, Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
             // Регистрируем сервисы
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
@@ -55,6 +55,10 @@ namespace PilotLookUp.Utils
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
             container.Register<ISelectionService, SelectionService>(Lifestyle.Singleton);
             container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
+            
+            // Регистрируем ThemeService
+            var themeToUse = theme ?? App.Theme;
+            container.Register<IThemeService>(() => new ThemeService(themeToUse), Lifestyle.Singleton);
             
             // Регистрируем ViewModels (только те, которые не требуют параметров)
             container.Register<LookUpVM>(Lifestyle.Transient);

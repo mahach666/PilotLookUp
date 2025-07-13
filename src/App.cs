@@ -45,6 +45,7 @@ namespace PilotLookUp
         private static ThemeNames _theme { get; set; }
         private static Container _globalContainer;
         public static ThemeNames Theme { get => _theme; }
+        public static IThemeService ThemeService { get; private set; }
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository,
@@ -57,7 +58,12 @@ namespace PilotLookUp
             _theme = pilotDialogService.Theme;
             
             // Создаем глобальный контейнер для сервисов, которые должны сохранять состояние
-            _globalContainer = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
+            _globalContainer = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, _theme);
+            
+            // Устанавливаем ThemeService в статические классы
+            ThemeService = _globalContainer.GetInstance<IThemeService>();
+            PilotObjectHelper.SetThemeService(ThemeService);
+            ObjectSet.SetThemeService(ThemeService);
         }
 
         // Build

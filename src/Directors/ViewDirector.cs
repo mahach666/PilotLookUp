@@ -50,7 +50,7 @@ namespace PilotLookUp
                 ServiceContainer.SetGlobalServices(objectsRepository, tabServiceProvider);
                 
                 // Создаем новый контейнер для этого окна
-                var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
+                var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, App.Theme);
                 
                 var navigationService = container.GetInstance<INavigationService>();
 

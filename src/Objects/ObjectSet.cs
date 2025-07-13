@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PilotLookUp.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -9,6 +10,8 @@ namespace PilotLookUp.Objects
 {
     public class ObjectSet : List<PilotObjectHelper>
     {
+        private static IThemeService _themeService;
+
         public ObjectSet(MemberInfo memberInfo)
         {
             _memberInfo = memberInfo;
@@ -36,12 +39,13 @@ namespace PilotLookUp.Objects
         {
             get
             {
+                var themeService = _themeService ?? App.ThemeService;
                 if (IsLookable == true)
                 {
-                    return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Blue : Colors.SteelBlue);
+                    return new SolidColorBrush(themeService.IsJediTheme ? Colors.Blue : Colors.SteelBlue);
                 }
                 else if (Discription.StartsWith("Error:")) return new SolidColorBrush(Colors.Red);
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
+                return new SolidColorBrush(themeService.IsJediTheme ? Colors.Black : Colors.White);
             }
         }
 
@@ -68,6 +72,12 @@ namespace PilotLookUp.Objects
                 }
                 return false;
             }
+        }
+
+        // Метод для установки ThemeService (вызывается из DI контейнера)
+        public static void SetThemeService(IThemeService themeService)
+        {
+            _themeService = themeService;
         }
 
         public override string ToString()
