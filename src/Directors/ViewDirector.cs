@@ -67,9 +67,22 @@ namespace PilotLookUp
 
                 var viewModelFactory = container.GetInstance<IViewModelFactory>();
                 var mainVM = viewModelFactory.CreateMainVM();
-                var window = container.GetInstance<MainView>();
-                window.DataContext = mainVM;
-                window.Show();
+
+                // Создаем и показываем окно в UI потоке
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    try
+                    {
+                        var window = container.GetInstance<MainView>();
+                        window.DataContext = mainVM;
+                        window.Show();
+                    }
+                    catch (System.Exception ex)
+                    {
+                        System.Windows.MessageBox.Show($"Ошибка при создании окна: {ex.Message}", 
+                            "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    }
+                });
             }
             catch (System.Exception ex)
             {

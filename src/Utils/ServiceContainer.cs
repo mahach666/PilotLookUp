@@ -51,12 +51,18 @@ namespace PilotLookUp.Utils
             container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
             container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
             
+            // Регистрируем новые сервисы для разделения ответственности
+            container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
+            container.Register<ISelectionService, SelectionService>(Lifestyle.Singleton);
+            container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
+            
             // Регистрируем ViewModels (только те, которые не требуют параметров)
             container.Register<LookUpVM>(Lifestyle.Transient);
             // SearchVM, MainVM, TaskTreeVM и AttrVM создаются через фабрику
             
             // Регистрируем Views
-            container.Register<MainView>(Lifestyle.Transient);
+            container.Register<MainView>(() =>
+                System.Windows.Application.Current.Dispatcher.Invoke(() => new MainView()), Lifestyle.Transient);
         }
 
         public static void SetGlobalServices(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)

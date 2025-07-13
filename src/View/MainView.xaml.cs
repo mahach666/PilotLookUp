@@ -1,4 +1,5 @@
 ﻿using PilotLookUp.ViewModel;
+using System.Threading;
 
 namespace PilotLookUp.View
 {
@@ -6,6 +7,12 @@ namespace PilotLookUp.View
     {
         public MainView()
         {
+            // Проверяем, что мы в STA потоке
+            if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
+            {
+                throw new System.InvalidOperationException("MainView должен создаваться в STA потоке");
+            }
+            
             InitializeComponent();
         }
     }

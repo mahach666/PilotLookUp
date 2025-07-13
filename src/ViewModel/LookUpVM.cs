@@ -40,7 +40,7 @@ namespace PilotLookUp.ViewModel
                     // Устанавливаем первый элемент как выбранный
                     DataObjectSelected = listItems.FirstOrDefault();
                     
-                    UpdateFiltredDataObjectsAsync();
+                    _ = UpdateFiltredDataObjectsAsync();
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace PilotLookUp.ViewModel
                 _dataInitialized = true; // Отмечаем, что данные были установлены через свойство
                 DataObjectSelected = value?.FirstOrDefault();
                 OnPropertyChanged();
-                UpdateFiltredDataObjectsAsync();
+                _ = UpdateFiltredDataObjectsAsync();
             }
         }
 
@@ -92,7 +92,7 @@ namespace PilotLookUp.ViewModel
                 _searchText = value;
                 OnPropertyChanged();
                 OnPropertyChanged("PromtVisibility");
-                UpdateFiltredDataObjectsAsync();
+                _ = UpdateFiltredDataObjectsAsync();
             }
         }
 

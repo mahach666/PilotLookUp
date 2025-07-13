@@ -2,13 +2,14 @@
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.SDK.Toolbar;
 using Ascon.Pilot.Themes;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
+using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-
 
 namespace PilotLookUp
 {
@@ -39,10 +40,10 @@ namespace PilotLookUp
         IToolbar<LinkedObjectsContext>,
         IToolbar<LinkedTasksContext2>
     {
-        private IObjectsRepository _objectsRepository;
-        private ITabServiceProvider _tabServiceProvider;
-        private ObjectSet _convertSelection;
+        private readonly IObjectsRepository _objectsRepository;
+        private readonly ITabServiceProvider _tabServiceProvider;
         private static ThemeNames _theme { get; set; }
+        private static Container _globalContainer;
         public static ThemeNames Theme { get => _theme; }
 
         [ImportingConstructor]
@@ -53,9 +54,10 @@ namespace PilotLookUp
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
-
-
             _theme = pilotDialogService.Theme;
+            
+            // Создаем глобальный контейнер для сервисов, которые должны сохранять состояние
+            _globalContainer = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
         }
 
         // Build
@@ -66,6 +68,7 @@ namespace PilotLookUp
             item.WithSubmenu().AddItem("LookDB", 1).WithHeader("LookDB");
             item.WithSubmenu().AddItem("Search", 2).WithHeader("Search");
         }
+        
         public void Build(IMenuBuilder builder, ObjectsViewContext context) =>
             ContextButtonBuilder(builder, context);
 
@@ -108,25 +111,17 @@ namespace PilotLookUp
 
         private void ItemClick(string name)
         {
-            if (name == "LookDB")
+            try
             {
-                ViewDirector.LookDB(_objectsRepository, _tabServiceProvider);
-                return;
+                // Используем глобальный контейнер для сервисов, которые должны сохранять состояние
+                var menuService = _globalContainer.GetInstance<IMenuService>();
+                menuService.HandleMenuItemClick(name);
             }
-            else if (name == "Search")
+            catch (System.Exception ex)
             {
-                ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider);
-                return;
+                System.Windows.MessageBox.Show($"Ошибка при обработке клика меню: {ex.Message}", 
+                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
-
-            if (_convertSelection == null || !_convertSelection.Any()) return;
-
-            if (name == "LookSelected")
-            {
-                ViewDirector.LookSelection(_convertSelection, _objectsRepository, _tabServiceProvider);
-                return;
-            }
-
         }
 
         private void ContextButtonBuilder(IMenuBuilder builder, MarshalByRefObject context)
@@ -137,25 +132,29 @@ namespace PilotLookUp
 
         private void SelectUpdater(MarshalByRefObject context)
         {
-            var map = new PilotObjectMap(_objectsRepository);
-
-            IEnumerable<object>? raw = context switch
+            try
             {
-                ObjectsViewContext c => c.SelectedObjects?.Cast<object>(),
-                DocumentFilesContext c => c.SelectedObjects?.Cast<object>(),
-                LinkedObjectsContext c => c.SelectedObjects?.Cast<object>(),
-                StorageContext c => c.SelectedObjects?.Cast<object>(),
+                IEnumerable<object> raw = context switch
+                {
+                    ObjectsViewContext c => c.SelectedObjects?.Cast<object>() ?? Enumerable.Empty<object>(),
+                    DocumentFilesContext c => c.SelectedObjects?.Cast<object>() ?? Enumerable.Empty<object>(),
+                    LinkedObjectsContext c => c.SelectedObjects?.Cast<object>() ?? Enumerable.Empty<object>(),
+                    StorageContext c => c.SelectedObjects?.Cast<object>() ?? Enumerable.Empty<object>(),
 
-                TasksViewContext2 c => c.SelectedTasks?.Cast<object>(),
-                LinkedTasksContext2 c => c.SelectedTasks?.Cast<object>(),
+                    TasksViewContext2 c => c.SelectedTasks?.Cast<object>() ?? Enumerable.Empty<object>(),
+                    LinkedTasksContext2 c => c.SelectedTasks?.Cast<object>() ?? Enumerable.Empty<object>(),
 
-                _ => null
-            };
+                    _ => Enumerable.Empty<object>()
+                };
 
-            if (raw?.Any() == true)
+                // Используем глобальный контейнер для сервисов, которые должны сохранять состояние
+                var selectionService = _globalContainer.GetInstance<ISelectionService>();
+                selectionService.UpdateSelection(raw);
+            }
+            catch (System.Exception ex)
             {
-                _convertSelection = new ObjectSet(null);
-                _convertSelection.AddRange(raw.Select(map.Wrap));
+                System.Windows.MessageBox.Show($"Ошибка при обновлении выбора: {ex.Message}", 
+                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }
 
@@ -164,7 +163,6 @@ namespace PilotLookUp
             SelectUpdater(context);
 
         public void OnToolbarItemClick(string name, ObjectsViewContext context) { }
-
 
         public void Build(IToolbarBuilder builder, TasksViewContext2 context) =>
             SelectUpdater(context);

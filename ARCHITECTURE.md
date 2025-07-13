@@ -173,4 +173,57 @@ window.Show();
 
 ### AttrVM
 - Отображает атрибуты выбранного объекта
-- Позволяет редактировать свойства объекта 
+- Позволяет редактировать свойства объекта
+
+## Интеграция с Pilot-ICE MEF
+
+App класс интегрируется с Pilot-ICE через MEF (Managed Extensibility Framework). Конструктор App получает зависимости от Pilot-ICE и сохраняет их в приватных полях:
+
+```csharp
+[ImportingConstructor]
+public App(IObjectsRepository objectsRepository,
+    ITabServiceProvider tabServiceProvider,
+    IPilotDialogService pilotDialogService)
+{
+    AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
+    _objectsRepository = objectsRepository;
+    _tabServiceProvider = tabServiceProvider;
+    _theme = pilotDialogService.Theme;
+}
+```
+
+Для доступа к нашим сервисам используется глобальный контейнер, созданный в конструкторе App. Это обеспечивает сохранение состояния сервисов между вызовами:
+
+```csharp
+private static Container _globalContainer;
+
+[ImportingConstructor]
+public App(IObjectsRepository objectsRepository,
+    ITabServiceProvider tabServiceProvider,
+    IPilotDialogService pilotDialogService)
+{
+    // Создаем глобальный контейнер для сервисов, которые должны сохранять состояние
+    _globalContainer = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
+}
+
+private void ItemClick(string name)
+{
+    try
+    {
+        var menuService = _globalContainer.GetInstance<IMenuService>();
+        menuService.HandleMenuItemClick(name);
+    }
+    catch (System.Exception ex)
+    {
+        // Обработка ошибок
+    }
+}
+```
+
+Этот подход обеспечивает:
+- Совместимость с MEF системой Pilot-ICE
+- Сохранение чистой архитектуры
+- Изоляцию наших сервисов от внешних зависимостей
+- Отсутствие конфликтов с MEF инъекцией зависимостей
+- Сохранение состояния сервисов между вызовами (важно для SelectionService)
+- Правильную работу LookSelected функциональности 
