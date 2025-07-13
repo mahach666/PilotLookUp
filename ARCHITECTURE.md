@@ -1,0 +1,176 @@
+# Архитектура PilotLookUp
+
+## Обзор
+
+PilotLookUp - это WPF приложение, построенное на архитектуре MVVM с использованием SimpleInjector для dependency injection. Приложение позволяет просматривать и анализировать объекты Pilot-ICE.
+
+## Основные компоненты
+
+### 1. Контейнер сервисов (ServiceContainer)
+
+**Расположение**: `src/Utils/ServiceContainer.cs`
+
+Контейнер использует SimpleInjector и создает новый экземпляр для каждого окна приложения, что позволяет избежать проблем с блокировкой контейнера.
+
+```csharp
+// Создание нового контейнера для каждого окна
+var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
+
+// Установка глобальных сервисов (опционально)
+ServiceContainer.SetGlobalServices(objectsRepository, tabServiceProvider);
+```
+
+**Ключевые особенности**:
+- Каждое окно получает свой собственный контейнер
+- Внешние сервисы (IObjectsRepository, ITabServiceProvider) регистрируются в каждом контейнере
+- Базовые сервисы настраиваются один раз для всех контейнеров
+
+### 2. Фабрика ViewModels (ViewModelFactory)
+
+**Расположение**: `src/Model/Services/ViewModelFactory.cs`
+
+Фабрика создает ViewModels с использованием dependency injection:
+
+```csharp
+public interface IViewModelFactory
+{
+    LookUpVM CreateLookUpVM(ObjectSet dataObjects = null);
+    SearchVM CreateSearchVM();
+    TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject);
+    AttrVM CreateAttrVM(PilotObjectHelper selectedObject);
+    MainVM CreateMainVM();
+}
+```
+
+### 3. Провайдер ViewModels (ViewModelProvider)
+
+**Расположение**: `src/Model/Services/ViewModelProvider.cs`
+
+Создает ViewModels, которые требуют параметры в конструкторе:
+
+```csharp
+public interface IViewModelProvider
+{
+    LookUpVM CreateLookUpVM(ObjectSet dataObjects = null);
+    TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject);
+    AttrVM CreateAttrVM(PilotObjectHelper selectedObject);
+    MainVM CreateMainVM(INavigationService navigationService, IViewModelFactory viewModelFactory);
+}
+```
+
+### 4. Создатель SearchVM (SearchViewModelCreator)
+
+**Расположение**: `src/Model/Services/SearchViewModelCreator.cs`
+
+Специализированный сервис для создания SearchVM:
+
+```csharp
+public interface ISearchViewModelCreator
+{
+    SearchVM CreateSearchVM(INavigationService navigationService);
+}
+```
+
+### 5. Сервис навигации (NavigationService)
+
+**Расположение**: `src/Model/Services/NavigationService.cs`
+
+Управляет навигацией между страницами в MainVM:
+
+```csharp
+public interface INavigationService
+{
+    void NavigateToLookUp(ObjectSet selectedObjects = null);
+    void NavigateToSearch();
+    void NavigateToTaskTree(PilotObjectHelper selectedObject);
+    void NavigateToAttr(PilotObjectHelper selectedObject);
+}
+```
+
+## Регистрация сервисов
+
+### Базовые сервисы (регистрируются в каждом контейнере)
+
+```csharp
+// Основные сервисы
+container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
+container.Register<ICustomSearchService, SearchService>(Lifestyle.Singleton);
+container.Register<ITabService, TabService>(Lifestyle.Singleton);
+container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
+container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
+container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
+
+// Фабрики и провайдеры
+container.Register<ISearchViewModelCreator, SearchViewModelCreator>(Lifestyle.Singleton);
+container.Register<IViewModelProvider, ViewModelProvider>(Lifestyle.Singleton);
+container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
+container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
+
+// ViewModels (только те, которые не требуют параметров)
+container.Register<LookUpVM>(Lifestyle.Transient);
+
+// Views
+container.Register<MainView>(Lifestyle.Transient);
+```
+
+### Внешние сервисы (регистрируются для каждого окна)
+
+```csharp
+// Регистрируются как экземпляры для каждого окна
+container.RegisterInstance(objectsRepository);
+container.RegisterInstance(tabServiceProvider);
+```
+
+## Создание окна
+
+Процесс создания нового окна:
+
+```csharp
+// 1. Создание контейнера для окна
+var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
+
+// 2. Получение сервиса навигации
+var navigationService = container.GetInstance<INavigationService>();
+
+// 3. Настройка начальной страницы
+navigationService.NavigateToLookUp(selectedObjects);
+
+// 4. Создание ViewModel и View
+var viewModelFactory = container.GetInstance<IViewModelFactory>();
+var mainVM = viewModelFactory.CreateMainVM();
+var window = container.GetInstance<MainView>();
+window.DataContext = mainVM;
+window.Show();
+```
+
+## Преимущества архитектуры
+
+1. **Изоляция окон**: Каждое окно имеет свой контейнер, что предотвращает конфликты
+2. **Гибкость**: Легко добавлять новые ViewModels и сервисы
+3. **Тестируемость**: Все зависимости инжектируются, что упрощает unit-тестирование
+4. **Масштабируемость**: Архитектура поддерживает добавление новых функций
+5. **Отсутствие блокировки контейнера**: Каждый контейнер валидируется только один раз
+
+## Структура ViewModels
+
+### MainVM
+- Главная ViewModel приложения
+- Управляет навигацией между страницами
+- Содержит команды для переключения между вкладками
+
+### LookUpVM
+- Отображает список объектов
+- Поддерживает поиск и фильтрацию
+- Позволяет открывать новые окна для выбранных объектов
+
+### SearchVM
+- Предоставляет интерфейс для поиска объектов
+- Использует ICustomSearchService для выполнения поиска
+
+### TaskTreeVM
+- Отображает дерево задач
+- Показывает иерархию объектов
+
+### AttrVM
+- Отображает атрибуты выбранного объекта
+- Позволяет редактировать свойства объекта 

@@ -4,7 +4,7 @@ namespace PilotLookUp.View.UserControls
 {
     public partial class TaskTreeViewPage : UserControl
     {
-        internal TaskTreeViewPage()
+        public TaskTreeViewPage()
         {
             InitializeComponent();
         }

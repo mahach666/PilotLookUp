@@ -1,13 +1,10 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Contracts;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
+using PilotLookUp.Utils;
 using PilotLookUp.View;
 using PilotLookUp.ViewModel;
-using SimpleInjector;
-
 
 namespace PilotLookUp
 {
@@ -18,72 +15,68 @@ namespace PilotLookUp
             , IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
-            if (!selectedObjects.IsLookable) return;
-
-            var startInfo = new StartViewInfo()
+            if (selectedObjects == null || !selectedObjects.IsLookable || selectedObjects.Count == 0)
             {
-                PageName = PagesName.LookUpPage,
-                SelectedObject = selectedObjects
-            };
+                System.Windows.MessageBox.Show("Нет выбранных объектов для просмотра.", "Предупреждение", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                return;
+            }
 
-            ShowView(objectsRepository, tabServiceProvider, startInfo);
+            ShowView(objectsRepository, tabServiceProvider, PagesName.LookUpPage, selectedObjects);
         }
 
         public static void LookDB(
             IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
-            var startInfo = new StartViewInfo()
-            { PageName = PagesName.DBPage };
-
-            ShowView(objectsRepository, tabServiceProvider, startInfo);
+            ShowView(objectsRepository, tabServiceProvider, PagesName.LookUpPage);
         }
 
         public static void SearchPage(
             IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider)
         {
-            var startInfo = new StartViewInfo()
-            { PageName = PagesName.SearchPage };
-
-            ShowView(objectsRepository, tabServiceProvider, startInfo);
+            ShowView(objectsRepository, tabServiceProvider, PagesName.SearchPage);
         }
 
         private static void ShowView(
             IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider
-            , StartViewInfo startViewInfo)
+            , PagesName pageName
+            , ObjectSet selectedObjects = null)
         {
-            var container = ConfigureContainer(objectsRepository, tabServiceProvider, startViewInfo);
+            try
+            {
+                // Устанавливаем глобальные сервисы (если еще не установлены)
+                ServiceContainer.SetGlobalServices(objectsRepository, tabServiceProvider);
+                
+                // Создаем новый контейнер для этого окна
+                var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider);
+                
+                var navigationService = container.GetInstance<INavigationService>();
 
-            var window = container
-         .GetInstance<MainView>();
+                // Настраиваем начальную страницу
+                switch (pageName)
+                {
+                    case PagesName.LookUpPage:
+                        navigationService.NavigateToLookUp(selectedObjects);
+                        break;
+                    case PagesName.SearchPage:
+                        navigationService.NavigateToSearch();
+                        break;
+                }
 
-            window.Show();
-        }
-
-        private static Container ConfigureContainer(
-            IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider
-            , StartViewInfo startViewInfo)
-        {
-            var container = new Container();
-
-            container.RegisterInstance(objectsRepository);
-            container.RegisterInstance(tabServiceProvider);
-            container.RegisterInstance(startViewInfo);
-
-            container.Register<IRepoService, RepoService>();
-            container.Register<ICustomSearchService, SearchService>();
-            container.Register<ITabService, TabService>();
-            container.Register<IWindowService, WindowService>();
-            container.Register<ITreeItemService, TreeItemService>();
-            container.Register<IDataObjectService, DataObjectService>();
-            container.Register<IPageService, PageService>();
-            container.Register<MainVM>();
-            container.Register<MainView>();
-
-            return container;
+                var viewModelFactory = container.GetInstance<IViewModelFactory>();
+                var mainVM = viewModelFactory.CreateMainVM();
+                var window = container.GetInstance<MainView>();
+                window.DataContext = mainVM;
+                window.Show();
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Ошибка при создании окна: {ex.Message}\n\n{ex.StackTrace}", 
+                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                throw;
+            }
         }
     }
 }

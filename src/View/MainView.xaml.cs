@@ -4,10 +4,9 @@ namespace PilotLookUp.View
 {
     public partial class MainView
     {
-        public MainView(MainVM vm)
+        public MainView()
         {
             InitializeComponent();
-            DataContext = vm;
         }
     }
 }

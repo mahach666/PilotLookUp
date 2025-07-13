@@ -17,13 +17,41 @@ namespace PilotLookUp.ViewModel
     {
         private IRepoService _repoService;
         private IWindowService _windowService;
+        private bool _dataInitialized = false;
 
         public LookUpVM(IRepoService lookUpModel, 
             IWindowService windowService)
         {
             _repoService = lookUpModel;
             _windowService = windowService;
-            DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
+        }
+
+        private void LoadDataFromRepository()
+        {
+            try
+            {
+                var repoData = _repoService.GetWrapedRepo();
+                if (repoData != null && repoData.Any())
+                {
+                    var listItems = repoData.Select(x => new ListItemVM(x)).ToList();
+                    _selectionDataObjects = listItems;
+                    OnPropertyChanged(nameof(SelectionDataObjects));
+                    
+                    // Устанавливаем первый элемент как выбранный
+                    DataObjectSelected = listItems.FirstOrDefault();
+                    
+                    UpdateFiltredDataObjectsAsync();
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Репозиторий пуст или недоступен.", "Информация", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Ошибка при загрузке данных из репозитория: {ex.Message}\n\n{ex.StackTrace}", 
+                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
         }
 
         private List<ListItemVM> _selectionDataObjects;
@@ -32,11 +60,26 @@ namespace PilotLookUp.ViewModel
             get => _selectionDataObjects;
             set
             {
-                if (value == null || !value.Any()) return;
+                if (value == null || !value.Any()) 
+                {
+                    // Если передали пустые данные, загружаем из репозитория
+                    LoadDataFromRepository();
+                    return;
+                }
                 _selectionDataObjects = value;
+                _dataInitialized = true; // Отмечаем, что данные были установлены через свойство
                 DataObjectSelected = value?.FirstOrDefault();
                 OnPropertyChanged();
                 UpdateFiltredDataObjectsAsync();
+            }
+        }
+
+        // Метод для инициализации данных, если они не были установлены через свойство
+        public void InitializeDataIfNeeded()
+        {
+            if (!_dataInitialized)
+            {
+                LoadDataFromRepository();
             }
         }
 

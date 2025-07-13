@@ -11,13 +11,20 @@ namespace PilotLookUp.ViewModel
 {
     public class MainVM : INotifyPropertyChanged
     {
-        private IPageService _pageController { get; }
+        private readonly INavigationService _navigationService;
+        private readonly IViewModelFactory _viewModelFactory;
 
-        public MainVM(IPageService pageService)
+        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory)
         {
-            _pageController = pageService;
-            _pageController.PageChanged += page => SelectedControl = page;
-            SelectedControl = _pageController.ActivePage;
+            _navigationService = navigationService;
+            _viewModelFactory = viewModelFactory;
+            _navigationService.PageChanged += page => SelectedControl = page;
+            
+            // Инициализируем SelectedControl только если ActivePage не null
+            if (_navigationService.ActivePage != null)
+            {
+                SelectedControl = _navigationService.ActivePage;
+            }
         }
 
         private IPage _selectedControl;
@@ -34,7 +41,20 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public PagesName ActivePage => _pageController.ActivePage.GetName();
+        public PagesName ActivePage 
+        {
+            get
+            {
+                try
+                {
+                    return _navigationService.ActivePage?.GetName() ?? PagesName.None;
+                }
+                catch
+                {
+                    return PagesName.None;
+                }
+            }
+        }
 
         public Visibility TaskButtVisibilities
         {
@@ -52,11 +72,39 @@ namespace PilotLookUp.ViewModel
 
         public Visibility AttrButtVisibilities => TaskButtVisibilities;
 
-        public ICommand LookDBCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.DBPage));
-        public ICommand SearchCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.SearchPage));
-        public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
-        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
-        public ICommand AttrCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.AttrPage));
+        public ICommand LookDBCommand => new RelayCommand<object>(_ => _navigationService.NavigateToLookUp());
+        public ICommand SearchCommand => new RelayCommand<object>(_ => _navigationService.NavigateToSearch());
+        public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _navigationService.NavigateTo(PagesName.LookUpPage));
+        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => 
+        {
+            try
+            {
+                if (SelectedControl is LookUpVM lookUpVM && lookUpVM.DataObjectSelected?.PilotObjectHelper != null)
+                {
+                    _navigationService.NavigateToTaskTree(lookUpVM.DataObjectSelected.PilotObjectHelper);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Ошибка при переходе к дереву задач: {ex.Message}", 
+                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+        });
+        public ICommand AttrCommand => new RelayCommand<object>(_ => 
+        {
+            try
+            {
+                if (SelectedControl is LookUpVM lookUpVM && lookUpVM.DataObjectSelected?.PilotObjectHelper != null)
+                {
+                    _navigationService.NavigateToAttr(lookUpVM.DataObjectSelected.PilotObjectHelper);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Ошибка при переходе к атрибутам: {ex.Message}", 
+                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+        });
 
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -9,21 +9,20 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class SearchResVM
+    public class SearchResVM
     {
-        private PilotObjectHelper _dataObj { get; }
-        private IPageService _pageController { get; }
-        private ITabService _tabService { get; }
+        private readonly PilotObjectHelper _dataObj;
+        private readonly INavigationService _navigationService;
+        private readonly ITabService _tabService;
 
-
-        internal SearchResVM(
-             IPageService pageController
+        public SearchResVM(
+             INavigationService navigationService
             , ITabService tabService
             , PilotObjectHelper pilotObjectHelper)
         {
            
             _dataObj = pilotObjectHelper;
-            _pageController = pageController;
+            _navigationService = navigationService;
             _tabService = tabService;
         }
 
@@ -34,7 +33,7 @@ namespace PilotLookUp.ViewModel
 
         private void GoPage()
         {
-            _pageController.CreatePage(PagesName.LookUpPage, new ObjectSet(null) { _dataObj });
+            _navigationService.NavigateToLookUp(new ObjectSet(null) { _dataObj });
         }
 
         public ICommand GoPageCommand => new RelayCommand<object>(_ => GoPage());

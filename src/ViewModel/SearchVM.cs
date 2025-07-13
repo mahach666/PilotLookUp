@@ -11,18 +11,18 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class SearchVM : INotifyPropertyChanged, IPage
+    public class SearchVM : INotifyPropertyChanged, IPage
     {
-        private IPageService _pageController { get; }
-        private ICustomSearchService _searchService { get; }
-        private ITabService _tabService { get; }
+        private readonly INavigationService _navigationService;
+        private readonly ICustomSearchService _searchService;
+        private readonly ITabService _tabService;
 
         public SearchVM(
-            IPageService pageController
+            INavigationService navigationService
             , ICustomSearchService searchService
             , ITabService tabService)
         {
-            _pageController = pageController;
+            _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;
             ClipboardCheck();
@@ -78,7 +78,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<SearchResVM>();
             foreach (var item in objectSet)
             {
-                var vm = new SearchResVM(_pageController, _tabService, item);
+                var vm = new SearchResVM(_navigationService, _tabService, item);
                 res.Add(vm);
             }
             Result = res;
