@@ -12,16 +12,18 @@ namespace PilotLookUp.Model.Services
 {
     public class SearchService : ICustomSearchService
     {
-        private IObjectsRepository _objectsRepository { get; }
+        private readonly IObjectsRepository _objectsRepository;
+        private readonly IObjectSetFactory _objectSetFactory;
 
-        public SearchService(IObjectsRepository objectsRepository)
+        public SearchService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory)
         {
             _objectsRepository = objectsRepository;
+            _objectSetFactory = objectSetFactory;
         }
 
         public async Task<ObjectSet> GetObjByString(string request)
         {
-            var tracer = new Tracer(_objectsRepository, null, null);
+            var tracer = new Tracer(_objectsRepository, null, null, _objectSetFactory);
             if (Guid.TryParse(request, out var id))
             {
                 var res = await tracer.Trace(await _objectsRepository.GetObjByGuid(id));
@@ -29,14 +31,14 @@ namespace PilotLookUp.Model.Services
             }
             else if (int.TryParse(request, out var intId))
             {
-                var res = new ObjectSet(null);
+                var res = _objectSetFactory.Create(null);
                 var person = _objectsRepository.GetPerson(intId);
                 var orgUnit = _objectsRepository.GetOrganisationUnit(intId);
                 var iType = _objectsRepository.GetType(intId);
                 if (person != null) { res.AddRange(await tracer.Trace(person)); }
                 if (orgUnit != null) { res.AddRange(await tracer.Trace(orgUnit)); }
                 if (iType != null) { res.AddRange(await tracer.Trace(iType)); }
-                var distSet = new ObjectSet(null);
+                var distSet = _objectSetFactory.Create(null);
                 distSet.AddRange(res.Distinct());
                 return distSet;
             }
@@ -45,13 +47,13 @@ namespace PilotLookUp.Model.Services
 
         public async Task<ObjectSet> GetBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
         {
-            ObjectSet pilotObjectHelpers = new ObjectSet(null);
+            ObjectSet pilotObjectHelpers = _objectSetFactory.Create(null);
             ObjectSet childrenSet;
 
             if (objectHelper.LookUpObject is IDataObject dataObject)
             {
                 var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
-                childrenSet = await new Tracer(_objectsRepository, null, null).Trace(listId);
+                childrenSet = await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(listId);
             }
             else return null;
 
@@ -84,7 +86,7 @@ namespace PilotLookUp.Model.Services
             if (dataObject != null)
             {
                 var parent = await dataObject.FindLastParrent(_objectsRepository);
-                var objSet = await new Tracer(_objectsRepository, null, null).Trace(parent);
+                var objSet = await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(parent);
                 return objSet.FirstOrDefault() is DataObjectHelper result ? result : null;
             }
             return null;

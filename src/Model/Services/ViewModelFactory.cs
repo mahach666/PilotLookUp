@@ -1,5 +1,6 @@
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
+using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Linq;
 
@@ -41,6 +42,14 @@ namespace PilotLookUp.Model.Services
         public MainVM CreateMainVM()
         {
             return _viewModelProvider.CreateMainVM(_navigationService, this);
+        }
+
+        public SearchResVM CreateSearchResVM(PilotObjectHelper pilotObjectHelper)
+        {
+            var container = ServiceContainer.CreateContainer();
+            var tabService = container.GetInstance<ITabService>();
+            var objectSetFactory = container.GetInstance<IObjectSetFactory>();
+            return new SearchResVM(_navigationService, tabService, pilotObjectHelper, objectSetFactory);
         }
     }
 } 

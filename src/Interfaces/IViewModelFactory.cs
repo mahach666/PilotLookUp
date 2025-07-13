@@ -11,5 +11,6 @@ namespace PilotLookUp.Interfaces
         TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject);
         AttrVM CreateAttrVM(PilotObjectHelper selectedObject);
         MainVM CreateMainVM();
+        SearchResVM CreateSearchResVM(PilotObjectHelper pilotObjectHelper);
     }
 } 

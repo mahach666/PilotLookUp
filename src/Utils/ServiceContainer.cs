@@ -56,6 +56,10 @@ namespace PilotLookUp.Utils
             container.Register<ISelectionService, SelectionService>(Lifestyle.Singleton);
             container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
             
+            // Регистрируем фабрики
+            container.Register<IPilotObjectHelperFactory, PilotObjectHelperFactory>(Lifestyle.Singleton);
+            container.Register<IObjectSetFactory, ObjectSetFactory>(Lifestyle.Singleton);
+            
             // Регистрируем ThemeService
             var themeToUse = theme ?? App.Theme;
             container.Register<IThemeService>(() => new ThemeService(themeToUse), Lifestyle.Singleton);

@@ -10,14 +10,14 @@ namespace PilotLookUp.Objects
 {
     public class ObjectSet : List<PilotObjectHelper>
     {
-        private static IThemeService _themeService;
-
-        public ObjectSet(MemberInfo memberInfo)
+        private readonly IThemeService _themeService;
+        private MemberInfo _memberInfo;
+        public ObjectSet(IThemeService themeService, MemberInfo memberInfo)
         {
+            _themeService = themeService;
             _memberInfo = memberInfo;
         }
 
-        private MemberInfo _memberInfo { get; }
         public bool IsMethodResult { get => _memberInfo?.MemberType is MemberTypes.Method; }
         public string SenderMemberName { get => IsMethodResult ? _memberInfo?.Name + "()" : _memberInfo?.Name; }
 
@@ -39,13 +39,12 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                var themeService = _themeService ?? App.ThemeService;
                 if (IsLookable == true)
                 {
-                    return new SolidColorBrush(themeService.IsJediTheme ? Colors.Blue : Colors.SteelBlue);
+                    return new SolidColorBrush(_themeService.IsJediTheme ? Colors.Blue : Colors.SteelBlue);
                 }
                 else if (Discription.StartsWith("Error:")) return new SolidColorBrush(Colors.Red);
-                return new SolidColorBrush(themeService.IsJediTheme ? Colors.Black : Colors.White);
+                return new SolidColorBrush(_themeService.IsJediTheme ? Colors.Black : Colors.White);
             }
         }
 
@@ -72,12 +71,6 @@ namespace PilotLookUp.Objects
                 }
                 return false;
             }
-        }
-
-        // Метод для установки ThemeService (вызывается из DI контейнера)
-        public static void SetThemeService(IThemeService themeService)
-        {
-            _themeService = themeService;
         }
 
         public override string ToString()

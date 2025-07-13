@@ -16,15 +16,18 @@ namespace PilotLookUp.ViewModel
         private readonly INavigationService _navigationService;
         private readonly ICustomSearchService _searchService;
         private readonly ITabService _tabService;
+        private readonly IObjectSetFactory _objectSetFactory;
 
         public SearchVM(
             INavigationService navigationService
             , ICustomSearchService searchService
-            , ITabService tabService)
+            , ITabService tabService
+            , IObjectSetFactory objectSetFactory)
         {
             _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;
+            _objectSetFactory = objectSetFactory;
             ClipboardCheck();
         }
 
@@ -78,7 +81,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<SearchResVM>();
             foreach (var item in objectSet)
             {
-                var vm = new SearchResVM(_navigationService, _tabService, item);
+                var vm = new SearchResVM(_navigationService, _tabService, item, _objectSetFactory);
                 res.Add(vm);
             }
             Result = res;

@@ -14,16 +14,19 @@ namespace PilotLookUp.ViewModel
         private readonly PilotObjectHelper _dataObj;
         private readonly INavigationService _navigationService;
         private readonly ITabService _tabService;
+        private readonly IObjectSetFactory _objectSetFactory;
 
         public SearchResVM(
              INavigationService navigationService
             , ITabService tabService
-            , PilotObjectHelper pilotObjectHelper)
+            , PilotObjectHelper pilotObjectHelper
+            , IObjectSetFactory objectSetFactory)
         {
            
             _dataObj = pilotObjectHelper;
             _navigationService = navigationService;
             _tabService = tabService;
+            _objectSetFactory = objectSetFactory;
         }
 
         public string Name => "DisplayName : " + _dataObj.Name;
@@ -33,7 +36,9 @@ namespace PilotLookUp.ViewModel
 
         private void GoPage()
         {
-            _navigationService.NavigateToLookUp(new ObjectSet(null) { _dataObj });
+            var objectSet = _objectSetFactory.Create(null);
+            objectSet.Add(_dataObj);
+            _navigationService.NavigateToLookUp(objectSet);
         }
 
         public ICommand GoPageCommand => new RelayCommand<object>(_ => GoPage());

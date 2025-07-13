@@ -226,4 +226,70 @@ private void ItemClick(string name)
 - Изоляцию наших сервисов от внешних зависимостей
 - Отсутствие конфликтов с MEF инъекцией зависимостей
 - Сохранение состояния сервисов между вызовами (важно для SelectionService)
-- Правильную работу LookSelected функциональности 
+- Правильную работу LookSelected функциональности
+
+## Принцип инверсии зависимостей (DIP)
+
+### Фабрики для создания объектов
+
+Для соблюдения принципа инверсии зависимостей созданы фабрики для создания объектов, которые требуют зависимостей:
+
+#### IPilotObjectHelperFactory
+```csharp
+public interface IPilotObjectHelperFactory
+{
+    PilotObjectHelper Create(string name, string stringId, object lookUpObject, bool isLookable);
+}
+```
+
+#### IObjectSetFactory
+```csharp
+public interface IObjectSetFactory
+{
+    ObjectSet Create(MemberInfo memberInfo);
+}
+```
+
+### Внедрение зависимостей через конструкторы
+
+Все сервисы теперь получают зависимости через конструкторы:
+
+```csharp
+public class SearchService : ICustomSearchService
+{
+    private readonly IObjectsRepository _objectsRepository;
+    private readonly IObjectSetFactory _objectSetFactory;
+
+    public SearchService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory)
+    {
+        _objectsRepository = objectsRepository;
+        _objectSetFactory = objectSetFactory;
+    }
+}
+```
+
+### Использование фабрик
+
+Вместо прямого создания объектов используется фабрика:
+
+```csharp
+// Было:
+var objectSet = new ObjectSet(null);
+
+// Стало:
+var objectSet = _objectSetFactory.Create(null);
+```
+
+### Регистрация фабрик в DI
+
+```csharp
+container.Register<IPilotObjectHelperFactory, PilotObjectHelperFactory>(Lifestyle.Singleton);
+container.Register<IObjectSetFactory, ObjectSetFactory>(Lifestyle.Singleton);
+```
+
+### Преимущества
+
+1. **Устранение статических зависимостей**: Объекты больше не зависят от глобальных сервисов
+2. **Тестируемость**: Легко создавать моки и тестировать компоненты изолированно
+3. **Гибкость**: Можно легко заменить реализации через DI
+4. **Соблюдение DIP**: Зависимости инжектируются через абстракции 

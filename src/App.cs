@@ -60,10 +60,8 @@ namespace PilotLookUp
             // Создаем глобальный контейнер для сервисов, которые должны сохранять состояние
             _globalContainer = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, _theme);
             
-            // Устанавливаем ThemeService в статические классы
+            // Устанавливаем ThemeService для обратной совместимости
             ThemeService = _globalContainer.GetInstance<IThemeService>();
-            PilotObjectHelper.SetThemeService(ThemeService);
-            ObjectSet.SetThemeService(ThemeService);
         }
 
         // Build

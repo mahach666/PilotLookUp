@@ -9,11 +9,13 @@ namespace PilotLookUp.Model.Services
     public class SelectionService : ISelectionService
     {
         private readonly IObjectMappingService _objectMappingService;
+        private readonly IObjectSetFactory _objectSetFactory;
         private ObjectSet _currentSelection;
 
-        public SelectionService(IObjectMappingService objectMappingService)
+        public SelectionService(IObjectMappingService objectMappingService, IObjectSetFactory objectSetFactory)
         {
             _objectMappingService = objectMappingService;
+            _objectSetFactory = objectSetFactory;
         }
 
         public ObjectSet GetCurrentSelection()
@@ -26,7 +28,7 @@ namespace PilotLookUp.Model.Services
             if (rawObjects?.Any() == true)
             {
                 var wrappedObjects = _objectMappingService.WrapMany(rawObjects);
-                _currentSelection = new ObjectSet(null);
+                _currentSelection = _objectSetFactory.Create(null);
                 _currentSelection.AddRange(wrappedObjects);
             }
             else

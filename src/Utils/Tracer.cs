@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Extensions;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using System;
 using System.Collections;
@@ -12,12 +13,12 @@ namespace PilotLookUp.Utils
 {
     public class Tracer
     {
-        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember)
+        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory)
         {
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             _objectsRepository = objectsRepository;
             _memberInfo = senderMember;
-            _objectSet = new ObjectSet(senderMember);
+            _objectSet = objectSetFactory.Create(senderMember);
         }
 
         private int _adaptiveTimer = 200;
