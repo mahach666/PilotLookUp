@@ -111,6 +111,7 @@
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="System.Xaml" />
 		<Reference Include="WindowsBase" />
+		<Reference Include="System.IO" />
 	</ItemGroup>
 	
 	<ItemGroup>

@@ -16,11 +16,13 @@ namespace PilotLookUp.ViewModel
     {
         private PilotObjectHelper _objectHelper;
         private IDataObjectService _dataObjectService;
+        private readonly IErrorHandlingService _errorHandlingService;
 
-        public AttrVM(PilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService)
+        public AttrVM(PilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IErrorHandlingService errorHandlingService)
         {
             _objectHelper = pilotObjectHelper;
             _dataObjectService = dataObjectService;
+            _errorHandlingService = errorHandlingService;
         }
 
         public IEnumerable<AttrDTO> Attrs
@@ -63,7 +65,6 @@ namespace PilotLookUp.ViewModel
         {
             var errorText = "Упс, ничего не выбрано.";
             if (_dataGridSelected == null) MessageBox.Show(errorText);
-
             try
             {
              if (sender == "DataGridSelectName")
@@ -83,8 +84,9 @@ namespace PilotLookUp.ViewModel
                     MessageBox.Show(errorText);
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
+                _errorHandlingService?.HandleError(ex, "AttrVM.CopyToClipboard");
                 MessageBox.Show(errorText);
             }
         }

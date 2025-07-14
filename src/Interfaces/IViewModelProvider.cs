@@ -5,10 +5,10 @@ namespace PilotLookUp.Interfaces
 {
     public interface IViewModelProvider
     {
-        LookUpVM CreateLookUpVM(ObjectSet dataObjects = null);
+        LookUpVM CreateLookUpVM(ObjectSet dataObjects = null, IErrorHandlingService errorHandlingService = null);
         SearchVM CreateSearchVM(INavigationService navigationService);
-        TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject);
-        AttrVM CreateAttrVM(PilotObjectHelper selectedObject);
-        MainVM CreateMainVM(INavigationService navigationService, IViewModelFactory viewModelFactory);
+        TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null);
+        AttrVM CreateAttrVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null);
+        MainVM CreateMainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService = null);
     }
 } 

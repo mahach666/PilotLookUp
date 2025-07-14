@@ -22,13 +22,15 @@ namespace PilotLookUp.ViewModel
         private ICustomSearchService _searchService;
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
+        private readonly IErrorHandlingService _errorHandlingService;
 
         public TaskTreeVM(
              PilotObjectHelper pilotObjectHelper,
              IRepoService lookUpModel,
              ICustomSearchService searchService,
              IWindowService windowService,
-             ITreeItemService treeItemService)
+             ITreeItemService treeItemService,
+             IErrorHandlingService errorHandlingService)
         {
             _revokedTask = false;
             _repoService = lookUpModel;
@@ -36,6 +38,7 @@ namespace PilotLookUp.ViewModel
             _searchService = searchService;
             _windowService = windowService;
             _treeItemService = treeItemService;
+            _errorHandlingService = errorHandlingService;
             FirstParrentNode = new ObservableCollection<ICustomTree>();
             _ = LoadDataAsync();
         }
@@ -195,7 +198,6 @@ namespace PilotLookUp.ViewModel
         {
             var errorText = "Упс, ничего не выбрано.";
             if (_dataObjectSelected == null) MessageBox.Show(errorText);
-
             try
             {
                 if (sender == "List")
@@ -219,8 +221,9 @@ namespace PilotLookUp.ViewModel
                     MessageBox.Show(errorText);
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
+                _errorHandlingService?.HandleError(ex, "TaskTreeVM.CopyToClipboard");
                 MessageBox.Show(errorText);
             }
         }

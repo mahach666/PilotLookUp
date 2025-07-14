@@ -4,6 +4,6 @@ namespace PilotLookUp.Interfaces
 {
     public interface ISearchViewModelCreator
     {
-        SearchVM CreateSearchVM(INavigationService navigationService);
+        SearchVM CreateSearchVM(INavigationService navigationService, IErrorHandlingService errorHandlingService = null);
     }
 } 

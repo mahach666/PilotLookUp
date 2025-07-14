@@ -18,12 +18,13 @@ namespace PilotLookUp.ViewModel
         private IRepoService _repoService;
         private IWindowService _windowService;
         private bool _dataInitialized = false;
+        private readonly IErrorHandlingService _errorHandlingService;
 
-        public LookUpVM(IRepoService lookUpModel, 
-            IWindowService windowService)
+        public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService)
         {
             _repoService = lookUpModel;
             _windowService = windowService;
+            _errorHandlingService = errorHandlingService;
         }
 
         private void LoadDataFromRepository()
@@ -49,6 +50,7 @@ namespace PilotLookUp.ViewModel
             }
             catch (System.Exception ex)
             {
+                _errorHandlingService?.HandleError(ex, "LookUpVM.LoadDataFromRepository");
                 System.Windows.MessageBox.Show($"Ошибка при загрузке данных из репозитория: {ex.Message}\n\n{ex.StackTrace}", 
                     "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
@@ -200,8 +202,9 @@ namespace PilotLookUp.ViewModel
                     MessageBox.Show(errorText);
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
+                _errorHandlingService?.HandleError(ex, "LookUpVM.CopyToClipboard");
                 MessageBox.Show(errorText);
             }
         }

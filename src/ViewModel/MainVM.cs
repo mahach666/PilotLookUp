@@ -13,11 +13,13 @@ namespace PilotLookUp.ViewModel
     {
         private readonly INavigationService _navigationService;
         private readonly IViewModelFactory _viewModelFactory;
+        private readonly IErrorHandlingService _errorHandlingService;
 
-        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory)
+        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService)
         {
             _navigationService = navigationService;
             _viewModelFactory = viewModelFactory;
+            _errorHandlingService = errorHandlingService;
             _navigationService.PageChanged += page => SelectedControl = page;
             
             // Инициализируем SelectedControl только если ActivePage не null
@@ -86,6 +88,7 @@ namespace PilotLookUp.ViewModel
             }
             catch (System.Exception ex)
             {
+                _errorHandlingService?.HandleError(ex, "MainVM.TaskTreeCommand");
                 System.Windows.MessageBox.Show($"Ошибка при переходе к дереву задач: {ex.Message}", 
                     "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
@@ -101,6 +104,7 @@ namespace PilotLookUp.ViewModel
             }
             catch (System.Exception ex)
             {
+                _errorHandlingService?.HandleError(ex, "MainVM.AttrCommand");
                 System.Windows.MessageBox.Show($"Ошибка при переходе к атрибутам: {ex.Message}", 
                     "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }

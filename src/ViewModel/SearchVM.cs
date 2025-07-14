@@ -17,17 +17,20 @@ namespace PilotLookUp.ViewModel
         private readonly ICustomSearchService _searchService;
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
+        private readonly IErrorHandlingService _errorHandlingService;
 
         public SearchVM(
             INavigationService navigationService
             , ICustomSearchService searchService
             , ITabService tabService
-            , IObjectSetFactory objectSetFactory)
+            , IObjectSetFactory objectSetFactory
+            , IErrorHandlingService errorHandlingService)
         {
             _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;
             _objectSetFactory = objectSetFactory;
+            _errorHandlingService = errorHandlingService;
             ClipboardCheck();
         }
 
@@ -36,14 +39,19 @@ namespace PilotLookUp.ViewModel
             string clipboardText = Clipboard.GetText();
             Application.Current.Dispatcher.Invoke(async () =>
             {
-                var res = new List<UserControl>();
-                var searchRes = await _searchService.GetObjByString(clipboardText);
+                try
                 {
+                    var res = new List<UserControl>();
+                    var searchRes = await _searchService.GetObjByString(clipboardText);
                     if (searchRes?.Count > 0)
                     {
                         Text = clipboardText;
                         SetRes(searchRes);
                     }
+                }
+                catch (System.Exception ex)
+                {
+                    _errorHandlingService?.HandleError(ex, "SearchVM.ClipboardCheck");
                 }
             });
         }
@@ -71,8 +79,15 @@ namespace PilotLookUp.ViewModel
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {
-                var searchRes = await _searchService.GetObjByString(Text);
-                SetRes(searchRes);
+                try
+                {
+                    var searchRes = await _searchService.GetObjByString(Text);
+                    SetRes(searchRes);
+                }
+                catch (System.Exception ex)
+                {
+                    _errorHandlingService?.HandleError(ex, "SearchVM.Search");
+                }
             });
         }
 

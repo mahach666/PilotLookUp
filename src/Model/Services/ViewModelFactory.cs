@@ -11,37 +11,39 @@ namespace PilotLookUp.Model.Services
         private readonly IViewModelProvider _viewModelProvider;
         private readonly ISearchViewModelCreator _searchViewModelCreator;
         private readonly INavigationService _navigationService;
+        private readonly IErrorHandlingService _errorHandlingService;
 
-        public ViewModelFactory(IViewModelProvider viewModelProvider, ISearchViewModelCreator searchViewModelCreator, INavigationService navigationService)
+        public ViewModelFactory(IViewModelProvider viewModelProvider, ISearchViewModelCreator searchViewModelCreator, INavigationService navigationService, IErrorHandlingService errorHandlingService)
         {
             _viewModelProvider = viewModelProvider;
             _searchViewModelCreator = searchViewModelCreator;
             _navigationService = navigationService;
+            _errorHandlingService = errorHandlingService;
         }
 
-        public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null)
+        public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null, IErrorHandlingService errorHandlingService = null)
         {
-            return _viewModelProvider.CreateLookUpVM(dataObjects);
+            return _viewModelProvider.CreateLookUpVM(dataObjects, errorHandlingService ?? _errorHandlingService);
         }
 
-        public SearchVM CreateSearchVM()
+        public SearchVM CreateSearchVM(IErrorHandlingService errorHandlingService = null)
         {
-            return _searchViewModelCreator.CreateSearchVM(_navigationService);
+            return _searchViewModelCreator.CreateSearchVM(_navigationService, errorHandlingService ?? _errorHandlingService);
         }
 
-        public TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject)
+        public TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
-            return _viewModelProvider.CreateTaskTreeVM(selectedObject);
+            return _viewModelProvider.CreateTaskTreeVM(selectedObject, errorHandlingService ?? _errorHandlingService);
         }
 
-        public AttrVM CreateAttrVM(PilotObjectHelper selectedObject)
+        public AttrVM CreateAttrVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
-            return _viewModelProvider.CreateAttrVM(selectedObject);
+            return _viewModelProvider.CreateAttrVM(selectedObject, errorHandlingService ?? _errorHandlingService);
         }
 
-        public MainVM CreateMainVM()
+        public MainVM CreateMainVM(IErrorHandlingService errorHandlingService = null)
         {
-            return _viewModelProvider.CreateMainVM(_navigationService, this);
+            return _viewModelProvider.CreateMainVM(_navigationService, this, errorHandlingService ?? _errorHandlingService);
         }
 
         public SearchResVM CreateSearchResVM(PilotObjectHelper pilotObjectHelper)

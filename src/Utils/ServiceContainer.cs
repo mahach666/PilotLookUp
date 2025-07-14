@@ -46,15 +46,30 @@ namespace PilotLookUp.Utils
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             
             // Регистрируем новые сервисы
-            container.Register<ISearchViewModelCreator, SearchViewModelCreator>(Lifestyle.Singleton);
-            container.Register<IViewModelProvider, ViewModelProvider>(Lifestyle.Singleton);
-            container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
-            container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
+            container.Register<ISearchViewModelCreator>(() => new SearchViewModelCreator(
+                container.GetInstance<ICustomSearchService>(),
+                container.GetInstance<ITabService>(),
+                container.GetInstance<IObjectSetFactory>(),
+                container.GetInstance<IErrorHandlingService>()), Lifestyle.Singleton);
+            container.Register<IViewModelProvider>(() => new ViewModelProvider(
+                container.GetInstance<IRepoService>(),
+                container.GetInstance<ICustomSearchService>(),
+                container.GetInstance<ITabService>(),
+                container.GetInstance<IWindowService>(),
+                container.GetInstance<ITreeItemService>(),
+                container.GetInstance<IDataObjectService>(),
+                container.GetInstance<IErrorHandlingService>()), Lifestyle.Singleton);
+            container.Register<IViewModelFactory>(() => new ViewModelFactory(
+                container.GetInstance<IViewModelProvider>(),
+                container.GetInstance<ISearchViewModelCreator>(),
+                container.GetInstance<INavigationService>(),
+                container.GetInstance<IErrorHandlingService>()), Lifestyle.Singleton);
             
             // Регистрируем новые сервисы для разделения ответственности
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
             container.Register<ISelectionService, SelectionService>(Lifestyle.Singleton);
             container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
+            container.Register<IErrorHandlingService, ErrorHandlingService>(Lifestyle.Singleton);
             
             // Регистрируем фабрики
             container.Register<IPilotObjectHelperFactory, PilotObjectHelperFactory>(Lifestyle.Singleton);
@@ -71,6 +86,7 @@ namespace PilotLookUp.Utils
             // Регистрируем Views
             container.Register<MainView>(() =>
                 System.Windows.Application.Current.Dispatcher.Invoke(() => new MainView()), Lifestyle.Transient);
+            container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
         }
 
         public static void SetGlobalServices(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
