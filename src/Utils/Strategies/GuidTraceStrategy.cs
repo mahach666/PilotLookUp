@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using PilotLookUp.Extensions;
+using Ascon.Pilot.SDK.Data;
 
 namespace PilotLookUp.Utils.Strategies
 {
@@ -23,7 +24,7 @@ namespace PilotLookUp.Utils.Strategies
 
             if (memberInfo?.Name == "HistoryItems")
             {
-                var lodedHistory = await objectsRepository.GetHistoryItemWithTimeout(guid, tracer.AdaptiveTimer);
+                var lodedHistory = await tracer.GetOrAddHistoryAsync(guid, async () => (object)await objectsRepository.GetHistoryItemWithTimeout(guid, tracer.AdaptiveTimer)) as IHistoryItem;
                 if (lodedHistory != null)
                 {
                     context.ObjectSet.Add(tracer.PilotObjectMap.Wrap(lodedHistory));
@@ -31,7 +32,7 @@ namespace PilotLookUp.Utils.Strategies
                 }
             }
 
-            var lodedObj = await objectsRepository.GetObjectWithTimeout(guid, tracer.AdaptiveTimer);
+            var lodedObj = await tracer.GetOrAddObjectAsync(guid, async () => (object)await objectsRepository.GetObjectWithTimeout(guid, tracer.AdaptiveTimer));
             if (lodedObj != null)
             {
                 context.ObjectSet.Add(tracer.PilotObjectMap.Wrap(lodedObj));

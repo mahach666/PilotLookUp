@@ -115,18 +115,15 @@ namespace PilotLookUp.ViewModel
         {
             if (SearchText?.Length >= 2)
             {
-                var filtered = await Task.Run(() =>
-                    SelectionDataObjects
-                        .Where(i => i.ObjName.ToUpper().Contains(SearchText.ToUpper())
-                                 || i.StrId.ToUpper().Contains(SearchText.ToUpper()))
-                        .ToList()
-                );
-
-                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = filtered);
+                var filtered = SelectionDataObjects
+                    .Where(i => i.ObjName.ToUpper().Contains(SearchText.ToUpper())
+                             || i.StrId.ToUpper().Contains(SearchText.ToUpper()))
+                    .ToList();
+                await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = filtered);
             }
             else
             {
-                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = SelectionDataObjects);
+                await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = SelectionDataObjects);
             }
         }
 
@@ -156,12 +153,14 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void UpdateInfo()
+        private async void UpdateInfo()
         {
-            Task.Run(async () =>
+            if (_dataObjectSelected == null || _dataObjectSelected.PilotObjectHelper == null)
             {
-                Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
-            });
+                Info = null;
+                return;
+            }
+            Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
         }
         private List<ObjectSet> _info;
         public List<ObjectSet> Info

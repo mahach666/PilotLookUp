@@ -159,12 +159,9 @@ namespace PilotLookUp.ViewModel
                 }
             }
         }
-        private void UpdateInfo()
+        private async void UpdateInfo()
         {
-            Task.Run(async () =>
-            {
-                Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
-            });
+            Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
         }
 
         #endregion

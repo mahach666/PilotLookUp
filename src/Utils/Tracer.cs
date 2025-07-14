@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace PilotLookUp.Utils
 {
@@ -30,6 +31,8 @@ namespace PilotLookUp.Utils
         public MemberInfo MemberInfo { get; }
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly TraceStrategyRegistry _traceStrategyRegistry;
+        private readonly ConcurrentDictionary<Guid, Task<object>> _objectCache = new();
+        private readonly ConcurrentDictionary<Guid, Task<object>> _historyCache = new();
 
         public async Task<ObjectSet> Trace(object obj)
         {
@@ -50,6 +53,15 @@ namespace PilotLookUp.Utils
             registry.Register(new KeyValuePairGuidIntTraceStrategy());
             registry.Register(new EnumerableTraceStrategy());
             // Можно добавить другие стратегии по мере необходимости
+        }
+
+        public Task<object> GetOrAddObjectAsync(Guid guid, Func<Task<object>> factory)
+        {
+            return _objectCache.GetOrAdd(guid, _ => factory());
+        }
+        public Task<object> GetOrAddHistoryAsync(Guid guid, Func<Task<object>> factory)
+        {
+            return _historyCache.GetOrAdd(guid, _ => factory());
         }
     }
 }

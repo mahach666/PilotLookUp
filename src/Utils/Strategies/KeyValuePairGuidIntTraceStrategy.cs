@@ -16,7 +16,7 @@ namespace PilotLookUp.Utils.Strategies
             var tracer = context.Tracer;
             var objectsRepository = tracer.ObjectsRepository;
             var pair = (KeyValuePair<Guid, int>)obj;
-            var loadedObj = await objectsRepository.GetObjectWithTimeout(pair.Key);
+            var loadedObj = await tracer.GetOrAddObjectAsync(pair.Key, async () => (object)await objectsRepository.GetObjectWithTimeout(pair.Key)) as IDataObject;
             var loadedPair = new KeyValuePair<IDataObject, int>(loadedObj, pair.Value);
             context.ObjectSet.Add(tracer.PilotObjectMap.Wrap(loadedPair));
         }
