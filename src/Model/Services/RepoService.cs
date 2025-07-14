@@ -12,15 +12,19 @@ namespace PilotLookUp.Model.Services
     {
         private readonly IObjectsRepository _objectsRepository;
         private readonly IObjectSetFactory _objectSetFactory;
+        private readonly IValidationService _validationService;
 
-        public RepoService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory)
+        public RepoService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(objectsRepository, objectSetFactory, validationService);
             _objectsRepository = objectsRepository;
             _objectSetFactory = objectSetFactory;
         }
 
         public async Task<List<ObjectSet>> GetObjInfo(IPilotObjectHelper sender)
         {
+            _validationService.ValidateNotNull(sender, nameof(sender));
             var res = new List<ObjectSet>();
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
@@ -38,6 +42,7 @@ namespace PilotLookUp.Model.Services
         }
         public async Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids)
         {
+            _validationService.ValidateNotNull(guids, nameof(guids));
             return await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(guids);
         }
     }

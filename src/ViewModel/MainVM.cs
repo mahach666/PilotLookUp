@@ -14,9 +14,12 @@ namespace PilotLookUp.ViewModel
         private readonly INavigationService _navigationService;
         private readonly IViewModelFactory _viewModelFactory;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
-        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService)
+        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(navigationService, viewModelFactory, errorHandlingService, validationService);
             _navigationService = navigationService;
             _viewModelFactory = viewModelFactory;
             _errorHandlingService = errorHandlingService;

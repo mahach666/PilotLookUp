@@ -10,10 +10,13 @@ namespace PilotLookUp.Model.Services
     {
         private readonly IObjectMappingService _objectMappingService;
         private readonly IObjectSetFactory _objectSetFactory;
+        private readonly IValidationService _validationService;
         private ObjectSet _currentSelection;
 
-        public SelectionService(IObjectMappingService objectMappingService, IObjectSetFactory objectSetFactory)
+        public SelectionService(IObjectMappingService objectMappingService, IObjectSetFactory objectSetFactory, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(objectMappingService, objectSetFactory, validationService);
             _objectMappingService = objectMappingService;
             _objectSetFactory = objectSetFactory;
         }
@@ -25,7 +28,8 @@ namespace PilotLookUp.Model.Services
 
         public void UpdateSelection(IEnumerable<object> rawObjects)
         {
-            var wrappedObjects = _objectMappingService.WrapMany(rawObjects ?? Enumerable.Empty<object>());
+            _validationService.ValidateNotNull(rawObjects, nameof(rawObjects));
+            var wrappedObjects = _objectMappingService.WrapMany(rawObjects);
             if (wrappedObjects?.Any() == true)
             {
                 _currentSelection = _objectSetFactory.Create(null);

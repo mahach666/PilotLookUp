@@ -7,14 +7,16 @@ namespace PilotLookUp.Model.Services
     public class ObjectSetFactory : IObjectSetFactory
     {
         private readonly IThemeService _themeService;
-        public ObjectSetFactory(IThemeService themeService)
+        private readonly IValidationService _validationService;
+        public ObjectSetFactory(IThemeService themeService, IValidationService validationService)
         {
             _themeService = themeService;
+            _validationService = validationService;
         }
 
         public ObjectSet Create(MemberInfo memberInfo)
         {
-            return new ObjectSet(_themeService, memberInfo);
+            return new ObjectSet(_themeService, memberInfo, _validationService);
         }
     }
 } 

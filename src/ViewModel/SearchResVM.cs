@@ -14,13 +14,17 @@ namespace PilotLookUp.ViewModel
         private readonly INavigationService _navigationService;
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
+        private readonly IValidationService _validationService;
 
         public SearchResVM(
              INavigationService navigationService
             , ITabService tabService
             , IPilotObjectHelper pilotObjectHelper
-            , IObjectSetFactory objectSetFactory)
+            , IObjectSetFactory objectSetFactory
+            , IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(navigationService, tabService, pilotObjectHelper, objectSetFactory, validationService);
             _dataObj = pilotObjectHelper;
             _navigationService = navigationService;
             _tabService = tabService;

@@ -9,13 +9,17 @@ namespace PilotLookUp.Model.Services
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
         public SearchViewModelCreator(
             ICustomSearchService searchService,
             ITabService tabService,
             IObjectSetFactory objectSetFactory,
-            IErrorHandlingService errorHandlingService)
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(searchService, tabService, objectSetFactory, errorHandlingService, validationService);
             _searchService = searchService;
             _tabService = tabService;
             _objectSetFactory = objectSetFactory;
@@ -24,7 +28,7 @@ namespace PilotLookUp.Model.Services
 
         public SearchVM CreateSearchVM(INavigationService navigationService, IErrorHandlingService errorHandlingService = null)
         {
-            return new SearchVM(navigationService, _searchService, _tabService, _objectSetFactory, errorHandlingService ?? _errorHandlingService);
+            return new SearchVM(navigationService, _searchService, _tabService, _objectSetFactory, errorHandlingService ?? _errorHandlingService, _validationService);
         }
     }
 } 

@@ -13,9 +13,12 @@ namespace PilotLookUp.Objects
     {
         private readonly List<IPilotObjectHelper> _items = new List<IPilotObjectHelper>();
         private readonly IThemeService _themeService;
+        private readonly IValidationService _validationService;
         private readonly MemberInfo _memberInfo;
-        public ObjectSet(IThemeService themeService, MemberInfo memberInfo)
+        public ObjectSet(IThemeService themeService, MemberInfo memberInfo, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(themeService, validationService);
             _themeService = themeService;
             _memberInfo = memberInfo;
         }
@@ -25,6 +28,7 @@ namespace PilotLookUp.Objects
         {
             get
             {
+                _validationService.ValidateNotNull(index, nameof(index));
                 if (index < 0 || index >= _items.Count)
                 {
                     System.Diagnostics.Debug.WriteLine($"[ObjectSet] Индекс вне диапазона: {index}");
@@ -39,6 +43,7 @@ namespace PilotLookUp.Objects
             }
             set
             {
+                _validationService.ValidateNotNull(index, nameof(index));
                 if (index < 0 || index >= _items.Count)
                 {
                     System.Diagnostics.Debug.WriteLine($"[ObjectSet] Индекс вне диапазона при set: {index}");
@@ -56,6 +61,7 @@ namespace PilotLookUp.Objects
 
         public void Add(IPilotObjectHelper item)
         {
+            _validationService.ValidateNotNull(item, nameof(item));
             if (item == null)
             {
                 System.Diagnostics.Debug.WriteLine("[ObjectSet] Попытка добавить null");
@@ -65,6 +71,7 @@ namespace PilotLookUp.Objects
         }
         public void AddRange(IEnumerable<IPilotObjectHelper> items)
         {
+            _validationService.ValidateNotNull(items, nameof(items));
             if (items == null) return;
             foreach (var item in items)
             {
@@ -76,10 +83,15 @@ namespace PilotLookUp.Objects
                 _items.Add(item);
             }
         }
-        public bool Remove(IPilotObjectHelper item) => _items.Remove(item);
+        public bool Remove(IPilotObjectHelper item)
+        {
+            _validationService.ValidateNotNull(item, nameof(item));
+            return _items.Remove(item);
+        }
         public void Clear() => _items.Clear();
         public bool Contains(IPilotObjectHelper item)
         {
+            _validationService.ValidateNotNull(item, nameof(item));
             if (item == null) return false;
             return _items.Contains(item);
         }

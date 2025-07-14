@@ -12,9 +12,12 @@ namespace PilotLookUp.Model.Services
         private readonly ISearchViewModelCreator _searchViewModelCreator;
         private readonly INavigationService _navigationService;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
-        public ViewModelFactory(IViewModelProvider viewModelProvider, ISearchViewModelCreator searchViewModelCreator, INavigationService navigationService, IErrorHandlingService errorHandlingService)
+        public ViewModelFactory(IViewModelProvider viewModelProvider, ISearchViewModelCreator searchViewModelCreator, INavigationService navigationService, IErrorHandlingService errorHandlingService, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(viewModelProvider, searchViewModelCreator, navigationService, errorHandlingService, validationService);
             _viewModelProvider = viewModelProvider;
             _searchViewModelCreator = searchViewModelCreator;
             _navigationService = navigationService;
@@ -51,7 +54,7 @@ namespace PilotLookUp.Model.Services
             var container = ServiceContainer.CreateContainer();
             var tabService = container.GetInstance<ITabService>();
             var objectSetFactory = container.GetInstance<IObjectSetFactory>();
-            return new SearchResVM(_navigationService, tabService, pilotObjectHelper, objectSetFactory);
+            return new SearchResVM(_navigationService, tabService, pilotObjectHelper, objectSetFactory, _validationService);
         }
     }
 } 

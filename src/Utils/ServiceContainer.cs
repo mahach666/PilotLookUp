@@ -44,13 +44,15 @@ namespace PilotLookUp.Utils
             container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
+            container.Register<IValidationService, ValidationService>(Lifestyle.Singleton);
             
             // Регистрируем новые сервисы
             container.Register<ISearchViewModelCreator>(() => new SearchViewModelCreator(
                 container.GetInstance<ICustomSearchService>(),
                 container.GetInstance<ITabService>(),
                 container.GetInstance<IObjectSetFactory>(),
-                container.GetInstance<IErrorHandlingService>()), Lifestyle.Singleton);
+                container.GetInstance<IErrorHandlingService>(),
+                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
             container.Register<IViewModelProvider>(() => new ViewModelProvider(
                 container.GetInstance<IRepoService>(),
                 container.GetInstance<ICustomSearchService>(),
@@ -58,12 +60,14 @@ namespace PilotLookUp.Utils
                 container.GetInstance<IWindowService>(),
                 container.GetInstance<ITreeItemService>(),
                 container.GetInstance<IDataObjectService>(),
-                container.GetInstance<IErrorHandlingService>()), Lifestyle.Singleton);
+                container.GetInstance<IErrorHandlingService>(),
+                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
             container.Register<IViewModelFactory>(() => new ViewModelFactory(
                 container.GetInstance<IViewModelProvider>(),
                 container.GetInstance<ISearchViewModelCreator>(),
                 container.GetInstance<INavigationService>(),
-                container.GetInstance<IErrorHandlingService>()), Lifestyle.Singleton);
+                container.GetInstance<IErrorHandlingService>(),
+                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
             
             // Регистрируем новые сервисы для разделения ответственности
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
@@ -73,7 +77,9 @@ namespace PilotLookUp.Utils
             
             // Регистрируем фабрики
             container.Register<IPilotObjectHelperFactory, PilotObjectHelperFactory>(Lifestyle.Singleton);
-            container.Register<IObjectSetFactory, ObjectSetFactory>(Lifestyle.Singleton);
+            container.Register<IObjectSetFactory>(() => new ObjectSetFactory(
+                container.GetInstance<IThemeService>(),
+                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
             
             // Регистрируем ThemeService
             var themeToUse = theme ?? App.Theme;

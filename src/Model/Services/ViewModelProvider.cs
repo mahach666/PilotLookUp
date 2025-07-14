@@ -14,6 +14,7 @@ namespace PilotLookUp.Model.Services
         private readonly ITreeItemService _treeItemService;
         private readonly IDataObjectService _dataObjectService;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
         public ViewModelProvider(
             IRepoService repoService,
@@ -22,8 +23,11 @@ namespace PilotLookUp.Model.Services
             IWindowService windowService,
             ITreeItemService treeItemService,
             IDataObjectService dataObjectService,
-            IErrorHandlingService errorHandlingService)
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(repoService, searchService, tabService, windowService, treeItemService, dataObjectService, errorHandlingService, validationService);
             _repoService = repoService;
             _searchService = searchService;
             _tabService = tabService;
@@ -35,10 +39,10 @@ namespace PilotLookUp.Model.Services
 
         public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null, IErrorHandlingService errorHandlingService = null)
         {
-            var vm = new LookUpVM(_repoService, _windowService, errorHandlingService ?? _errorHandlingService);
+            var vm = new LookUpVM(_repoService, _windowService, errorHandlingService ?? _errorHandlingService, _validationService);
             if (dataObjects != null && dataObjects.Count > 0)
             {
-                vm.SelectionDataObjects = dataObjects.Select(x => new ListItemVM(x)).ToList();
+                vm.SelectionDataObjects = dataObjects.Select(x => new ListItemVM(x, _validationService)).ToList();
             }
             return vm;
         }
@@ -51,17 +55,17 @@ namespace PilotLookUp.Model.Services
 
         public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
-            return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, errorHandlingService ?? _errorHandlingService);
+            return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, errorHandlingService ?? _errorHandlingService, _validationService);
         }
 
         public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
-            return new AttrVM(selectedObject, _dataObjectService, errorHandlingService ?? _errorHandlingService);
+            return new AttrVM(selectedObject, _dataObjectService, errorHandlingService ?? _errorHandlingService, _validationService);
         }
 
         public MainVM CreateMainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService = null)
         {
-            return new MainVM(navigationService, viewModelFactory, errorHandlingService ?? _errorHandlingService);
+            return new MainVM(navigationService, viewModelFactory, errorHandlingService ?? _errorHandlingService, _validationService);
         }
     }
 } 

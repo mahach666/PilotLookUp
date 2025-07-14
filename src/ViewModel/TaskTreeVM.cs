@@ -23,6 +23,7 @@ namespace PilotLookUp.ViewModel
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
         public TaskTreeVM(
              IPilotObjectHelper pilotObjectHelper,
@@ -30,8 +31,11 @@ namespace PilotLookUp.ViewModel
              ICustomSearchService searchService,
              IWindowService windowService,
              ITreeItemService treeItemService,
-             IErrorHandlingService errorHandlingService)
+             IErrorHandlingService errorHandlingService,
+             IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(pilotObjectHelper, lookUpModel, searchService, windowService, treeItemService, errorHandlingService, validationService);
             _revokedTask = false;
             _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;
@@ -104,7 +108,7 @@ namespace PilotLookUp.ViewModel
             if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
             {
                 LastParrent = await _searchService.GetLastParent(dataObject);
-                ICustomTree rootNode = new ListItemVM(LastParrent);
+                ICustomTree rootNode = new ListItemVM(LastParrent, _validationService);
                 rootNode = await _treeItemService.FillChild(rootNode);
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
@@ -121,7 +125,7 @@ namespace PilotLookUp.ViewModel
                 ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
                 foreach (IPilotObjectHelper item in allLastParrent)
                 {
-                    ICustomTree rootNode = new ListItemVM(item);
+                    ICustomTree rootNode = new ListItemVM(item, _validationService);
                     rootNode = await _treeItemService.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }
@@ -163,6 +167,11 @@ namespace PilotLookUp.ViewModel
         }
         private async void UpdateInfo()
         {
+            if (_dataObjectSelected == null || _dataObjectSelected.PilotObjectHelper == null)
+            {
+                Info = null;
+                return;
+            }
             Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
         }
 

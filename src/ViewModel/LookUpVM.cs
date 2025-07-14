@@ -19,9 +19,12 @@ namespace PilotLookUp.ViewModel
         private IWindowService _windowService;
         private bool _dataInitialized = false;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
-        public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService)
+        public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService);
             System.Diagnostics.Debug.WriteLine("[TRACE] LookUpVM: Конструктор вызван");
             _repoService = lookUpModel;
             _windowService = windowService;
@@ -40,7 +43,7 @@ namespace PilotLookUp.ViewModel
                             System.Diagnostics.Debug.WriteLine("[LookUpVM] Обнаружен null в repoData");
                             return null;
                         }
-                        return new ListItemVM(x);
+                        return new ListItemVM(x, _validationService);
                     }).Where(x => x != null).ToList();
                     _selectionDataObjects = listItems;
                     OnPropertyChanged(nameof(SelectionDataObjects));

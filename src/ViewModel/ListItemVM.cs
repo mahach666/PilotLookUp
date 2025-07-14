@@ -8,8 +8,12 @@ namespace PilotLookUp.ViewModel
 {
     public class ListItemVM : INotifyPropertyChanged, ICustomTree
     {
-        public ListItemVM(IPilotObjectHelper pilotObjectHelper)
+        private readonly IValidationService _validationService;
+
+        public ListItemVM(IPilotObjectHelper pilotObjectHelper, IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateNotNull(pilotObjectHelper, nameof(pilotObjectHelper));
             System.Diagnostics.Debug.WriteLine($"[TRACE] ListItemVM: Конструктор вызван для {pilotObjectHelper?.Name ?? "null"}");
             PilotObjectHelper = pilotObjectHelper;
             Children = new ObservableCollection<ICustomTree>();

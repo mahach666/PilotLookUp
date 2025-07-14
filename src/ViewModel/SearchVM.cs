@@ -18,14 +18,18 @@ namespace PilotLookUp.ViewModel
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IErrorHandlingService _errorHandlingService;
+        private readonly IValidationService _validationService;
 
         public SearchVM(
             INavigationService navigationService
             , ICustomSearchService searchService
             , ITabService tabService
             , IObjectSetFactory objectSetFactory
-            , IErrorHandlingService errorHandlingService)
+            , IErrorHandlingService errorHandlingService
+            , IValidationService validationService)
         {
+            _validationService = validationService;
+            _validationService.ValidateConstructorParams(navigationService, searchService, tabService, objectSetFactory, errorHandlingService, validationService);
             _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;
@@ -96,7 +100,7 @@ namespace PilotLookUp.ViewModel
             var res = new List<SearchResVM>();
             foreach (var item in objectSet)
             {
-                var vm = new SearchResVM(_navigationService, _tabService, item, _objectSetFactory);
+                var vm = new SearchResVM(_navigationService, _tabService, item, _objectSetFactory, _validationService);
                 res.Add(vm);
             }
             Result = res;
