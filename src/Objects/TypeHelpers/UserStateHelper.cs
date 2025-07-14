@@ -11,8 +11,9 @@ namespace PilotLookUp.Objects.TypeHelpers
             : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj?.Name;
+            _name = obj?.Title;
             _isLookable = true;
+            _stringId = obj?.Id.ToString();
         }
 
         public override BitmapImage GetImage()

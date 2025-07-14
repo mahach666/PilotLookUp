@@ -13,15 +13,32 @@ namespace PilotLookUp.Model.Services
         private readonly INavigationService _navigationService;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
+        private readonly ITabService _tabService;
+        private readonly IObjectSetFactory _objectSetFactory;
 
-        public ViewModelFactory(IViewModelProvider viewModelProvider, ISearchViewModelCreator searchViewModelCreator, INavigationService navigationService, IErrorHandlingService errorHandlingService, IValidationService validationService)
+        public ViewModelFactory(
+            IViewModelProvider viewModelProvider, 
+            ISearchViewModelCreator searchViewModelCreator, 
+            INavigationService navigationService, 
+            IErrorHandlingService errorHandlingService, 
+            IValidationService validationService,
+            ITabService tabService,
+            IObjectSetFactory objectSetFactory)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(viewModelProvider, searchViewModelCreator, navigationService, errorHandlingService, validationService);
+            _validationService.ValidateConstructorParams(viewModelProvider,
+                searchViewModelCreator,
+                navigationService,
+                errorHandlingService,
+                validationService,
+                tabService,
+                objectSetFactory);
             _viewModelProvider = viewModelProvider;
             _searchViewModelCreator = searchViewModelCreator;
             _navigationService = navigationService;
             _errorHandlingService = errorHandlingService;
+            _tabService = tabService;
+            _objectSetFactory = objectSetFactory;
         }
 
         public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null, IErrorHandlingService errorHandlingService = null)
@@ -51,10 +68,7 @@ namespace PilotLookUp.Model.Services
 
         public SearchResVM CreateSearchResVM(IPilotObjectHelper pilotObjectHelper)
         {
-            var container = ServiceContainer.CreateContainer();
-            var tabService = container.GetInstance<ITabService>();
-            var objectSetFactory = container.GetInstance<IObjectSetFactory>();
-            return new SearchResVM(_navigationService, tabService, pilotObjectHelper, objectSetFactory, _validationService);
+            return new SearchResVM(_navigationService, _tabService, pilotObjectHelper, _objectSetFactory, _validationService);
         }
     }
 } 

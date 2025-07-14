@@ -12,9 +12,9 @@ namespace PilotLookUp.Objects.TypeHelpers
             : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj?.ToString();
+            _name = obj?.Name;
             _isLookable = true;
-            _stringId = obj?.ToString();
+            _stringId = obj?.Id.ToString();
         }
 
         public override BitmapImage GetImage()

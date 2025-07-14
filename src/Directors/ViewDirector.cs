@@ -59,12 +59,13 @@ namespace PilotLookUp
             System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.ShowView: pageName={pageName}, selectedObjects.Count={selectedObjects?.Count}");
             try
             {
-                // Убираю SetGlobalServices
                 // Создаем новый контейнер для этого окна
                 var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, theme);
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: DI контейнер создан");
+                
                 var navigationService = container.GetInstance<INavigationService>();
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: navigationService получен");
+                
                 // Настраиваем начальную страницу
                 switch (pageName)
                 {
@@ -77,20 +78,23 @@ namespace PilotLookUp
                         System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: NavigateToSearch вызван");
                         break;
                 }
+                
                 var viewModelFactory = container.GetInstance<IViewModelFactory>();
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: viewModelFactory получен");
                 var mainVM = viewModelFactory.CreateMainVM();
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: mainVM создан");
-                // Создаем и показываем окно в UI потоке
+                
+                var windowFactory = container.GetInstance<IWindowFactory>();
+                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: windowFactory получен");
+                
+                // Создаем и показываем окно
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     try
                     {
                         System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: Dispatcher.Invoke стартует");
-                        var window = container.GetInstance<MainView>();
-                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: MainView получен из контейнера");
-                        window.DataContext = mainVM;
-                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: DataContext установлен");
+                        var window = windowFactory.CreateMainWindow(mainVM);
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: MainView создан через фабрику");
                         window.Show();
                         System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: window.Show() вызван");
                     }

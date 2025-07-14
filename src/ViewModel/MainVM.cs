@@ -65,30 +65,19 @@ namespace PilotLookUp.ViewModel
         {
             get
             {
-                System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: SelectedControl = {SelectedControl?.GetType().Name}");
-                
                 if (SelectedControl is LookUpVM lookUpVM)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: DataObjectSelected = {lookUpVM.DataObjectSelected?.GetType().Name}");
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: PilotObjectHelper = {lookUpVM.DataObjectSelected?.PilotObjectHelper?.GetType().Name}");
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: LookUpObject = {lookUpVM.DataObjectSelected?.PilotObjectHelper?.LookUpObject?.GetType().Name}");
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: Is IDataObject = {lookUpVM.DataObjectSelected?.PilotObjectHelper?.LookUpObject is IDataObject}");
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: Is DataObjectHelper = {lookUpVM.DataObjectSelected?.PilotObjectHelper is DataObjectHelper}");
-                    
                     if (lookUpVM.DataObjectSelected?.PilotObjectHelper?.LookUpObject is IDataObject || 
                         lookUpVM.DataObjectSelected?.PilotObjectHelper is DataObjectHelper)
                     {
-                        System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: Возвращаем Visible для IDataObject/DataObjectHelper");
                         return Visibility.Visible;
                     }
                 }
                 else if (SelectedControl is TaskTreeVM || SelectedControl is AttrVM)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: Возвращаем Visible для TaskTreeVM/AttrVM");
                     return Visibility.Visible;
                 }
                 
-                System.Diagnostics.Debug.WriteLine($"[TRACE] TaskButtVisibilities: Возвращаем Hidden");
                 return Visibility.Hidden;
             }
         }

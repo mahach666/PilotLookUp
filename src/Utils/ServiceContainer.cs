@@ -10,7 +10,9 @@ namespace PilotLookUp.Utils
 {
     public static class ServiceContainer
     {
-        public static Container CreateContainer(IObjectsRepository objectsRepository = null, ITabServiceProvider tabServiceProvider = null, Ascon.Pilot.Themes.ThemeNames? theme = null)
+        public static Container CreateContainer(IObjectsRepository objectsRepository = null,
+            ITabServiceProvider tabServiceProvider = null,
+            Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
             // Создаем новый контейнер для каждого окна
             var container = new Container();
@@ -30,7 +32,8 @@ namespace PilotLookUp.Utils
             return container;
         }
 
-        private static void ConfigureBaseServices(Container container, Ascon.Pilot.Themes.ThemeNames? theme = null)
+        private static void ConfigureBaseServices(Container container,
+            Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
             // Регистрируем сервисы
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
@@ -65,7 +68,9 @@ namespace PilotLookUp.Utils
                 container.GetInstance<ISearchViewModelCreator>(),
                 container.GetInstance<INavigationService>(),
                 container.GetInstance<IErrorHandlingService>(),
-                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
+                container.GetInstance<IValidationService>(),
+                container.GetInstance<ITabService>(),
+                container.GetInstance<IObjectSetFactory>()), Lifestyle.Singleton);
             
             // Регистрируем новые сервисы для разделения ответственности
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
@@ -82,6 +87,7 @@ namespace PilotLookUp.Utils
             container.Register<IObjectSetFactory>(() => new ObjectSetFactory(
                 container.GetInstance<IThemeService>(),
                 container.GetInstance<IValidationService>()), Lifestyle.Singleton);
+            container.Register<IWindowFactory, WindowFactory>(Lifestyle.Singleton);
             
             // Регистрируем ThemeService
             if (theme == null)
