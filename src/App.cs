@@ -151,7 +151,7 @@ namespace PilotLookUp
                     _ => Enumerable.Empty<object>()
                 };
 
-                // Используем глобальный контейнер для сервисов, которые должны сохранять состояние
+                if (!raw.Any()) return;
                 var selectionService = _globalContainer.GetInstance<ISelectionService>();
                 selectionService.UpdateSelection(raw);
             }
