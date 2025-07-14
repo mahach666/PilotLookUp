@@ -44,41 +44,49 @@ namespace PilotLookUp
             , PagesName pageName
             , ObjectSet selectedObjects = null)
         {
+            System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.ShowView: pageName={pageName}, selectedObjects.Count={selectedObjects?.Count}");
             try
             {
                 // Устанавливаем глобальные сервисы (если еще не установлены)
                 ServiceContainer.SetGlobalServices(objectsRepository, tabServiceProvider);
-                
+                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: SetGlobalServices завершён");
                 // Создаем новый контейнер для этого окна
                 var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, App.Theme);
-                
+                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: DI контейнер создан");
                 var navigationService = container.GetInstance<INavigationService>();
-
+                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: navigationService получен");
                 // Настраиваем начальную страницу
                 switch (pageName)
                 {
                     case PagesName.LookUpPage:
                         navigationService.NavigateToLookUp(selectedObjects);
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: NavigateToLookUp вызван");
                         break;
                     case PagesName.SearchPage:
                         navigationService.NavigateToSearch();
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: NavigateToSearch вызван");
                         break;
                 }
-
                 var viewModelFactory = container.GetInstance<IViewModelFactory>();
+                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: viewModelFactory получен");
                 var mainVM = viewModelFactory.CreateMainVM();
-
+                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: mainVM создан");
                 // Создаем и показываем окно в UI потоке
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
                     try
                     {
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: Dispatcher.Invoke стартует");
                         var window = container.GetInstance<MainView>();
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: MainView получен из контейнера");
                         window.DataContext = mainVM;
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: DataContext установлен");
                         window.Show();
+                        System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: window.Show() вызван");
                     }
                     catch (System.Exception ex)
                     {
+                        System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.ShowView: Ошибка при создании окна: {ex.Message}");
                         System.Windows.MessageBox.Show($"Ошибка при создании окна: {ex.Message}", 
                             "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                     }
@@ -86,6 +94,7 @@ namespace PilotLookUp
             }
             catch (System.Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.ShowView: Ошибка верхнего уровня: {ex.Message}");
                 System.Windows.MessageBox.Show($"Ошибка при создании окна: {ex.Message}\n\n{ex.StackTrace}", 
                     "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
                 throw;

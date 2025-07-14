@@ -17,7 +17,7 @@ namespace PilotLookUp.ViewModel
 {
     public class TaskTreeVM : INotifyPropertyChanged, IPage
     {
-        private PilotObjectHelper _objectHelper;
+        private IPilotObjectHelper _objectHelper;
         private IRepoService _repoService;
         private ICustomSearchService _searchService;
         private IWindowService _windowService;
@@ -25,7 +25,7 @@ namespace PilotLookUp.ViewModel
         private readonly IErrorHandlingService _errorHandlingService;
 
         public TaskTreeVM(
-             PilotObjectHelper pilotObjectHelper,
+             IPilotObjectHelper pilotObjectHelper,
              IRepoService lookUpModel,
              ICustomSearchService searchService,
              IWindowService windowService,
@@ -91,11 +91,13 @@ namespace PilotLookUp.ViewModel
         #region Дерево процесса
         private async Task LoadDataAsync()
         {
-            bool isTask;
+            bool isTask = false;
 
-            if (_objectHelper is DataObjectHelper dataObjectHelper)
+            // Проверяем наличие свойства IsTask через интерфейс
+            var isTaskProp = _objectHelper.GetType().GetProperty("IsTask");
+            if (isTaskProp != null)
             {
-                isTask = dataObjectHelper.IsTask;
+                isTask = (bool)isTaskProp.GetValue(_objectHelper);
             }
             else return;
 
@@ -117,7 +119,7 @@ namespace PilotLookUp.ViewModel
             {
                 var treeItems = new ObservableCollection<ICustomTree>();
                 ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
-                foreach (PilotObjectHelper item in allLastParrent)
+                foreach (IPilotObjectHelper item in allLastParrent)
                 {
                     ICustomTree rootNode = new ListItemVM(item);
                     rootNode = await _treeItemService.FillChild(rootNode);
@@ -131,7 +133,7 @@ namespace PilotLookUp.ViewModel
                 return;
             }
         }
-        private PilotObjectHelper LastParrent { get; set; }
+        private IPilotObjectHelper LastParrent { get; set; }
 
         private ObservableCollection<ICustomTree> _firstParrentNode;
 

@@ -6,6 +6,6 @@ namespace PilotLookUp.Interfaces
 {
     public interface IDataObjectService
     {
-        public IEnumerable<AttrDTO> GetAttrDTOs(DataObjectHelper dataObjectHelper);
+        public IEnumerable<AttrDTO> GetAttrDTOs(IPilotObjectHelper dataObjectHelper);
     }
 }

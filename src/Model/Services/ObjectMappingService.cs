@@ -17,14 +17,14 @@ namespace PilotLookUp.Model.Services
             _pilotObjectMap = new PilotObjectMap(_objectsRepository);
         }
 
-        public PilotObjectHelper Wrap(object rawObject)
+        public IPilotObjectHelper Wrap(object rawObject)
         {
             return _pilotObjectMap.Wrap(rawObject);
         }
 
-        public IEnumerable<PilotObjectHelper> WrapMany(IEnumerable<object> rawObjects)
+        public IEnumerable<IPilotObjectHelper> WrapMany(IEnumerable<object> rawObjects)
         {
-            return rawObjects?.Select(Wrap) ?? Enumerable.Empty<PilotObjectHelper>();
+            return rawObjects?.Select(Wrap) ?? Enumerable.Empty<IPilotObjectHelper>();
         }
     }
 } 

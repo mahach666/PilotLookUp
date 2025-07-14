@@ -19,7 +19,7 @@ namespace PilotLookUp.Model.Services
             _objectSetFactory = objectSetFactory;
         }
 
-        public async Task<List<ObjectSet>> GetObjInfo(PilotObjectHelper sender)
+        public async Task<List<ObjectSet>> GetObjInfo(IPilotObjectHelper sender)
         {
             var res = new List<ObjectSet>();
             foreach (var pair in sender.Reflection.KeyValuePairs)

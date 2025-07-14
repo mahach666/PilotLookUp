@@ -15,7 +15,7 @@ namespace PilotLookUp.Utils
 {
     public class Tracer
     {
-        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory)
+        public Tracer(IObjectsRepository objectsRepository, IPilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory)
         {
             PilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             ObjectsRepository = objectsRepository;

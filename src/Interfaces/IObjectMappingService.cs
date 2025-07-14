@@ -1,11 +1,12 @@
 using PilotLookUp.Objects;
 using System.Collections.Generic;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Interfaces
 {
     public interface IObjectMappingService
     {
-        PilotObjectHelper Wrap(object rawObject);
-        IEnumerable<PilotObjectHelper> WrapMany(IEnumerable<object> rawObjects);
+        IPilotObjectHelper Wrap(object rawObject);
+        IEnumerable<IPilotObjectHelper> WrapMany(IEnumerable<object> rawObjects);
     }
 } 

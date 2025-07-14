@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Interfaces
 {
     public interface IRepoService
     {
-        public Task<List<ObjectSet>> GetObjInfo(PilotObjectHelper sender);
-        public ObjectSet GetWrapedRepo();
-        public Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids);
+        Task<List<ObjectSet>> GetObjInfo(IPilotObjectHelper sender);
+        ObjectSet GetWrapedRepo();
+        Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids);
     }
 }

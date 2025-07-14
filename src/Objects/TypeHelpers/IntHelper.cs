@@ -11,12 +11,12 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class IntHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        private PilotObjectHelper _sender { get; }
+        private IPilotObjectHelper _sender { get; }
         private MemberInfo _senderMember { get; }
         private IObjectsRepository _objectsRepository { get; }
         private int _value { get; }
 
-        public IntHelper(int value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
+        public IntHelper(int value, IObjectsRepository objectsRepository, IPilotObjectHelper sender, MemberInfo senderMember)
         {
             _sender = sender;
             _senderMember = senderMember;

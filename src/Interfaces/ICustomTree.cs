@@ -7,7 +7,6 @@ namespace PilotLookUp.Interfaces
     {
         public ObservableCollection<ICustomTree> Children { get; set; }
         public ICustomTree Parrent { get; set; }
-        public PilotObjectHelper PilotObjectHelper { get; }
-
+        public IPilotObjectHelper PilotObjectHelper { get; }
     }
 }

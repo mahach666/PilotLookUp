@@ -50,7 +50,26 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            return null;
+            var kv = _lookUpObject;
+            if (kv is KeyValuePair<string, object> strObj)
+            {
+                if (strObj.Value is string)
+                    return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\stringIcon.png", UriKind.RelativeOrAbsolute));
+                if (strObj.Value is int)
+                    return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\intIcon.png", UriKind.RelativeOrAbsolute));
+                if (strObj.Value is Guid)
+                    return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\guidIcon.png", UriKind.RelativeOrAbsolute));
+                if (strObj.Value is Enum)
+                    return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\enumIcon.png", UriKind.RelativeOrAbsolute));
+                if (strObj.Value is Ascon.Pilot.SDK.IDataObject)
+                    return new BitmapImage(new Uri("..\\..\\Resources\\UI\\databaseEnabled.png", UriKind.RelativeOrAbsolute));
+                if (strObj.Value is Ascon.Pilot.SDK.IAccess)
+                    return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\accessIcon.png", UriKind.RelativeOrAbsolute));
+                // fallback
+                return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\attrIcon.png", UriKind.RelativeOrAbsolute));
+            }
+            // Для других кейсов — универсальная иконка
+            return new BitmapImage(new Uri("..\\..\\Resources\\TypeIcons\\attrIcon.png", UriKind.RelativeOrAbsolute));
         }
     }
 }

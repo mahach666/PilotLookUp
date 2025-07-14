@@ -7,13 +7,15 @@ namespace PilotLookUp.View
     {
         public MainView()
         {
+            System.Diagnostics.Debug.WriteLine("[TRACE] MainView: Конструктор вызван");
             // Проверяем, что мы в STA потоке
             if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
             {
+                System.Diagnostics.Debug.WriteLine("[TRACE] MainView: Не STA поток!");
                 throw new System.InvalidOperationException("MainView должен создаваться в STA потоке");
             }
-            
             InitializeComponent();
+            System.Diagnostics.Debug.WriteLine("[TRACE] MainView: InitializeComponent завершён");
         }
     }
 }

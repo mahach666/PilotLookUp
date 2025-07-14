@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Objects.Strategies;
 using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Interfaces;
 using System.Reflection;
 
 namespace PilotLookUp.Objects
@@ -8,7 +9,7 @@ namespace PilotLookUp.Objects
     public class PilotObjectMap
     {
         private readonly TypeWrapStrategyRegistry _strategyRegistry;
-        public PilotObjectMap(IObjectsRepository objectsRepository, PilotObjectHelper senderObj = null, MemberInfo senderMember = null)
+        public PilotObjectMap(IObjectsRepository objectsRepository, IPilotObjectHelper senderObj = null, System.Reflection.MemberInfo senderMember = null)
         {
             _objectsRepository = objectsRepository;
             _senderObj = senderObj;
@@ -17,10 +18,10 @@ namespace PilotLookUp.Objects
             RegisterDefaultStrategies(_strategyRegistry);
         }
         private IObjectsRepository _objectsRepository { get; }
-        private PilotObjectHelper _senderObj { get; }
-        private MemberInfo _senderMember { get; }
+        private IPilotObjectHelper _senderObj { get; }
+        private System.Reflection.MemberInfo _senderMember { get; }
 
-        public PilotObjectHelper Wrap(object obj)
+        public IPilotObjectHelper Wrap(object obj)
         {
             var context = new TypeWrapContext(_objectsRepository, _senderObj, _senderMember);
             try
@@ -74,7 +75,7 @@ namespace PilotLookUp.Objects
             registry.Register(new SignatureWrapStrategy());
         }
 
-        public static PilotObjectHelper WrapNull()
+        public static IPilotObjectHelper WrapNull()
         {
             return new NullHelper();
         }

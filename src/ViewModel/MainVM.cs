@@ -64,7 +64,7 @@ namespace PilotLookUp.ViewModel
             {
                 if (SelectedControl is LookUpVM lookUpVM
                         && lookUpVM.DataObjectSelected is ICustomTree castomTree
-                        && castomTree.PilotObjectHelper is DataObjectHelper)
+                        && castomTree.PilotObjectHelper != null)
                     return Visibility.Visible;
                 else if (SelectedControl is TaskTreeVM || SelectedControl is AttrVM)
                     return Visibility.Visible;

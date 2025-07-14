@@ -11,7 +11,7 @@ namespace PilotLookUp.Model.Services
             _themeService = themeService;
         }
 
-        public PilotObjectHelper Create(string name, string stringId, object lookUpObject, bool isLookable)
+        public IPilotObjectHelper Create(string name, string stringId, object lookUpObject, bool isLookable)
         {
             return new DefaultPilotObjectHelper(_themeService, name, stringId, lookUpObject, isLookable);
         }

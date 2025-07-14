@@ -11,7 +11,7 @@ namespace PilotLookUp.Objects
 {
     public class ObjectSet : IObjectSet
     {
-        private readonly List<PilotObjectHelper> _items = new List<PilotObjectHelper>();
+        private readonly List<IPilotObjectHelper> _items = new List<IPilotObjectHelper>();
         private readonly IThemeService _themeService;
         private readonly MemberInfo _memberInfo;
         public ObjectSet(IThemeService themeService, MemberInfo memberInfo)
@@ -21,19 +21,69 @@ namespace PilotLookUp.Objects
         }
 
         public int Count => _items.Count;
-        public PilotObjectHelper this[int index]
+        public IPilotObjectHelper this[int index]
         {
-            get => _items[index];
-            set => _items[index] = value;
+            get
+            {
+                if (index < 0 || index >= _items.Count)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Индекс вне диапазона: {index}");
+                    return null;
+                }
+                var obj = _items[index];
+                if (obj == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Обнаружен null по индексу {index}");
+                }
+                return obj;
+            }
+            set
+            {
+                if (index < 0 || index >= _items.Count)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Индекс вне диапазона при set: {index}");
+                    return;
+                }
+                if (value == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Попытка установить null по индексу {index}");
+                    return;
+                }
+                _items[index] = value;
+            }
         }
         public MemberInfo MemberInfo => _memberInfo;
 
-        public void Add(PilotObjectHelper item) => _items.Add(item);
-        public void AddRange(IEnumerable<PilotObjectHelper> items) => _items.AddRange(items);
-        public bool Remove(PilotObjectHelper item) => _items.Remove(item);
+        public void Add(IPilotObjectHelper item)
+        {
+            if (item == null)
+            {
+                System.Diagnostics.Debug.WriteLine("[ObjectSet] Попытка добавить null");
+                return;
+            }
+            _items.Add(item);
+        }
+        public void AddRange(IEnumerable<IPilotObjectHelper> items)
+        {
+            if (items == null) return;
+            foreach (var item in items)
+            {
+                if (item == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("[ObjectSet] Попытка добавить null в AddRange");
+                    continue;
+                }
+                _items.Add(item);
+            }
+        }
+        public bool Remove(IPilotObjectHelper item) => _items.Remove(item);
         public void Clear() => _items.Clear();
-        public bool Contains(PilotObjectHelper item) => _items.Contains(item);
-        public IEnumerator<PilotObjectHelper> GetEnumerator() => _items.GetEnumerator();
+        public bool Contains(IPilotObjectHelper item)
+        {
+            if (item == null) return false;
+            return _items.Contains(item);
+        }
+        public IEnumerator<IPilotObjectHelper> GetEnumerator() => _items.GetEnumerator();
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
         public bool IsMethodResult => _memberInfo?.MemberType is MemberTypes.Method;
@@ -43,13 +93,14 @@ namespace PilotLookUp.Objects
         {
             get
             {
-                var firstObj = this.FirstOrDefault();
+                var firstObj = this.FirstOrDefault(x => x != null);
                 if (Count == 0) return "No objects";
+                else if (firstObj == null) return "[ObjectSet] Все объекты null";
                 else if (Count == 1)
                 {
                     return firstObj?.StringId ?? firstObj?.Name ?? firstObj?.ToString() ?? "Ошибка вычисления";
                 }
-                else return $"List<{firstObj?.LookUpObject?.GetType().Name: invalid}>Count = {Count}";
+                else return $"List<{firstObj?.LookUpObject?.GetType().Name ?? "invalid"}>Count = {Count}";
             }
         }
 

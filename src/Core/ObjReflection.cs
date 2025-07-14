@@ -1,4 +1,5 @@
 ﻿using PilotLookUp.Objects;
+using PilotLookUp.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -7,7 +8,7 @@ namespace PilotLookUp.Core
 {
     public class ObjReflection
     {
-        public ObjReflection(PilotObjectHelper typeHelper)
+        public ObjReflection(IPilotObjectHelper typeHelper)
         {
             object dataObjects = typeHelper?.LookUpObject;
 

@@ -9,7 +9,7 @@ namespace PilotLookUp.Model.Services
 {
     public class DataObjectService : IDataObjectService
     {
-        public IEnumerable<AttrDTO> GetAttrDTOs(DataObjectHelper dataObjectHelper)
+        public IEnumerable<AttrDTO> GetAttrDTOs(IPilotObjectHelper dataObjectHelper)
         {
             var castedObject = dataObjectHelper.LookUpObject as IDataObject;
 

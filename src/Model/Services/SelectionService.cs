@@ -25,9 +25,9 @@ namespace PilotLookUp.Model.Services
 
         public void UpdateSelection(IEnumerable<object> rawObjects)
         {
-            if (rawObjects?.Any() == true)
+            var wrappedObjects = _objectMappingService.WrapMany(rawObjects ?? Enumerable.Empty<object>());
+            if (wrappedObjects?.Any() == true)
             {
-                var wrappedObjects = _objectMappingService.WrapMany(rawObjects);
                 _currentSelection = _objectSetFactory.Create(null);
                 _currentSelection.AddRange(wrappedObjects);
             }

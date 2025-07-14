@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects
 {
@@ -13,7 +14,7 @@ namespace PilotLookUp.Objects
             _strategies.Add(strategy);
         }
 
-        public PilotObjectHelper Wrap(object obj, TypeWrapContext context)
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context)
         {
             var strategy = _strategies.FirstOrDefault(s => s.CanWrap(obj));
             if (strategy != null)

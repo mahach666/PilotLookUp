@@ -45,7 +45,7 @@ namespace PilotLookUp.Model.Services
             return null;
         }
 
-        public async Task<ObjectSet> GetBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false)
+        public async Task<ObjectSet> GetBaseParentsOfRelations(IPilotObjectHelper objectHelper, bool findRevoked = false)
         {
             ObjectSet pilotObjectHelpers = _objectSetFactory.Create(null);
             ObjectSet childrenSet;
@@ -59,18 +59,23 @@ namespace PilotLookUp.Model.Services
 
             foreach (var child in childrenSet)
             {
-                if (child is DataObjectHelper dataHelp && child.LookUpObject is IDataObject dataObj)
+                if (child is IPilotObjectHelper dataHelp && dataHelp.LookUpObject is IDataObject dataObj)
                 {
-                    if (dataHelp.IsTask)
+                    // Проверяем, есть ли свойство IsTask через интерфейс
+                    var isTaskProp = dataHelp.GetType().GetProperty("IsTask");
+                    var isTask = isTaskProp != null && (bool)isTaskProp.GetValue(dataHelp);
+                    if (isTask)
                     {
-                        if (!findRevoked) // Пропуск отозванных заданий
+                        if (!findRevoked)
                         {
-                            if (dataHelp.IsRevokedTask)
+                            var isRevokedProp = dataHelp.GetType().GetProperty("IsRevokedTask");
+                            var isRevoked = isRevokedProp != null && (bool)isRevokedProp.GetValue(dataHelp);
+                            if (isRevoked)
                             {
                                 continue;
                             }
                         }
-                        DataObjectHelper lastParrent = await GetLastParent(dataObj);
+                        var lastParrent = await GetLastParent(dataObj);
                         if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
                         {
                             pilotObjectHelpers.Add(lastParrent);
@@ -81,13 +86,13 @@ namespace PilotLookUp.Model.Services
             return pilotObjectHelpers;
         }
 
-        public async Task<DataObjectHelper> GetLastParent(IDataObject dataObject)
+        public async Task<IPilotObjectHelper> GetLastParent(IDataObject dataObject)
         {
             if (dataObject != null)
             {
                 var parent = await dataObject.FindLastParrent(_objectsRepository);
                 var objSet = await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(parent);
-                return objSet.FirstOrDefault() is DataObjectHelper result ? result : null;
+                return objSet.FirstOrDefault();
             }
             return null;
         }

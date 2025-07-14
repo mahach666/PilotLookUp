@@ -8,9 +8,9 @@ namespace PilotLookUp.Interfaces
     {
         LookUpVM CreateLookUpVM(ObjectSet dataObjects = null, IErrorHandlingService errorHandlingService = null);
         SearchVM CreateSearchVM(IErrorHandlingService errorHandlingService = null);
-        TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null);
-        AttrVM CreateAttrVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null);
+        TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null);
+        AttrVM CreateAttrVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null);
         MainVM CreateMainVM(IErrorHandlingService errorHandlingService = null);
-        SearchResVM CreateSearchResVM(PilotObjectHelper pilotObjectHelper);
+        SearchResVM CreateSearchResVM(IPilotObjectHelper pilotObjectHelper);
     }
 } 

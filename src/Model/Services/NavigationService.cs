@@ -71,14 +71,14 @@ namespace PilotLookUp.Model.Services
             SetActivePage(searchVM);
         }
 
-        public void NavigateToTaskTree(PilotObjectHelper selectedObject)
+        public void NavigateToTaskTree(IPilotObjectHelper selectedObject)
         {
             var taskTreeVM = _viewModelProvider.CreateTaskTreeVM(selectedObject);
             AddPage(taskTreeVM);
             SetActivePage(taskTreeVM);
         }
 
-        public void NavigateToAttr(PilotObjectHelper selectedObject)
+        public void NavigateToAttr(IPilotObjectHelper selectedObject)
         {
             var attrVM = _viewModelProvider.CreateAttrVM(selectedObject);
             AddPage(attrVM);

@@ -49,12 +49,12 @@ namespace PilotLookUp.Model.Services
             throw new System.NotImplementedException("Use ISearchViewModelCreator instead");
         }
 
-        public TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
+        public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
             return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, errorHandlingService ?? _errorHandlingService);
         }
 
-        public AttrVM CreateAttrVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
+        public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
             return new AttrVM(selectedObject, _dataObjectService, errorHandlingService ?? _errorHandlingService);
         }

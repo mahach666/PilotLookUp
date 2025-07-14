@@ -12,7 +12,7 @@ namespace PilotLookUp.Interfaces
         void NavigateTo(PagesName pageName);
         void NavigateToLookUp(ObjectSet dataObjects = null);
         void NavigateToSearch();
-        void NavigateToTaskTree(PilotObjectHelper selectedObject);
-        void NavigateToAttr(PilotObjectHelper selectedObject);
+        void NavigateToTaskTree(IPilotObjectHelper selectedObject);
+        void NavigateToAttr(IPilotObjectHelper selectedObject);
     }
 } 

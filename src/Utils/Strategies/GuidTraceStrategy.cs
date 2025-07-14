@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using PilotLookUp.Extensions;
 using Ascon.Pilot.SDK.Data;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Utils.Strategies
 {
@@ -57,5 +58,7 @@ namespace PilotLookUp.Utils.Strategies
 
             context.ObjectSet.Add(tracer.PilotObjectMap.Wrap(guid));
         }
+
+        // Метод Trace(IPilotObjectHelper helper) удалён как устаревший и неиспользуемый
     }
 } 

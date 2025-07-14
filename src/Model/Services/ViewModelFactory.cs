@@ -31,12 +31,12 @@ namespace PilotLookUp.Model.Services
             return _searchViewModelCreator.CreateSearchVM(_navigationService, errorHandlingService ?? _errorHandlingService);
         }
 
-        public TaskTreeVM CreateTaskTreeVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
+        public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
             return _viewModelProvider.CreateTaskTreeVM(selectedObject, errorHandlingService ?? _errorHandlingService);
         }
 
-        public AttrVM CreateAttrVM(PilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
+        public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
         {
             return _viewModelProvider.CreateAttrVM(selectedObject, errorHandlingService ?? _errorHandlingService);
         }
@@ -46,7 +46,7 @@ namespace PilotLookUp.Model.Services
             return _viewModelProvider.CreateMainVM(_navigationService, this, errorHandlingService ?? _errorHandlingService);
         }
 
-        public SearchResVM CreateSearchResVM(PilotObjectHelper pilotObjectHelper)
+        public SearchResVM CreateSearchResVM(IPilotObjectHelper pilotObjectHelper)
         {
             var container = ServiceContainer.CreateContainer();
             var tabService = container.GetInstance<ITabService>();

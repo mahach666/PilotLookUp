@@ -1,7 +1,6 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -11,7 +10,7 @@ namespace PilotLookUp.ViewModel
 {
     public class SearchResVM
     {
-        private readonly PilotObjectHelper _dataObj;
+        private readonly IPilotObjectHelper _dataObj;
         private readonly INavigationService _navigationService;
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
@@ -19,10 +18,9 @@ namespace PilotLookUp.ViewModel
         public SearchResVM(
              INavigationService navigationService
             , ITabService tabService
-            , PilotObjectHelper pilotObjectHelper
+            , IPilotObjectHelper pilotObjectHelper
             , IObjectSetFactory objectSetFactory)
         {
-           
             _dataObj = pilotObjectHelper;
             _navigationService = navigationService;
             _tabService = tabService;

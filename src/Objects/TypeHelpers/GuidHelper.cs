@@ -8,9 +8,9 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class GuidHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        private PilotObjectHelper _sender { get; }
+        private IPilotObjectHelper _sender { get; }
         private MemberInfo _senderMember { get; }
-        public GuidHelper(Guid value, PilotObjectHelper sender, MemberInfo senderMember)
+        public GuidHelper(Guid value, IPilotObjectHelper sender, MemberInfo senderMember)
         {
             _sender = sender;
             _senderMember = senderMember;

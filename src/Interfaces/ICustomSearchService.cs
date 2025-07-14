@@ -9,9 +9,9 @@ namespace PilotLookUp.Interfaces
     {
         public Task<ObjectSet> GetObjByString(string request);
 
-        public Task<ObjectSet> GetBaseParentsOfRelations(PilotObjectHelper objectHelper, bool findRevoked = false);
+        public Task<ObjectSet> GetBaseParentsOfRelations(IPilotObjectHelper objectHelper, bool findRevoked = false);
 
-        public Task<DataObjectHelper> GetLastParent(IDataObject dataObject);
+        public Task<IPilotObjectHelper> GetLastParent(IDataObject dataObject);
 
     }
 }

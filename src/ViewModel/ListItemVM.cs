@@ -1,5 +1,4 @@
 ﻿using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,13 +8,14 @@ namespace PilotLookUp.ViewModel
 {
     public class ListItemVM : INotifyPropertyChanged, ICustomTree
     {
-        public ListItemVM(PilotObjectHelper pilotObjectHelper)
+        public ListItemVM(IPilotObjectHelper pilotObjectHelper)
         {
+            System.Diagnostics.Debug.WriteLine($"[TRACE] ListItemVM: Конструктор вызван для {pilotObjectHelper?.Name ?? "null"}");
             PilotObjectHelper = pilotObjectHelper;
             Children = new ObservableCollection<ICustomTree>();
         }
 
-        public PilotObjectHelper PilotObjectHelper { get; }
+        public IPilotObjectHelper PilotObjectHelper { get; }
         public string ObjName => PilotObjectHelper.Name;
         public string StrId => PilotObjectHelper.StringId;
         public BitmapImage ObjImage => PilotObjectHelper.GetImage();

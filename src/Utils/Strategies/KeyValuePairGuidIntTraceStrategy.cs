@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PilotLookUp.Extensions;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Utils.Strategies
 {
@@ -20,5 +21,7 @@ namespace PilotLookUp.Utils.Strategies
             var loadedPair = new KeyValuePair<IDataObject, int>(loadedObj, pair.Value);
             context.ObjectSet.Add(tracer.PilotObjectMap.Wrap(loadedPair));
         }
+
+        // Метод Trace(IPilotObjectHelper helper) удалён как устаревший и неиспользуемый
     }
 } 

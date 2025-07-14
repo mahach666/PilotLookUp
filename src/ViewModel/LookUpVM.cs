@@ -22,6 +22,7 @@ namespace PilotLookUp.ViewModel
 
         public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService)
         {
+            System.Diagnostics.Debug.WriteLine("[TRACE] LookUpVM: Конструктор вызван");
             _repoService = lookUpModel;
             _windowService = windowService;
             _errorHandlingService = errorHandlingService;
@@ -34,7 +35,13 @@ namespace PilotLookUp.ViewModel
                 var repoData = _repoService.GetWrapedRepo();
                 if (repoData != null && repoData.Any())
                 {
-                    var listItems = repoData.Select(x => new ListItemVM(x)).ToList();
+                    var listItems = repoData.Where(x => x != null).Select(x => {
+                        if (x == null) {
+                            System.Diagnostics.Debug.WriteLine("[LookUpVM] Обнаружен null в repoData");
+                            return null;
+                        }
+                        return new ListItemVM(x);
+                    }).Where(x => x != null).ToList();
                     _selectionDataObjects = listItems;
                     OnPropertyChanged(nameof(SelectionDataObjects));
                     
@@ -68,9 +75,14 @@ namespace PilotLookUp.ViewModel
                     LoadDataFromRepository();
                     return;
                 }
-                _selectionDataObjects = value;
+                var filtered = value.Where(x => x != null).ToList();
+                if (filtered.Count != value.Count)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[LookUpVM] Обнаружены null в SelectionDataObjects: {value.Count - filtered.Count}");
+                }
+                _selectionDataObjects = filtered;
                 _dataInitialized = true; // Отмечаем, что данные были установлены через свойство
-                DataObjectSelected = value?.FirstOrDefault();
+                DataObjectSelected = filtered.FirstOrDefault();
                 OnPropertyChanged();
                 _ = UpdateFiltredDataObjectsAsync();
             }

@@ -2,7 +2,6 @@
 using PilotLookUp.Contracts;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,11 +13,11 @@ namespace PilotLookUp.ViewModel
 {
     public class AttrVM : INotifyPropertyChanged, IPage
     {
-        private PilotObjectHelper _objectHelper;
+        private IPilotObjectHelper _objectHelper;
         private IDataObjectService _dataObjectService;
         private readonly IErrorHandlingService _errorHandlingService;
 
-        public AttrVM(PilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IErrorHandlingService errorHandlingService)
+        public AttrVM(IPilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IErrorHandlingService errorHandlingService)
         {
             _objectHelper = pilotObjectHelper;
             _dataObjectService = dataObjectService;
@@ -31,7 +30,7 @@ namespace PilotLookUp.ViewModel
             {
                 if (_objectHelper == null || _objectHelper.LookUpObject == null)
                     return new List<AttrDTO>();
-                return _dataObjectService.GetAttrDTOs(_objectHelper as DataObjectHelper);
+                return _dataObjectService.GetAttrDTOs(_objectHelper);
             }
         }
 

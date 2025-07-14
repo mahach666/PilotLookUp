@@ -4,15 +4,15 @@ using PilotLookUp.Objects;
 
 namespace PilotLookUp.Interfaces
 {
-    public interface IObjectSet : IEnumerable<PilotObjectHelper>
+    public interface IObjectSet : IEnumerable<IPilotObjectHelper>
     {
         int Count { get; }
-        PilotObjectHelper this[int index] { get; set; }
-        void Add(PilotObjectHelper item);
-        void AddRange(IEnumerable<PilotObjectHelper> items);
-        bool Remove(PilotObjectHelper item);
+        IPilotObjectHelper this[int index] { get; set; }
+        void Add(IPilotObjectHelper item);
+        void AddRange(IEnumerable<IPilotObjectHelper> items);
+        bool Remove(IPilotObjectHelper item);
         void Clear();
-        bool Contains(PilotObjectHelper item);
+        bool Contains(IPilotObjectHelper item);
         MemberInfo MemberInfo { get; }
         // Можно добавить другие методы по необходимости
     }
