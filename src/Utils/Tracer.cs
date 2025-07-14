@@ -2,6 +2,7 @@
 using PilotLookUp.Extensions;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
+using PilotLookUp.Utils.Strategies;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,105 +16,40 @@ namespace PilotLookUp.Utils
     {
         public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory)
         {
-            _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
-            _objectsRepository = objectsRepository;
-            _memberInfo = senderMember;
-            _objectSet = objectSetFactory.Create(senderMember);
+            PilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
+            ObjectsRepository = objectsRepository;
+            MemberInfo = senderMember;
+            _objectSetFactory = objectSetFactory;
+            _traceStrategyRegistry = new TraceStrategyRegistry();
+            RegisterDefaultStrategies(_traceStrategyRegistry);
         }
 
-        private int _adaptiveTimer = 200;
-        private PilotObjectMap _pilotObjectMap { get; }
-        private IObjectsRepository _objectsRepository { get; }
-        private ObjectSet _objectSet { get; set; }
-        private MemberInfo _memberInfo { get; }
-        private IEnumerable<IUserState> _userStates { get; set; }
-        private IEnumerable<IUserStateMachine> _userStateMachines { get; set; }
-
+        public int AdaptiveTimer { get; set; } = 200;
+        public PilotObjectMap PilotObjectMap { get; }
+        public IObjectsRepository ObjectsRepository { get; }
+        public MemberInfo MemberInfo { get; }
+        private readonly IObjectSetFactory _objectSetFactory;
+        private readonly TraceStrategyRegistry _traceStrategyRegistry;
 
         public async Task<ObjectSet> Trace(object obj)
         {
-            if (obj == null) return _objectSet;
-
-            // Определение типа объекта и вызов соответствующей перегрузки
-            if (obj is IEnumerable enumerable
-                && !(obj is string))
-            {
-                return await AddToSelectionEnum(enumerable.Cast<object>());
-            }
-            else
-            {
-                return await AddToSelection(obj);
-            }
+            var objectSet = _objectSetFactory.Create(MemberInfo);
+            await TraceInternalAsync(obj, objectSet);
+            return objectSet;
         }
 
-        private async Task<ObjectSet> AddToSelectionEnum<T>(IEnumerable<T> objects)
+        internal async Task TraceInternalAsync(object obj, ObjectSet objectSet)
         {
-            foreach (object obj in objects)
-            {
-                if (obj is Guid guid)
-                {
-                    _userStates = _objectsRepository.GetUserStates();
-                    _userStateMachines = _objectsRepository.GetUserStateMachines();
-                    _objectSet.Add(await GuidHandler(guid));
-                }
-                else if (obj is KeyValuePair<Guid, int> keyVal)
-                {
-                    var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObjectWithTimeout(keyVal.Key), keyVal.Value);
-                    _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
-                }
-                else
-                    _objectSet.Add(_pilotObjectMap.Wrap(obj));
-            }
-            return _objectSet;
+            var context = new TraceContext(this, objectSet);
+            await _traceStrategyRegistry.TraceAsync(obj, context);
         }
 
-        private async Task<ObjectSet> AddToSelection(object obj)
+        private void RegisterDefaultStrategies(TraceStrategyRegistry registry)
         {
-            if (obj is Guid guid)
-            {
-                _userStates = _objectsRepository.GetUserStates();
-                _userStateMachines = _objectsRepository.GetUserStateMachines();
-                _objectSet.Add(await GuidHandler(guid));
-            }
-            else
-            {
-                _objectSet.Add(_pilotObjectMap.Wrap(obj));
-            }
-            return _objectSet;
-        }
-
-        private async Task<PilotObjectHelper> GuidHandler(Guid guid)
-        {
-            if (_memberInfo?.Name== "HistoryItems")
-            {
-                var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
-                if (lodedHistory != null)
-                {
-                    return _pilotObjectMap.Wrap(lodedHistory);
-                } 
-            }
-
-            var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-            if (lodedObj != null)
-            {
-                return _pilotObjectMap.Wrap(lodedObj);
-            }
-
-            _adaptiveTimer = 10;
-
-            var userState = _userStates.FirstOrDefault(i => i.Id == guid);
-            if (userState != null)
-            {
-                return _pilotObjectMap.Wrap(userState);
-            }
-
-            var userStateMachine = _userStateMachines.FirstOrDefault(i => i.Id == guid);
-            if (userStateMachine != null)
-            {
-                return _pilotObjectMap.Wrap(userStateMachine);
-            }
-
-            return _pilotObjectMap.Wrap(guid);
+            registry.Register(new GuidTraceStrategy());
+            registry.Register(new KeyValuePairGuidIntTraceStrategy());
+            registry.Register(new EnumerableTraceStrategy());
+            // Можно добавить другие стратегии по мере необходимости
         }
     }
 }
