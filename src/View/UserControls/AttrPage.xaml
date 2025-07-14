@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
+             xmlns:utils="clr-namespace:PilotLookUp.Utils"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -42,13 +43,13 @@
                 <ContextMenu>
                     <MenuItem Header="Копировать Name"
                        Command="{Binding CopyCommand}"
-                       CommandParameter="DataGridSelectName" />
+                       CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectName}" />
                     <MenuItem Header="Копировать Value"
                        Command="{Binding CopyCommand}"
-                       CommandParameter="DataGridSelectValue" />
+                       CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectValue}" />
                     <MenuItem Header="Копировать Title"
                        Command="{Binding CopyCommand}"
-                       CommandParameter="DataGridSelectTitle" />
+                       CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectTitle}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 

@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using PilotLookUp.Utils;
 
 namespace PilotLookUp.ViewModel
 {
@@ -65,24 +66,27 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void CopyToClipboard(string sender)
+        private void CopyToClipboard(object sender)
         {
             try
             {
-                switch (sender)
+                if (sender is CopyCommandKey key)
                 {
-                    case "DataGridSelectName":
-                        _copyDataService.CopyAttributeName(_dataGridSelected);
-                        break;
-                    case "DataGridSelectValue":
-                        _copyDataService.CopyAttributeValue(_dataGridSelected);
-                        break;
-                    case "DataGridSelectTitle":
-                        _copyDataService.CopyAttributeTitle(_dataGridSelected);
-                        break;
-                    default:
-                        _copyDataService.CopyAttributeName(_dataGridSelected);
-                        break;
+                    switch (key)
+                    {
+                        case CopyCommandKey.DataGridSelectName:
+                            _copyDataService.CopyAttributeName(_dataGridSelected);
+                            break;
+                        case CopyCommandKey.DataGridSelectValue:
+                            _copyDataService.CopyAttributeValue(_dataGridSelected);
+                            break;
+                        case CopyCommandKey.DataGridSelectTitle:
+                            _copyDataService.CopyAttributeTitle(_dataGridSelected);
+                            break;
+                        default:
+                            _copyDataService.CopyAttributeName(_dataGridSelected);
+                            break;
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -91,7 +95,7 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        public ICommand CopyCommand => new RelayCommand<object>(CopyToClipboard);
 
 
         public event PropertyChangedEventHandler PropertyChanged;

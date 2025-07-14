@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Application = System.Windows.Application;
+using PilotLookUp.Utils;
 
 namespace PilotLookUp.ViewModel
 {
@@ -179,27 +180,30 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void CopyToClipboard(string sender)
+        private void CopyToClipboard(object sender)
         {
             try
             {
-                switch (sender)
+                if (sender is CopyCommandKey key)
                 {
-                    case "List":
-                        _copyDataService.CopyObjectName(_dataObjectSelected);
-                        break;
-                    case "DataGridSelectName":
-                        _copyDataService.CopyMemberName(_dataGridSelected);
-                        break;
-                    case "DataGridSelectValue":
-                        _copyDataService.CopyMemberValue(_dataGridSelected);
-                        break;
-                    case "DataGridSelectLine":
-                        _copyDataService.CopyMemberLine(_dataGridSelected);
-                        break;
-                    default:
-                        _copyDataService.CopyObjectName(_dataObjectSelected);
-                        break;
+                    switch (key)
+                    {
+                        case CopyCommandKey.List:
+                            _copyDataService.CopyObjectName(_dataObjectSelected);
+                            break;
+                        case CopyCommandKey.DataGridSelectName:
+                            _copyDataService.CopyMemberName(_dataGridSelected);
+                            break;
+                        case CopyCommandKey.DataGridSelectValue:
+                            _copyDataService.CopyMemberValue(_dataGridSelected);
+                            break;
+                        case CopyCommandKey.DataGridSelectLine:
+                            _copyDataService.CopyMemberLine(_dataGridSelected);
+                            break;
+                        default:
+                            _copyDataService.CopyObjectName(_dataObjectSelected);
+                            break;
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -207,8 +211,7 @@ namespace PilotLookUp.ViewModel
                 _errorHandlingService?.HandleError(ex, "LookUpVM.CopyToClipboard");
             }
         }
-
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        public ICommand CopyCommand => new RelayCommand<object>(CopyToClipboard);
         public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindow(_dataGridSelected));
 
 

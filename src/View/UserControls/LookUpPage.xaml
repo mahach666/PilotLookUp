@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
+             xmlns:utils="clr-namespace:PilotLookUp.Utils"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -63,7 +64,7 @@
                         <ContextMenu>
                             <MenuItem Header="Копировать выделенное"
                                       Command="{Binding CopyCommand}"
-                                      CommandParameter="List" />
+                                      CommandParameter="{x:Static utils:CopyCommandKey.List}" />
                         </ContextMenu>
                     </ListBox.ContextMenu>
 
@@ -86,13 +87,13 @@
                     <ContextMenu>
                         <MenuItem Header="Копировать Name"
                                   Command="{Binding CopyCommand}"
-                                  CommandParameter="DataGridSelectName" />
+                                  CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectName}" />
                         <MenuItem Header="Копировать Value"
                                   Command="{Binding CopyCommand}"
-                                  CommandParameter="DataGridSelectValue" />
+                                  CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectValue}" />
                         <MenuItem Header="Копировать строку"
                                   Command="{Binding CopyCommand}"
-                                  CommandParameter="DataGridSelectLine" />
+                                  CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectLine}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
 
