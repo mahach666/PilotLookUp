@@ -7,11 +7,13 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class StorageDataObjectHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public StorageDataObjectHelper(IStorageDataObject obj)
+        public StorageDataObjectHelper(IThemeService themeService, IStorageDataObject obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj.DataObject.DisplayName;
+            _name = obj?.ToString();
             _isLookable = true;
+            _stringId = obj?.ToString();
         }
 
         public override BitmapImage GetImage()

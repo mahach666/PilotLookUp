@@ -10,22 +10,9 @@ namespace PilotLookUp.Objects.TypeHelpers
     {
         private IPilotObjectHelper _sender { get; }
         private MemberInfo _senderMember { get; }
-        public GuidHelper(Guid value, IPilotObjectHelper sender, MemberInfo senderMember)
+        internal GuidHelper(IThemeService themeService, Guid value)
+            : base(themeService)
         {
-            _sender = sender;
-            _senderMember = senderMember;
-
-            if (senderMember != null)
-            {
-                if (senderMember.Name == "Id")
-                {
-                    _lookUpObject = sender.LookUpObject;
-                    _name = sender.Name;
-                    _isLookable = true;
-                    _stringId = sender.StringId;
-                    return;
-                }
-            }
             _lookUpObject = value;
             _name = value.ToString();
             _isLookable = false;

@@ -6,7 +6,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class FileHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public FileHelper(object value)
+        public FileHelper(IThemeService themeService, object value)
+            : base(themeService)
         {
             _lookUpObject = value;
             _name = value?.ToString();

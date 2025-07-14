@@ -7,10 +7,11 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class ObjectsRepositoryHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public ObjectsRepositoryHelper(IObjectsRepository objectsRepository)
+        public ObjectsRepositoryHelper(IThemeService themeService, IObjectsRepository obj)
+            : base(themeService)
         {
-            _lookUpObject = objectsRepository;
-            _name = "ObjectsRepository";
+            _lookUpObject = obj;
+            _name = "Репозиторий";
             _isLookable = true;
         }
 

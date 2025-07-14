@@ -9,9 +9,11 @@ namespace PilotLookUp.Objects
     public class PilotObjectMap
     {
         private readonly TypeWrapStrategyRegistry _strategyRegistry;
-        public PilotObjectMap(IObjectsRepository objectsRepository, IPilotObjectHelper senderObj = null, System.Reflection.MemberInfo senderMember = null)
+        private readonly IPilotObjectHelperFactory _factory;
+        public PilotObjectMap(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IPilotObjectHelper senderObj = null, System.Reflection.MemberInfo senderMember = null)
         {
             _objectsRepository = objectsRepository;
+            _factory = factory;
             _senderObj = senderObj;
             _senderMember = senderMember;
             _strategyRegistry = new TypeWrapStrategyRegistry();
@@ -30,54 +32,54 @@ namespace PilotLookUp.Objects
             }
             catch
             {
-                return new OtherHelper(obj);
+                return _factory.CreateDefault("Unknown", "Unknown", obj, false);
             }
         }
 
         private void RegisterDefaultStrategies(TypeWrapStrategyRegistry registry)
         {
             // Примитивы
-            registry.Register(new StringWrapStrategy());
-            registry.Register(new IntWrapStrategy());
-            registry.Register(new BoolWrapStrategy());
-            registry.Register(new LongWrapStrategy());
-            registry.Register(new DateTimeWrapStrategy());
-            registry.Register(new EnumWrapStrategy());
-            registry.Register(new GuidWrapStrategy());
-            registry.Register(new NullWrapStrategy());
+            registry.Register(new StringWrapStrategy(_factory));
+            registry.Register(new IntWrapStrategy(_factory));
+            registry.Register(new BoolWrapStrategy(_factory));
+            registry.Register(new LongWrapStrategy(_factory));
+            registry.Register(new DateTimeWrapStrategy(_factory));
+            registry.Register(new EnumWrapStrategy(_factory));
+            registry.Register(new GuidWrapStrategy(_factory));
+            registry.Register(new NullWrapStrategy(_factory));
             // Pilot-объекты
-            registry.Register(new ObjectsRepositoryWrapStrategy());
-            registry.Register(new DataObjectWrapStrategy());
-            registry.Register(new HistoryItemWrapStrategy());
-            registry.Register(new TypeWrapStrategy());
-            registry.Register(new PersonWrapStrategy());
-            registry.Register(new UserStateWrapStrategy());
-            registry.Register(new UserStateMachineWrapStrategy());
-            registry.Register(new AttributeWrapStrategy());
-            registry.Register(new KeyValuePairStringObjectWrapStrategy());
-            registry.Register(new KeyValuePairGuidIntWrapStrategy());
-            registry.Register(new KeyValuePairDataObjectIntWrapStrategy());
-            registry.Register(new KeyValuePairGuidEnumerableTransitionWrapStrategy());
-            registry.Register(new KeyValuePairIntAccessWrapStrategy());
-            registry.Register(new RelationWrapStrategy());
-            registry.Register(new FileWrapStrategy());
-            registry.Register(new AccessWrapStrategy());
-            registry.Register(new AccessRecordWrapStrategy());
-            registry.Register(new FilesSnapshotWrapStrategy());
-            registry.Register(new PositionWrapStrategy());
-            registry.Register(new OrganizationUnitWrapStrategy());
-            registry.Register(new TransitionWrapStrategy());
-            registry.Register(new StorageDataObjectWrapStrategy());
-            registry.Register(new StateInfoWrapStrategy());
-            registry.Register(new LockInfoWrapStrategy());
-            registry.Register(new SignatureRequestWrapStrategy());
-            registry.Register(new ReportItemWrapStrategy());
-            registry.Register(new SignatureWrapStrategy());
+            registry.Register(new ObjectsRepositoryWrapStrategy(_factory));
+            registry.Register(new DataObjectWrapStrategy(_factory));
+            registry.Register(new HistoryItemWrapStrategy(_factory));
+            registry.Register(new TypeWrapStrategy(_factory));
+            registry.Register(new PersonWrapStrategy(_factory));
+            registry.Register(new UserStateWrapStrategy(_factory));
+            registry.Register(new UserStateMachineWrapStrategy(_factory));
+            registry.Register(new AttributeWrapStrategy(_factory));
+            registry.Register(new KeyValuePairStringObjectWrapStrategy(_factory));
+            registry.Register(new KeyValuePairGuidIntWrapStrategy(_factory));
+            registry.Register(new KeyValuePairDataObjectIntWrapStrategy(_factory));
+            registry.Register(new KeyValuePairGuidEnumerableTransitionWrapStrategy(_factory));
+            registry.Register(new KeyValuePairIntAccessWrapStrategy(_factory));
+            registry.Register(new RelationWrapStrategy(_factory));
+            registry.Register(new FileWrapStrategy(_factory));
+            registry.Register(new AccessWrapStrategy(_factory));
+            registry.Register(new AccessRecordWrapStrategy(_factory));
+            registry.Register(new FilesSnapshotWrapStrategy(_factory));
+            registry.Register(new PositionWrapStrategy(_factory));
+            registry.Register(new OrganizationUnitWrapStrategy(_factory));
+            registry.Register(new TransitionWrapStrategy(_factory));
+            registry.Register(new StorageDataObjectWrapStrategy(_factory));
+            registry.Register(new StateInfoWrapStrategy(_factory));
+            registry.Register(new LockInfoWrapStrategy(_factory));
+            registry.Register(new SignatureRequestWrapStrategy(_factory));
+            registry.Register(new ReportItemWrapStrategy(_factory));
+            registry.Register(new SignatureWrapStrategy(_factory));
         }
 
         public static IPilotObjectHelper WrapNull()
         {
-            return new NullHelper();
+            return null; // Это статический метод, нужно будет исправить по-другому
         }
     }
 }

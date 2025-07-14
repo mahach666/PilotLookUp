@@ -9,15 +9,18 @@ namespace PilotLookUp.Model.Services
         private readonly IObjectsRepository _objectsRepository;
         private readonly ITabServiceProvider _tabServiceProvider;
         private readonly ISelectionService _selectionService;
+        private readonly Ascon.Pilot.Themes.ThemeNames _theme;
 
         public MenuService(
             IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
-            ISelectionService selectionService)
+            ISelectionService selectionService,
+            Ascon.Pilot.Themes.ThemeNames theme)
         {
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
             _selectionService = selectionService;
+            _theme = theme;
         }
 
         public void HandleMenuItemClick(string name)
@@ -25,16 +28,16 @@ namespace PilotLookUp.Model.Services
             switch (name)
             {
                 case "LookDB":
-                    ViewDirector.LookDB(_objectsRepository, _tabServiceProvider);
+                    ViewDirector.LookDB(_objectsRepository, _tabServiceProvider, _theme);
                     break;
                 case "Search":
-                    ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider);
+                    ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider, _theme);
                     break;
                 case "LookSelected":
                     var selection = _selectionService.GetCurrentSelection();
                     if (_selectionService.HasSelection())
                     {
-                        ViewDirector.LookSelection(selection, _objectsRepository, _tabServiceProvider);
+                        ViewDirector.LookSelection(selection, _objectsRepository, _tabServiceProvider, _theme);
                     }
                     break;
             }

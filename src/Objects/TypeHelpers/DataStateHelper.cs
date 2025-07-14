@@ -7,11 +7,12 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class DataStateHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public DataStateHelper(DataState obj)
+        public DataStateHelper(IThemeService themeService, DataState obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
             _name = obj.ToString();
-            _isLookable = false;
+            _isLookable = true;
         }
 
         public override BitmapImage GetImage()

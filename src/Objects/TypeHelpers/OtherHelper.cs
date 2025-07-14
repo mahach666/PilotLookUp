@@ -6,10 +6,11 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class OtherHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public OtherHelper(object obj)
+        public OtherHelper(IThemeService themeService, object value)
+            : base(themeService)
         {
-            _lookUpObject = obj;
-            _name = obj.ToString();
+            _lookUpObject = value;
+            _name = value?.ToString();
             _isLookable = false;
         }
 

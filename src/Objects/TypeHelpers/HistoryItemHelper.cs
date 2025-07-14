@@ -5,11 +5,12 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class HistoryItemHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public HistoryItemHelper(object value)
+        public HistoryItemHelper(IThemeService themeService, object obj)
+            : base(themeService)
         {
-            _lookUpObject = value;
-            _name = value?.ToString();
-            _isLookable = false;
+            _lookUpObject = obj;
+            _name = obj?.ToString();
+            _isLookable = true;
         }
 
         public override BitmapImage GetImage()

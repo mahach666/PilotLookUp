@@ -7,12 +7,13 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class RelationHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public RelationHelper(IRelation obj)
+        public RelationHelper(IThemeService themeService, IRelation obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj.Name is null ? obj.Id.ToString() : obj.Name;
+            _name = obj?.ToString();
             _isLookable = true;
-            _stringId = obj.Id.ToString();
+            _stringId = obj?.Id.ToString();
         }
 
         public override BitmapImage GetImage()

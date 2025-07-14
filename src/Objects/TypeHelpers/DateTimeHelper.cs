@@ -6,11 +6,12 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class DateTimeHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public DateTimeHelper(DateTime value)
+        public DateTimeHelper(IThemeService themeService, DateTime obj)
+            : base(themeService)
         {
-            _lookUpObject = value;
-            _name = value.ToString("g");
-            _isLookable = false;
+            _lookUpObject = obj;
+            _name = obj.ToString();
+            _isLookable = true;
         }
 
         public override BitmapImage GetImage()

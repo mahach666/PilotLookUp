@@ -42,10 +42,9 @@ namespace PilotLookUp
     {
         private readonly IObjectsRepository _objectsRepository;
         private readonly ITabServiceProvider _tabServiceProvider;
-        private static ThemeNames _theme { get; set; }
-        private static Container _globalContainer;
-        public static ThemeNames Theme { get => _theme; }
-        public static IThemeService ThemeService { get; private set; }
+        private readonly ThemeNames _theme;
+        private readonly IThemeService _themeService;
+        private readonly Container _container;
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository,
@@ -56,12 +55,8 @@ namespace PilotLookUp
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
             _theme = pilotDialogService.Theme;
-            
-            // Создаем глобальный контейнер для сервисов, которые должны сохранять состояние
-            _globalContainer = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, _theme);
-            
-            // Устанавливаем ThemeService для обратной совместимости
-            ThemeService = _globalContainer.GetInstance<IThemeService>();
+            _container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, _theme);
+            _themeService = _container.GetInstance<IThemeService>();
         }
 
         // Build
@@ -117,8 +112,7 @@ namespace PilotLookUp
         {
             try
             {
-                // Используем глобальный контейнер для сервисов, которые должны сохранять состояние
-                var menuService = _globalContainer.GetInstance<IMenuService>();
+                var menuService = _container.GetInstance<IMenuService>();
                 menuService.HandleMenuItemClick(name);
             }
             catch (System.Exception ex)
@@ -152,7 +146,7 @@ namespace PilotLookUp
                 };
 
                 if (!raw.Any()) return;
-                var selectionService = _globalContainer.GetInstance<ISelectionService>();
+                var selectionService = _container.GetInstance<ISelectionService>();
                 selectionService.UpdateSelection(raw);
             }
             catch (System.Exception ex)

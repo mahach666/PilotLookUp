@@ -7,6 +7,7 @@ namespace PilotLookUp.Objects
 {
     public abstract class PilotObjectHelper : IPilotObjectHelper
     {
+        protected readonly IThemeService _themeService;
         protected string _name { get; set; }
         public string Name { get => _name; }
 
@@ -21,8 +22,13 @@ namespace PilotLookUp.Objects
 
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
 
+        public PilotObjectHelper(IThemeService themeService)
+        {
+            _themeService = themeService;
+        }
+
         public virtual Brush DefaultTextColor =>
-            new System.Windows.Media.SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? System.Windows.Media.Colors.Black : System.Windows.Media.Colors.White);
+            new System.Windows.Media.SolidColorBrush(_themeService.CurrentTheme == Ascon.Pilot.Themes.ThemeNames.Jedi ? System.Windows.Media.Colors.Black : System.Windows.Media.Colors.White);
         public abstract BitmapImage GetImage();
     }
 }

@@ -72,6 +72,14 @@ namespace PilotLookUp.ViewModel
             get => _selectionDataObjects;
             set
             {
+                System.Diagnostics.Debug.WriteLine($"[TRACE] LookUpVM.SelectionDataObjects.set: value is null? {value == null}, count: {value?.Count ?? 0}");
+                if (value != null)
+                {
+                    foreach (var item in value)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[TRACE] LookUpVM.SelectionDataObjects.set: ListItemVM.ObjName: {item?.ObjName}");
+                    }
+                }
                 if (value == null || !value.Any()) 
                 {
                     // Если передали пустые данные, загружаем из репозитория

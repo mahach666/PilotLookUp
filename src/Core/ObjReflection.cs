@@ -11,18 +11,29 @@ namespace PilotLookUp.Core
         public ObjReflection(IPilotObjectHelper typeHelper)
         {
             object dataObjects = typeHelper?.LookUpObject;
+            System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Конструктор вызван для типа {dataObjects?.GetType().FullName}");
 
             if (dataObjects != null)
             {
                 _objType = dataObjects.GetType();
                 _propertyes = _objType.GetProperties();
                 _methods = _objType.GetMethods();
+                System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Найдено {_propertyes.Length} свойств, {_methods.Length} методов");
 
                 // Поля
                 foreach (PropertyInfo property in _propertyes)
                 {
+                    System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Обрабатывается свойство {property.Name} типа {property.PropertyType.FullName}");
                     object value = property.GetValue(dataObjects);
-                    if (value == null) value = "null";
+                    if (value == null) 
+                    {
+                        value = "null";
+                        System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Свойство {property.Name} = null");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Свойство {property.Name} = {value} (тип: {value.GetType().FullName})");
+                    }
                     KeyValuePairs.Add(property, value);
                 }
 

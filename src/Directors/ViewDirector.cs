@@ -13,45 +13,55 @@ namespace PilotLookUp
         public static void LookSelection(
             ObjectSet selectedObjects
             , IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider)
+            , ITabServiceProvider tabServiceProvider
+            , Ascon.Pilot.Themes.ThemeNames theme)
         {
+            System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.LookSelection: selectedObjects is null? {selectedObjects == null}, count: {selectedObjects?.Count ?? 0}");
+            if (selectedObjects != null)
+            {
+                foreach (var obj in selectedObjects)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.LookSelection: item type: {obj?.GetType().Name}, name: {obj?.Name}");
+                }
+            }
             if (selectedObjects == null || !selectedObjects.IsLookable || selectedObjects.Count == 0)
             {
                 System.Windows.MessageBox.Show("Нет выбранных объектов для просмотра.", "Предупреждение", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
                 return;
             }
 
-            ShowView(objectsRepository, tabServiceProvider, PagesName.LookUpPage, selectedObjects);
+            ShowView(objectsRepository, tabServiceProvider, theme, PagesName.LookUpPage, selectedObjects);
         }
 
         public static void LookDB(
             IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider)
+            , ITabServiceProvider tabServiceProvider
+            , Ascon.Pilot.Themes.ThemeNames theme)
         {
-            ShowView(objectsRepository, tabServiceProvider, PagesName.LookUpPage);
+            ShowView(objectsRepository, tabServiceProvider, theme, PagesName.LookUpPage);
         }
 
         public static void SearchPage(
             IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider)
+            , ITabServiceProvider tabServiceProvider
+            , Ascon.Pilot.Themes.ThemeNames theme)
         {
-            ShowView(objectsRepository, tabServiceProvider, PagesName.SearchPage);
+            ShowView(objectsRepository, tabServiceProvider, theme, PagesName.SearchPage);
         }
 
         private static void ShowView(
             IObjectsRepository objectsRepository
             , ITabServiceProvider tabServiceProvider
+            , Ascon.Pilot.Themes.ThemeNames theme
             , PagesName pageName
             , ObjectSet selectedObjects = null)
         {
             System.Diagnostics.Debug.WriteLine($"[TRACE] ViewDirector.ShowView: pageName={pageName}, selectedObjects.Count={selectedObjects?.Count}");
             try
             {
-                // Устанавливаем глобальные сервисы (если еще не установлены)
-                ServiceContainer.SetGlobalServices(objectsRepository, tabServiceProvider);
-                System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: SetGlobalServices завершён");
+                // Убираю SetGlobalServices
                 // Создаем новый контейнер для этого окна
-                var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, App.Theme);
+                var container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, theme);
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: DI контейнер создан");
                 var navigationService = container.GetInstance<INavigationService>();
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: navigationService получен");

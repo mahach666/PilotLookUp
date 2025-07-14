@@ -8,12 +8,13 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class ReportItemHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public ReportItemHelper(IReportItem reportItem)
+        internal ReportItemHelper(IThemeService themeService, IReportItem obj)
+            : base(themeService)
         {
-            _lookUpObject = reportItem;
-            _name = reportItem.Name;
+            _lookUpObject = obj;
+            _name = obj?.ToString();
             _isLookable = true;
-            _stringId = reportItem.Id.ToString();
+            _stringId = obj?.ToString();
         }
 
         public override BitmapImage GetImage()

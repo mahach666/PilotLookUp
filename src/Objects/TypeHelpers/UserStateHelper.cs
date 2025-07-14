@@ -7,12 +7,12 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class UserStateHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public UserStateHelper(IUserState obj)
+        public UserStateHelper(IThemeService themeService, IUserState obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj.Title;
+            _name = obj?.Name;
             _isLookable = true;
-            _stringId = obj.Id.ToString();
         }
 
         public override BitmapImage GetImage()

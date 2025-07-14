@@ -13,13 +13,15 @@ namespace PilotLookUp.Model.Services
         private readonly IObjectsRepository _objectsRepository;
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IValidationService _validationService;
+        private readonly IPilotObjectHelperFactory _factory;
 
-        public RepoService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IValidationService validationService)
+        public RepoService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IPilotObjectHelperFactory factory, IValidationService validationService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(objectsRepository, objectSetFactory, validationService);
+            _validationService.ValidateConstructorParams(objectsRepository, objectSetFactory, factory, validationService);
             _objectsRepository = objectsRepository;
             _objectSetFactory = objectSetFactory;
+            _factory = factory;
         }
 
         public async Task<List<ObjectSet>> GetObjInfo(IPilotObjectHelper sender)
@@ -28,14 +30,14 @@ namespace PilotLookUp.Model.Services
             var res = new List<ObjectSet>();
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender, pair.Key, _objectSetFactory).Trace(pair.Value);
+                ObjectSet newPilotObj = await new Tracer(_objectsRepository, _factory, sender, pair.Key, _objectSetFactory).Trace(pair.Value);
                 res.Add(newPilotObj);
             }
             return res;
         }
         public ObjectSet GetWrapedRepo()
         {
-            var pilotObjectMap = new PilotObjectMap(_objectsRepository);
+            var pilotObjectMap = new PilotObjectMap(_objectsRepository, _factory);
             var repo = _objectSetFactory.Create(null);
             repo.Add(pilotObjectMap.Wrap(_objectsRepository));
             return repo;
@@ -43,7 +45,7 @@ namespace PilotLookUp.Model.Services
         public async Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids)
         {
             _validationService.ValidateNotNull(guids, nameof(guids));
-            return await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(guids);
+            return await new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory).Trace(guids);
         }
     }
 }

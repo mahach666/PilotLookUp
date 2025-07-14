@@ -7,12 +7,13 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class PersonHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public PersonHelper(IPerson obj)
+        public PersonHelper(IThemeService themeService, IPerson obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj.DisplayName;
+            _name = obj?.DisplayName;
             _isLookable = true;
-            _stringId = obj.Id.ToString();
+            _stringId = obj?.Id.ToString();
         }
 
         public override BitmapImage GetImage()

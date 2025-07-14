@@ -1,15 +1,19 @@
 ﻿using System.Windows.Media.Imaging;
 using PilotLookUp.Interfaces;
+using Ascon.Pilot.SDK.Data;
+using Ascon.Pilot.SDK;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class SignatureHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public SignatureHelper(object value)
+        internal SignatureHelper(IThemeService themeService, ISignature obj)
+            : base(themeService)
         {
-            _lookUpObject = value;
-            _name = value?.ToString();
-            _isLookable = false;
+            _lookUpObject = obj;
+            _name = obj?.ToString();
+            _isLookable = true;
+            _stringId = obj?.ToString();
         }
 
         public override BitmapImage GetImage()

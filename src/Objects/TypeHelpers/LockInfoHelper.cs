@@ -6,10 +6,11 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class LockInfoHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public LockInfoHelper(ILockInfo value)
+        public LockInfoHelper(IThemeService themeService, ILockInfo obj)
+            : base(themeService)
         {
-            _lookUpObject = value;
-            _name = value.ToString();
+            _lookUpObject = obj;
+            _name = obj.ToString();
             _isLookable = true;
         }
 

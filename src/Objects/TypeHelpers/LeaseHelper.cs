@@ -6,7 +6,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class LeaseHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public LeaseHelper(ILease obj)
+        public LeaseHelper(IThemeService themeService, ILease obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
             _name = obj.ToString();

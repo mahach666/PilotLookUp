@@ -1,3 +1,4 @@
+using System;
 using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model.Services;
@@ -9,9 +10,6 @@ namespace PilotLookUp.Utils
 {
     public static class ServiceContainer
     {
-        private static IObjectsRepository _globalObjectsRepository;
-        private static ITabServiceProvider _globalTabServiceProvider;
-
         public static Container CreateContainer(IObjectsRepository objectsRepository = null, ITabServiceProvider tabServiceProvider = null, Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
             // Создаем новый контейнер для каждого окна
@@ -20,14 +18,11 @@ namespace PilotLookUp.Utils
             // Настраиваем базовые сервисы
             ConfigureBaseServices(container, theme);
             
-            // Регистрируем внешние сервисы (используем переданные или глобальные)
-            var repo = objectsRepository ?? _globalObjectsRepository;
-            var tabProvider = tabServiceProvider ?? _globalTabServiceProvider;
-            
-            if (repo != null)
-                container.RegisterInstance(repo);
-            if (tabProvider != null)
-                container.RegisterInstance(tabProvider);
+            // Регистрируем внешние сервисы (используем только переданные)
+            if (objectsRepository != null)
+                container.RegisterInstance(objectsRepository);
+            if (tabServiceProvider != null)
+                container.RegisterInstance(tabServiceProvider);
             
             // Валидируем контейнер
             container.Verify();
@@ -41,7 +36,10 @@ namespace PilotLookUp.Utils
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
             container.Register<ICustomSearchService, SearchService>(Lifestyle.Singleton);
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
-            container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
+            container.Register<IWindowService>(() => new WindowService(
+                container.GetInstance<IObjectsRepository>(),
+                container.GetInstance<ITabServiceProvider>(),
+                theme.Value), Lifestyle.Singleton);
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             container.Register<IValidationService, ValidationService>(Lifestyle.Singleton);
@@ -72,7 +70,11 @@ namespace PilotLookUp.Utils
             // Регистрируем новые сервисы для разделения ответственности
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
             container.Register<ISelectionService, SelectionService>(Lifestyle.Singleton);
-            container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
+            container.Register<IMenuService>(() => new MenuService(
+                container.GetInstance<IObjectsRepository>(),
+                container.GetInstance<ITabServiceProvider>(),
+                container.GetInstance<ISelectionService>(),
+                theme.Value), Lifestyle.Singleton);
             container.Register<IErrorHandlingService, ErrorHandlingService>(Lifestyle.Singleton);
             
             // Регистрируем фабрики
@@ -82,8 +84,9 @@ namespace PilotLookUp.Utils
                 container.GetInstance<IValidationService>()), Lifestyle.Singleton);
             
             // Регистрируем ThemeService
-            var themeToUse = theme ?? App.Theme;
-            container.Register<IThemeService>(() => new ThemeService(themeToUse), Lifestyle.Singleton);
+            if (theme == null)
+                throw new ArgumentNullException(nameof(theme), "Theme должен быть явно передан в DI контейнер!");
+            container.Register<IThemeService>(() => new ThemeService(theme.Value), Lifestyle.Singleton);
             
             // Регистрируем ViewModels (только те, которые не требуют параметров)
             container.Register<LookUpVM>(Lifestyle.Transient);
@@ -95,10 +98,6 @@ namespace PilotLookUp.Utils
             container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
         }
 
-        public static void SetGlobalServices(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider)
-        {
-            _globalObjectsRepository = objectsRepository;
-            _globalTabServiceProvider = tabServiceProvider;
-        }
+        // Удаляю SetGlobalServices и все статические поля
     }
 } 

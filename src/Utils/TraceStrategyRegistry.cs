@@ -23,8 +23,12 @@ namespace PilotLookUp.Utils
             }
             else
             {
-                // fallback: просто обернуть через PilotObjectMap
-                context.ObjectSet.Add(context.Tracer.PilotObjectMap.Wrap(obj));
+                var wrapped = context.Tracer.PilotObjectMap.Wrap(obj);
+                if (wrapped == null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[TRACE] TraceStrategyRegistry.TraceAsync: Wrap вернул null для типа {obj?.GetType().FullName}");
+                }
+                context.ObjectSet.Add(wrapped);
             }
         }
     }

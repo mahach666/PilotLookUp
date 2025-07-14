@@ -5,7 +5,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     internal class BoolHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public BoolHelper(bool value)
+        public BoolHelper(IThemeService themeService, bool value)
+            : base(themeService)
         {
             _lookUpObject = value;
             _name = value.ToString();

@@ -9,163 +9,217 @@ namespace PilotLookUp.Objects.Strategies
 {
     public class ObjectsRepositoryWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public ObjectsRepositoryWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IObjectsRepository;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new ObjectsRepositoryHelper(context.ObjectsRepository);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateObjectsRepository((IObjectsRepository)obj);
     }
 
     public class DataObjectWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public DataObjectWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IDataObject;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new DataObjectHelper((IDataObject)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateDataObject((IDataObject)obj);
     }
 
     public class HistoryItemWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public HistoryItemWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IHistoryItem;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new HistoryItemHelper((IHistoryItem)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => null; // TODO: реализовать через фабрику
     }
 
     public class TypeWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public TypeWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IType;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new TypeHelper((IType)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateType((IType)obj);
     }
 
     public class PersonWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public PersonWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IPerson;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new PersonHelper((IPerson)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreatePerson((IPerson)obj);
     }
 
     public class UserStateWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public UserStateWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IUserState;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new UserStateHelper((IUserState)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateUserState((IUserState)obj);
     }
 
     public class UserStateMachineWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public UserStateMachineWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IUserStateMachine;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new UserStateMachineHelper((IUserStateMachine)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateUserStateMachine((IUserStateMachine)obj);
     }
 
     public class AttributeWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public AttributeWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IAttribute;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new AttributeHelper((IAttribute)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateAttribute((IAttribute)obj);
     }
 
     public class KeyValuePairStringObjectWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public KeyValuePairStringObjectWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<string, object>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new KeyValuePairHelper((KeyValuePair<string, object>)obj, (IDataObject)context.SenderObj.LookUpObject);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<string, object>)obj, (IDataObject)context.SenderObj.LookUpObject);
     }
 
     public class KeyValuePairGuidIntWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public KeyValuePairGuidIntWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<Guid, int>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new KeyValuePairHelper((KeyValuePair<Guid, int>)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<Guid, int>)obj);
     }
 
     public class KeyValuePairDataObjectIntWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public KeyValuePairDataObjectIntWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<IDataObject, int>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new KeyValuePairHelper((KeyValuePair<IDataObject, int>)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<IDataObject, int>)obj);
     }
 
     public class KeyValuePairGuidEnumerableTransitionWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public KeyValuePairGuidEnumerableTransitionWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<Guid, IEnumerable<ITransition>>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new KeyValuePairHelper((KeyValuePair<Guid, IEnumerable<ITransition>>)obj, context.ObjectsRepository);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<Guid, IEnumerable<ITransition>>)obj, context.ObjectsRepository);
     }
 
     public class KeyValuePairIntAccessWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public KeyValuePairIntAccessWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<int, IAccess>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new KeyValuePairHelper((KeyValuePair<int, IAccess>)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<int, IAccess>)obj);
     }
 
     public class RelationWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public RelationWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IRelation;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new RelationHelper((IRelation)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateRelation((IRelation)obj);
     }
 
     public class FileWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public FileWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IFile;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new FileHelper((IFile)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateFile((IFile)obj);
     }
 
     public class AccessWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public AccessWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IAccess;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new AccessHelper((IAccess)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateAccess((IAccess)obj);
     }
 
     public class AccessRecordWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public AccessRecordWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IAccessRecord;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new AccessRecordHelper((IAccessRecord)obj, context.ObjectsRepository);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateAccessRecord((IAccessRecord)obj, context.ObjectsRepository);
     }
 
     public class FilesSnapshotWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public FilesSnapshotWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IFilesSnapshot;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new FilesSnapshotHelper((IFilesSnapshot)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateFilesSnapshot((IFilesSnapshot)obj);
     }
 
     public class PositionWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public PositionWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IPosition;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new PositionHelper((IPosition)obj, context.ObjectsRepository);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreatePosition((IPosition)obj, context.ObjectsRepository);
     }
 
     public class OrganizationUnitWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public OrganizationUnitWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IOrganisationUnit;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new OrganizationUnitHelper((IOrganisationUnit)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateOrganisationUnit((IOrganisationUnit)obj);
     }
 
     public class TransitionWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public TransitionWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is ITransition;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new TransitionHelper((ITransition)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateTransition((ITransition)obj);
     }
 
     public class StorageDataObjectWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public StorageDataObjectWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IStorageDataObject;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new StorageDataObjectHelper((IStorageDataObject)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateStorageDataObject((IStorageDataObject)obj);
     }
 
     public class StateInfoWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public StateInfoWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IStateInfo;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new StateInfoHelper((IStateInfo)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateStateInfo((IStateInfo)obj);
     }
 
     public class LockInfoWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public LockInfoWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is ILockInfo;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new LockInfoHelper((ILockInfo)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateLockInfo((ILockInfo)obj);
     }
 
     public class SignatureRequestWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public SignatureRequestWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is ISignatureRequest;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new SignatureRequestHelper((ISignatureRequest)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateSignatureRequest((ISignatureRequest)obj);
     }
 
     public class ReportItemWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public ReportItemWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IReportItem;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new ReportItemHelper((IReportItem)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateReportItem((IReportItem)obj);
     }
 
     public class SignatureWrapStrategy : ITypeWrapStrategy
     {
+        private readonly IPilotObjectHelperFactory _factory;
+        public SignatureWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is ISignature;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => new SignatureHelper((ISignature)obj);
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateSignature((ISignature)obj);
     }
 } 

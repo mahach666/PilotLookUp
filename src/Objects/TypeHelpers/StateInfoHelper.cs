@@ -7,11 +7,13 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class StateInfoHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public StateInfoHelper(IStateInfo obj)
+        public StateInfoHelper(IThemeService themeService, IStateInfo obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj.State.ToString();
+            _name = obj?.ToString();
             _isLookable = true;
+            _stringId = obj?.ToString();
         }
 
         public override BitmapImage GetImage()

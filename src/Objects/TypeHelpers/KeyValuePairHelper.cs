@@ -10,22 +10,27 @@ namespace PilotLookUp.Objects.TypeHelpers
     public class KeyValuePairHelper : PilotObjectHelper, IPilotObjectHelper
     {
         // Attr
-        public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IDataObject sender)
+        public KeyValuePairHelper(IThemeService themeService, KeyValuePair<string, object> keyValuePair, IDataObject sender)
+            : base(themeService)
         {
+            System.Diagnostics.Debug.WriteLine($"[TRACE] KeyValuePairHelper: Конструктор Attr вызван для ключа '{keyValuePair.Key}', значение типа {keyValuePair.Value?.GetType().FullName}");
             _lookUpObject = keyValuePair;
             _name = sender.Type.Attributes.FirstOrDefault(i => i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
             _isLookable = true;
+            System.Diagnostics.Debug.WriteLine($"[TRACE] KeyValuePairHelper: _name = {_name}, _isLookable = {_isLookable}");
         }
 
         // TypesByChildren
-        public KeyValuePairHelper(KeyValuePair<Guid, int> keyValuePair)
+        public KeyValuePairHelper(IThemeService themeService, KeyValuePair<Guid, int> keyValuePair)
+            : base(themeService)
         {
             _lookUpObject = keyValuePair;
             _name = keyValuePair.Key.ToString();
             _isLookable = true;
         }
         // TypesByChildren v2
-        public KeyValuePairHelper(KeyValuePair<IDataObject, int> keyValuePair)
+        public KeyValuePairHelper(IThemeService themeService, KeyValuePair<IDataObject, int> keyValuePair)
+            : base(themeService)
         {
             _lookUpObject = keyValuePair;
             _name = keyValuePair.Key.DisplayName;
@@ -33,7 +38,8 @@ namespace PilotLookUp.Objects.TypeHelpers
         }
 
         // Access
-        public KeyValuePairHelper(KeyValuePair<int, IAccess> keyValuePair)
+        public KeyValuePairHelper(IThemeService themeService, KeyValuePair<int, IAccess> keyValuePair)
+            : base(themeService)
         {
             _lookUpObject = keyValuePair.Value;
             _name = keyValuePair.Value.AccessLevel.ToString();
@@ -41,10 +47,11 @@ namespace PilotLookUp.Objects.TypeHelpers
         }
 
         // ITransition
-        public KeyValuePairHelper(KeyValuePair<Guid, IEnumerable<ITransition>> keyValuePair, IObjectsRepository objectsRepository)
+        public KeyValuePairHelper(IThemeService themeService, KeyValuePair<Guid, IEnumerable<ITransition>> keyValuePair, IObjectsRepository objectsRepository)
+            : base(themeService)
         {
             _lookUpObject = keyValuePair.Value;
-            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Title ?? "invalid";
+            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Name ?? "invalid";
             _isLookable = true;
         }
 

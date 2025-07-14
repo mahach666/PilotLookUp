@@ -7,7 +7,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class EnumHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public EnumHelper(Enum obj)
+        public EnumHelper(IThemeService themeService, Enum obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
             _name = obj.ToString();

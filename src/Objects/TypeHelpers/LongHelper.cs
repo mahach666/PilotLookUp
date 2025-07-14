@@ -5,7 +5,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class LongHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public LongHelper(long value)
+        public LongHelper(IThemeService themeService, long value)
+            : base(themeService)
         {
             _lookUpObject = value;
             _name = value.ToString();

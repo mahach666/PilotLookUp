@@ -1,17 +1,18 @@
 ﻿using Ascon.Pilot.SDK;
 using System;
 using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
     public class UserStateMachineHelper : PilotObjectHelper
     {
-        public UserStateMachineHelper(IUserStateMachine obj)
+        public UserStateMachineHelper(IThemeService themeService, IUserStateMachine obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj.Title;
+            _name = obj?.ToString();
             _isLookable = true;
-            _stringId = obj.Id.ToString();
         }
 
         public override BitmapImage GetImage()

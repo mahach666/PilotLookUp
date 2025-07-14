@@ -7,7 +7,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class FilesSnapshotHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public FilesSnapshotHelper(IFilesSnapshot obj)
+        public FilesSnapshotHelper(IThemeService themeService, IFilesSnapshot obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
             _name = obj.Created.ToString();

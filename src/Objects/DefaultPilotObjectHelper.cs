@@ -5,11 +5,9 @@ namespace PilotLookUp.Objects
 {
     public class DefaultPilotObjectHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        private readonly IThemeService _themeService;
-
         public DefaultPilotObjectHelper(IThemeService themeService, string name, string stringId, object lookUpObject, bool isLookable)
+            : base(themeService)
         {
-            _themeService = themeService;
             _name = name;
             _stringId = stringId;
             _lookUpObject = lookUpObject;

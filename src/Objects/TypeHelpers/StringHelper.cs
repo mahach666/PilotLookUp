@@ -7,7 +7,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class StringHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public StringHelper(string value)
+        public StringHelper(IThemeService themeService, string value)
+            : base(themeService)
         {
             _lookUpObject = value;
             _name = value;

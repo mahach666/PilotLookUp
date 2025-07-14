@@ -14,16 +14,18 @@ namespace PilotLookUp.Model.Services
     {
         private readonly IObjectsRepository _objectsRepository;
         private readonly IObjectSetFactory _objectSetFactory;
+        private readonly IPilotObjectHelperFactory _factory;
 
-        public SearchService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory)
+        public SearchService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IPilotObjectHelperFactory factory)
         {
             _objectsRepository = objectsRepository;
             _objectSetFactory = objectSetFactory;
+            _factory = factory;
         }
 
         public async Task<ObjectSet> GetObjByString(string request)
         {
-            var tracer = new Tracer(_objectsRepository, null, null, _objectSetFactory);
+            var tracer = new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory);
             if (Guid.TryParse(request, out var id))
             {
                 var res = await tracer.Trace(await _objectsRepository.GetObjByGuid(id));
@@ -53,7 +55,7 @@ namespace PilotLookUp.Model.Services
             if (objectHelper.LookUpObject is IDataObject dataObject)
             {
                 var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
-                childrenSet = await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(listId);
+                childrenSet = await new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory).Trace(listId);
             }
             else return null;
 
@@ -91,7 +93,7 @@ namespace PilotLookUp.Model.Services
             if (dataObject != null)
             {
                 var parent = await dataObject.FindLastParrent(_objectsRepository);
-                var objSet = await new Tracer(_objectsRepository, null, null, _objectSetFactory).Trace(parent);
+                var objSet = await new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory).Trace(parent);
                 return objSet.FirstOrDefault();
             }
             return null;

@@ -7,10 +7,11 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class AccessRecordHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public AccessRecordHelper(IAccessRecord obj, IObjectsRepository objectsRepository)
+        public AccessRecordHelper(IThemeService themeService, IAccessRecord obj, IObjectsRepository objectsRepository)
+            : base(themeService)
         {
             _lookUpObject = obj;
-            _name = objectsRepository.GetOrganisationUnit(obj.OrgUnitId).Title;
+            _name = objectsRepository.GetOrganisationUnit(obj.OrgUnitId)?.Title;
             _isLookable = true;
         }
 

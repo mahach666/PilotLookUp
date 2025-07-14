@@ -7,7 +7,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class AttributeHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public AttributeHelper(IAttribute obj)
+        public AttributeHelper(IThemeService themeService, IAttribute obj)
+            : base(themeService)
         {
             _lookUpObject = obj;
             _name = obj.Title;
