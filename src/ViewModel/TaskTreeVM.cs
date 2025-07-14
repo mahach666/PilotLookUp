@@ -24,6 +24,7 @@ namespace PilotLookUp.ViewModel
         private ITreeItemService _treeItemService;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
+        private readonly ICopyDataService _copyDataService;
 
         public TaskTreeVM(
              IPilotObjectHelper pilotObjectHelper,
@@ -32,10 +33,11 @@ namespace PilotLookUp.ViewModel
              IWindowService windowService,
              ITreeItemService treeItemService,
              IErrorHandlingService errorHandlingService,
-             IValidationService validationService)
+             IValidationService validationService,
+             ICopyDataService copyDataService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(pilotObjectHelper, lookUpModel, searchService, windowService, treeItemService, errorHandlingService, validationService);
+            _validationService.ValidateConstructorParams(pilotObjectHelper, lookUpModel, searchService, windowService, treeItemService, errorHandlingService, validationService, copyDataService);
             _revokedTask = false;
             _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;
@@ -43,6 +45,7 @@ namespace PilotLookUp.ViewModel
             _windowService = windowService;
             _treeItemService = treeItemService;
             _errorHandlingService = errorHandlingService;
+            _copyDataService = copyDataService;
             FirstParrentNode = new ObservableCollection<ICustomTree>();
             _ = LoadDataAsync();
         }
@@ -204,35 +207,30 @@ namespace PilotLookUp.ViewModel
 
         private void CopyToClipboard(string sender)
         {
-            var errorText = "Упс, ничего не выбрано.";
-            if (_dataObjectSelected == null) MessageBox.Show(errorText);
             try
             {
-                if (sender == "List")
+                switch (sender)
                 {
-                    Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
-                }
-                else if (sender == "DataGridSelectName")
-                {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName);
-                }
-                else if (sender == "DataGridSelectValue")
-                {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
-                }
-                else if (sender == "DataGridSelectLine")
-                {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
-                }
-                else
-                {
-                    MessageBox.Show(errorText);
+                    case "List":
+                        _copyDataService.CopyObjectName(_dataObjectSelected);
+                        break;
+                    case "DataGridSelectName":
+                        _copyDataService.CopyMemberName(_dataGridSelected);
+                        break;
+                    case "DataGridSelectValue":
+                        _copyDataService.CopyMemberValue(_dataGridSelected);
+                        break;
+                    case "DataGridSelectLine":
+                        _copyDataService.CopyMemberLine(_dataGridSelected);
+                        break;
+                    default:
+                        _copyDataService.CopyObjectName(_dataObjectSelected);
+                        break;
                 }
             }
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "TaskTreeVM.CopyToClipboard");
-                MessageBox.Show(errorText);
             }
         }
 

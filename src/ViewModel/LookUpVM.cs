@@ -20,31 +20,30 @@ namespace PilotLookUp.ViewModel
         private bool _dataInitialized = false;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
+        private readonly IDataInitializationService _dataInitializationService;
+        private readonly IDataFilterService _dataFilterService;
+        private readonly ICopyDataService _copyDataService;
 
-        public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService, IValidationService validationService)
+        public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService, IValidationService validationService, IDataInitializationService dataInitializationService, IDataFilterService dataFilterService, ICopyDataService copyDataService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService);
+            _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService, dataInitializationService, dataFilterService, copyDataService);
             System.Diagnostics.Debug.WriteLine("[TRACE] LookUpVM: Конструктор вызван");
             _repoService = lookUpModel;
             _windowService = windowService;
             _errorHandlingService = errorHandlingService;
+            _dataInitializationService = dataInitializationService;
+            _dataFilterService = dataFilterService;
+            _copyDataService = copyDataService;
         }
 
         private void LoadDataFromRepository()
         {
             try
             {
-                var repoData = _repoService.GetWrapedRepo();
-                if (repoData != null && repoData.Any())
+                var listItems = _dataInitializationService.InitializeDataFromRepository();
+                if (listItems.Any())
                 {
-                    var listItems = repoData.Where(x => x != null).Select(x => {
-                        if (x == null) {
-                            System.Diagnostics.Debug.WriteLine("[LookUpVM] Обнаружен null в repoData");
-                            return null;
-                        }
-                        return new ListItemVM(x, _validationService);
-                    }).Where(x => x != null).ToList();
                     _selectionDataObjects = listItems;
                     OnPropertyChanged(nameof(SelectionDataObjects));
                     
@@ -53,16 +52,10 @@ namespace PilotLookUp.ViewModel
                     
                     _ = UpdateFiltredDataObjectsAsync();
                 }
-                else
-                {
-                    System.Windows.MessageBox.Show("Репозиторий пуст или недоступен.", "Информация", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
-                }
             }
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "LookUpVM.LoadDataFromRepository");
-                System.Windows.MessageBox.Show($"Ошибка при загрузке данных из репозитория: {ex.Message}\n\n{ex.StackTrace}", 
-                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }
 
@@ -136,18 +129,8 @@ namespace PilotLookUp.ViewModel
 
         public async Task UpdateFiltredDataObjectsAsync()
         {
-            if (SearchText?.Length >= 2)
-            {
-                var filtered = SelectionDataObjects
-                    .Where(i => i.ObjName.ToUpper().Contains(SearchText.ToUpper())
-                             || i.StrId.ToUpper().Contains(SearchText.ToUpper()))
-                    .ToList();
-                await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = filtered);
-            }
-            else
-            {
-                await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = SelectionDataObjects);
-            }
+            var filtered = await _dataFilterService.FilterDataAsync(SelectionDataObjects, SearchText);
+            await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = filtered);
         }
 
         private ListItemVM _dataObjectSelected;
@@ -198,36 +181,30 @@ namespace PilotLookUp.ViewModel
 
         private void CopyToClipboard(string sender)
         {
-            var errorText = "Упс, ничего не выбрано.";
-            if (_dataObjectSelected == null) MessageBox.Show(errorText);
-
             try
             {
-                if (sender == "List")
+                switch (sender)
                 {
-                    Clipboard.SetText(_dataObjectSelected.PilotObjectHelper?.Name);
-                }
-                else if (sender == "DataGridSelectName")
-                {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName);
-                }
-                else if (sender == "DataGridSelectValue")
-                {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
-                }
-                else if (sender == "DataGridSelectLine")
-                {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
-                }
-                else
-                {
-                    MessageBox.Show(errorText);
+                    case "List":
+                        _copyDataService.CopyObjectName(_dataObjectSelected);
+                        break;
+                    case "DataGridSelectName":
+                        _copyDataService.CopyMemberName(_dataGridSelected);
+                        break;
+                    case "DataGridSelectValue":
+                        _copyDataService.CopyMemberValue(_dataGridSelected);
+                        break;
+                    case "DataGridSelectLine":
+                        _copyDataService.CopyMemberLine(_dataGridSelected);
+                        break;
+                    default:
+                        _copyDataService.CopyObjectName(_dataObjectSelected);
+                        break;
                 }
             }
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "LookUpVM.CopyToClipboard");
-                MessageBox.Show(errorText);
             }
         }
 

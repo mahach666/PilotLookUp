@@ -17,14 +17,16 @@ namespace PilotLookUp.ViewModel
         private IDataObjectService _dataObjectService;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
+        private readonly ICopyDataService _copyDataService;
 
-        public AttrVM(IPilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IErrorHandlingService errorHandlingService, IValidationService validationService)
+        public AttrVM(IPilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IErrorHandlingService errorHandlingService, IValidationService validationService, ICopyDataService copyDataService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(pilotObjectHelper, dataObjectService, errorHandlingService, validationService);
+            _validationService.ValidateConstructorParams(pilotObjectHelper, dataObjectService, errorHandlingService, validationService, copyDataService);
             _objectHelper = pilotObjectHelper;
             _dataObjectService = dataObjectService;
             _errorHandlingService = errorHandlingService;
+            _copyDataService = copyDataService;
         }
 
         public IEnumerable<AttrDTO> Attrs
@@ -65,31 +67,27 @@ namespace PilotLookUp.ViewModel
 
         private void CopyToClipboard(string sender)
         {
-            var errorText = "Упс, ничего не выбрано.";
-            if (_dataGridSelected == null) MessageBox.Show(errorText);
             try
             {
-             if (sender == "DataGridSelectName")
+                switch (sender)
                 {
-                    Clipboard.SetText(_dataGridSelected?.Name);
-                }
-                else if (sender == "DataGridSelectValue")
-                {
-                    Clipboard.SetText(_dataGridSelected?.Value);
-                }
-                else if (sender == "DataGridSelectTitle")
-                {
-                    Clipboard.SetText(_dataGridSelected?.Title);
-                }
-                else
-                {
-                    MessageBox.Show(errorText);
+                    case "DataGridSelectName":
+                        _copyDataService.CopyAttributeName(_dataGridSelected);
+                        break;
+                    case "DataGridSelectValue":
+                        _copyDataService.CopyAttributeValue(_dataGridSelected);
+                        break;
+                    case "DataGridSelectTitle":
+                        _copyDataService.CopyAttributeTitle(_dataGridSelected);
+                        break;
+                    default:
+                        _copyDataService.CopyAttributeName(_dataGridSelected);
+                        break;
                 }
             }
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "AttrVM.CopyToClipboard");
-                MessageBox.Show(errorText);
             }
         }
 

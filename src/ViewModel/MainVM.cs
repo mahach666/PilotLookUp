@@ -15,14 +15,16 @@ namespace PilotLookUp.ViewModel
         private readonly IViewModelFactory _viewModelFactory;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
+        private readonly IUserNotificationService _notificationService;
 
-        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService, IValidationService validationService)
+        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService, IValidationService validationService, IUserNotificationService notificationService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService, viewModelFactory, errorHandlingService, validationService);
+            _validationService.ValidateConstructorParams(navigationService, viewModelFactory, errorHandlingService, validationService, notificationService);
             _navigationService = navigationService;
             _viewModelFactory = viewModelFactory;
             _errorHandlingService = errorHandlingService;
+            _notificationService = notificationService;
             _navigationService.PageChanged += page => SelectedControl = page;
             
             // Инициализируем SelectedControl только если ActivePage не null
@@ -99,8 +101,7 @@ namespace PilotLookUp.ViewModel
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "MainVM.TaskTreeCommand");
-                System.Windows.MessageBox.Show($"Ошибка при переходе к дереву задач: {ex.Message}", 
-                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                _notificationService.ShowError($"Ошибка при переходе к дереву задач: {ex.Message}");
             }
         });
         public ICommand AttrCommand => new RelayCommand<object>(_ => 
@@ -115,8 +116,7 @@ namespace PilotLookUp.ViewModel
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "MainVM.AttrCommand");
-                System.Windows.MessageBox.Show($"Ошибка при переходе к атрибутам: {ex.Message}", 
-                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                _notificationService.ShowError($"Ошибка при переходе к атрибутам: {ex.Message}");
             }
         });
 

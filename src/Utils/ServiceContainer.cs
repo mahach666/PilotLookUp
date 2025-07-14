@@ -43,7 +43,7 @@ namespace PilotLookUp.Utils
         private static void ConfigureBaseServices(Container container,
             Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
-            // Регистрируем сервисы
+            // Регистрируем основные сервисы
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
             container.Register<ICustomSearchService, SearchService>(Lifestyle.Singleton);
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
@@ -60,6 +60,14 @@ namespace PilotLookUp.Utils
             container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
             container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
             container.Register<IThemeService, ThemeService>(Lifestyle.Singleton);
+            
+            // Регистрируем новые сервисы для разделения ответственности
+            container.Register<IClipboardService, ClipboardService>(Lifestyle.Singleton);
+            container.Register<IUserNotificationService, UserNotificationService>(Lifestyle.Singleton);
+            container.Register<IDataFilterService, DataFilterService>(Lifestyle.Singleton);
+            container.Register<IDataInitializationService, DataInitializationService>(Lifestyle.Singleton);
+            container.Register<ICopyDataService, CopyDataService>(Lifestyle.Singleton);
+            container.Register<IViewDirectorService, ViewDirectorService>(Lifestyle.Singleton);
             
             // Регистрируем NavigationService
             container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);

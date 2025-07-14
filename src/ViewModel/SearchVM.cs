@@ -19,6 +19,7 @@ namespace PilotLookUp.ViewModel
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
+        private readonly IClipboardService _clipboardService;
 
         public SearchVM(
             INavigationService navigationService
@@ -26,21 +27,23 @@ namespace PilotLookUp.ViewModel
             , ITabService tabService
             , IObjectSetFactory objectSetFactory
             , IErrorHandlingService errorHandlingService
-            , IValidationService validationService)
+            , IValidationService validationService
+            , IClipboardService clipboardService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService, searchService, tabService, objectSetFactory, errorHandlingService, validationService);
+            _validationService.ValidateConstructorParams(navigationService, searchService, tabService, objectSetFactory, errorHandlingService, validationService, clipboardService);
             _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;
             _objectSetFactory = objectSetFactory;
             _errorHandlingService = errorHandlingService;
+            _clipboardService = clipboardService;
             ClipboardCheck();
         }
 
         private void ClipboardCheck()
         {
-            string clipboardText = Clipboard.GetText();
+            string clipboardText = _clipboardService.GetClipboardText();
             Application.Current.Dispatcher.Invoke(async () =>
             {
                 try

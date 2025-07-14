@@ -117,8 +117,8 @@ namespace PilotLookUp
             }
             catch (System.Exception ex)
             {
-                System.Windows.MessageBox.Show($"Ошибка при обработке клика меню: {ex.Message}", 
-                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                var notificationService = _container.GetInstance<IUserNotificationService>();
+                notificationService.ShowError($"Ошибка при обработке клика меню: {ex.Message}");
             }
         }
 
@@ -151,8 +151,8 @@ namespace PilotLookUp
             }
             catch (System.Exception ex)
             {
-                System.Windows.MessageBox.Show($"Ошибка при обновлении выбора: {ex.Message}", 
-                    "Ошибка", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                var notificationService = _container.GetInstance<IUserNotificationService>();
+                notificationService.ShowError($"Ошибка при обновлении выбора: {ex.Message}");
             }
         }
 
