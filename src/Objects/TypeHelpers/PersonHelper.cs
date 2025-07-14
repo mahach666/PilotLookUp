@@ -1,10 +1,11 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class PersonHelper : PilotObjectHelper
+    public class PersonHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public PersonHelper(IPerson obj)
         {

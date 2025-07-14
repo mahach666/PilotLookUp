@@ -1,22 +1,20 @@
-﻿using Ascon.Pilot.SDK;
-using System;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class SignatureRequestHelper : PilotObjectHelper
+    internal class SignatureRequestHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public SignatureRequestHelper(ISignatureRequest obj)
+        public SignatureRequestHelper(object value)
         {
-            _lookUpObject = obj;
-            _name = obj.Id.ToString();
-            _isLookable = true;
-            _stringId = obj.Id.ToString();
+            _lookUpObject = value;
+            _name = value?.ToString();
+            _isLookable = false;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\signatureIcon.png", UriKind.RelativeOrAbsolute));
+            return null;
         }
     }
 }

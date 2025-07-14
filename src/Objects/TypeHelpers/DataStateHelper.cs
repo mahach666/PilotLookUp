@@ -1,10 +1,11 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class DataStateHelper : PilotObjectHelper
+    public class DataStateHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public DataStateHelper(DataState obj)
         {

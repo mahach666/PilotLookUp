@@ -1,12 +1,13 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class ObjectsRepositoryHelper : PilotObjectHelper
+    internal class ObjectsRepositoryHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public ObjectsRepositoryHelper( IObjectsRepository objectsRepository) 
+        public ObjectsRepositoryHelper(IObjectsRepository objectsRepository)
         {
             _lookUpObject = objectsRepository;
             _name = "ObjectsRepository";

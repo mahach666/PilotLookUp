@@ -1,11 +1,12 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class ReportItemHelper : PilotObjectHelper
+    internal class ReportItemHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public ReportItemHelper(IReportItem reportItem)
         {

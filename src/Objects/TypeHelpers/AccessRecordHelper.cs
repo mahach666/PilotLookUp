@@ -1,16 +1,17 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class AccessRecordHelper : PilotObjectHelper
+    public class AccessRecordHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public AccessRecordHelper(IAccessRecord obj, IObjectsRepository objectsRepository) 
+        public AccessRecordHelper(IAccessRecord obj, IObjectsRepository objectsRepository)
         {
             _lookUpObject = obj;
             _name = objectsRepository.GetOrganisationUnit(obj.OrgUnitId).Title;
-            _isLookable = true;            
+            _isLookable = true;
         }
 
         public override BitmapImage GetImage()

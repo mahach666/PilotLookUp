@@ -1,21 +1,21 @@
-﻿using Ascon.Pilot.SDK;
-using System;
+﻿using System;
 using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class DateTimeHelper : PilotObjectHelper
+    public class DateTimeHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public DateTimeHelper(DateTime obj)
+        public DateTimeHelper(DateTime value)
         {
-            _lookUpObject = obj;
-            _name = obj.ToString();
+            _lookUpObject = value;
+            _name = value.ToString("g");
             _isLookable = false;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\dateTimeIcon.png", UriKind.RelativeOrAbsolute));
+            return null;
         }
     }
 }

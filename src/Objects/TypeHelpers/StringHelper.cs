@@ -1,12 +1,13 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class StringHelper : PilotObjectHelper
+    public class StringHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public StringHelper(string value) 
+        public StringHelper(string value)
         {
             _lookUpObject = value;
             _name = value;

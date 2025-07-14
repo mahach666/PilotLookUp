@@ -1,11 +1,12 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Reflection;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    internal class GuidHelper : PilotObjectHelper
+    internal class GuidHelper : PilotObjectHelper, IPilotObjectHelper
     {
         private PilotObjectHelper _sender { get; }
         private MemberInfo _senderMember { get; }

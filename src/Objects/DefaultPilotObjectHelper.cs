@@ -3,7 +3,7 @@ using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects
 {
-    public class DefaultPilotObjectHelper : PilotObjectHelper
+    public class DefaultPilotObjectHelper : PilotObjectHelper, IPilotObjectHelper
     {
         private readonly IThemeService _themeService;
 

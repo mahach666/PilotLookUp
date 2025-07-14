@@ -1,23 +1,20 @@
-﻿using Ascon.Pilot.SDK;
-using Ascon.Pilot.SDK.Data;
-using System;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class HistoryItemHelper : PilotObjectHelper
+    public class HistoryItemHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public HistoryItemHelper(IHistoryItem obj)
+        public HistoryItemHelper(object value)
         {
-            _lookUpObject = obj;
-            _name = obj.Created.ToString();
-            _isLookable = true;
-            _stringId = obj.Id.ToString();
+            _lookUpObject = value;
+            _name = value?.ToString();
+            _isLookable = false;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\historyItemIcon.png", UriKind.RelativeOrAbsolute));
+            return null;
         }
     }
 }

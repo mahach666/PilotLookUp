@@ -1,12 +1,13 @@
-﻿using Ascon.Pilot.SDK;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
+using Ascon.Pilot.SDK;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class KeyValuePairHelper : PilotObjectHelper
+    public class KeyValuePairHelper : PilotObjectHelper, IPilotObjectHelper
     {
         // Attr
         public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IDataObject sender)
@@ -49,20 +50,6 @@ namespace PilotLookUp.Objects.TypeHelpers
 
         public override BitmapImage GetImage()
         {
-            if (_lookUpObject is KeyValuePair<string, object>
-                || _lookUpObject is KeyValuePair<Guid, int>
-                || _lookUpObject is KeyValuePair<IDataObject, int>)
-            {
-                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\keyValuePairIcon.png", UriKind.RelativeOrAbsolute));
-            }
-            else if (_lookUpObject is IAccess)
-            {
-                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\accessIcon.png", UriKind.RelativeOrAbsolute));
-            }
-            else if (_lookUpObject is IEnumerable<ITransition>)
-            {
-                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\transitionIcon.png", UriKind.RelativeOrAbsolute));
-            }
             return null;
         }
     }

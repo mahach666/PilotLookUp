@@ -1,21 +1,20 @@
-﻿using Ascon.Pilot.SDK;
-using System;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class TransitionHelper : PilotObjectHelper
+    public class TransitionHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public TransitionHelper(ITransition obj)
+        public TransitionHelper(object value)
         {
-            _lookUpObject = obj;
-            _name = obj.DisplayName;
-            _isLookable = true;
+            _lookUpObject = value;
+            _name = value?.ToString();
+            _isLookable = false;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\transitionIcon.png", UriKind.RelativeOrAbsolute));
+            return null;
         }
     }
 }

@@ -1,22 +1,21 @@
-﻿using Ascon.Pilot.SDK;
-using System;
+﻿using System;
 using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class FileHelper : PilotObjectHelper
+    public class FileHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public FileHelper(IFile obj)
+        public FileHelper(object value)
         {
-            _lookUpObject = obj;
-            _name = obj.Name;
-            _isLookable = true;
-            _stringId = obj.Id.ToString();
+            _lookUpObject = value;
+            _name = value?.ToString();
+            _isLookable = false;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\fileIcon.png", UriKind.RelativeOrAbsolute));
+            return null;
         }
     }
 }

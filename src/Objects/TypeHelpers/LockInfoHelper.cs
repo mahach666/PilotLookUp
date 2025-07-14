@@ -1,9 +1,10 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class LockInfoHelper : PilotObjectHelper
+    public class LockInfoHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public LockInfoHelper(ILockInfo value)
         {

@@ -1,10 +1,11 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class StateInfoHelper : PilotObjectHelper
+    public class StateInfoHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public StateInfoHelper(IStateInfo obj)
         {

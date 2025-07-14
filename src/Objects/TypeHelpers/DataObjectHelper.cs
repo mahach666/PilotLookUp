@@ -1,11 +1,12 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class DataObjectHelper : PilotObjectHelper
+    public class DataObjectHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public DataObjectHelper(IDataObject obj)
         {
@@ -13,10 +14,6 @@ namespace PilotLookUp.Objects.TypeHelpers
             _name = obj.DisplayName;
             _isLookable = true;
             _stringId = obj.Id.ToString();
-            //if (revokedId == null)
-            //{
-            //    revokedId = objectsRepository.GetUserStates().FirstOrDefault(i => i.Name == "revoked").Id;
-            //}
         }
 
         public override BitmapImage GetImage()

@@ -1,13 +1,14 @@
 ﻿using System.Windows.Media.Imaging;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.TypeHelpers
 {
-    public class NullHelper : PilotObjectHelper
+    public class NullHelper : PilotObjectHelper, IPilotObjectHelper
     {
         public NullHelper()
         {
             _lookUpObject = null;
-            _name = "NULL";
+            _name = "null";
             _isLookable = false;
         }
 
