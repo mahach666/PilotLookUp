@@ -9,7 +9,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             : base(null)
         {
             _lookUpObject = null;
-            _name = "null";
+            _name = PilotLookUp.Resources.Strings.NullName;
             _isLookable = false;
         }
 

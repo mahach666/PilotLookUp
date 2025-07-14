@@ -32,11 +32,11 @@ namespace PilotLookUp.Model.Services
                 .Select(attr => new AttrDTO
                 {
                     Name = attr.Key,
-                    Title = "Unknown",
+                    Title = PilotLookUp.Resources.Strings.Unknown,
                     Value = attr.Value?.ToString() ?? string.Empty,
-                    IsObligatory = "Unknown",
-                    IsService = "Unknown",
-                    Type = "Unknown",      
+                    IsObligatory = PilotLookUp.Resources.Strings.Unknown,
+                    IsService = PilotLookUp.Resources.Strings.Unknown,
+                    Type = PilotLookUp.Resources.Strings.Unknown,
                     IsValid = false
                 }));
 

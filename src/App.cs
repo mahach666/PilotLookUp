@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using PilotLookUp.Resources;
 
 namespace PilotLookUp
 {
@@ -62,10 +63,10 @@ namespace PilotLookUp
         // Build
         public void Build(IMenuBuilder builder, MainViewContext context)
         {
-            var item = builder.AddItem("PilotLookUp", 1).WithHeader("PilotLookUp");
-            item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
-            item.WithSubmenu().AddItem("LookDB", 1).WithHeader("LookDB");
-            item.WithSubmenu().AddItem("Search", 2).WithHeader("Search");
+            var item = builder.AddItem(PilotLookUp.Resources.Strings.MenuPilotLookUp, 1).WithHeader(PilotLookUp.Resources.Strings.MenuPilotLookUp);
+            item.WithSubmenu().AddItem(PilotLookUp.Resources.Strings.MenuLookSelected, 0).WithHeader(PilotLookUp.Resources.Strings.MenuLookSelected);
+            item.WithSubmenu().AddItem(PilotLookUp.Resources.Strings.MenuLookDB, 1).WithHeader(PilotLookUp.Resources.Strings.MenuLookDB);
+            item.WithSubmenu().AddItem(PilotLookUp.Resources.Strings.MenuSearch, 2).WithHeader(PilotLookUp.Resources.Strings.MenuSearch);
         }
         
         public void Build(IMenuBuilder builder, ObjectsViewContext context) =>
@@ -118,14 +119,14 @@ namespace PilotLookUp
             catch (System.Exception ex)
             {
                 var notificationService = _container.GetInstance<IUserNotificationService>();
-                notificationService.ShowError($"Ошибка при обработке клика меню: {ex.Message}");
+                notificationService.ShowError(string.Format(Strings.ErrorMenuClick, ex.Message));
             }
         }
 
         private void ContextButtonBuilder(IMenuBuilder builder, MarshalByRefObject context)
         {
             SelectUpdater(context);
-            builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
+            builder.AddItem(PilotLookUp.Resources.Strings.MenuLookSelected, 0).WithHeader(PilotLookUp.Resources.Strings.MenuLookSelected);
         }
 
         private void SelectUpdater(MarshalByRefObject context)
@@ -152,7 +153,7 @@ namespace PilotLookUp
             catch (System.Exception ex)
             {
                 var notificationService = _container.GetInstance<IUserNotificationService>();
-                notificationService.ShowError($"Ошибка при обновлении выбора: {ex.Message}");
+                notificationService.ShowError(string.Format(Strings.ErrorSelectionUpdate, ex.Message));
             }
         }
 

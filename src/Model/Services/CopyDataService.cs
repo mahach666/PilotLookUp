@@ -2,6 +2,7 @@ using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
 using PilotLookUp.Contracts;
+using PilotLookUp.Resources;
 
 namespace PilotLookUp.Model.Services
 {
@@ -20,7 +21,7 @@ namespace PilotLookUp.Model.Services
         {
             if (dataObject?.PilotObjectHelper?.Name == null)
             {
-                _notificationService.ShowError("Упс, ничего не выбрано.");
+                _notificationService.ShowError(Strings.NothingSelected);
                 return;
             }
 
@@ -31,7 +32,7 @@ namespace PilotLookUp.Model.Services
         {
             if (dataGridSelected?.SenderMemberName == null)
             {
-                _notificationService.ShowError("Упс, ничего не выбрано.");
+                _notificationService.ShowError(Strings.NothingSelected);
                 return;
             }
 
@@ -42,7 +43,7 @@ namespace PilotLookUp.Model.Services
         {
             if (dataGridSelected?.Discription == null)
             {
-                _notificationService.ShowError("Упс, ничего не выбрано.");
+                _notificationService.ShowError(Strings.NothingSelected);
                 return;
             }
 
@@ -53,7 +54,7 @@ namespace PilotLookUp.Model.Services
         {
             if (dataGridSelected?.SenderMemberName == null)
             {
-                _notificationService.ShowError("Упс, ничего не выбрано.");
+                _notificationService.ShowError(Strings.NothingSelected);
                 return;
             }
 
@@ -67,7 +68,7 @@ namespace PilotLookUp.Model.Services
             {
                 if (attrDTO.Name == null)
                 {
-                    _notificationService.ShowError("Упс, ничего не выбрано.");
+                    _notificationService.ShowError(Strings.NothingSelected);
                     return;
                 }
                 _clipboardService.CopyToClipboard(attrDTO.Name);
@@ -80,7 +81,7 @@ namespace PilotLookUp.Model.Services
             {
                 if (attrDTO.Value == null)
                 {
-                    _notificationService.ShowError("Упс, ничего не выбрано.");
+                    _notificationService.ShowError(Strings.NothingSelected);
                     return;
                 }
                 _clipboardService.CopyToClipboard(attrDTO.Value);
@@ -93,7 +94,7 @@ namespace PilotLookUp.Model.Services
             {
                 if (attrDTO.Title == null)
                 {
-                    _notificationService.ShowError("Упс, ничего не выбрано.");
+                    _notificationService.ShowError(Strings.NothingSelected);
                     return;
                 }
                 _clipboardService.CopyToClipboard(attrDTO.Title);

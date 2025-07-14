@@ -12,7 +12,7 @@ namespace PilotLookUp.View
             if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
             {
                 System.Diagnostics.Debug.WriteLine("[TRACE] MainView: Не STA поток!");
-                throw new System.InvalidOperationException("MainView должен создаваться в STA потоке");
+                throw new System.InvalidOperationException(PilotLookUp.Resources.Strings.StaThreadError);
             }
             InitializeComponent();
             System.Diagnostics.Debug.WriteLine("[TRACE] MainView: InitializeComponent завершён");

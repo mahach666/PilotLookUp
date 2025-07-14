@@ -3,6 +3,7 @@ using PilotLookUp.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PilotLookUp.Resources;
 
 namespace PilotLookUp.Model.Services
 {
@@ -29,7 +30,7 @@ namespace PilotLookUp.Model.Services
                 var repoData = _repoService.GetWrapedRepo();
                 if (repoData == null || !repoData.Any())
                 {
-                    _notificationService.ShowInfo("Репозиторий пуст или недоступен.", "Информация");
+                    _notificationService.ShowInfo(Strings.RepositoryEmpty, Strings.InfoTitle);
                     return new List<ListItemVM>();
                 }
 
@@ -43,7 +44,7 @@ namespace PilotLookUp.Model.Services
             }
             catch (System.Exception ex)
             {
-                _notificationService.ShowError($"Ошибка при загрузке данных из репозитория: {ex.Message}", "Ошибка");
+                _notificationService.ShowError(string.Format(Strings.ErrorTitle, ex.Message), Strings.ErrorTitle);
                 return new List<ListItemVM>();
             }
         }
@@ -55,7 +56,7 @@ namespace PilotLookUp.Model.Services
                 var repoData = _repoService.GetWrapedRepo();
                 if (repoData == null || !repoData.Any())
                 {
-                    _notificationService.ShowInfo("Репозиторий пуст или недоступен.", "Информация");
+                    _notificationService.ShowInfo(PilotLookUp.Resources.Strings.RepositoryEmpty, PilotLookUp.Resources.Strings.InfoTitle);
                     return new List<ListItemVM>();
                 }
 
@@ -67,7 +68,7 @@ namespace PilotLookUp.Model.Services
             }
             catch (System.Exception ex)
             {
-                _notificationService.ShowError($"Ошибка при загрузке данных из репозитория: {ex.Message}", "Ошибка");
+                _notificationService.ShowError(string.Format(PilotLookUp.Resources.Strings.ErrorLoadingRepository, ex.Message), PilotLookUp.Resources.Strings.ErrorTitle);
                 return new List<ListItemVM>();
             }
         }

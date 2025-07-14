@@ -8,6 +8,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behaviorutils="clr-namespace:PilotLookUp.Utils"
              xmlns:utils="clr-namespace:PilotLookUp.Utils"
+             xmlns:resx="clr-namespace:PilotLookUp.Resources"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -30,11 +31,11 @@
         <!-- Новый верхний Grid -->
         <Grid Background="{DynamicResource HoverBackground}">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
-                <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" />
+                <TextBlock Text="{x:Static resx:Strings.SelectedElementId}" FontWeight="Bold" />
                 <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
-                <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />
+                <TextBlock Text="{x:Static resx:Strings.NameLabel}" FontWeight="Bold" Margin="20,0,0,0" />
                 <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" />
-                <CheckBox  Content="Отозванные задания" IsChecked="{Binding RevokedTask}" Visibility="{Binding RevokedTaskVisible}" Margin="5,0" />
+                <CheckBox Content="{x:Static resx:Strings.RevokedTasks}" IsChecked="{Binding RevokedTask}" Visibility="{Binding RevokedTaskVisible}" Margin="5,0" />
             </StackPanel>
         </Grid>
 
@@ -66,21 +67,21 @@
             <DataGrid ItemsSource="{Binding Info}" Grid.Column="2" IsReadOnly="True" SelectedItem="{Binding DataGridSelected}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Копировать Name" Command="{Binding CopyCommand}" CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectName}" />
-                        <MenuItem Header="Копировать Value" Command="{Binding CopyCommand}" CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectValue}" />
-                        <MenuItem Header="Копировать строку" Command="{Binding CopyCommand}" CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectLine}" />
+                        <MenuItem Header="{x:Static resx:Strings.CopyName}" Command="{Binding CopyCommand}" CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectName}" />
+                        <MenuItem Header="{x:Static resx:Strings.CopyValue}" Command="{Binding CopyCommand}" CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectValue}" />
+                        <MenuItem Header="{x:Static resx:Strings.CopyLine}" Command="{Binding CopyCommand}" CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectLine}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
 
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Name" Width="*">
+                    <DataGridTemplateColumn Header="{x:Static resx:Strings.GridColumnName}" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding SenderMemberName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Value" Width="*">
+                    <DataGridTemplateColumn Header="{x:Static resx:Strings.GridColumnValue}" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock>

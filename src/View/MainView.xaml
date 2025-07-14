@@ -6,10 +6,11 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:local="clr-namespace:PilotLookUp.View"
                        xmlns:enums="clr-namespace:PilotLookUp.Enums"
+                       xmlns:resx="clr-namespace:PilotLookUp.Resources"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800"
-                       Title="PilotLookUp"
+                       Title="{x:Static resx:Strings.WindowTitle}"
                        ShowInTaskbar="True">
 
     
@@ -33,32 +34,32 @@
             <UniformGrid Rows="5"
                          VerticalAlignment="Top"
                          HorizontalAlignment="Left" Margin="0,-5,0,0">
-                <Button ToolTip="LookDB"
+                <Button ToolTip="{x:Static resx:Strings.LookDBToolTip}"
                         Tag="{x:Static enums:PagesName.DBPage}"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding LookDBCommand}"
                         Content="..\Resources\UI\databaseEnabled.png" />
 
-                <Button ToolTip="Search"
+                <Button ToolTip="{x:Static resx:Strings.SearchToolTip}"
                         Tag="{x:Static enums:PagesName.SearchPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding SearchCommand}"
                         Content="..\Resources\UI\search.png" />
 
-                <Button ToolTip="LookUpView"
+                <Button ToolTip="{x:Static resx:Strings.LookUpViewToolTip}"
                         Tag="{x:Static enums:PagesName.LookUpPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding LookUpPageCommand}"
                         Content="..\Resources\UI\lookUpView.png" />
                 
-                <Button ToolTip="Tasks"
+                <Button ToolTip="{x:Static resx:Strings.TasksToolTip}"
                         Tag="{x:Static enums:PagesName.TaskTree}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding TaskTreeCommand}"
                         Content="..\Resources\UI\task.png"
                         Visibility="{Binding TaskButtVisibilities}"/>
 
-                <Button ToolTip="Attr"
+                <Button ToolTip="{x:Static resx:Strings.AttrToolTip}"
                         Tag="{x:Static enums:PagesName.AttrPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding AttrCommand}"

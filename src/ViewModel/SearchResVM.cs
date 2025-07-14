@@ -31,8 +31,8 @@ namespace PilotLookUp.ViewModel
             _objectSetFactory = objectSetFactory;
         }
 
-        public string Name => "DisplayName : " + _dataObj.Name;
-        public string Id => "Id : " + _dataObj.StringId;
+        public string Name => string.Format(PilotLookUp.Resources.Strings.DisplayNameFormat, _dataObj.Name);
+        public string Id => string.Format(PilotLookUp.Resources.Strings.IdFormat, _dataObj.StringId);
         public BitmapImage TypeIcon => _dataObj.GetImage();
         public Visibility CanGo => (_dataObj?.LookUpObject is IDataObject) ? Visibility.Visible : Visibility.Hidden;
 

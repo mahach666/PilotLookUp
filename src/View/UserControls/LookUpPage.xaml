@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
              xmlns:utils="clr-namespace:PilotLookUp.Utils"
+             xmlns:resx="clr-namespace:PilotLookUp.Resources"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -42,7 +43,7 @@
 
                 <Label Grid.Row="0"
                        IsEnabled="False"
-                       Content="Введите имя или Id"
+                       Content="{x:Static resx:Strings.PromptEnterNameOrId}"
                        Visibility="{Binding PromtVisibility}"
                        Foreground="Gray"
                        IsHitTestVisible="False"

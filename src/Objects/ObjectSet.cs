@@ -106,11 +106,11 @@ namespace PilotLookUp.Objects
             get
             {
                 var firstObj = this.FirstOrDefault(x => x != null);
-                if (Count == 0) return "No objects";
-                else if (firstObj == null) return "[ObjectSet] Все объекты null";
+                if (Count == 0) return PilotLookUp.Resources.Strings.NoObjects;
+                else if (firstObj == null) return PilotLookUp.Resources.Strings.AllObjectsNull;
                 else if (Count == 1)
                 {
-                    return firstObj?.StringId ?? firstObj?.Name ?? firstObj?.ToString() ?? "Ошибка вычисления";
+                    return firstObj?.StringId ?? firstObj?.Name ?? firstObj?.ToString() ?? PilotLookUp.Resources.Strings.CalculationError;
                 }
                 else return $"List<{firstObj?.LookUpObject?.GetType().Name ?? "invalid"}>Count = {Count}";
             }

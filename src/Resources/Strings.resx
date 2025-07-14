@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, ...</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, ...</value>
+  </resheader>
+  <data name="ErrorTitle" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="InfoTitle" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="WarningTitle" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="ConfirmationTitle" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Упс, ничего не выбрано.</value>
+  </data>
+  <data name="RepositoryEmpty" xml:space="preserve">
+    <value>Репозиторий пуст или недоступен.</value>
+  </data>
+  <data name="ErrorCopyTaskTree" xml:space="preserve">
+    <value>Ошибка при переходе к дереву задач: {0}</value>
+  </data>
+  <data name="ErrorCopyAttr" xml:space="preserve">
+    <value>Ошибка при переходе к атрибутам: {0}</value>
+  </data>
+  <data name="ErrorMenuClick" xml:space="preserve">
+    <value>Ошибка при обработке клика меню: {0}</value>
+  </data>
+  <data name="ErrorSelectionUpdate" xml:space="preserve">
+    <value>Ошибка при обновлении выбора: {0}</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="DisplayName" xml:space="preserve">
+    <value>Имя: {0}</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id: {0}</value>
+  </data>
+  <data name="SelectedElementId" xml:space="preserve">
+    <value>Выбранный элемент Id:</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Имя:</value>
+  </data>
+  <data name="RevokedTasks" xml:space="preserve">
+    <value>Отозванные задания</value>
+  </data>
+  <data name="CopyName" xml:space="preserve">
+    <value>Копировать Name</value>
+  </data>
+  <data name="CopyValue" xml:space="preserve">
+    <value>Копировать Value</value>
+  </data>
+  <data name="CopyLine" xml:space="preserve">
+    <value>Копировать строку</value>
+  </data>
+  <data name="CopySelected" xml:space="preserve">
+    <value>Копировать выделенное</value>
+  </data>
+  <data name="PromptEnterNameOrId" xml:space="preserve">
+    <value>Введите имя или Id</value>
+  </data>
+  <data name="PromptEnterIdOrGuid" xml:space="preserve">
+    <value>Введите Id или GUID</value>
+  </data>
+  <data name="LookDBToolTip" xml:space="preserve">
+    <value>LookDB</value>
+  </data>
+  <data name="SearchToolTip" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="LookUpViewToolTip" xml:space="preserve">
+    <value>LookUpView</value>
+  </data>
+  <data name="TasksToolTip" xml:space="preserve">
+    <value>Tasks</value>
+  </data>
+  <data name="AttrToolTip" xml:space="preserve">
+    <value>Attr</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>PilotLookUp</value>
+  </data>
+  <data name="GridColumnName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="GridColumnValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="GridColumnTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="GridColumnIsObligatory" xml:space="preserve">
+    <value>IsObligatory</value>
+  </data>
+  <data name="GridColumnIsService" xml:space="preserve">
+    <value>IsService</value>
+  </data>
+  <data name="GridColumnType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="GridColumnIsInitialized" xml:space="preserve">
+    <value>IsInitialized</value>
+  </data>
+  <data name="GridColumnIsValid" xml:space="preserve">
+    <value>IsValid</value>
+  </data>
+  <data name="CopyTitle" xml:space="preserve">
+    <value>Копировать Title</value>
+  </data>
+  <data name="DisplayNameFormat" xml:space="preserve">
+    <value>DisplayName : {0}</value>
+  </data>
+  <data name="IdFormat" xml:space="preserve">
+    <value>Id : {0}</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="RepositoryName" xml:space="preserve">
+    <value>Репозиторий</value>
+  </data>
+  <data name="NullName" xml:space="preserve">
+    <value>null</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>invalid</value>
+  </data>
+  <data name="ErrorLoadingRepository" xml:space="preserve">
+    <value>Ошибка при загрузке данных из репозитория: {0}</value>
+  </data>
+  <data name="StaThreadError" xml:space="preserve">
+    <value>MainView должен создаваться в STA потоке</value>
+  </data>
+  <data name="NoObjects" xml:space="preserve">
+    <value>No objects</value>
+  </data>
+  <data name="AllObjectsNull" xml:space="preserve">
+    <value>[ObjectSet] Все объекты null</value>
+  </data>
+  <data name="CalculationError" xml:space="preserve">
+    <value>Ошибка вычисления</value>
+  </data>
+  <data name="MenuPilotLookUp" xml:space="preserve">
+    <value>PilotLookUp</value>
+  </data>
+  <data name="MenuLookSelected" xml:space="preserve">
+    <value>LookSelected</value>
+  </data>
+  <data name="MenuLookDB" xml:space="preserve">
+    <value>LookDB</value>
+  </data>
+  <data name="MenuSearch" xml:space="preserve">
+    <value>Search</value>
+  </data>
+</root> 

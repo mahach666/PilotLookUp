@@ -11,6 +11,7 @@
 		<AssemblyVersion>2.4.1.0</AssemblyVersion>
 		<RootNamespace>PilotLookUp</RootNamespace>
 		<OutputType>Library</OutputType>
+		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -112,6 +113,7 @@
 		<Reference Include="System.Xaml" />
 		<Reference Include="WindowsBase" />
 		<Reference Include="System.IO" />
+		<Reference Include="System.ComponentModel.Composition" />
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -146,5 +148,22 @@
 	
 	<ItemGroup>
 	  <Folder Include="ViewModel\Commands\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Strings.resx" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Strings.resx">
+		<Generator>PublicResXFileCodeGenerator</Generator>
+		<LastGenOutput>Strings.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Compile Update="Resources\Strings.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Strings.resx</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 </Project>

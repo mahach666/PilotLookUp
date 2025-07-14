@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using PilotLookUp.Resources;
 
 namespace PilotLookUp.ViewModel
 {
@@ -101,7 +102,7 @@ namespace PilotLookUp.ViewModel
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "MainVM.TaskTreeCommand");
-                _notificationService.ShowError($"Ошибка при переходе к дереву задач: {ex.Message}");
+                _notificationService.ShowError(string.Format(Strings.ErrorCopyTaskTree, ex.Message));
             }
         });
         public ICommand AttrCommand => new RelayCommand<object>(_ => 
@@ -116,7 +117,7 @@ namespace PilotLookUp.ViewModel
             catch (System.Exception ex)
             {
                 _errorHandlingService?.HandleError(ex, "MainVM.AttrCommand");
-                _notificationService.ShowError($"Ошибка при переходе к атрибутам: {ex.Message}");
+                _notificationService.ShowError(string.Format(Strings.ErrorCopyAttr, ex.Message));
             }
         });
 

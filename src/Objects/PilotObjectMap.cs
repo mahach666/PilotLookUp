@@ -32,7 +32,7 @@ namespace PilotLookUp.Objects
             }
             catch
             {
-                return _factory.CreateDefault("Unknown", "Unknown", obj, false);
+                return _factory.CreateDefault(PilotLookUp.Resources.Strings.Unknown, PilotLookUp.Resources.Strings.Unknown, obj, false);
             }
         }
 

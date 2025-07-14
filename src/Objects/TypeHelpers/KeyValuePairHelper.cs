@@ -51,7 +51,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             : base(themeService)
         {
             _lookUpObject = keyValuePair.Value;
-            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Name ?? "invalid";
+            _name = objectsRepository?.GetUserStates().FirstOrDefault(i => i.Id == keyValuePair.Key)?.Name ?? PilotLookUp.Resources.Strings.InvalidName;
             _isLookable = true;
         }
 

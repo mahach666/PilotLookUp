@@ -11,7 +11,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             : base(themeService)
         {
             _lookUpObject = obj;
-            _name = "Репозиторий";
+            _name = PilotLookUp.Resources.Strings.RepositoryName;
             _isLookable = true;
         }
 

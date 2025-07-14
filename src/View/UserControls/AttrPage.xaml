@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              xmlns:utils="clr-namespace:PilotLookUp.Utils"
+             xmlns:resx="clr-namespace:PilotLookUp.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -26,9 +27,9 @@
 
         <Grid Background="{DynamicResource HoverBackground}">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
-                <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" />
+                <TextBlock Text="{x:Static resx:Strings.SelectedElementId}" FontWeight="Bold" />
                 <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
-                <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />
+                <TextBlock Text="{x:Static resx:Strings.NameLabel}" FontWeight="Bold" Margin="20,0,0,0" />
                 <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" />
             </StackPanel>
         </Grid>
@@ -41,48 +42,48 @@
 
                 <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Копировать Name"
+                    <MenuItem Header="{x:Static resx:Strings.CopyName}"
                        Command="{Binding CopyCommand}"
                        CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectName}" />
-                    <MenuItem Header="Копировать Value"
+                    <MenuItem Header="{x:Static resx:Strings.CopyValue}"
                        Command="{Binding CopyCommand}"
                        CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectValue}" />
-                    <MenuItem Header="Копировать Title"
+                    <MenuItem Header="{x:Static resx:Strings.CopyTitle}"
                        Command="{Binding CopyCommand}"
                        CommandParameter="{x:Static utils:CopyCommandKey.DataGridSelectTitle}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Name"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnName}"
                                             Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                    <DataGridTextColumn Header="Title"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnTitle}"
                                             Binding="{Binding Title, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                    <DataGridTextColumn Header="Value"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnValue}"
                                             Binding="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                    <DataGridTextColumn Header="IsObligatory"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnIsObligatory}"
                                             Binding="{Binding IsObligatory, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                    <DataGridTextColumn Header="IsService"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnIsService}"
                                             Binding="{Binding IsService, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                    <DataGridTextColumn Header="Type"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnType}"
                                             Binding="{Binding Type, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
 
-                    <DataGridTextColumn Header="IsInitialized"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnIsInitialized}"
                                             Binding="{Binding IsInitialized, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
                     
-                    <DataGridTextColumn Header="IsValid"
+                    <DataGridTextColumn Header="{x:Static resx:Strings.GridColumnIsValid}"
                                             Binding="{Binding IsValid, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*" />
                 </DataGrid.Columns>
