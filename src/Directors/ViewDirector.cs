@@ -81,7 +81,7 @@ namespace PilotLookUp
                 
                 var viewModelFactory = container.GetInstance<IViewModelFactory>();
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: viewModelFactory получен");
-                var mainVM = viewModelFactory.CreateMainVM();
+                var mainVM = viewModelFactory.CreateMainVM(navigationService);
                 System.Diagnostics.Debug.WriteLine("[TRACE] ViewDirector.ShowView: mainVM создан");
                 
                 var windowFactory = container.GetInstance<IWindowFactory>();

@@ -9,18 +9,18 @@ namespace PilotLookUp.Model.Services
         private readonly IObjectsRepository _objectsRepository;
         private readonly ITabServiceProvider _tabServiceProvider;
         private readonly ISelectionService _selectionService;
-        private readonly Ascon.Pilot.Themes.ThemeNames _theme;
+        private readonly IThemeProvider _themeProvider;
 
         public MenuService(
             IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
             ISelectionService selectionService,
-            Ascon.Pilot.Themes.ThemeNames theme)
+            IThemeProvider themeProvider)
         {
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
             _selectionService = selectionService;
-            _theme = theme;
+            _themeProvider = themeProvider;
         }
 
         public void HandleMenuItemClick(string name)
@@ -28,16 +28,16 @@ namespace PilotLookUp.Model.Services
             switch (name)
             {
                 case "LookDB":
-                    ViewDirector.LookDB(_objectsRepository, _tabServiceProvider, _theme);
+                    ViewDirector.LookDB(_objectsRepository, _tabServiceProvider, _themeProvider.Theme);
                     break;
                 case "Search":
-                    ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider, _theme);
+                    ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider, _themeProvider.Theme);
                     break;
                 case "LookSelected":
                     var selection = _selectionService.GetCurrentSelection();
                     if (_selectionService.HasSelection())
                     {
-                        ViewDirector.LookSelection(selection, _objectsRepository, _tabServiceProvider, _theme);
+                        ViewDirector.LookSelection(selection, _objectsRepository, _tabServiceProvider, _themeProvider.Theme);
                     }
                     break;
             }

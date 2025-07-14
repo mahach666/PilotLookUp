@@ -6,23 +6,21 @@ namespace PilotLookUp.Model.Services
 {
     public class WindowService : IWindowService
     {
-        private IObjectsRepository _objectsRepository;
-        private ITabServiceProvider _tabServiceProvider;
-        private Ascon.Pilot.Themes.ThemeNames _theme;
+        private readonly IObjectsRepository _objectsRepository;
+        private readonly ITabServiceProvider _tabServiceProvider;
+        private readonly IThemeProvider _themeProvider;
 
-        public WindowService(IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider
-            , Ascon.Pilot.Themes.ThemeNames theme)
+        public WindowService(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, IThemeProvider themeProvider)
         {
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
-            _theme = theme;
+            _themeProvider = themeProvider;
         }
 
         public void CreateNewMainWindow(ObjectSet obj)
         {
             if (obj == null) return;
-            ViewDirector.LookSelection(obj, _objectsRepository, _tabServiceProvider, _theme);
+            ViewDirector.LookSelection(obj, _objectsRepository, _tabServiceProvider, _themeProvider.Theme);
         }
     }
 }

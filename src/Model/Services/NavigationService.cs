@@ -9,15 +9,13 @@ namespace PilotLookUp.Model.Services
 {
     public class NavigationService : INavigationService
     {
-        private readonly IViewModelProvider _viewModelProvider;
-        private readonly ISearchViewModelCreator _searchViewModelCreator;
+        private readonly IViewModelFactory _viewModelFactory;
         private readonly List<IPage> _pages;
         private IPage _activePage;
 
-        public NavigationService(IViewModelProvider viewModelProvider, ISearchViewModelCreator searchViewModelCreator)
+        public NavigationService(IViewModelFactory viewModelFactory)
         {
-            _viewModelProvider = viewModelProvider;
-            _searchViewModelCreator = searchViewModelCreator;
+            _viewModelFactory = viewModelFactory;
             _pages = new List<IPage>();
         }
 
@@ -52,7 +50,7 @@ namespace PilotLookUp.Model.Services
 
         public void NavigateToLookUp(ObjectSet dataObjects = null)
         {
-            var lookUpVM = _viewModelProvider.CreateLookUpVM(dataObjects);
+            var lookUpVM = _viewModelFactory.CreateLookUpVM(dataObjects);
             
             // Если данные не были переданы, инициализируем из репозитория
             if (dataObjects == null)
@@ -66,21 +64,21 @@ namespace PilotLookUp.Model.Services
 
         public void NavigateToSearch()
         {
-            var searchVM = _searchViewModelCreator.CreateSearchVM(this);
+            var searchVM = _viewModelFactory.CreateSearchVM(this);
             AddPage(searchVM);
             SetActivePage(searchVM);
         }
 
         public void NavigateToTaskTree(IPilotObjectHelper selectedObject)
         {
-            var taskTreeVM = _viewModelProvider.CreateTaskTreeVM(selectedObject);
+            var taskTreeVM = _viewModelFactory.CreateTaskTreeVM(selectedObject);
             AddPage(taskTreeVM);
             SetActivePage(taskTreeVM);
         }
 
         public void NavigateToAttr(IPilotObjectHelper selectedObject)
         {
-            var attrVM = _viewModelProvider.CreateAttrVM(selectedObject);
+            var attrVM = _viewModelFactory.CreateAttrVM(selectedObject);
             AddPage(attrVM);
             SetActivePage(attrVM);
         }

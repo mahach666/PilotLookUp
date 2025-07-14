@@ -17,14 +17,22 @@ namespace PilotLookUp.Utils
             // Создаем новый контейнер для каждого окна
             var container = new Container();
             
-            // Настраиваем базовые сервисы
-            ConfigureBaseServices(container, theme);
+            // Регистрируем внешние сервисы (обязательные)
+            if (objectsRepository == null)
+                throw new ArgumentNullException(nameof(objectsRepository), "IObjectsRepository обязателен!");
+            if (tabServiceProvider == null)
+                throw new ArgumentNullException(nameof(tabServiceProvider), "ITabServiceProvider обязателен!");
+            if (theme == null)
+                throw new ArgumentNullException(nameof(theme), "Theme обязателен!");
+                
+            container.RegisterInstance(objectsRepository);
+            container.RegisterInstance(tabServiceProvider);
             
-            // Регистрируем внешние сервисы (используем только переданные)
-            if (objectsRepository != null)
-                container.RegisterInstance(objectsRepository);
-            if (tabServiceProvider != null)
-                container.RegisterInstance(tabServiceProvider);
+            // Регистрируем ThemeProvider
+            container.RegisterInstance<IThemeProvider>(new ThemeProvider(theme.Value));
+            
+            // Настраиваем базовые сервисы
+            ConfigureBaseServices(container, theme.Value);
             
             // Валидируем контейнер
             container.Verify();
@@ -39,69 +47,26 @@ namespace PilotLookUp.Utils
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
             container.Register<ICustomSearchService, SearchService>(Lifestyle.Singleton);
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
-            container.Register<IWindowService>(() => new WindowService(
-                container.GetInstance<IObjectsRepository>(),
-                container.GetInstance<ITabServiceProvider>(),
-                theme.Value), Lifestyle.Singleton);
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             container.Register<IValidationService, ValidationService>(Lifestyle.Singleton);
-            
-            // Регистрируем новые сервисы
-            container.Register<ISearchViewModelCreator>(() => new SearchViewModelCreator(
-                container.GetInstance<ICustomSearchService>(),
-                container.GetInstance<ITabService>(),
-                container.GetInstance<IObjectSetFactory>(),
-                container.GetInstance<IErrorHandlingService>(),
-                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
-            container.Register<IViewModelProvider>(() => new ViewModelProvider(
-                container.GetInstance<IRepoService>(),
-                container.GetInstance<ICustomSearchService>(),
-                container.GetInstance<ITabService>(),
-                container.GetInstance<IWindowService>(),
-                container.GetInstance<ITreeItemService>(),
-                container.GetInstance<IDataObjectService>(),
-                container.GetInstance<IErrorHandlingService>(),
-                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
-            container.Register<IViewModelFactory>(() => new ViewModelFactory(
-                container.GetInstance<IViewModelProvider>(),
-                container.GetInstance<ISearchViewModelCreator>(),
-                container.GetInstance<INavigationService>(),
-                container.GetInstance<IErrorHandlingService>(),
-                container.GetInstance<IValidationService>(),
-                container.GetInstance<ITabService>(),
-                container.GetInstance<IObjectSetFactory>()), Lifestyle.Singleton);
-            
-            // Регистрируем новые сервисы для разделения ответственности
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
             container.Register<ISelectionService, SelectionService>(Lifestyle.Singleton);
-            container.Register<IMenuService>(() => new MenuService(
-                container.GetInstance<IObjectsRepository>(),
-                container.GetInstance<ITabServiceProvider>(),
-                container.GetInstance<ISelectionService>(),
-                theme.Value), Lifestyle.Singleton);
             container.Register<IErrorHandlingService, ErrorHandlingService>(Lifestyle.Singleton);
-            
-            // Регистрируем фабрики
             container.Register<IPilotObjectHelperFactory, PilotObjectHelperFactory>(Lifestyle.Singleton);
-            container.Register<IObjectSetFactory>(() => new ObjectSetFactory(
-                container.GetInstance<IThemeService>(),
-                container.GetInstance<IValidationService>()), Lifestyle.Singleton);
             container.Register<IWindowFactory, WindowFactory>(Lifestyle.Singleton);
+            container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
+            container.Register<IObjectSetFactory, ObjectSetFactory>(Lifestyle.Singleton);
+            container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
+            container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
+            container.Register<IThemeService, ThemeService>(Lifestyle.Singleton);
             
-            // Регистрируем ThemeService
-            if (theme == null)
-                throw new ArgumentNullException(nameof(theme), "Theme должен быть явно передан в DI контейнер!");
-            container.Register<IThemeService>(() => new ThemeService(theme.Value), Lifestyle.Singleton);
-            
-            // Регистрируем ViewModels (только те, которые не требуют параметров)
-            container.Register<LookUpVM>(Lifestyle.Transient);
-            // SearchVM, MainVM, TaskTreeVM и AttrVM создаются через фабрику
+            // Регистрируем NavigationService
+            container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
             
             // Регистрируем Views
             container.Register<MainView>(() =>
                 System.Windows.Application.Current.Dispatcher.Invoke(() => new MainView()), Lifestyle.Transient);
-            container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
         }
 
         // Удаляю SetGlobalServices и все статические поля

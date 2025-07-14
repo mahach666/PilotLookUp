@@ -141,6 +141,31 @@ namespace PilotLookUp.Objects.TypeHelpers
                     _stringId = unit?.Id.ToString();
                     return;
                 }
+
+                else if (sender.LookUpObject is IStateInfo stateInfo
+                        && stateInfo.GetType().Name == "PluginStateInfo"
+                        && senderMember.Name == "PersonId")
+                {
+                    var personObj = objectsRepository.GetPerson(value);
+                    _lookUpObject = personObj;
+                    _name = personObj?.DisplayName;
+                    _isLookable = true;
+                    _stringId = personObj?.Id.ToString();
+                    return;
+                }
+
+                else if (sender.LookUpObject is IStateInfo stateInfo2
+                        && stateInfo2.GetType().Name == "PluginStateInfo"
+                        && senderMember.Name == "PositionId")
+                {
+                    // Для PositionId используем OrganisationUnit, так как GetPosition не существует
+                    var unit = objectsRepository.GetOrganisationUnit(value);
+                    _lookUpObject = unit;
+                    _name = unit?.Title;
+                    _isLookable = true;
+                    _stringId = unit?.Id.ToString();
+                    return;
+                }
             }
 
             else if (sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair

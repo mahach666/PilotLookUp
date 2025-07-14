@@ -11,7 +11,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             : base(themeService)
         {
             _lookUpObject = obj;
-            _name = obj?.ToString();
+            _name = obj?.Id.ToString();
             _isLookable = true;
             _stringId = obj?.Id.ToString();
         }

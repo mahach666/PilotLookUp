@@ -8,67 +8,76 @@ namespace PilotLookUp.Model.Services
 {
     public class ViewModelFactory : IViewModelFactory
     {
-        private readonly IViewModelProvider _viewModelProvider;
-        private readonly ISearchViewModelCreator _searchViewModelCreator;
-        private readonly INavigationService _navigationService;
+        private readonly IRepoService _repoService;
+        private readonly ICustomSearchService _searchService;
+        private readonly ITabService _tabService;
+        private readonly IWindowService _windowService;
+        private readonly ITreeItemService _treeItemService;
+        private readonly IDataObjectService _dataObjectService;
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
-        private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
 
         public ViewModelFactory(
-            IViewModelProvider viewModelProvider, 
-            ISearchViewModelCreator searchViewModelCreator, 
-            INavigationService navigationService, 
-            IErrorHandlingService errorHandlingService, 
-            IValidationService validationService,
+            IRepoService repoService,
+            ICustomSearchService searchService,
             ITabService tabService,
+            IWindowService windowService,
+            ITreeItemService treeItemService,
+            IDataObjectService dataObjectService,
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService,
             IObjectSetFactory objectSetFactory)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(viewModelProvider,
-                searchViewModelCreator,
-                navigationService,
-                errorHandlingService,
-                validationService,
-                tabService,
-                objectSetFactory);
-            _viewModelProvider = viewModelProvider;
-            _searchViewModelCreator = searchViewModelCreator;
-            _navigationService = navigationService;
-            _errorHandlingService = errorHandlingService;
+            _validationService.ValidateConstructorParams(
+                repoService, searchService, tabService, windowService, treeItemService, 
+                dataObjectService, errorHandlingService, validationService, objectSetFactory);
+            
+            _repoService = repoService;
+            _searchService = searchService;
             _tabService = tabService;
+            _windowService = windowService;
+            _treeItemService = treeItemService;
+            _dataObjectService = dataObjectService;
+            _errorHandlingService = errorHandlingService;
+            _validationService = validationService;
             _objectSetFactory = objectSetFactory;
         }
 
-        public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null, IErrorHandlingService errorHandlingService = null)
+        public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null)
         {
-            return _viewModelProvider.CreateLookUpVM(dataObjects, errorHandlingService ?? _errorHandlingService);
+            var vm = new LookUpVM(_repoService, _windowService, _errorHandlingService, _validationService);
+            if (dataObjects != null && dataObjects.Count > 0)
+            {
+                vm.SelectionDataObjects = dataObjects.Select(x => new ListItemVM(x, _validationService)).ToList();
+            }
+            return vm;
         }
 
-        public SearchVM CreateSearchVM(IErrorHandlingService errorHandlingService = null)
+        public SearchVM CreateSearchVM(INavigationService navigationService)
         {
-            return _searchViewModelCreator.CreateSearchVM(_navigationService, errorHandlingService ?? _errorHandlingService);
+            return new SearchVM(navigationService, _searchService, _tabService, _objectSetFactory, _errorHandlingService, _validationService);
         }
 
-        public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
+        public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject)
         {
-            return _viewModelProvider.CreateTaskTreeVM(selectedObject, errorHandlingService ?? _errorHandlingService);
+            return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, _errorHandlingService, _validationService);
         }
 
-        public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject, IErrorHandlingService errorHandlingService = null)
+        public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject)
         {
-            return _viewModelProvider.CreateAttrVM(selectedObject, errorHandlingService ?? _errorHandlingService);
+            return new AttrVM(selectedObject, _dataObjectService, _errorHandlingService, _validationService);
         }
 
-        public MainVM CreateMainVM(IErrorHandlingService errorHandlingService = null)
+        public MainVM CreateMainVM(INavigationService navigationService)
         {
-            return _viewModelProvider.CreateMainVM(_navigationService, this, errorHandlingService ?? _errorHandlingService);
+            return new MainVM(navigationService, this, _errorHandlingService, _validationService);
         }
 
-        public SearchResVM CreateSearchResVM(IPilotObjectHelper pilotObjectHelper)
+        public SearchResVM CreateSearchResVM(INavigationService navigationService, IPilotObjectHelper pilotObjectHelper)
         {
-            return new SearchResVM(_navigationService, _tabService, pilotObjectHelper, _objectSetFactory, _validationService);
+            return new SearchResVM(navigationService, _tabService, pilotObjectHelper, _objectSetFactory, _validationService);
         }
     }
 } 

@@ -5,14 +5,14 @@ namespace PilotLookUp.Model.Services
 {
     public class ThemeService : IThemeService
     {
-        private readonly ThemeNames _theme;
+        private readonly IThemeProvider _themeProvider;
 
-        public ThemeService(ThemeNames theme)
+        public ThemeService(IThemeProvider themeProvider)
         {
-            _theme = theme;
+            _themeProvider = themeProvider;
         }
 
-        public ThemeNames CurrentTheme => _theme;
-        public bool IsJediTheme => _theme == ThemeNames.Jedi;
+        public ThemeNames CurrentTheme => _themeProvider.Theme;
+        public bool IsJediTheme => _themeProvider.Theme == ThemeNames.Jedi;
     }
 } 
