@@ -1,4 +1,4 @@
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using System.Windows;
 
 namespace PilotLookUp.Model.Services

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 
 namespace PilotLookUp.Utils
 {

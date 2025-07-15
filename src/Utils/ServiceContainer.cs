@@ -1,10 +1,11 @@
 using System;
 using Ascon.Pilot.SDK;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Model.Services;
 using PilotLookUp.View;
 using PilotLookUp.ViewModel;
 using SimpleInjector;
+using PilotLookUp.Domain.UseCases;
 
 namespace PilotLookUp.Utils
 {

@@ -1,5 +1,5 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;

@@ -1,4 +1,4 @@
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.View;
 using PilotLookUp.ViewModel;
 

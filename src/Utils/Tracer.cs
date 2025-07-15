@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Extensions;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils.Strategies;
 using System;

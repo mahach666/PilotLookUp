@@ -1,7 +1,6 @@
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Domain.Entities;
 using PilotLookUp.ViewModel;
-using PilotLookUp.Contracts;
 using PilotLookUp.Resources;
 
 namespace PilotLookUp.Model.Services

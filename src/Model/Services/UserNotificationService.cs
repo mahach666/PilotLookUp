@@ -1,5 +1,5 @@
 using System.Resources;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using System.Windows;
 using PilotLookUp.Resources;
 

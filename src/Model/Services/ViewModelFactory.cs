@@ -1,5 +1,5 @@
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Domain.Entities;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Linq;

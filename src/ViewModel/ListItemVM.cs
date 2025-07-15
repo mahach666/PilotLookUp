@@ -1,4 +1,4 @@
-﻿using PilotLookUp.Interfaces;
+﻿using PilotLookUp.Domain.Interfaces;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

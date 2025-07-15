@@ -1,5 +1,5 @@
 using Ascon.Pilot.SDK;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using System;
 
 namespace PilotLookUp.Model.Services

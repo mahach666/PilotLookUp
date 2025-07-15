@@ -1,5 +1,5 @@
-﻿using PilotLookUp.Objects;
-using PilotLookUp.Interfaces;
+﻿using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

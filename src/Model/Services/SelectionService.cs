@@ -1,6 +1,6 @@
 using Ascon.Pilot.SDK;
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,7 +1,6 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.Enums;
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Resources;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;

@@ -1,7 +1,6 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.Contracts;
-using PilotLookUp.Enums;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;

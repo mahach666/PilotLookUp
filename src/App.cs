@@ -2,15 +2,14 @@
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.SDK.Toolbar;
 using Ascon.Pilot.Themes;
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Resources;
 using PilotLookUp.Utils;
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using PilotLookUp.Resources;
 
 namespace PilotLookUp
 {

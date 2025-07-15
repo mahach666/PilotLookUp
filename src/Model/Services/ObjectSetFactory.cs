@@ -1,5 +1,5 @@
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Domain.Entities;
 using System.Reflection;
 
 namespace PilotLookUp.Model.Services

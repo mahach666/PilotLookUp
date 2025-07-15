@@ -1,6 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 
 namespace PilotLookUp.Model.Services
 {

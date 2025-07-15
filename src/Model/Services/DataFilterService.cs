@@ -1,4 +1,4 @@
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
 using System.Linq;

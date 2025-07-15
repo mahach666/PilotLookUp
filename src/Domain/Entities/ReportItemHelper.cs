@@ -1,0 +1,25 @@
+﻿using Ascon.Pilot.SDK;
+using Ascon.Pilot.SDK.Data;
+using PilotLookUp.Domain.Interfaces;
+using System;
+using System.Windows.Media.Imaging;
+
+namespace PilotLookUp.Domain.Entities
+{
+    internal class ReportItemHelper : PilotObjectHelper, IPilotObjectHelper
+    {
+        internal ReportItemHelper(IThemeService themeService, IReportItem obj)
+            : base(themeService)
+        {
+            _lookUpObject = obj;
+            _name = obj?.Name;
+            _isLookable = true;
+            _stringId = obj?.Id.ToString();
+        }
+
+        public override BitmapImage GetImage()
+        {
+            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\reportIcon.png", UriKind.RelativeOrAbsolute));
+        }
+    }
+}

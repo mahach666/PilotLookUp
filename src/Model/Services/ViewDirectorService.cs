@@ -1,11 +1,8 @@
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.Themes;
-using PilotLookUp.Enums;
-using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Utils;
-using PilotLookUp.View;
-using PilotLookUp.ViewModel;
 using System.Windows;
 
 namespace PilotLookUp.Model.Services

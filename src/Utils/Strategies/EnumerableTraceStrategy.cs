@@ -1,4 +1,4 @@
-using PilotLookUp.Objects;
+using PilotLookUp.Domain.Entities;
 using System.Collections;
 using System.Threading.Tasks;
 

@@ -1,9 +1,9 @@
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
-using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
-using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Objects.Strategies
 {

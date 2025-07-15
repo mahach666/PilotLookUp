@@ -4,7 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PilotLookUp.Extensions;
-using PilotLookUp.Interfaces;
+using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 
 namespace PilotLookUp.Utils.Strategies
 {
