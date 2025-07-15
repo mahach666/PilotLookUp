@@ -7,15 +7,13 @@ using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.ViewModel
 {
-    public class ListItemVM : INotifyPropertyChanged, ICustomTree
+    public class ListItemVM : BaseValidatedViewModel, ICustomTree
     {
-        private readonly IValidationService _validationService;
         private readonly ILogger _logger;
 
         public ListItemVM(IPilotObjectHelper pilotObjectHelper, IValidationService validationService, ILogger logger)
+            : base(validationService, pilotObjectHelper, logger)
         {
-            _validationService = validationService;
-            _validationService.ValidateNotNull(pilotObjectHelper, nameof(pilotObjectHelper));
             _logger = logger;
             _logger.Trace($"[TRACE] ListItemVM: Конструктор вызван для {pilotObjectHelper?.Name ?? "null"}");
             PilotObjectHelper = pilotObjectHelper;
@@ -39,11 +37,5 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICustomTree Parrent { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

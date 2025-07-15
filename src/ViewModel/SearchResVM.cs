@@ -7,27 +7,21 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
 {
-    public class SearchResVM
+    public class SearchResVM : BaseValidatedViewModel
     {
         private readonly IPilotObjectHelper _dataObj;
         private readonly INavigationService _navigationService;
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
-        private readonly IValidationService _validationService;
 
         public SearchResVM(
-             INavigationService navigationService
-            , ITabService tabService
-            , IPilotObjectHelper pilotObjectHelper
-            , IObjectSetFactory objectSetFactory
-            , IValidationService validationService)
+             INavigationService navigationService,
+             ITabService tabService,
+             IPilotObjectHelper pilotObjectHelper,
+             IObjectSetFactory objectSetFactory,
+             IValidationService validationService)
+            : base(validationService, navigationService, tabService, pilotObjectHelper, objectSetFactory)
         {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService,
-                tabService,
-                pilotObjectHelper,
-                objectSetFactory,
-                validationService);
             _dataObj = pilotObjectHelper;
             _navigationService = navigationService;
             _tabService = tabService;

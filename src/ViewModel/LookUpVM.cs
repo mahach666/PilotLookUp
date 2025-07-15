@@ -14,13 +14,12 @@ using Application = System.Windows.Application;
 
 namespace PilotLookUp.ViewModel
 {
-    public class LookUpVM : INotifyPropertyChanged, IPage
+    public class LookUpVM : BaseValidatedViewModel, IPage
     {
         private IRepoService _repoService;
         private IWindowService _windowService;
         private bool _dataInitialized = false;
         private readonly IErrorHandlingService _errorHandlingService;
-        private readonly IValidationService _validationService;
         private readonly IDataInitializationService _dataInitializationService;
         private readonly IDataFilterService _dataFilterService;
         private readonly ICopyDataService _copyDataService;
@@ -35,17 +34,23 @@ namespace PilotLookUp.ViewModel
             ICopyDataService copyDataService,
             ILogger logger,
             List<ListItemVM> initialData = null)
+            : base(validationService,
+                  lookUpModel,
+                  windowService,
+                  errorHandlingService,
+                  validationService,
+                  dataInitializationService,
+                  dataFilterService,
+                  copyDataService)
         {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService, dataInitializationService, dataFilterService, copyDataService);
-            _logger = logger;
-            _logger.Trace("[TRACE] LookUpVM: Конструктор вызван");
             _repoService = lookUpModel;
             _windowService = windowService;
             _errorHandlingService = errorHandlingService;
             _dataInitializationService = dataInitializationService;
             _dataFilterService = dataFilterService;
             _copyDataService = copyDataService;
+            _logger = logger;
+
             if (initialData != null && initialData.Count > 0)
             {
                 SelectionDataObjects = initialData;
@@ -224,13 +229,6 @@ namespace PilotLookUp.ViewModel
         }
         public ICommand CopyCommand => new RelayCommand<object>(CopyToClipboard);
         public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindow(_dataGridSelected));
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         PagesName IPage.GetName() =>
              PagesName.LookUpPage;

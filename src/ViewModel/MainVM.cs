@@ -1,20 +1,17 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Resources;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    public class MainVM : INotifyPropertyChanged
+    public class MainVM : BaseValidatedViewModel
     {
         private readonly INavigationService _navigationService;
         private readonly IViewModelFactory _viewModelFactory;
         private readonly IErrorHandlingService _errorHandlingService;
-        private readonly IValidationService _validationService;
         private readonly IUserNotificationService _notificationService;
 
         public MainVM(INavigationService navigationService,
@@ -22,20 +19,19 @@ namespace PilotLookUp.ViewModel
             IErrorHandlingService errorHandlingService,
             IValidationService validationService,
             IUserNotificationService notificationService)
+            : base(validationService,
+                  navigationService,
+                  viewModelFactory,
+                  errorHandlingService,
+                  validationService,
+                  notificationService)
         {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService,
-                viewModelFactory,
-                errorHandlingService,
-                validationService,
-                notificationService);
             _navigationService = navigationService;
             _viewModelFactory = viewModelFactory;
             _errorHandlingService = errorHandlingService;
             _notificationService = notificationService;
             _navigationService.PageChanged += page => SelectedControl = page;
-            
-            // Инициализируем SelectedControl только если ActivePage не null
+
             if (_navigationService.ActivePage != null)
             {
                 SelectedControl = _navigationService.ActivePage;
@@ -98,12 +94,5 @@ namespace PilotLookUp.ViewModel
             "MainVM.AttrCommand",
             PilotLookUp.Resources.Strings.ErrorCopyAttr
         );
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

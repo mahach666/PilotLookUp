@@ -75,33 +75,67 @@ namespace PilotLookUp.Model.Services
             {
                 initialData = dataObjects.Select(x => new ListItemVM(x, _validationService, _logger)).ToList();
             }
-            var vm = new LookUpVM(_repoService, _windowService, _errorHandlingService, _validationService, _dataInitializationService, _dataFilterService, _copyDataService, _logger, initialData);
+            var vm = new LookUpVM(_repoService,
+                _windowService,
+                _errorHandlingService,
+                _validationService,
+                _dataInitializationService,
+                _dataFilterService,
+                _copyDataService,
+                _logger,
+                initialData);
             return vm;
         }
 
         public SearchVM CreateSearchVM(INavigationService navigationService)
         {
-            return new SearchVM(navigationService, _searchService, _tabService, _objectSetFactory, _errorHandlingService, _validationService, _clipboardService);
+            return new SearchVM(navigationService,
+                _searchService,
+                _tabService,
+                _objectSetFactory,
+                _errorHandlingService,
+                _validationService,
+                _clipboardService);
         }
 
         public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject)
         {
-            return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, _errorHandlingService, _validationService, _copyDataService, _taskTreeBuilderService);
+            return new TaskTreeVM(selectedObject,
+                _repoService,
+                _searchService,
+                _windowService,
+                _treeItemService,
+                _errorHandlingService,
+                _validationService,
+                _copyDataService,
+                _taskTreeBuilderService);
         }
 
         public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject)
         {
-            return new AttrVM(selectedObject, _dataObjectService, _errorHandlingService, _validationService, _copyDataService);
+            return new AttrVM(selectedObject,
+                _dataObjectService,
+                _errorHandlingService,
+                _validationService,
+                _copyDataService);
         }
 
         public MainVM CreateMainVM(INavigationService navigationService)
         {
-            return new MainVM(navigationService, this, _errorHandlingService, _validationService, _notificationService);
+            return new MainVM(navigationService,
+                this,
+                _errorHandlingService,
+                _validationService,
+                _notificationService);
         }
 
         public SearchResVM CreateSearchResVM(INavigationService navigationService, IPilotObjectHelper pilotObjectHelper)
         {
-            return new SearchResVM(navigationService, _tabService, pilotObjectHelper, _objectSetFactory, _validationService);
+            return new SearchResVM(navigationService,
+                _tabService,
+                pilotObjectHelper,
+                _objectSetFactory,
+                _validationService);
         }
     }
 } 

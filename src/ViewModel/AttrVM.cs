@@ -9,12 +9,11 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    public class AttrVM : INotifyPropertyChanged, IPage
+    public class AttrVM : BaseValidatedViewModel, IPage
     {
         private IPilotObjectHelper _objectHelper;
         private IDataObjectService _dataObjectService;
         private readonly IErrorHandlingService _errorHandlingService;
-        private readonly IValidationService _validationService;
         private readonly ICopyDataService _copyDataService;
 
         public AttrVM(IPilotObjectHelper pilotObjectHelper,
@@ -22,13 +21,13 @@ namespace PilotLookUp.ViewModel
             IErrorHandlingService errorHandlingService,
             IValidationService validationService,
             ICopyDataService copyDataService)
+            : base(validationService,
+                  pilotObjectHelper,
+                  dataObjectService,
+                  errorHandlingService,
+                  validationService,
+                  copyDataService)
         {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(pilotObjectHelper,
-                dataObjectService,
-                errorHandlingService,
-                validationService,
-                copyDataService);
             _objectHelper = pilotObjectHelper;
             _dataObjectService = dataObjectService;
             _errorHandlingService = errorHandlingService;
@@ -101,13 +100,6 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand CopyCommand => new RelayCommand<object>(CopyToClipboard);
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         PagesName IPage.GetName() =>
             PagesName.AttrPage;

@@ -1,8 +1,8 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Utils;
 using PilotLookUp.Model.Services;
+using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,12 +10,11 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 
 namespace PilotLookUp.ViewModel
 {
-    public class TaskTreeVM : INotifyPropertyChanged, IPage
+    public class TaskTreeVM : BaseValidatedViewModel, IPage
     {
         private IPilotObjectHelper _objectHelper;
         private IRepoService _repoService;
@@ -23,7 +22,6 @@ namespace PilotLookUp.ViewModel
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
         private readonly IErrorHandlingService _errorHandlingService;
-        private readonly IValidationService _validationService;
         private readonly ICopyDataService _copyDataService;
         private readonly TaskTreeBuilderService _taskTreeBuilderService;
 
@@ -37,18 +35,17 @@ namespace PilotLookUp.ViewModel
              IValidationService validationService,
              ICopyDataService copyDataService,
              TaskTreeBuilderService taskTreeBuilderService)
+            : base(validationService,
+                  pilotObjectHelper,
+                  lookUpModel,
+                  searchService,
+                  windowService,
+                  treeItemService,
+                  errorHandlingService,
+                  validationService,
+                  copyDataService,
+                  taskTreeBuilderService)
         {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(pilotObjectHelper,
-                lookUpModel,
-                searchService,
-                windowService,
-                treeItemService,
-                errorHandlingService,
-                validationService,
-                copyDataService,
-                taskTreeBuilderService);
-            _revokedTask = false;
             _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;
             _searchService = searchService;
@@ -61,7 +58,6 @@ namespace PilotLookUp.ViewModel
             _ = LoadDataAsync();
         }
 
-        #region Информация о выбранном задании
         public string IdSelectedItem
         {
             get
@@ -104,9 +100,6 @@ namespace PilotLookUp.ViewModel
         }
 
 
-        #endregion
-
-        #region Дерево процесса
         private async Task LoadDataAsync()
         {
             var (nodes, revokedTaskVisible, lastParent) = await _taskTreeBuilderService.BuildTaskTreeAsync(_objectHelper, RevokedTask);
@@ -155,9 +148,7 @@ namespace PilotLookUp.ViewModel
             Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
         }
 
-        #endregion
 
-        #region Свойства выбранного объекта
         private List<ObjectSet> _info;
         public List<ObjectSet> Info
         {
@@ -214,12 +205,6 @@ namespace PilotLookUp.ViewModel
             }
         }
         public ICommand CopyCommand => new RelayCommand<object>(CopyToClipboard);
-        #endregion
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         PagesName IPage.GetName() =>
              PagesName.TaskTree;

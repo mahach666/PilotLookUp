@@ -5,38 +5,36 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    public class SearchVM : INotifyPropertyChanged, IPage
+    public class SearchVM : BaseValidatedViewModel, IPage
     {
         private readonly INavigationService _navigationService;
         private readonly ICustomSearchService _searchService;
         private readonly ITabService _tabService;
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IErrorHandlingService _errorHandlingService;
-        private readonly IValidationService _validationService;
         private readonly IClipboardService _clipboardService;
 
         public SearchVM(
-            INavigationService navigationService
-            , ICustomSearchService searchService
-            , ITabService tabService
-            , IObjectSetFactory objectSetFactory
-            , IErrorHandlingService errorHandlingService
-            , IValidationService validationService
-            , IClipboardService clipboardService)
+            INavigationService navigationService,
+            ICustomSearchService searchService,
+            ITabService tabService,
+            IObjectSetFactory objectSetFactory,
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService,
+            IClipboardService clipboardService)
+            : base(validationService,
+                  navigationService,
+                  searchService,
+                  tabService,
+                  objectSetFactory,
+                  errorHandlingService,
+                  validationService,
+                  clipboardService)
         {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService,
-                searchService,
-                tabService,
-                objectSetFactory,
-                errorHandlingService,
-                validationService,
-                clipboardService);
             _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;
@@ -57,7 +55,7 @@ namespace PilotLookUp.ViewModel
                         _navigationService,
                         _tabService,
                         _objectSetFactory,
-                        _validationService);
+                        null); // validationService больше не передаём
                     if (res?.Count > 0)
                     {
                         Text = clipboardText;
@@ -103,7 +101,7 @@ namespace PilotLookUp.ViewModel
             {
                 try
                 {
-                    var res = await _searchService.SearchAndMapVMsAsync(Text, _navigationService, _tabService, _objectSetFactory, _validationService);
+                    var res = await _searchService.SearchAndMapVMsAsync(Text, _navigationService, _tabService, _objectSetFactory, null);
                     Result = res;
                 }
                 catch (System.Exception ex)
@@ -114,12 +112,6 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => Search());
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         PagesName IPage.GetName() =>
             PagesName.SearchPage;
