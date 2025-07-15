@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +20,9 @@ namespace PilotLookUp.Domain.UseCases
             {
                 Name = attr.Name,
                 Title = attr.Title,
-                Value = objAttr.TryGetValue(attr.Name, out var value) ? value?.ToString() : string.Empty,
+                Value = objAttr.TryGetValue(attr.Name, out var value)
+                        ? FormatValue(value)
+                        : string.Empty,
                 IsObligatory = attr.IsObligatory.ToString(),
                 IsService = attr.IsService.ToString(),
                 Type = attr.Type.ToString(),
@@ -31,15 +34,29 @@ namespace PilotLookUp.Domain.UseCases
                 .Select(attr => new AttrDTO
                 {
                     Name = attr.Key,
-                    Title = PilotLookUp.Resources.Strings.Unknown,
+                    Title = Resources.Strings.Unknown,
                     Value = attr.Value?.ToString() ?? string.Empty,
-                    IsObligatory = PilotLookUp.Resources.Strings.Unknown,
-                    IsService = PilotLookUp.Resources.Strings.Unknown,
-                    Type = PilotLookUp.Resources.Strings.Unknown,
+                    IsObligatory = Resources.Strings.Unknown,
+                    IsService = Resources.Strings.Unknown,
+                    Type = Resources.Strings.Unknown,
                     IsValid = false
                 }));
 
             return res;
+        }
+
+        private static string FormatValue(object value)
+        {
+            if (value is string str)
+                return str;
+           
+            if (value is IEnumerable enumerable)
+            {
+                return string.Join("; ", enumerable
+                    .Cast<object>()
+                    .Select(item => item?.ToString() ?? string.Empty));
+            }
+            return value?.ToString() ?? string.Empty;
         }
     }
 }

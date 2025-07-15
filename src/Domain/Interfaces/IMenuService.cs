@@ -1,6 +1,3 @@
-using Ascon.Pilot.SDK;
-using System;
-
 namespace PilotLookUp.Domain.Interfaces
 {
     public interface IMenuService

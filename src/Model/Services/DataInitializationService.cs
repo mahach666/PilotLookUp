@@ -8,21 +8,19 @@ using System.Threading.Tasks;
 
 namespace PilotLookUp.Model.Services
 {
-    public class DataInitializationService : IDataInitializationService
+    public class DataInitializationService : BaseValidatedService, IDataInitializationService
     {
         private readonly IRepoService _repoService;
-        private readonly IValidationService _validationService;
         private readonly IUserNotificationService _notificationService;
         private readonly ILogger _logger;
 
         public DataInitializationService(
-            IRepoService repoService, 
+            IRepoService repoService,
             IValidationService validationService,
             IUserNotificationService notificationService,
-            ILogger logger)
+            ILogger logger) : base(validationService, repoService, notificationService, logger)
         {
             _repoService = repoService;
-            _validationService = validationService;
             _notificationService = notificationService;
             _logger = logger;
         }
@@ -85,10 +83,10 @@ namespace PilotLookUp.Model.Services
             var validItems = data.Where(x => x != null).ToList();
             if (validItems.Count != data.Count)
             {
-                _logger.Trace($"[DataInitializationService] Обнаружены null в данных: {data.Count - validItems.Count}");
+                _logger.Trace($"Обнаружены null в данных: {data.Count - validItems.Count}");
             }
 
             return validItems.Any();
         }
     }
-} 
+}

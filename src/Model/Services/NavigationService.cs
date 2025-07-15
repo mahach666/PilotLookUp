@@ -1,6 +1,6 @@
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Objects;
+using PilotLookUp.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,6 @@ namespace PilotLookUp.Model.Services
             }
             else
             {
-                // Создаем новую страницу в зависимости от типа
                 switch (pageName)
                 {
                     case PagesName.LookUpPage:
@@ -52,7 +51,6 @@ namespace PilotLookUp.Model.Services
         {
             var lookUpVM = _viewModelFactory.CreateLookUpVM(dataObjects);
             
-            // Если данные не были переданы, инициализируем из репозитория
             if (dataObjects == null)
             {
                 lookUpVM.InitializeDataIfNeeded();
@@ -85,7 +83,6 @@ namespace PilotLookUp.Model.Services
 
         private void AddPage(IPage page)
         {
-            // Удаляем существующую страницу того же типа
             _pages.RemoveAll(p => p.GetName() == page.GetName());
             _pages.Add(page);
         }

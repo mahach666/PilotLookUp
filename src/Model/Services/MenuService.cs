@@ -1,6 +1,5 @@
 using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
-using System;
 
 namespace PilotLookUp.Model.Services
 {
@@ -48,7 +47,7 @@ namespace PilotLookUp.Model.Services
 
         public void HandleToolbarItemClick(string name)
         {
-            // Пока не используется, но может понадобиться в будущем
+
         }
     }
 } 

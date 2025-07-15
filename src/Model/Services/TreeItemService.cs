@@ -11,16 +11,17 @@ using System.Windows;
 
 namespace PilotLookUp.Model.Services
 {
-    public class TreeItemService : ITreeItemService
+    public class TreeItemService : BaseValidatedService, ITreeItemService
     {
         private IRepoService _lookUpModel { get; }
-        private readonly IValidationService _validationService;
         private readonly ILogger _logger;
 
-        public TreeItemService(IRepoService lookUpModel, IValidationService validationService, ILogger logger)
+        public TreeItemService(
+            IRepoService lookUpModel,
+            IValidationService validationService,
+            ILogger logger) : base(validationService, lookUpModel, logger)
         {
             _lookUpModel = lookUpModel;
-            _validationService = validationService;
             _logger = logger;
         }
 
@@ -33,8 +34,8 @@ namespace PilotLookUp.Model.Services
         private async Task BuildChildNodes(ICustomTree lastParrent)
         {
             var sad = lastParrent.PilotObjectHelper.LookUpObject as Ascon.Pilot.SDK.IDataObject;
-            List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
-            //ObjectSet newPilotObj = await new Tracer(objectsRepository, null, null).Trace(children);
+            List<Guid> children = sad.Children.ToList();  
+
             ObjectSet newPilotObj = await _lookUpModel.GetWrapedObjs(children);
 
             foreach (var dataObjectHelper in newPilotObj)
@@ -51,27 +52,25 @@ namespace PilotLookUp.Model.Services
                         childNode
                     };
                 }
-                await BuildChildNodes(childNode); // Рекурсия для вложенных детей
+                await BuildChildNodes(childNode); 
             }
         }
     }
 
-    public class TaskTreeBuilderService
+    public class TaskTreeBuilderService : BaseValidatedService
     {
         private readonly ICustomSearchService _searchService;
         private readonly ITreeItemService _treeItemService;
-        private readonly IValidationService _validationService;
         private readonly ILogger _logger;
 
         public TaskTreeBuilderService(
             ICustomSearchService searchService,
             ITreeItemService treeItemService,
             IValidationService validationService,
-            ILogger logger)
+            ILogger logger) : base(validationService, searchService, treeItemService, logger)
         {
             _searchService = searchService;
             _treeItemService = treeItemService;
-            _validationService = validationService;
             _logger = logger;
         }
 

@@ -1,8 +1,6 @@
 ﻿using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Infrastructure;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.ViewModel
@@ -11,7 +9,10 @@ namespace PilotLookUp.ViewModel
     {
         private readonly ILogger _logger;
 
-        public ListItemVM(IPilotObjectHelper pilotObjectHelper, IValidationService validationService, ILogger logger)
+        public ListItemVM(
+            IPilotObjectHelper pilotObjectHelper,
+            IValidationService validationService,
+            ILogger logger)
             : base(validationService, pilotObjectHelper, logger)
         {
             _logger = logger;

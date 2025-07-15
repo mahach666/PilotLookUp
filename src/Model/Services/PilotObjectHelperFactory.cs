@@ -1,6 +1,6 @@
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
-using PilotLookUp.Domain.Helpers;
+using PilotLookUp.Domain.Entities.Helpers;
 using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Infrastructure;
 using System;
@@ -27,7 +27,11 @@ namespace PilotLookUp.Model.Services
         {
             return new BoolHelper(_themeService, value, _logger);
         }
-        public IPilotObjectHelper CreateInt(int value, IObjectsRepository objectsRepository, IPilotObjectHelper sender, System.Reflection.MemberInfo senderMember)
+        public IPilotObjectHelper CreateInt(
+            int value,
+            IObjectsRepository objectsRepository,
+            IPilotObjectHelper sender,
+            System.Reflection.MemberInfo senderMember)
         {
             return new IntHelper(_themeService, value, objectsRepository, sender, senderMember, _logger);
         }
@@ -62,8 +66,6 @@ namespace PilotLookUp.Model.Services
         public IPilotObjectHelper CreateAttribute(IAttribute obj) => new AttributeHelper(_themeService, obj, _logger);
         public IPilotObjectHelper CreateKeyValuePair(object obj, object extra = null)
         {
-            // Здесь можно реализовать логику выбора нужного KeyValuePairHelper
-            // Например:
             if (obj is KeyValuePair<string, object> kv1 && extra is IDataObject dataObj)
                 return new KeyValuePairHelper(_themeService, kv1, dataObj, _logger);
             if (obj is KeyValuePair<Guid, int> kv2)

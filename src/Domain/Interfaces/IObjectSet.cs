@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Reflection;
-using PilotLookUp.Domain.Entities;
 
 namespace PilotLookUp.Domain.Interfaces
 {
@@ -14,6 +13,5 @@ namespace PilotLookUp.Domain.Interfaces
         void Clear();
         bool Contains(IPilotObjectHelper item);
         MemberInfo MemberInfo { get; }
-        // Можно добавить другие методы по необходимости
     }
 } 

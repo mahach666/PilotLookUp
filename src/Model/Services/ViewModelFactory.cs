@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace PilotLookUp.Model.Services
 {
-    public class ViewModelFactory : IViewModelFactory
+    public class ViewModelFactory : BaseValidatedService, IViewModelFactory
     {
         private readonly IRepoService _repoService;
         private readonly ICustomSearchService _searchService;
@@ -16,7 +16,6 @@ namespace PilotLookUp.Model.Services
         private readonly ITreeItemService _treeItemService;
         private readonly IDataObjectService _dataObjectService;
         private readonly IErrorHandlingService _errorHandlingService;
-        private readonly IValidationService _validationService;
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IDataInitializationService _dataInitializationService;
         private readonly IDataFilterService _dataFilterService;
@@ -42,14 +41,23 @@ namespace PilotLookUp.Model.Services
             IClipboardService clipboardService,
             IUserNotificationService notificationService,
             TaskTreeBuilderService taskTreeBuilderService,
-            ILogger logger)
-        {
-            _validationService = validationService;
-            _validationService.ValidateConstructorParams(
-                repoService, searchService, tabService, windowService, treeItemService, 
-                dataObjectService, errorHandlingService, validationService, objectSetFactory,
-                dataInitializationService, dataFilterService, copyDataService, clipboardService, notificationService);
-            
+            ILogger logger) : base(validationService,
+                repoService,
+                searchService,
+                tabService,
+                windowService,
+                treeItemService,
+                dataObjectService,
+                errorHandlingService,
+                objectSetFactory,
+                dataInitializationService,
+                dataFilterService,
+                copyDataService,
+                clipboardService,
+                notificationService,
+                taskTreeBuilderService,
+                logger)
+        {            
             _repoService = repoService;
             _searchService = searchService;
             _tabService = tabService;
@@ -57,7 +65,6 @@ namespace PilotLookUp.Model.Services
             _treeItemService = treeItemService;
             _dataObjectService = dataObjectService;
             _errorHandlingService = errorHandlingService;
-            _validationService = validationService;
             _objectSetFactory = objectSetFactory;
             _dataInitializationService = dataInitializationService;
             _dataFilterService = dataFilterService;

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
-             xmlns:utils="clr-namespace:PilotLookUp.Utils"
+             xmlns:utils="clr-namespace:PilotLookUp.Enums"
              xmlns:resx="clr-namespace:PilotLookUp.Resources"
              mc:Ignorable="d"
              d:DesignHeight="450"

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using System.Windows.Data;
-using System.Windows;
+﻿using PilotLookUp.Domain.Entities.Helpers;
 using PilotLookUp.ViewModel;
-using PilotLookUp.Domain.Helpers;
+using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 
 namespace PilotLookUp.Model
 {
@@ -22,7 +22,6 @@ namespace PilotLookUp.Model
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // parameter: "Task" или "Attr"
             var selectedControl = value;
             if (selectedControl is LookUpVM lookUpVM)
             {

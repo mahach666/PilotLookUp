@@ -5,7 +5,8 @@ namespace PilotLookUp.Extensions
 {
     static public class DataObjectEx
     {
-        static public async Task<IDataObject> FindLastParrent(this IDataObject dataObject, IObjectsRepository objectsRepository)
+        static public async Task<IDataObject> FindLastParrent(this IDataObject dataObject,
+            IObjectsRepository objectsRepository)
         {
             while (dataObject.ParentId != null && dataObject.ParentId != default)
             {

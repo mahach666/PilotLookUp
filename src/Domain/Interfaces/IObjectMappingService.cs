@@ -1,6 +1,4 @@
-using PilotLookUp.Objects;
 using System.Collections.Generic;
-using PilotLookUp.Domain.Interfaces;
 
 namespace PilotLookUp.Domain.Interfaces
 {

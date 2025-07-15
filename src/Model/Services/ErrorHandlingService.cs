@@ -12,7 +12,6 @@ namespace PilotLookUp.Model.Services
         public void HandleError(Exception ex, string context = null)
         {
             LogError(ex, context);
-            // Здесь можно добавить дополнительные fallback-механизмы
         }
 
         public void LogError(Exception ex, string context = null)
@@ -24,12 +23,14 @@ namespace PilotLookUp.Model.Services
             }
             catch
             {
-                // Если не удалось записать в файл, можно добавить альтернативное логирование (например, в консоль)
                 Console.WriteLine(message);
             }
         }
 
-        public async Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> operation, int retryCount = 3, string context = null)
+        public async Task<T> ExecuteWithRetryAsync<T>(
+            Func<Task<T>> operation,
+            int retryCount = 3,
+            string context = null)
         {
             int attempts = 0;
             while (true)
@@ -44,12 +45,15 @@ namespace PilotLookUp.Model.Services
                     LogError(ex, context);
                     if (attempts >= retryCount)
                         throw;
-                    await Task.Delay(500 * attempts); // экспоненциальная задержка
+                    await Task.Delay(500 * attempts);
                 }
             }
         }
 
-        public async Task ExecuteWithRetryAsync(Func<Task> operation, int retryCount = 3, string context = null)
+        public async Task ExecuteWithRetryAsync(
+            Func<Task> operation,
+            int retryCount = 3,
+            string context = null)
         {
             int attempts = 0;
             while (true)

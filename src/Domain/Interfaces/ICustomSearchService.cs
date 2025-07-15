@@ -1,9 +1,8 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Entities;
-using PilotLookUp.Objects;
-using System.Threading.Tasks;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PilotLookUp.Domain.Interfaces
 {
@@ -15,6 +14,11 @@ namespace PilotLookUp.Domain.Interfaces
 
         public Task<IPilotObjectHelper> GetLastParent(IDataObject dataObject);
 
-        public Task<List<SearchResVM>> SearchAndMapVMsAsync(string request, INavigationService navigationService, ITabService tabService, IObjectSetFactory objectSetFactory, IValidationService validationService);
+        public Task<List<SearchResVM>> SearchAndMapVMsAsync(
+            string request,
+            INavigationService navigationService,
+            ITabService tabService,
+            IObjectSetFactory objectSetFactory,
+            IValidationService validationService);
     }
 }

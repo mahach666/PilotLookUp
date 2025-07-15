@@ -1,13 +1,13 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
-using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Extensions;
+using PilotLookUp.Infrastructure;
+using PilotLookUp.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PilotLookUp.ViewModel;
-using System.Collections.Generic;
-using PilotLookUp.Infrastructure;
 
 namespace PilotLookUp.Model.Services
 {
@@ -18,7 +18,11 @@ namespace PilotLookUp.Model.Services
         private readonly IPilotObjectHelperFactory _factory;
         private readonly ILogger _logger;
 
-        public SearchService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IPilotObjectHelperFactory factory, ILogger logger)
+        public SearchService(
+            IObjectsRepository objectsRepository,
+            IObjectSetFactory objectSetFactory,
+            IPilotObjectHelperFactory factory,
+            ILogger logger)
         {
             _objectsRepository = objectsRepository;
             _objectSetFactory = objectSetFactory;
@@ -66,7 +70,6 @@ namespace PilotLookUp.Model.Services
             {
                 if (child is IPilotObjectHelper dataHelp && dataHelp.LookUpObject is IDataObject dataObj)
                 {
-                    // Проверяем, есть ли свойство IsTask через интерфейс
                     var isTaskProp = dataHelp.GetType().GetProperty("IsTask");
                     var isTask = isTaskProp != null && (bool)isTaskProp.GetValue(dataHelp);
                     if (isTask)
@@ -96,13 +99,25 @@ namespace PilotLookUp.Model.Services
             if (dataObject != null)
             {
                 var parent = await dataObject.FindLastParrent(_objectsRepository);
-                var objSet = await new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory, _logger).Trace(parent);
+                var objSet = await new Tracer(
+                    _objectsRepository,
+                    _factory,
+                    null,
+                    null,
+                    _objectSetFactory,
+                    _logger).Trace(parent);
+
                 return objSet.FirstOrDefault();
             }
             return null;
         }
 
-        public async Task<List<SearchResVM>> SearchAndMapVMsAsync(string request, INavigationService navigationService, ITabService tabService, IObjectSetFactory objectSetFactory, IValidationService validationService)
+        public async Task<List<SearchResVM>> SearchAndMapVMsAsync(
+            string request,
+            INavigationService navigationService,
+            ITabService tabService,
+            IObjectSetFactory objectSetFactory,
+            IValidationService validationService)
         {
             var objectSet = await GetObjByString(request);
             var res = new List<SearchResVM>();
@@ -110,7 +125,13 @@ namespace PilotLookUp.Model.Services
             {
                 foreach (var item in objectSet)
                 {
-                    var vm = new SearchResVM(navigationService, tabService, item, objectSetFactory, validationService);
+                    var vm = new SearchResVM(
+                        navigationService,
+                        tabService,
+                        item,
+                        objectSetFactory,
+                        validationService);
+
                     res.Add(vm);
                 }
             }

@@ -1,12 +1,10 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Enums;
 using PilotLookUp.Model.Services;
-using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;

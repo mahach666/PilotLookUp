@@ -11,7 +11,11 @@ namespace PilotLookUp.Model.Services
         private readonly IThemeProvider _themeProvider;
         private readonly IViewDirectorService _viewDirectorService;
 
-        public WindowService(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, IThemeProvider themeProvider, IViewDirectorService viewDirectorService)
+        public WindowService(
+            IObjectsRepository objectsRepository,
+            ITabServiceProvider tabServiceProvider,
+            IThemeProvider themeProvider,
+            IViewDirectorService viewDirectorService)
         {
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;

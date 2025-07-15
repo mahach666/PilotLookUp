@@ -1,7 +1,6 @@
-using System.Resources;
 using PilotLookUp.Domain.Interfaces;
-using System.Windows;
 using PilotLookUp.Resources;
+using System.Windows;
 
 namespace PilotLookUp.Model.Services
 {

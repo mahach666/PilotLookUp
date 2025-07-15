@@ -1,6 +1,6 @@
+using PilotLookUp.ViewModel;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using PilotLookUp.ViewModel;
 
 namespace PilotLookUp.Domain.Interfaces
 {

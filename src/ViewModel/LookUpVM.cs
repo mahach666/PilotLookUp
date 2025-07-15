@@ -1,12 +1,10 @@
 ﻿using PilotLookUp.Commands;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Enums;
 using PilotLookUp.Infrastructure;
-using PilotLookUp.Utils;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -97,7 +95,6 @@ namespace PilotLookUp.ViewModel
                 }
                 else if (!_dataInitialized)
                 {
-                    // Если пришёл пустой список и не было инициализации — инициализируем из репозитория
                     _ = InitializeDataAsync();
                 }
             }

@@ -5,18 +5,16 @@ using System.Reflection;
 
 namespace PilotLookUp.Model.Services
 {
-    public class ObjectSetFactory : IObjectSetFactory
+    public class ObjectSetFactory : BaseValidatedService, IObjectSetFactory
     {
         private readonly IThemeService _themeService;
-        private readonly IValidationService _validationService;
         private readonly ILogger _logger;
 
         public ObjectSetFactory(IThemeService themeService,
             IValidationService validationService,
-            ILogger logger)
+            ILogger logger) : base(validationService, themeService, logger)
         {
             _themeService = themeService;
-            _validationService = validationService;
             _logger = logger;
         }
 
@@ -25,4 +23,4 @@ namespace PilotLookUp.Model.Services
             return new ObjectSet(_themeService, memberInfo, _validationService, _logger);
         }
     }
-} 
+}

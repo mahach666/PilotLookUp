@@ -1,8 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Utils;
-using PilotLookUp.Utils.Strategies;
+using PilotLookUp.Infrastructure.Strategies;
 using System;
 using System.Collections.Concurrent;
 using System.Reflection;
@@ -13,10 +12,20 @@ namespace PilotLookUp.Infrastructure
     public class Tracer
     {
         private readonly ILogger _logger;
-        public Tracer(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IPilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory, ILogger logger)
+        public Tracer(
+            IObjectsRepository objectsRepository,
+            IPilotObjectHelperFactory factory,
+            IPilotObjectHelper senderObj,
+            MemberInfo senderMember,
+            IObjectSetFactory objectSetFactory,
+            ILogger logger)
         {
             _logger = logger;
-            PilotObjectMap = new PilotObjectMap(objectsRepository, factory, senderObj, senderMember);
+            PilotObjectMap = new PilotObjectMap(objectsRepository,
+                factory,
+                senderObj,
+                senderMember);
+
             ObjectsRepository = objectsRepository;
             MemberInfo = senderMember;
             _objectSetFactory = objectSetFactory;
@@ -51,7 +60,6 @@ namespace PilotLookUp.Infrastructure
             registry.Register(new GuidTraceStrategy());
             registry.Register(new KeyValuePairGuidIntTraceStrategy());
             registry.Register(new EnumerableTraceStrategy());
-            // Можно добавить другие стратегии по мере необходимости
         }
 
         public Task<object> GetOrAddObjectAsync(Guid guid, Func<Task<object>> factory)

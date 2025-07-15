@@ -1,4 +1,4 @@
-﻿using PilotLookUp.Domain.Entities;
+﻿using PilotLookUp.Enums;
 
 namespace PilotLookUp.Domain.Interfaces
 {

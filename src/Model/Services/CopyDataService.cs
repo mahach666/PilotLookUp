@@ -1,7 +1,7 @@
-using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Domain.Entities;
-using PilotLookUp.ViewModel;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Resources;
+using PilotLookUp.ViewModel;
 
 namespace PilotLookUp.Model.Services
 {
@@ -10,7 +10,8 @@ namespace PilotLookUp.Model.Services
         private readonly IClipboardService _clipboardService;
         private readonly IUserNotificationService _notificationService;
 
-        public CopyDataService(IClipboardService clipboardService, IUserNotificationService notificationService)
+        public CopyDataService(IClipboardService clipboardService,
+            IUserNotificationService notificationService)
         {
             _clipboardService = clipboardService;
             _notificationService = notificationService;

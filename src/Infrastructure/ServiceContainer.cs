@@ -14,10 +14,8 @@ namespace PilotLookUp.Infrastructure
             ITabServiceProvider tabServiceProvider = null,
             Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
-            // Создаем новый контейнер для каждого окна
             var container = new Container();
 
-            // Регистрируем внешние сервисы (обязательные)
             if (objectsRepository == null)
                 throw new ArgumentNullException(nameof(objectsRepository), "IObjectsRepository обязателен!");
             if (tabServiceProvider == null)
@@ -28,16 +26,12 @@ namespace PilotLookUp.Infrastructure
             container.RegisterInstance(objectsRepository);
             container.RegisterInstance(tabServiceProvider);
 
-            // Регистрируем ThemeProvider
             container.RegisterInstance<IThemeProvider>(new ThemeProvider(theme.Value));
 
-            // Регистрируем логгер
             container.Register<ILogger, SimpleLogger>(Lifestyle.Singleton);
 
-            // Настраиваем базовые сервисы
             ConfigureBaseServices(container, theme.Value);
 
-            // Валидируем контейнер
             container.Verify();
 
             return container;
@@ -46,7 +40,6 @@ namespace PilotLookUp.Infrastructure
         private static void ConfigureBaseServices(Container container,
             Ascon.Pilot.Themes.ThemeNames? theme = null)
         {
-            // Регистрируем основные сервисы
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
             container.Register<ICustomSearchService, SearchService>(Lifestyle.Singleton);
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
@@ -65,7 +58,6 @@ namespace PilotLookUp.Infrastructure
             container.Register<IThemeService, ThemeService>(Lifestyle.Singleton);
             container.Register<TaskTreeBuilderService, TaskTreeBuilderService>(Lifestyle.Singleton);
 
-            // Регистрируем новые сервисы для разделения ответственности
             container.Register<IClipboardService, ClipboardService>(Lifestyle.Singleton);
             container.Register<IUserNotificationService, UserNotificationService>(Lifestyle.Singleton);
             container.Register<IDataFilterService, DataFilterService>(Lifestyle.Singleton);
@@ -73,14 +65,10 @@ namespace PilotLookUp.Infrastructure
             container.Register<ICopyDataService, CopyDataService>(Lifestyle.Singleton);
             container.Register<IViewDirectorService, ViewDirectorService>(Lifestyle.Singleton);
 
-            // Регистрируем NavigationService
             container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
 
-            // Регистрируем Views
             container.Register(() =>
                 System.Windows.Application.Current.Dispatcher.Invoke(() => new MainView(container.GetInstance<ILogger>())), Lifestyle.Transient);
         }
-
-        // Удаляю SetGlobalServices и все статические поля
     }
 }

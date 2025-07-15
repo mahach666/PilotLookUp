@@ -76,7 +76,9 @@ namespace PilotLookUp.Objects.Strategies
         private readonly IPilotObjectHelperFactory _factory;
         public KeyValuePairStringObjectWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<string, object>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<string, object>)obj, (IDataObject)context.SenderObj.LookUpObject);
+        public IPilotObjectHelper Wrap(
+            object obj,
+            TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<string, object>)obj, (IDataObject)context.SenderObj.LookUpObject);
     }
 
     public class KeyValuePairGuidIntWrapStrategy : ITypeWrapStrategy
@@ -100,7 +102,9 @@ namespace PilotLookUp.Objects.Strategies
         private readonly IPilotObjectHelperFactory _factory;
         public KeyValuePairGuidEnumerableTransitionWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is KeyValuePair<Guid, IEnumerable<ITransition>>;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<Guid, IEnumerable<ITransition>>)obj, context.ObjectsRepository);
+        public IPilotObjectHelper Wrap(
+            object obj,
+            TypeWrapContext context) => _factory.CreateKeyValuePair((KeyValuePair<Guid, IEnumerable<ITransition>>)obj, context.ObjectsRepository);
     }
 
     public class KeyValuePairIntAccessWrapStrategy : ITypeWrapStrategy

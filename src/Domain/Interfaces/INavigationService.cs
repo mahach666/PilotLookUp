@@ -1,5 +1,5 @@
 using PilotLookUp.Domain.Entities;
-using PilotLookUp.Objects;
+using PilotLookUp.Enums;
 using System;
 
 namespace PilotLookUp.Domain.Interfaces

@@ -5,7 +5,6 @@ using Ascon.Pilot.Themes;
 using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Infrastructure;
 using PilotLookUp.Resources;
-using PilotLookUp.Utils;
 using SimpleInjector;
 using System;
 using System.Collections.Generic;
@@ -41,10 +40,6 @@ namespace PilotLookUp
         IToolbar<LinkedObjectsContext>,
         IToolbar<LinkedTasksContext2>
     {
-        private readonly IObjectsRepository _objectsRepository;
-        private readonly ITabServiceProvider _tabServiceProvider;
-        private readonly ThemeNames _theme;
-        private readonly IThemeService _themeService;
         private readonly Container _container;
 
         [ImportingConstructor]
@@ -53,11 +48,10 @@ namespace PilotLookUp
             IPilotDialogService pilotDialogService)
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
-            _objectsRepository = objectsRepository;
-            _tabServiceProvider = tabServiceProvider;
-            _theme = pilotDialogService.Theme;
-            _container = ServiceContainer.CreateContainer(objectsRepository, tabServiceProvider, _theme);
-            _themeService = _container.GetInstance<IThemeService>();
+            _container = ServiceContainer.CreateContainer(
+                objectsRepository,
+                tabServiceProvider,
+                pilotDialogService.Theme);
         }
 
         // Build

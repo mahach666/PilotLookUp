@@ -1,9 +1,7 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Enums;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 
@@ -55,7 +53,7 @@ namespace PilotLookUp.ViewModel
                         _navigationService,
                         _tabService,
                         _objectSetFactory,
-                        null); // validationService больше не передаём
+                        null);
                     if (res?.Count > 0)
                     {
                         Text = clipboardText;
@@ -101,7 +99,13 @@ namespace PilotLookUp.ViewModel
             {
                 try
                 {
-                    var res = await _searchService.SearchAndMapVMsAsync(Text, _navigationService, _tabService, _objectSetFactory, null);
+                    var res = await _searchService.SearchAndMapVMsAsync(
+                        Text,
+                        _navigationService,
+                        _tabService,
+                        _objectSetFactory,
+                        null);
+
                     Result = res;
                 }
                 catch (System.Exception ex)

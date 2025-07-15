@@ -1,8 +1,6 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using PilotLookUp.Enums;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel

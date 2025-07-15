@@ -23,7 +23,6 @@ namespace PilotLookUp.Model.Services
 
         public void ValidateState(object obj)
         {
-            // Базовая заглушка: можно расширить для сложных объектов
             if (obj == null)
                 throw new ArgumentNullException("Object state is null");
         }

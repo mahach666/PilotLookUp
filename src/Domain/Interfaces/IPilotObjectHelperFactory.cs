@@ -6,10 +6,25 @@ namespace PilotLookUp.Domain.Interfaces
 {
     public interface IPilotObjectHelperFactory
     {
-        IPilotObjectHelper Create(string name, string stringId, object lookUpObject, bool isLookable);
-        IPilotObjectHelper CreateDefault(string name, string stringId, object lookUpObject, bool isLookable);
+        IPilotObjectHelper Create(
+            string name,
+            string stringId,
+            object lookUpObject,
+            bool isLookable);
+
+        IPilotObjectHelper CreateDefault(
+            string name,
+            string stringId,
+            object lookUpObject,
+            bool isLookable);
+
         IPilotObjectHelper CreateBool(bool value);
-        IPilotObjectHelper CreateInt(int value, IObjectsRepository objectsRepository, IPilotObjectHelper sender, System.Reflection.MemberInfo senderMember);
+        IPilotObjectHelper CreateInt(
+            int value,
+            IObjectsRepository objectsRepository,
+            IPilotObjectHelper sender,
+            System.Reflection.MemberInfo senderMember);
+
         IPilotObjectHelper CreateString(string value);
         IPilotObjectHelper CreateEnum(System.Enum value);
         IPilotObjectHelper CreateGuid(System.Guid value);

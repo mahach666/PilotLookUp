@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace PilotLookUp.Infrastructure
 {
     public class SimpleLogger : ILogger

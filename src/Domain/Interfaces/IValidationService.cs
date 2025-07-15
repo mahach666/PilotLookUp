@@ -1,5 +1,3 @@
-using System;
-
 namespace PilotLookUp.Domain.Interfaces
 {
     public interface IValidationService
@@ -7,6 +5,5 @@ namespace PilotLookUp.Domain.Interfaces
         void ValidateNotNull(object obj, string paramName = null);
         void ValidateConstructorParams(params object[] args);
         void ValidateState(object obj);
-        // В будущем: Validate<T>(T obj) для интеграции с FluentValidation
     }
 } 

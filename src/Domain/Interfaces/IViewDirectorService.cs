@@ -6,8 +6,18 @@ namespace PilotLookUp.Domain.Interfaces
 {
     public interface IViewDirectorService
     {
-        void LookSelection(ObjectSet selectedObjects, IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, ThemeNames theme);
-        void LookDB(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, ThemeNames theme);
-        void SearchPage(IObjectsRepository objectsRepository, ITabServiceProvider tabServiceProvider, ThemeNames theme);
+        void LookSelection(
+            ObjectSet selectedObjects,
+            IObjectsRepository objectsRepository,
+            ITabServiceProvider tabServiceProvider,
+            ThemeNames theme);
+        void LookDB(
+            IObjectsRepository objectsRepository,
+            ITabServiceProvider tabServiceProvider,
+            ThemeNames theme);
+        void SearchPage(
+            IObjectsRepository objectsRepository,
+            ITabServiceProvider tabServiceProvider,
+            ThemeNames theme);
     }
 } 
