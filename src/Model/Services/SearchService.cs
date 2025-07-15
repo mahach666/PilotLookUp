@@ -6,6 +6,8 @@ using PilotLookUp.Utils;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using PilotLookUp.ViewModel;
+using System.Collections.Generic;
 
 namespace PilotLookUp.Model.Services
 {
@@ -96,6 +98,21 @@ namespace PilotLookUp.Model.Services
                 return objSet.FirstOrDefault();
             }
             return null;
+        }
+
+        public async Task<List<SearchResVM>> SearchAndMapVMsAsync(string request, INavigationService navigationService, ITabService tabService, IObjectSetFactory objectSetFactory, IValidationService validationService)
+        {
+            var objectSet = await GetObjByString(request);
+            var res = new List<SearchResVM>();
+            if (objectSet != null)
+            {
+                foreach (var item in objectSet)
+                {
+                    var vm = new SearchResVM(navigationService, tabService, item, objectSetFactory, validationService);
+                    res.Add(vm);
+                }
+            }
+            return res;
         }
     }
 }

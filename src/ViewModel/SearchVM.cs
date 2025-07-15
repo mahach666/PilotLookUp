@@ -46,19 +46,18 @@ namespace PilotLookUp.ViewModel
             ClipboardCheck();
         }
 
-        private void ClipboardCheck()
+        private async void ClipboardCheck()
         {
             string clipboardText = _clipboardService.GetClipboardText();
             Application.Current.Dispatcher.Invoke(async () =>
             {
                 try
                 {
-                    var res = new List<UserControl>();
-                    var searchRes = await _searchService.GetObjByString(clipboardText);
-                    if (searchRes?.Count > 0)
+                    var res = await _searchService.SearchAndMapVMsAsync(clipboardText, _navigationService, _tabService, _objectSetFactory, _validationService);
+                    if (res?.Count > 0)
                     {
                         Text = clipboardText;
-                        SetRes(searchRes);
+                        Result = res;
                     }
                 }
                 catch (System.Exception ex)
@@ -87,31 +86,20 @@ namespace PilotLookUp.ViewModel
             get => _text;
             set { _text = value; OnPropertyChanged(); OnPropertyChanged("PromtVisibility"); }
         }
-        private void Search()
+        private async void Search()
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {
                 try
                 {
-                    var searchRes = await _searchService.GetObjByString(Text);
-                    SetRes(searchRes);
+                    var res = await _searchService.SearchAndMapVMsAsync(Text, _navigationService, _tabService, _objectSetFactory, _validationService);
+                    Result = res;
                 }
                 catch (System.Exception ex)
                 {
                     _errorHandlingService?.HandleError(ex, "SearchVM.Search");
                 }
             });
-        }
-
-        private void SetRes(ObjectSet objectSet)
-        {
-            var res = new List<SearchResVM>();
-            foreach (var item in objectSet)
-            {
-                var vm = new SearchResVM(_navigationService, _tabService, item, _objectSetFactory, _validationService);
-                res.Add(vm);
-            }
-            Result = res;
         }
 
         public ICommand SearchCommand => new RelayCommand<object>(_ => Search());

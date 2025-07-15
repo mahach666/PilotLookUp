@@ -50,8 +50,6 @@ namespace PilotLookUp.ViewModel
             {
                 _selectedControl = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(TaskButtVisibilities));
-                OnPropertyChanged(nameof(AttrButtVisibilities));
                 OnPropertyChanged(nameof(ActivePage));
             }
         }
@@ -71,62 +69,35 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public Visibility TaskButtVisibilities
-        {
-            get
-            {
-                if (SelectedControl is LookUpVM lookUpVM)
-                {
-                    if (lookUpVM.DataObjectSelected?.PilotObjectHelper?.LookUpObject is IDataObject || 
-                        lookUpVM.DataObjectSelected?.PilotObjectHelper is DataObjectHelper)
-                    {
-                        return Visibility.Visible;
-                    }
-                }
-                else if (SelectedControl is TaskTreeVM || SelectedControl is AttrVM)
-                {
-                    return Visibility.Visible;
-                }
-                
-                return Visibility.Hidden;
-            }
-        }
-
-        public Visibility AttrButtVisibilities => TaskButtVisibilities;
-
         public ICommand LookDBCommand => new RelayCommand<object>(_ => _navigationService.NavigateToLookUp());
         public ICommand SearchCommand => new RelayCommand<object>(_ => _navigationService.NavigateToSearch());
         public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _navigationService.NavigateTo(PagesName.LookUpPage));
-        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => 
-        {
-            try
+        public ICommand TaskTreeCommand => new Commands.SafeRelayCommand<object>(
+            _ =>
             {
                 if (SelectedControl is LookUpVM lookUpVM && lookUpVM.DataObjectSelected?.PilotObjectHelper != null)
                 {
                     _navigationService.NavigateToTaskTree(lookUpVM.DataObjectSelected.PilotObjectHelper);
                 }
-            }
-            catch (System.Exception ex)
-            {
-                _errorHandlingService?.HandleError(ex, "MainVM.TaskTreeCommand");
-                _notificationService.ShowError(string.Format(Strings.ErrorCopyTaskTree, ex.Message));
-            }
-        });
-        public ICommand AttrCommand => new RelayCommand<object>(_ => 
-        {
-            try
+            },
+            _errorHandlingService,
+            _notificationService,
+            "MainVM.TaskTreeCommand",
+            PilotLookUp.Resources.Strings.ErrorCopyTaskTree
+        );
+        public ICommand AttrCommand => new Commands.SafeRelayCommand<object>(
+            _ =>
             {
                 if (SelectedControl is LookUpVM lookUpVM && lookUpVM.DataObjectSelected?.PilotObjectHelper != null)
                 {
                     _navigationService.NavigateToAttr(lookUpVM.DataObjectSelected.PilotObjectHelper);
                 }
-            }
-            catch (System.Exception ex)
-            {
-                _errorHandlingService?.HandleError(ex, "MainVM.AttrCommand");
-                _notificationService.ShowError(string.Format(Strings.ErrorCopyAttr, ex.Message));
-            }
-        });
+            },
+            _errorHandlingService,
+            _notificationService,
+            "MainVM.AttrCommand",
+            PilotLookUp.Resources.Strings.ErrorCopyAttr
+        );
 
 
         public event PropertyChangedEventHandler PropertyChanged;

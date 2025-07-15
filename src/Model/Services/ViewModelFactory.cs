@@ -23,6 +23,7 @@ namespace PilotLookUp.Model.Services
         private readonly ICopyDataService _copyDataService;
         private readonly IClipboardService _clipboardService;
         private readonly IUserNotificationService _notificationService;
+        private readonly TaskTreeBuilderService _taskTreeBuilderService;
 
         public ViewModelFactory(
             IRepoService repoService,
@@ -38,7 +39,8 @@ namespace PilotLookUp.Model.Services
             IDataFilterService dataFilterService,
             ICopyDataService copyDataService,
             IClipboardService clipboardService,
-            IUserNotificationService notificationService)
+            IUserNotificationService notificationService,
+            TaskTreeBuilderService taskTreeBuilderService)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(
@@ -60,6 +62,7 @@ namespace PilotLookUp.Model.Services
             _copyDataService = copyDataService;
             _clipboardService = clipboardService;
             _notificationService = notificationService;
+            _taskTreeBuilderService = taskTreeBuilderService;
         }
 
         public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null)
@@ -80,7 +83,7 @@ namespace PilotLookUp.Model.Services
 
         public TaskTreeVM CreateTaskTreeVM(IPilotObjectHelper selectedObject)
         {
-            return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, _errorHandlingService, _validationService, _copyDataService);
+            return new TaskTreeVM(selectedObject, _repoService, _searchService, _windowService, _treeItemService, _errorHandlingService, _validationService, _copyDataService, _taskTreeBuilderService);
         }
 
         public AttrVM CreateAttrVM(IPilotObjectHelper selectedObject)

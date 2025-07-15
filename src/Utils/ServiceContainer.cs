@@ -61,6 +61,7 @@ namespace PilotLookUp.Utils
             container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
             container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
             container.Register<IThemeService, ThemeService>(Lifestyle.Singleton);
+            container.Register<TaskTreeBuilderService>(Lifestyle.Singleton);
             
             // Регистрируем новые сервисы для разделения ответственности
             container.Register<IClipboardService, ClipboardService>(Lifestyle.Singleton);

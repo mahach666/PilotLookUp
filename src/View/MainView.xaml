@@ -7,6 +7,7 @@
                        xmlns:local="clr-namespace:PilotLookUp.View"
                        xmlns:enums="clr-namespace:PilotLookUp.Domain.Entities"
                        xmlns:resx="clr-namespace:PilotLookUp.Resources"
+                       xmlns:model="clr-namespace:PilotLookUp.Model"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800"
@@ -21,6 +22,7 @@
                 <ResourceDictionary Source="..\Resources\StyleDictionary.xaml" />
                 <ResourceDictionary Source="..\Resources\VMMap.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <model:ButtonVisibilityConverter x:Key="ButtonVisibilityConverter" />
         </ResourceDictionary>
     </controls:DialogWindow.Resources>
 
@@ -57,14 +59,14 @@
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding TaskTreeCommand}"
                         Content="..\Resources\UI\task.png"
-                        Visibility="{Binding TaskButtVisibilities}"/>
+                        Visibility="{Binding SelectedControl, Converter={StaticResource ButtonVisibilityConverter}}"/>
 
                 <Button ToolTip="{x:Static resx:Strings.AttrToolTip}"
                         Tag="{x:Static enums:PagesName.AttrPage}"                        
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding AttrCommand}"
                         Content="..\Resources\UI\attr.png"
-                        Visibility="{Binding AttrButtVisibilities}"/>
+                        Visibility="{Binding SelectedControl, Converter={StaticResource ButtonVisibilityConverter}}"/>
             </UniformGrid>
         </Grid>
 

@@ -2,6 +2,7 @@
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Utils;
+using PilotLookUp.Model.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -24,6 +25,7 @@ namespace PilotLookUp.ViewModel
         private readonly IErrorHandlingService _errorHandlingService;
         private readonly IValidationService _validationService;
         private readonly ICopyDataService _copyDataService;
+        private readonly TaskTreeBuilderService _taskTreeBuilderService;
 
         public TaskTreeVM(
              IPilotObjectHelper pilotObjectHelper,
@@ -33,7 +35,8 @@ namespace PilotLookUp.ViewModel
              ITreeItemService treeItemService,
              IErrorHandlingService errorHandlingService,
              IValidationService validationService,
-             ICopyDataService copyDataService)
+             ICopyDataService copyDataService,
+             TaskTreeBuilderService taskTreeBuilderService)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(pilotObjectHelper,
@@ -43,7 +46,8 @@ namespace PilotLookUp.ViewModel
                 treeItemService,
                 errorHandlingService,
                 validationService,
-                copyDataService);
+                copyDataService,
+                taskTreeBuilderService);
             _revokedTask = false;
             _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;
@@ -52,6 +56,7 @@ namespace PilotLookUp.ViewModel
             _treeItemService = treeItemService;
             _errorHandlingService = errorHandlingService;
             _copyDataService = copyDataService;
+            _taskTreeBuilderService = taskTreeBuilderService;
             FirstParrentNode = new ObservableCollection<ICustomTree>();
             _ = LoadDataAsync();
         }
@@ -104,47 +109,13 @@ namespace PilotLookUp.ViewModel
         #region Дерево процесса
         private async Task LoadDataAsync()
         {
-            bool isTask = false;
-
-            // Проверяем наличие свойства IsTask через интерфейс
-            var isTaskProp = _objectHelper.GetType().GetProperty("IsTask");
-            if (isTaskProp != null)
+            var (nodes, revokedTaskVisible, lastParent) = await _taskTreeBuilderService.BuildTaskTreeAsync(_objectHelper, RevokedTask);
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                isTask = (bool)isTaskProp.GetValue(_objectHelper);
-            }
-            else return;
-
-            if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
-            {
-                LastParrent = await _searchService.GetLastParent(dataObject);
-                ICustomTree rootNode = new ListItemVM(LastParrent, _validationService);
-                rootNode = await _treeItemService.FillChild(rootNode);
-                // Обновляем UI-поток
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    RevokedTaskVisible = Visibility.Hidden;
-                    FirstParrentNode.Clear();
-                    FirstParrentNode = new ObservableCollection<ICustomTree> { rootNode };
-                });
-                return;
-            }
-            else
-            {
-                var treeItems = new ObservableCollection<ICustomTree>();
-                ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
-                foreach (IPilotObjectHelper item in allLastParrent)
-                {
-                    ICustomTree rootNode = new ListItemVM(item, _validationService);
-                    rootNode = await _treeItemService.FillChild(rootNode);
-                    treeItems.Add(rootNode);
-                }
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    FirstParrentNode.Clear();
-                    FirstParrentNode = treeItems;
-                });
-                return;
-            }
+                RevokedTaskVisible = revokedTaskVisible;
+                FirstParrentNode = nodes;
+                LastParrent = lastParent;
+            });
         }
         private IPilotObjectHelper LastParrent { get; set; }
 
