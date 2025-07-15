@@ -3,6 +3,7 @@ using PilotLookUp.Domain.Entities;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace PilotLookUp.Model.Services
 {
@@ -63,11 +64,12 @@ namespace PilotLookUp.Model.Services
 
         public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null)
         {
-            var vm = new LookUpVM(_repoService, _windowService, _errorHandlingService, _validationService, _dataInitializationService, _dataFilterService, _copyDataService);
+            List<ListItemVM> initialData = null;
             if (dataObjects != null && dataObjects.Count > 0)
             {
-                vm.SelectionDataObjects = dataObjects.Select(x => new ListItemVM(x, _validationService)).ToList();
+                initialData = dataObjects.Select(x => new ListItemVM(x, _validationService)).ToList();
             }
+            var vm = new LookUpVM(_repoService, _windowService, _errorHandlingService, _validationService, _dataInitializationService, _dataFilterService, _copyDataService, initialData);
             return vm;
         }
 

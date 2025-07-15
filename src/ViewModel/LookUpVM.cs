@@ -30,7 +30,8 @@ namespace PilotLookUp.ViewModel
             IValidationService validationService,
             IDataInitializationService dataInitializationService,
             IDataFilterService dataFilterService,
-            ICopyDataService copyDataService)
+            ICopyDataService copyDataService,
+            List<ListItemVM> initialData = null)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService, dataInitializationService, dataFilterService, copyDataService);
@@ -41,27 +42,33 @@ namespace PilotLookUp.ViewModel
             _dataInitializationService = dataInitializationService;
             _dataFilterService = dataFilterService;
             _copyDataService = copyDataService;
+            if (initialData != null && initialData.Count > 0)
+            {
+                SelectionDataObjects = initialData;
+            }
+            else
+            {
+                _ = InitializeDataAsync();
+            }
         }
 
-        private void LoadDataFromRepository()
+        private async Task InitializeDataAsync()
         {
             try
             {
-                var listItems = _dataInitializationService.InitializeDataFromRepository();
-                if (listItems.Any())
+                var listItems = await _dataInitializationService.InitializeDataFromRepositoryAsync();
+                if (_dataInitializationService.ValidateData(listItems))
                 {
-                    _selectionDataObjects = listItems;
-                    OnPropertyChanged(nameof(SelectionDataObjects));
-                    
-                    // Устанавливаем первый элемент как выбранный
-                    DataObjectSelected = listItems.FirstOrDefault();
-                    
-                    _ = UpdateFiltredDataObjectsAsync();
+                    SelectionDataObjects = listItems;
+                }
+                else
+                {
+                    SelectionDataObjects = new List<ListItemVM>();
                 }
             }
             catch (System.Exception ex)
             {
-                _errorHandlingService?.HandleError(ex, "LookUpVM.LoadDataFromRepository");
+                _errorHandlingService?.HandleError(ex, "LookUpVM.InitializeDataAsync");
             }
         }
 
@@ -71,39 +78,27 @@ namespace PilotLookUp.ViewModel
             get => _selectionDataObjects;
             set
             {
-                System.Diagnostics.Debug.WriteLine($"[TRACE] LookUpVM.SelectionDataObjects.set: value is null? {value == null}, count: {value?.Count ?? 0}");
-                if (value != null)
+                if (value != null && value.Count > 0)
                 {
-                    foreach (var item in value)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"[TRACE] LookUpVM.SelectionDataObjects.set: ListItemVM.ObjName: {item?.ObjName}");
-                    }
+                    _selectionDataObjects = value;
+                    _dataInitialized = true;
+                    DataObjectSelected = _selectionDataObjects?.FirstOrDefault();
+                    OnPropertyChanged();
+                    _ = UpdateFiltredDataObjectsAsync();
                 }
-                if (value == null || !value.Any()) 
+                else if (!_dataInitialized)
                 {
-                    // Если передали пустые данные, загружаем из репозитория
-                    LoadDataFromRepository();
-                    return;
+                    // Если пришёл пустой список и не было инициализации — инициализируем из репозитория
+                    _ = InitializeDataAsync();
                 }
-                var filtered = value.Where(x => x != null).ToList();
-                if (filtered.Count != value.Count)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[LookUpVM] Обнаружены null в SelectionDataObjects: {value.Count - filtered.Count}");
-                }
-                _selectionDataObjects = filtered;
-                _dataInitialized = true; // Отмечаем, что данные были установлены через свойство
-                DataObjectSelected = filtered.FirstOrDefault();
-                OnPropertyChanged();
-                _ = UpdateFiltredDataObjectsAsync();
             }
         }
 
-        // Метод для инициализации данных, если они не были установлены через свойство
         public void InitializeDataIfNeeded()
         {
             if (!_dataInitialized)
             {
-                LoadDataFromRepository();
+                _ = InitializeDataAsync();
             }
         }
 
@@ -135,8 +130,15 @@ namespace PilotLookUp.ViewModel
 
         public async Task UpdateFiltredDataObjectsAsync()
         {
-            var filtered = await _dataFilterService.FilterDataAsync(SelectionDataObjects, SearchText);
-            await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = filtered);
+            try
+            {
+                var filtered = await _dataFilterService.FilterDataAsync(SelectionDataObjects, SearchText);
+                await Application.Current.Dispatcher.InvokeAsync(() => FiltredDataObjects = filtered);
+            }
+            catch (System.Exception ex)
+            {
+                _errorHandlingService?.HandleError(ex, "LookUpVM.UpdateFiltredDataObjectsAsync");
+            }
         }
 
         private ListItemVM _dataObjectSelected;
