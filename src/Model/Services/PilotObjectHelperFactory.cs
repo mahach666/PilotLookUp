@@ -96,6 +96,10 @@ namespace PilotLookUp.Model.Services
         {
             return new DateTimeHelper(_themeService, value);
         }
+        public IPilotObjectHelper CreateHistoryItem(IHistoryItem obj)
+        {
+            return new HistoryItemHelper(_themeService, obj);
+        }
         public IPilotObjectHelper Create(string name, string stringId, object lookUpObject, bool isLookable)
         {
             return CreateDefault(name, stringId, lookUpObject, isLookable);

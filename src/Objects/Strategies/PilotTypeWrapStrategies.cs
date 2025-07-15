@@ -28,7 +28,7 @@ namespace PilotLookUp.Objects.Strategies
         private readonly IPilotObjectHelperFactory _factory;
         public HistoryItemWrapStrategy(IPilotObjectHelperFactory factory) { _factory = factory; }
         public bool CanWrap(object obj) => obj is IHistoryItem;
-        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => null; // TODO: реализовать через фабрику
+        public IPilotObjectHelper Wrap(object obj, TypeWrapContext context) => _factory.CreateHistoryItem((IHistoryItem)obj);
     }
 
     public class TypeWrapStrategy : ITypeWrapStrategy

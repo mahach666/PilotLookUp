@@ -38,5 +38,6 @@ namespace PilotLookUp.Interfaces
         IPilotObjectHelper CreateObjectsRepository(IObjectsRepository obj);
         IPilotObjectHelper CreateDataObject(IDataObject obj);
         IPilotObjectHelper CreateDateTime(DateTime value);
+        IPilotObjectHelper CreateHistoryItem(IHistoryItem obj);
     }
 } 
