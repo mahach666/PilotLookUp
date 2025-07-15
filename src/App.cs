@@ -63,10 +63,10 @@ namespace PilotLookUp
         // Build
         public void Build(IMenuBuilder builder, MainViewContext context)
         {
-            var item = builder.AddItem(PilotLookUp.Resources.Strings.MenuPilotLookUp, 1).WithHeader(PilotLookUp.Resources.Strings.MenuPilotLookUp);
-            item.WithSubmenu().AddItem(PilotLookUp.Resources.Strings.MenuLookSelected, 0).WithHeader(PilotLookUp.Resources.Strings.MenuLookSelected);
-            item.WithSubmenu().AddItem(PilotLookUp.Resources.Strings.MenuLookDB, 1).WithHeader(PilotLookUp.Resources.Strings.MenuLookDB);
-            item.WithSubmenu().AddItem(PilotLookUp.Resources.Strings.MenuSearch, 2).WithHeader(PilotLookUp.Resources.Strings.MenuSearch);
+            var item = builder.AddItem(Strings.MenuPilotLookUp, 1).WithHeader(Strings.MenuPilotLookUp);
+            item.WithSubmenu().AddItem(Strings.MenuLookSelected, 0).WithHeader(Strings.MenuLookSelected);
+            item.WithSubmenu().AddItem(Strings.MenuLookDB, 1).WithHeader(Strings.MenuLookDB);
+            item.WithSubmenu().AddItem(Strings.MenuSearch, 2).WithHeader(Strings.MenuSearch);
         }
         
         public void Build(IMenuBuilder builder, ObjectsViewContext context) =>

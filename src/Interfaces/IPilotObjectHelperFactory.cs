@@ -1,8 +1,6 @@
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
 using System;
-using System.Collections.Generic;
-using PilotLookUp.Objects;
 
 namespace PilotLookUp.Interfaces
 {

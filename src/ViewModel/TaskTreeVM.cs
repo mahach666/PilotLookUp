@@ -2,7 +2,7 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
-using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
-using PilotLookUp.Utils;
 
 
 namespace PilotLookUp.ViewModel

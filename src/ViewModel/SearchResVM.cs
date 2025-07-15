@@ -1,5 +1,4 @@
 ﻿using PilotLookUp.Commands;
-using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using System.Windows;
 using System.Windows.Input;

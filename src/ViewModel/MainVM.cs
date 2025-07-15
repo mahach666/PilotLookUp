@@ -2,11 +2,11 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Resources;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using PilotLookUp.Resources;
 
 namespace PilotLookUp.ViewModel
 {

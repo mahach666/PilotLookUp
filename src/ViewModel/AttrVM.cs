@@ -2,13 +2,11 @@
 using PilotLookUp.Contracts;
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Objects.TypeHelpers;
+using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
-using PilotLookUp.Utils;
 
 namespace PilotLookUp.ViewModel
 {
