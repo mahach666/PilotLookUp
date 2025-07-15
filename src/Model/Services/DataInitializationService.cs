@@ -1,6 +1,6 @@
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Infrastructure;
 using PilotLookUp.Resources;
-using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
 using System.Linq;

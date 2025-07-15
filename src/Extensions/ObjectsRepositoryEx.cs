@@ -1,6 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
-using PilotLookUp.Core;
+using PilotLookUp.Infrastructure;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

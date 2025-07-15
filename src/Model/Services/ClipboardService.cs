@@ -1,5 +1,5 @@
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Utils;
+using PilotLookUp.Infrastructure;
 using System.Windows;
 
 namespace PilotLookUp.Model.Services

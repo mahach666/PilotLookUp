@@ -2,12 +2,12 @@
 using PilotLookUp.Extensions;
 using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Domain.Entities;
-using PilotLookUp.Utils;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
+using PilotLookUp.Infrastructure;
 
 namespace PilotLookUp.Model.Services
 {

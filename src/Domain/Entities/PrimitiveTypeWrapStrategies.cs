@@ -1,7 +1,5 @@
-using Ascon.Pilot.SDK;
-using PilotLookUp.Domain.Entities;
-using System;
 using PilotLookUp.Domain.Interfaces;
+using System;
 
 namespace PilotLookUp.Domain.Entities
 {

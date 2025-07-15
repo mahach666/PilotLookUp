@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows;
 using PilotLookUp.ViewModel;
-using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Helpers;
 
 namespace PilotLookUp.Model
 {

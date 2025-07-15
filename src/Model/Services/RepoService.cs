@@ -1,10 +1,10 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Domain.Entities;
-using PilotLookUp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using PilotLookUp.Infrastructure;
 
 namespace PilotLookUp.Model.Services
 {

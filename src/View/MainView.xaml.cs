@@ -1,4 +1,4 @@
-﻿using PilotLookUp.Utils;
+﻿using PilotLookUp.Infrastructure;
 using System.Threading;
 
 namespace PilotLookUp.View

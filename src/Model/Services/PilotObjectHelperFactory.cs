@@ -1,8 +1,8 @@
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
-using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Helpers;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Utils;
+using PilotLookUp.Infrastructure;
 using System;
 using System.Collections.Generic;
 
