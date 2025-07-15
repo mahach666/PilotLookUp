@@ -25,7 +25,13 @@ namespace PilotLookUp.ViewModel
         private readonly IDataFilterService _dataFilterService;
         private readonly ICopyDataService _copyDataService;
 
-        public LookUpVM(IRepoService lookUpModel, IWindowService windowService, IErrorHandlingService errorHandlingService, IValidationService validationService, IDataInitializationService dataInitializationService, IDataFilterService dataFilterService, ICopyDataService copyDataService)
+        public LookUpVM(IRepoService lookUpModel,
+            IWindowService windowService,
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService,
+            IDataInitializationService dataInitializationService,
+            IDataFilterService dataFilterService,
+            ICopyDataService copyDataService)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService, dataInitializationService, dataFilterService, copyDataService);
@@ -110,7 +116,7 @@ namespace PilotLookUp.ViewModel
             {
                 _searchText = value;
                 OnPropertyChanged();
-                OnPropertyChanged("PromtVisibility");
+                OnPropertyChanged(nameof(PromtVisibility));
                 _ = UpdateFiltredDataObjectsAsync();
             }
         }

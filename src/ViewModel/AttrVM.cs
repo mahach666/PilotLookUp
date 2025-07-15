@@ -20,10 +20,18 @@ namespace PilotLookUp.ViewModel
         private readonly IValidationService _validationService;
         private readonly ICopyDataService _copyDataService;
 
-        public AttrVM(IPilotObjectHelper pilotObjectHelper, IDataObjectService dataObjectService, IErrorHandlingService errorHandlingService, IValidationService validationService, ICopyDataService copyDataService)
+        public AttrVM(IPilotObjectHelper pilotObjectHelper,
+            IDataObjectService dataObjectService,
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService,
+            ICopyDataService copyDataService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(pilotObjectHelper, dataObjectService, errorHandlingService, validationService, copyDataService);
+            _validationService.ValidateConstructorParams(pilotObjectHelper,
+                dataObjectService,
+                errorHandlingService,
+                validationService,
+                copyDataService);
             _objectHelper = pilotObjectHelper;
             _dataObjectService = dataObjectService;
             _errorHandlingService = errorHandlingService;

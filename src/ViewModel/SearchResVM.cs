@@ -24,7 +24,11 @@ namespace PilotLookUp.ViewModel
             , IValidationService validationService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService, tabService, pilotObjectHelper, objectSetFactory, validationService);
+            _validationService.ValidateConstructorParams(navigationService,
+                tabService,
+                pilotObjectHelper,
+                objectSetFactory,
+                validationService);
             _dataObj = pilotObjectHelper;
             _navigationService = navigationService;
             _tabService = tabService;

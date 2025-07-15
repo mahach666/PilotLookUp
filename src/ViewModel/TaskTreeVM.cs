@@ -38,7 +38,14 @@ namespace PilotLookUp.ViewModel
              ICopyDataService copyDataService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(pilotObjectHelper, lookUpModel, searchService, windowService, treeItemService, errorHandlingService, validationService, copyDataService);
+            _validationService.ValidateConstructorParams(pilotObjectHelper,
+                lookUpModel,
+                searchService,
+                windowService,
+                treeItemService,
+                errorHandlingService,
+                validationService,
+                copyDataService);
             _revokedTask = false;
             _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;

@@ -31,7 +31,13 @@ namespace PilotLookUp.ViewModel
             , IClipboardService clipboardService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService, searchService, tabService, objectSetFactory, errorHandlingService, validationService, clipboardService);
+            _validationService.ValidateConstructorParams(navigationService,
+                searchService,
+                tabService,
+                objectSetFactory,
+                errorHandlingService,
+                validationService,
+                clipboardService);
             _navigationService = navigationService;
             _searchService = searchService;
             _tabService = tabService;

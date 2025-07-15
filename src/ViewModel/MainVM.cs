@@ -18,10 +18,18 @@ namespace PilotLookUp.ViewModel
         private readonly IValidationService _validationService;
         private readonly IUserNotificationService _notificationService;
 
-        public MainVM(INavigationService navigationService, IViewModelFactory viewModelFactory, IErrorHandlingService errorHandlingService, IValidationService validationService, IUserNotificationService notificationService)
+        public MainVM(INavigationService navigationService,
+            IViewModelFactory viewModelFactory,
+            IErrorHandlingService errorHandlingService,
+            IValidationService validationService,
+            IUserNotificationService notificationService)
         {
             _validationService = validationService;
-            _validationService.ValidateConstructorParams(navigationService, viewModelFactory, errorHandlingService, validationService, notificationService);
+            _validationService.ValidateConstructorParams(navigationService,
+                viewModelFactory,
+                errorHandlingService,
+                validationService,
+                notificationService);
             _navigationService = navigationService;
             _viewModelFactory = viewModelFactory;
             _errorHandlingService = errorHandlingService;

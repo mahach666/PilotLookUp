@@ -10,7 +10,8 @@ namespace PilotLookUp.ViewModel
     {
         private readonly IValidationService _validationService;
 
-        public ListItemVM(IPilotObjectHelper pilotObjectHelper, IValidationService validationService)
+        public ListItemVM(IPilotObjectHelper pilotObjectHelper,
+            IValidationService validationService)
         {
             _validationService = validationService;
             _validationService.ValidateNotNull(pilotObjectHelper, nameof(pilotObjectHelper));
