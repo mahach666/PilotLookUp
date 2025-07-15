@@ -1,12 +1,19 @@
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Domain.Entities
 {
     public class DefaultPilotObjectHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public DefaultPilotObjectHelper(IThemeService themeService, string name, string stringId, object lookUpObject, bool isLookable)
-            : base(themeService)
+        public DefaultPilotObjectHelper(
+            IThemeService themeService,
+            string name,
+            string stringId,
+            object lookUpObject,
+            bool isLookable,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _name = name;
             _stringId = stringId;

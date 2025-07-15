@@ -46,14 +46,18 @@ namespace PilotLookUp.ViewModel
             ClipboardCheck();
         }
 
-        private async void ClipboardCheck()
+        private void ClipboardCheck()
         {
             string clipboardText = _clipboardService.GetClipboardText();
             Application.Current.Dispatcher.Invoke(async () =>
             {
                 try
                 {
-                    var res = await _searchService.SearchAndMapVMsAsync(clipboardText, _navigationService, _tabService, _objectSetFactory, _validationService);
+                    var res = await _searchService.SearchAndMapVMsAsync(clipboardText,
+                        _navigationService,
+                        _tabService,
+                        _objectSetFactory,
+                        _validationService);
                     if (res?.Count > 0)
                     {
                         Text = clipboardText;
@@ -78,15 +82,22 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public Visibility PromtVisibility => string.IsNullOrEmpty(_text) ? Visibility.Visible : Visibility.Hidden;
+        public Visibility PromtVisibility => string.IsNullOrEmpty(_text) 
+            ? Visibility.Visible 
+            : Visibility.Hidden;
 
         private string _text;
         public string Text
         {
             get => _text;
-            set { _text = value; OnPropertyChanged(); OnPropertyChanged("PromtVisibility"); }
+            set
+            {
+                _text = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(PromtVisibility));
+            }
         }
-        private async void Search()
+        private void Search()
         {
             Application.Current.Dispatcher.Invoke(async () =>
             {

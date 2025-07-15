@@ -1,5 +1,5 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Domain.Interfaces;
+﻿using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Reflection;
 using System.Windows.Media.Imaging;
@@ -10,8 +10,10 @@ namespace PilotLookUp.Domain.Entities
     {
         private IPilotObjectHelper _sender { get; }
         private MemberInfo _senderMember { get; }
-        internal GuidHelper(IThemeService themeService, Guid value)
-            : base(themeService)
+        internal GuidHelper(IThemeService themeService,
+            Guid value,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = value;
             _name = value.ToString();

@@ -1,5 +1,5 @@
 ﻿using PilotLookUp.Domain.Interfaces;
-using System.Collections;
+using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,12 +15,18 @@ namespace PilotLookUp.Domain.Entities
         private readonly IThemeService _themeService;
         private readonly IValidationService _validationService;
         private readonly MemberInfo _memberInfo;
-        public ObjectSet(IThemeService themeService, MemberInfo memberInfo, IValidationService validationService)
+        private readonly ILogger _logger;
+
+        public ObjectSet(IThemeService themeService,
+            MemberInfo memberInfo,
+            IValidationService validationService,
+            ILogger logger)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(themeService, validationService);
             _themeService = themeService;
             _memberInfo = memberInfo;
+            _logger = logger;
         }
 
         public int Count => _items.Count;

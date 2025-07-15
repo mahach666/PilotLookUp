@@ -1,6 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
-using Ascon.Pilot.SDK.Data;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -8,8 +8,10 @@ namespace PilotLookUp.Domain.Entities
 {
     internal class SignatureRequestHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        internal SignatureRequestHelper(IThemeService themeService, ISignatureRequest obj)
-            : base(themeService)
+        internal SignatureRequestHelper(IThemeService themeService,
+            ISignatureRequest obj,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.ToString();

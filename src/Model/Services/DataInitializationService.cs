@@ -1,9 +1,10 @@
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Resources;
+using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PilotLookUp.Resources;
 
 namespace PilotLookUp.Model.Services
 {
@@ -12,15 +13,18 @@ namespace PilotLookUp.Model.Services
         private readonly IRepoService _repoService;
         private readonly IValidationService _validationService;
         private readonly IUserNotificationService _notificationService;
+        private readonly ILogger _logger;
 
         public DataInitializationService(
             IRepoService repoService, 
             IValidationService validationService,
-            IUserNotificationService notificationService)
+            IUserNotificationService notificationService,
+            ILogger logger)
         {
             _repoService = repoService;
             _validationService = validationService;
             _notificationService = notificationService;
+            _logger = logger;
         }
 
         public async Task<List<ListItemVM>> InitializeDataFromRepositoryAsync()
@@ -36,7 +40,7 @@ namespace PilotLookUp.Model.Services
 
                 var listItems = repoData
                     .Where(x => x != null)
-                    .Select(x => new ListItemVM(x, _validationService))
+                    .Select(x => new ListItemVM(x, _validationService, _logger))
                     .Where(x => x != null)
                     .ToList();
 
@@ -62,7 +66,7 @@ namespace PilotLookUp.Model.Services
 
                 return repoData
                     .Where(x => x != null)
-                    .Select(x => new ListItemVM(x, _validationService))
+                    .Select(x => new ListItemVM(x, _validationService, _logger))
                     .Where(x => x != null)
                     .ToList();
             }
@@ -81,7 +85,7 @@ namespace PilotLookUp.Model.Services
             var validItems = data.Where(x => x != null).ToList();
             if (validItems.Count != data.Count)
             {
-                System.Diagnostics.Debug.WriteLine($"[DataInitializationService] Обнаружены null в данных: {data.Count - validItems.Count}");
+                _logger.Trace($"[DataInitializationService] Обнаружены null в данных: {data.Count - validItems.Count}");
             }
 
             return validItems.Any();

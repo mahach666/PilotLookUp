@@ -7,8 +7,11 @@ namespace PilotLookUp.Domain.Entities
 {
     public class UserStateHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public UserStateHelper(IThemeService themeService, IUserState obj)
-            : base(themeService)
+        public UserStateHelper(
+            IThemeService themeService,
+            IUserState obj,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.Title;

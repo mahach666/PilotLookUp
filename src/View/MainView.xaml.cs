@@ -1,21 +1,23 @@
-﻿using PilotLookUp.ViewModel;
+﻿using PilotLookUp.Utils;
 using System.Threading;
 
 namespace PilotLookUp.View
 {
     public partial class MainView
     {
-        public MainView()
+        private readonly ILogger _logger;
+        public MainView(ILogger logger)
         {
-            System.Diagnostics.Debug.WriteLine("[TRACE] MainView: Конструктор вызван");
+            _logger = logger;
+            _logger.Trace("[TRACE] MainView: Конструктор вызван");
             // Проверяем, что мы в STA потоке
             if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
             {
-                System.Diagnostics.Debug.WriteLine("[TRACE] MainView: Не STA поток!");
+                _logger.Trace("[TRACE] MainView: Не STA поток!");
                 throw new System.InvalidOperationException(PilotLookUp.Resources.Strings.StaThreadError);
             }
             InitializeComponent();
-            System.Diagnostics.Debug.WriteLine("[TRACE] MainView: InitializeComponent завершён");
+            _logger.Trace("[TRACE] MainView: InitializeComponent завершён");
         }
     }
 }

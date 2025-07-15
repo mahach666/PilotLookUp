@@ -1,5 +1,6 @@
 ﻿using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -8,31 +9,33 @@ namespace PilotLookUp.Core
 {
     public class ObjReflection
     {
-        public ObjReflection(IPilotObjectHelper typeHelper)
+        private readonly ILogger _logger;
+        public ObjReflection(IPilotObjectHelper typeHelper, ILogger logger)
         {
+            _logger = logger;
             object dataObjects = typeHelper?.LookUpObject;
-            System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Конструктор вызван для типа {dataObjects?.GetType().FullName}");
+            _logger.Trace($"[TRACE] ObjReflection: Конструктор вызван для типа {dataObjects?.GetType().FullName}");
 
             if (dataObjects != null)
             {
                 _objType = dataObjects.GetType();
                 _propertyes = _objType.GetProperties();
                 _methods = _objType.GetMethods();
-                System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Найдено {_propertyes.Length} свойств, {_methods.Length} методов");
+                _logger.Trace($"[TRACE] ObjReflection: Найдено {_propertyes.Length} свойств, {_methods.Length} методов");
 
                 // Поля
                 foreach (PropertyInfo property in _propertyes)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Обрабатывается свойство {property.Name} типа {property.PropertyType.FullName}");
+                    _logger.Trace($"[TRACE] ObjReflection: Обрабатывается свойство {property.Name} типа {property.PropertyType.FullName}");
                     object value = property.GetValue(dataObjects);
                     if (value == null) 
                     {
                         value = "null";
-                        System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Свойство {property.Name} = null");
+                        _logger.Trace($"[TRACE] ObjReflection: Свойство {property.Name} = null");
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine($"[TRACE] ObjReflection: Свойство {property.Name} = {value} (тип: {value.GetType().FullName})");
+                        _logger.Trace($"[TRACE] ObjReflection: Свойство {property.Name} = {value} (тип: {value.GetType().FullName})");
                     }
                     KeyValuePairs.Add(property, value);
                 }
@@ -60,9 +63,9 @@ namespace PilotLookUp.Core
             }
         }
 
-        public static ObjReflection Empty()
+        public static ObjReflection Empty(ILogger logger)
         {
-            return new ObjReflection(PilotObjectMap.WrapNull());
+            return new ObjReflection(PilotObjectMap.WrapNull(), logger);
         }
 
         private Type _objType { get; }

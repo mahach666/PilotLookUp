@@ -1,5 +1,5 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Domain.Interfaces;
+﻿using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -7,8 +7,11 @@ namespace PilotLookUp.Domain.Entities
 {
     public class StringHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public StringHelper(IThemeService themeService, string value)
-            : base(themeService)
+        public StringHelper(
+            IThemeService themeService,
+            string value,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = value;
             _name = value;

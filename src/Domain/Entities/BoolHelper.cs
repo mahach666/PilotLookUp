@@ -1,4 +1,5 @@
 ﻿using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -6,8 +7,10 @@ namespace PilotLookUp.Domain.Entities
 {
     internal class BoolHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public BoolHelper(IThemeService themeService, bool value)
-            : base(themeService)
+        public BoolHelper(IThemeService themeService,
+            bool value,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = value;
             _name = value.ToString();

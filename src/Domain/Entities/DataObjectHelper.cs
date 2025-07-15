@@ -1,15 +1,14 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Utils;
-using System;
 using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Domain.Entities
 {
     public class DataObjectHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public DataObjectHelper(IThemeService themeService, IDataObject obj)
-            : base(themeService)
+        public DataObjectHelper(IThemeService themeService, IDataObject obj, ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.DisplayName;

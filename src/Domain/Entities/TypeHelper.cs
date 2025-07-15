@@ -7,8 +7,11 @@ namespace PilotLookUp.Domain.Entities
 {
     public class TypeHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public TypeHelper(IThemeService themeService, IType obj)
-            : base(themeService)
+        public TypeHelper(
+            IThemeService themeService,
+            IType obj,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.Title;

@@ -8,6 +8,12 @@ namespace PilotLookUp.Utils
     public class TraceStrategyRegistry
     {
         private readonly List<ITraceStrategy> _strategies = new List<ITraceStrategy>();
+        private readonly ILogger _logger;
+
+        public TraceStrategyRegistry(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public void Register(ITraceStrategy strategy)
         {
@@ -26,7 +32,7 @@ namespace PilotLookUp.Utils
                 var wrapped = context.Tracer.PilotObjectMap.Wrap(obj);
                 if (wrapped == null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[TRACE] TraceStrategyRegistry.TraceAsync: Wrap вернул null для типа {obj?.GetType().FullName}");
+                    _logger.Trace($"[TRACE] TraceStrategyRegistry.TraceAsync: Wrap вернул null для типа {obj?.GetType().FullName}");
                 }
                 context.ObjectSet.Add(wrapped);
             }

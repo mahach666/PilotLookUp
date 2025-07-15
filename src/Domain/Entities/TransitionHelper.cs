@@ -1,6 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
-using Ascon.Pilot.SDK.Data;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -8,8 +8,11 @@ namespace PilotLookUp.Domain.Entities
 {
     public class TransitionHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public TransitionHelper(IThemeService themeService, ITransition obj)
-            : base(themeService)
+        public TransitionHelper(
+            IThemeService themeService,
+            ITransition obj,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.ToString();

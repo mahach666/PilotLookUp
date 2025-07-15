@@ -11,19 +11,14 @@ namespace PilotLookUp.Domain.Entities
 {
     public class IntHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        private IPilotObjectHelper _sender { get; }
-        private MemberInfo _senderMember { get; }
-        private IObjectsRepository _objectsRepository { get; }
-        private int _value { get; }
-
-        public IntHelper(IThemeService themeService, int value, IObjectsRepository objectsRepository, IPilotObjectHelper sender, MemberInfo senderMember)
-            : base(themeService)
+        public IntHelper(IThemeService themeService,
+            int value,
+            IObjectsRepository objectsRepository,
+            IPilotObjectHelper sender,
+            MemberInfo senderMember,
+            ILogger logger)
+            : base(themeService, logger)
         {
-            _sender = sender;
-            _senderMember = senderMember;
-            _objectsRepository = objectsRepository;
-            _value = value;
-
             if (senderMember != null)
             {
                 if (senderMember.Name.Contains("AllOrgUnits"))

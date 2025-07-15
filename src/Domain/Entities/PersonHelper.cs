@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -7,8 +8,8 @@ namespace PilotLookUp.Domain.Entities
 {
     public class PersonHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public PersonHelper(IThemeService themeService, IPerson obj)
-            : base(themeService)
+        public PersonHelper(IThemeService themeService, IPerson obj, ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.DisplayName;

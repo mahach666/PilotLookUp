@@ -1,4 +1,5 @@
 ﻿using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -9,13 +10,14 @@ namespace PilotLookUp.ViewModel
     public class ListItemVM : INotifyPropertyChanged, ICustomTree
     {
         private readonly IValidationService _validationService;
+        private readonly ILogger _logger;
 
-        public ListItemVM(IPilotObjectHelper pilotObjectHelper,
-            IValidationService validationService)
+        public ListItemVM(IPilotObjectHelper pilotObjectHelper, IValidationService validationService, ILogger logger)
         {
             _validationService = validationService;
             _validationService.ValidateNotNull(pilotObjectHelper, nameof(pilotObjectHelper));
-            System.Diagnostics.Debug.WriteLine($"[TRACE] ListItemVM: Конструктор вызван для {pilotObjectHelper?.Name ?? "null"}");
+            _logger = logger;
+            _logger.Trace($"[TRACE] ListItemVM: Конструктор вызван для {pilotObjectHelper?.Name ?? "null"}");
             PilotObjectHelper = pilotObjectHelper;
             Children = new ObservableCollection<ICustomTree>();
         }

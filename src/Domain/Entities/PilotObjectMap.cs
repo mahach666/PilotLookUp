@@ -1,8 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Objects.Strategies;
-using PilotLookUp.Domain.Entities;
-using System.Reflection;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Objects.Strategies;
+using System.Reflection;
 
 namespace PilotLookUp.Domain.Entities
 {
@@ -10,7 +9,10 @@ namespace PilotLookUp.Domain.Entities
     {
         private readonly TypeWrapStrategyRegistry _strategyRegistry;
         private readonly IPilotObjectHelperFactory _factory;
-        public PilotObjectMap(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IPilotObjectHelper senderObj = null, System.Reflection.MemberInfo senderMember = null)
+        public PilotObjectMap(IObjectsRepository objectsRepository,
+            IPilotObjectHelperFactory factory,
+            IPilotObjectHelper senderObj = null,
+            MemberInfo senderMember = null)
         {
             _objectsRepository = objectsRepository;
             _factory = factory;
@@ -21,18 +23,23 @@ namespace PilotLookUp.Domain.Entities
         }
         private IObjectsRepository _objectsRepository { get; }
         private IPilotObjectHelper _senderObj { get; }
-        private System.Reflection.MemberInfo _senderMember { get; }
+        private MemberInfo _senderMember { get; }
 
         public IPilotObjectHelper Wrap(object obj)
         {
-            var context = new TypeWrapContext(_objectsRepository, _senderObj, _senderMember);
+            var context = new TypeWrapContext(_objectsRepository,
+                _senderObj,
+                _senderMember);
             try
             {
                 return _strategyRegistry.Wrap(obj, context);
             }
             catch
             {
-                return _factory.CreateDefault(PilotLookUp.Resources.Strings.Unknown, PilotLookUp.Resources.Strings.Unknown, obj, false);
+                return _factory.CreateDefault(Resources.Strings.Unknown,
+                    Resources.Strings.Unknown,
+                    obj,
+                    false);
             }
         }
 
@@ -79,7 +86,7 @@ namespace PilotLookUp.Domain.Entities
 
         public static IPilotObjectHelper WrapNull()
         {
-            return null; // Это статический метод, нужно будет исправить по-другому
+            return null;
         }
     }
 }

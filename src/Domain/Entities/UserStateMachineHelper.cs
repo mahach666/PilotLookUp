@@ -1,14 +1,18 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
-using PilotLookUp.Domain.Interfaces;
 
 namespace PilotLookUp.Domain.Entities
 {
     public class UserStateMachineHelper : PilotObjectHelper
     {
-        public UserStateMachineHelper(IThemeService themeService, IUserStateMachine obj)
-            : base(themeService)
+        public UserStateMachineHelper(
+            IThemeService themeService,
+            IUserStateMachine obj,
+            ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.Title;

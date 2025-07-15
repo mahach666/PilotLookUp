@@ -1,6 +1,6 @@
-﻿using Ascon.Pilot.SDK;
+﻿using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Domain.Entities;
+using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -15,11 +15,13 @@ namespace PilotLookUp.Model.Services
     {
         private IRepoService _lookUpModel { get; }
         private readonly IValidationService _validationService;
+        private readonly ILogger _logger;
 
-        public TreeItemService(IRepoService lookUpModel, IValidationService validationService)
+        public TreeItemService(IRepoService lookUpModel, IValidationService validationService, ILogger logger)
         {
             _lookUpModel = lookUpModel;
             _validationService = validationService;
+            _logger = logger;
         }
 
         public async Task<ICustomTree> FillChild(ICustomTree lastParrent)
@@ -37,7 +39,7 @@ namespace PilotLookUp.Model.Services
 
             foreach (var dataObjectHelper in newPilotObj)
             {
-                var childNode = new ListItemVM(dataObjectHelper, _validationService);
+                var childNode = new ListItemVM(dataObjectHelper, _validationService, _logger);
                 if (lastParrent.Children != null)
                 {
                     lastParrent.Children.Add(childNode);
@@ -59,15 +61,23 @@ namespace PilotLookUp.Model.Services
         private readonly ICustomSearchService _searchService;
         private readonly ITreeItemService _treeItemService;
         private readonly IValidationService _validationService;
+        private readonly ILogger _logger;
 
-        public TaskTreeBuilderService(ICustomSearchService searchService, ITreeItemService treeItemService, IValidationService validationService)
+        public TaskTreeBuilderService(
+            ICustomSearchService searchService,
+            ITreeItemService treeItemService,
+            IValidationService validationService,
+            ILogger logger)
         {
             _searchService = searchService;
             _treeItemService = treeItemService;
             _validationService = validationService;
+            _logger = logger;
         }
 
-        public async Task<(ObservableCollection<ICustomTree> nodes, Visibility revokedTaskVisible, IPilotObjectHelper lastParent)> BuildTaskTreeAsync(IPilotObjectHelper objectHelper, bool revokedTask)
+        public async Task<(ObservableCollection<ICustomTree> nodes, Visibility revokedTaskVisible, IPilotObjectHelper lastParent)> BuildTaskTreeAsync(
+            IPilotObjectHelper objectHelper,
+            bool revokedTask)
         {
             bool isTask = false;
             var isTaskProp = objectHelper.GetType().GetProperty("IsTask");
@@ -80,7 +90,7 @@ namespace PilotLookUp.Model.Services
             if (isTask && objectHelper.LookUpObject is Ascon.Pilot.SDK.IDataObject dataObject)
             {
                 var lastParent = await _searchService.GetLastParent(dataObject);
-                ICustomTree rootNode = new ListItemVM(lastParent, _validationService);
+                ICustomTree rootNode = new ListItemVM(lastParent, _validationService, _logger);
                 rootNode = await _treeItemService.FillChild(rootNode);
                 return (new ObservableCollection<ICustomTree> { rootNode }, Visibility.Hidden, lastParent);
             }
@@ -90,7 +100,7 @@ namespace PilotLookUp.Model.Services
                 ObjectSet allLastParent = await _searchService.GetBaseParentsOfRelations(objectHelper, revokedTask);
                 foreach (IPilotObjectHelper item in allLastParent)
                 {
-                    ICustomTree rootNode = new ListItemVM(item, _validationService);
+                    ICustomTree rootNode = new ListItemVM(item, _validationService, _logger);
                     rootNode = await _treeItemService.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }

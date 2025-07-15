@@ -1,5 +1,5 @@
-﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Domain.Interfaces;
+﻿using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -7,8 +7,8 @@ namespace PilotLookUp.Domain.Entities
 {
     public class EnumHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public EnumHelper(IThemeService themeService, Enum obj)
-            : base(themeService)
+        public EnumHelper(IThemeService themeService, Enum obj, ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj.ToString();

@@ -1,9 +1,9 @@
-using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Utils;
 using PilotLookUp.ViewModel;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PilotLookUp.Model.Services
 {
@@ -24,6 +24,7 @@ namespace PilotLookUp.Model.Services
         private readonly IClipboardService _clipboardService;
         private readonly IUserNotificationService _notificationService;
         private readonly TaskTreeBuilderService _taskTreeBuilderService;
+        private readonly ILogger _logger;
 
         public ViewModelFactory(
             IRepoService repoService,
@@ -40,7 +41,8 @@ namespace PilotLookUp.Model.Services
             ICopyDataService copyDataService,
             IClipboardService clipboardService,
             IUserNotificationService notificationService,
-            TaskTreeBuilderService taskTreeBuilderService)
+            TaskTreeBuilderService taskTreeBuilderService,
+            ILogger logger)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(
@@ -63,6 +65,7 @@ namespace PilotLookUp.Model.Services
             _clipboardService = clipboardService;
             _notificationService = notificationService;
             _taskTreeBuilderService = taskTreeBuilderService;
+            _logger = logger;
         }
 
         public LookUpVM CreateLookUpVM(ObjectSet dataObjects = null)
@@ -70,9 +73,9 @@ namespace PilotLookUp.Model.Services
             List<ListItemVM> initialData = null;
             if (dataObjects != null && dataObjects.Count > 0)
             {
-                initialData = dataObjects.Select(x => new ListItemVM(x, _validationService)).ToList();
+                initialData = dataObjects.Select(x => new ListItemVM(x, _validationService, _logger)).ToList();
             }
-            var vm = new LookUpVM(_repoService, _windowService, _errorHandlingService, _validationService, _dataInitializationService, _dataFilterService, _copyDataService, initialData);
+            var vm = new LookUpVM(_repoService, _windowService, _errorHandlingService, _validationService, _dataInitializationService, _dataFilterService, _copyDataService, _logger, initialData);
             return vm;
         }
 

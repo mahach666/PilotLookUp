@@ -14,14 +14,16 @@ namespace PilotLookUp.Model.Services
         private readonly IObjectSetFactory _objectSetFactory;
         private readonly IValidationService _validationService;
         private readonly IPilotObjectHelperFactory _factory;
+        private readonly ILogger _logger;
 
-        public RepoService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IPilotObjectHelperFactory factory, IValidationService validationService)
+        public RepoService(IObjectsRepository objectsRepository, IObjectSetFactory objectSetFactory, IPilotObjectHelperFactory factory, IValidationService validationService, ILogger logger)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(objectsRepository, objectSetFactory, factory, validationService);
             _objectsRepository = objectsRepository;
             _objectSetFactory = objectSetFactory;
             _factory = factory;
+            _logger = logger;
         }
 
         public async Task<List<ObjectSet>> GetObjInfo(IPilotObjectHelper sender)
@@ -30,7 +32,7 @@ namespace PilotLookUp.Model.Services
             var res = new List<ObjectSet>();
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                ObjectSet newPilotObj = await new Tracer(_objectsRepository, _factory, sender, pair.Key, _objectSetFactory).Trace(pair.Value);
+                ObjectSet newPilotObj = await new Tracer(_objectsRepository, _factory, sender, pair.Key, _objectSetFactory, _logger).Trace(pair.Value);
                 res.Add(newPilotObj);
             }
             return res;
@@ -45,7 +47,7 @@ namespace PilotLookUp.Model.Services
         public async Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids)
         {
             _validationService.ValidateNotNull(guids, nameof(guids));
-            return await new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory).Trace(guids);
+            return await new Tracer(_objectsRepository, _factory, null, null, _objectSetFactory, _logger).Trace(guids);
         }
     }
 }

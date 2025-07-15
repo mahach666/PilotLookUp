@@ -1,28 +1,25 @@
 ﻿using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
 using PilotLookUp.Domain.Entities;
 using PilotLookUp.Domain.Interfaces;
-using PilotLookUp.Objects;
 using PilotLookUp.Utils.Strategies;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 
 namespace PilotLookUp.Utils
 {
     public class Tracer
     {
-        public Tracer(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IPilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory)
+        private readonly ILogger _logger;
+        public Tracer(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IPilotObjectHelper senderObj, MemberInfo senderMember, IObjectSetFactory objectSetFactory, ILogger logger)
         {
+            _logger = logger;
             PilotObjectMap = new PilotObjectMap(objectsRepository, factory, senderObj, senderMember);
             ObjectsRepository = objectsRepository;
             MemberInfo = senderMember;
             _objectSetFactory = objectSetFactory;
-            _traceStrategyRegistry = new TraceStrategyRegistry();
+            _traceStrategyRegistry = new TraceStrategyRegistry(_logger);
             RegisterDefaultStrategies(_traceStrategyRegistry);
         }
 

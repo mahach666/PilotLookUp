@@ -23,6 +23,7 @@ namespace PilotLookUp.ViewModel
         private readonly IDataInitializationService _dataInitializationService;
         private readonly IDataFilterService _dataFilterService;
         private readonly ICopyDataService _copyDataService;
+        private readonly ILogger _logger;
 
         public LookUpVM(IRepoService lookUpModel,
             IWindowService windowService,
@@ -31,11 +32,13 @@ namespace PilotLookUp.ViewModel
             IDataInitializationService dataInitializationService,
             IDataFilterService dataFilterService,
             ICopyDataService copyDataService,
+            ILogger logger,
             List<ListItemVM> initialData = null)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(lookUpModel, windowService, errorHandlingService, validationService, dataInitializationService, dataFilterService, copyDataService);
-            System.Diagnostics.Debug.WriteLine("[TRACE] LookUpVM: Конструктор вызван");
+            _logger = logger;
+            _logger.Trace("[TRACE] LookUpVM: Конструктор вызван");
             _repoService = lookUpModel;
             _windowService = windowService;
             _errorHandlingService = errorHandlingService;

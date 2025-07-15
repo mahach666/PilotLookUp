@@ -1,14 +1,15 @@
-﻿using System;
-using System.Windows.Media.Imaging;
-using Ascon.Pilot.SDK;
+﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
+using System;
+using System.Windows.Media.Imaging;
 
 namespace PilotLookUp.Domain.Entities
 {
     public class FileHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public FileHelper(IThemeService themeService, IFile value)
-            : base(themeService)
+        public FileHelper(IThemeService themeService, IFile value, ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = value;
             _name = value?.Name.ToString();

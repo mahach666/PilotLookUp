@@ -1,6 +1,7 @@
 using Ascon.Pilot.SDK;
-using PilotLookUp.Domain.Interfaces;
 using PilotLookUp.Domain.Entities;
+using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,22 +13,24 @@ namespace PilotLookUp.Model.Services
         private readonly PilotObjectMap _pilotObjectMap;
         private readonly IValidationService _validationService;
         private readonly IPilotObjectHelperFactory _factory;
+        private readonly ILogger _logger;
 
-        public ObjectMappingService(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IValidationService validationService)
+        public ObjectMappingService(IObjectsRepository objectsRepository, IPilotObjectHelperFactory factory, IValidationService validationService, ILogger logger)
         {
             _validationService = validationService;
             _validationService.ValidateConstructorParams(objectsRepository, factory, validationService);
             _objectsRepository = objectsRepository;
             _factory = factory;
             _pilotObjectMap = new PilotObjectMap(_objectsRepository, _factory);
+            _logger = logger;
         }
 
         public IPilotObjectHelper Wrap(object rawObject)
         {
-            System.Diagnostics.Debug.WriteLine($"[TRACE] ObjectMappingService.Wrap: rawObject type: {rawObject?.GetType().Name}");
+            _logger.Trace($"[TRACE] ObjectMappingService.Wrap: rawObject type: {rawObject?.GetType().Name}");
             _validationService.ValidateNotNull(rawObject, nameof(rawObject));
             var result = _pilotObjectMap.Wrap(rawObject);
-            System.Diagnostics.Debug.WriteLine($"[TRACE] ObjectMappingService.Wrap: result is null? {result == null}, type: {result?.GetType().Name}, name: {result?.Name}");
+            _logger.Trace($"[TRACE] ObjectMappingService.Wrap: result is null? {result == null}, type: {result?.GetType().Name}, name: {result?.Name}");
             return result;
         }
 
@@ -35,10 +38,10 @@ namespace PilotLookUp.Model.Services
         {
             _validationService.ValidateNotNull(rawObjects, nameof(rawObjects));
             var result = rawObjects?.Select(Wrap).ToList() ?? new List<IPilotObjectHelper>();
-            System.Diagnostics.Debug.WriteLine($"[TRACE] ObjectMappingService.WrapMany: rawObjects count: {rawObjects?.Count() ?? 0}, result count: {result.Count}");
+            _logger.Trace($"[TRACE] ObjectMappingService.WrapMany: rawObjects count: {rawObjects?.Count() ?? 0}, result count: {result.Count}");
             foreach (var r in result)
             {
-                System.Diagnostics.Debug.WriteLine($"[TRACE] ObjectMappingService.WrapMany: item is null? {r == null}, type: {r?.GetType().Name}, name: {r?.Name}");
+                _logger.Trace($"[TRACE] ObjectMappingService.WrapMany: item is null? {r == null}, type: {r?.GetType().Name}, name: {r?.Name}");
             }
             return result;
         }

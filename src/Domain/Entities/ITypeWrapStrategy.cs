@@ -1,4 +1,3 @@
-using System;
 using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
 
@@ -12,7 +11,9 @@ namespace PilotLookUp.Domain.Entities
 
     public class TypeWrapContext
     {
-        public TypeWrapContext(IObjectsRepository objectsRepository, IPilotObjectHelper senderObj, System.Reflection.MemberInfo senderMember)
+        public TypeWrapContext(IObjectsRepository objectsRepository,
+            IPilotObjectHelper senderObj,
+            System.Reflection.MemberInfo senderMember)
         {
             ObjectsRepository = objectsRepository;
             SenderObj = senderObj;

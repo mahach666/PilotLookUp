@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -7,8 +8,8 @@ namespace PilotLookUp.Domain.Entities
 {
     public class RelationHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public RelationHelper(IThemeService themeService, IRelation obj)
-            : base(themeService)
+        public RelationHelper(IThemeService themeService, IRelation obj, ILogger logger)
+            : base(themeService, logger)
         {
             _lookUpObject = obj;
             _name = obj?.Id.ToString();

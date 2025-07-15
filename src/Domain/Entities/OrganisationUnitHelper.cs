@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System;
 using System.Windows.Media.Imaging;
 
@@ -7,8 +8,10 @@ namespace PilotLookUp.Domain.Entities
 {
     public class OrganizationUnitHelper : PilotObjectHelper, IPilotObjectHelper
     {
-        public OrganizationUnitHelper(IThemeService themeService, IOrganisationUnit obj)
-            : base(themeService)
+        public OrganizationUnitHelper(IThemeService themeService,
+            IOrganisationUnit obj,
+            ILogger logger)
+            : base(themeService, logger)
         {
             System.Diagnostics.Debug.WriteLine($"[TRACE] OrganizationUnitHelper: Конструктор вызван для типа {obj?.GetType().FullName}");
             _lookUpObject = obj;
@@ -20,18 +23,7 @@ namespace PilotLookUp.Domain.Entities
 
         public override BitmapImage GetImage()
         {
-            System.Diagnostics.Debug.WriteLine($"[TRACE] OrganizationUnitHelper.GetImage: Вызван для типа {_lookUpObject?.GetType().FullName}");
-            try
-            {
-                var image = new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
-                System.Diagnostics.Debug.WriteLine($"[TRACE] OrganizationUnitHelper.GetImage: Иконка создана успешно");
-                return image;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"[TRACE] OrganizationUnitHelper.GetImage: Ошибка при создании иконки: {ex.Message}");
-                return null;
-            }
+            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
         }
     }
 }
