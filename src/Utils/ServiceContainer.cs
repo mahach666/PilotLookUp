@@ -16,7 +16,7 @@ namespace PilotLookUp.Utils
         {
             // Создаем новый контейнер для каждого окна
             var container = new Container();
-            
+
             // Регистрируем внешние сервисы (обязательные)
             if (objectsRepository == null)
                 throw new ArgumentNullException(nameof(objectsRepository), "IObjectsRepository обязателен!");
@@ -24,22 +24,22 @@ namespace PilotLookUp.Utils
                 throw new ArgumentNullException(nameof(tabServiceProvider), "ITabServiceProvider обязателен!");
             if (theme == null)
                 throw new ArgumentNullException(nameof(theme), "Theme обязателен!");
-                
+
             container.RegisterInstance(objectsRepository);
             container.RegisterInstance(tabServiceProvider);
-            
+
             // Регистрируем ThemeProvider
             container.RegisterInstance<IThemeProvider>(new ThemeProvider(theme.Value));
-            
+
             // Регистрируем логгер
             container.Register<ILogger, SimpleLogger>(Lifestyle.Singleton);
-            
+
             // Настраиваем базовые сервисы
             ConfigureBaseServices(container, theme.Value);
-            
+
             // Валидируем контейнер
             container.Verify();
-            
+
             return container;
         }
 
@@ -50,10 +50,7 @@ namespace PilotLookUp.Utils
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);
             container.Register<ICustomSearchService, SearchService>(Lifestyle.Singleton);
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
-            container.Register<ITreeItemService>(() => new TreeItemService(
-                container.GetInstance<IRepoService>(),
-                container.GetInstance<IValidationService>(),
-                container.GetInstance<ILogger>()), Lifestyle.Singleton);
+            container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             container.Register<IValidationService, ValidationService>(Lifestyle.Singleton);
             container.Register<IObjectMappingService, ObjectMappingService>(Lifestyle.Singleton);
@@ -61,33 +58,13 @@ namespace PilotLookUp.Utils
             container.Register<IErrorHandlingService, ErrorHandlingService>(Lifestyle.Singleton);
             container.Register<IPilotObjectHelperFactory, PilotObjectHelperFactory>(Lifestyle.Singleton);
             container.Register<IWindowFactory, WindowFactory>(Lifestyle.Singleton);
-            container.Register<IViewModelFactory>(() => new ViewModelFactory(
-                container.GetInstance<IRepoService>(),
-                container.GetInstance<ICustomSearchService>(),
-                container.GetInstance<ITabService>(),
-                container.GetInstance<IWindowService>(),
-                container.GetInstance<ITreeItemService>(),
-                container.GetInstance<IDataObjectService>(),
-                container.GetInstance<IErrorHandlingService>(),
-                container.GetInstance<IValidationService>(),
-                container.GetInstance<IObjectSetFactory>(),
-                container.GetInstance<IDataInitializationService>(),
-                container.GetInstance<IDataFilterService>(),
-                container.GetInstance<ICopyDataService>(),
-                container.GetInstance<IClipboardService>(),
-                container.GetInstance<IUserNotificationService>(),
-                container.GetInstance<TaskTreeBuilderService>(),
-                container.GetInstance<ILogger>()), Lifestyle.Singleton);
+            container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
             container.Register<IObjectSetFactory, ObjectSetFactory>(Lifestyle.Singleton);
             container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
             container.Register<IMenuService, MenuService>(Lifestyle.Singleton);
             container.Register<IThemeService, ThemeService>(Lifestyle.Singleton);
-            container.Register<TaskTreeBuilderService>(() => new TaskTreeBuilderService(
-                container.GetInstance<ICustomSearchService>(),
-                container.GetInstance<ITreeItemService>(),
-                container.GetInstance<IValidationService>(),
-                container.GetInstance<ILogger>()), Lifestyle.Singleton);
-            
+            container.Register<TaskTreeBuilderService, TaskTreeBuilderService>(Lifestyle.Singleton);
+
             // Регистрируем новые сервисы для разделения ответственности
             container.Register<IClipboardService, ClipboardService>(Lifestyle.Singleton);
             container.Register<IUserNotificationService, UserNotificationService>(Lifestyle.Singleton);
@@ -95,10 +72,10 @@ namespace PilotLookUp.Utils
             container.Register<IDataInitializationService, DataInitializationService>(Lifestyle.Singleton);
             container.Register<ICopyDataService, CopyDataService>(Lifestyle.Singleton);
             container.Register<IViewDirectorService, ViewDirectorService>(Lifestyle.Singleton);
-            
+
             // Регистрируем NavigationService
             container.Register<INavigationService, NavigationService>(Lifestyle.Singleton);
-            
+
             // Регистрируем Views
             container.Register<MainView>(() =>
                 System.Windows.Application.Current.Dispatcher.Invoke(() => new MainView(container.GetInstance<ILogger>())), Lifestyle.Transient);
@@ -106,4 +83,4 @@ namespace PilotLookUp.Utils
 
         // Удаляю SetGlobalServices и все статические поля
     }
-} 
+}
