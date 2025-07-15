@@ -13,12 +13,12 @@ namespace PilotLookUp.Domain.Entities
             ILogger logger)
             : base(themeService, logger)
         {
-            System.Diagnostics.Debug.WriteLine($"[TRACE] OrganizationUnitHelper: Конструктор вызван для типа {obj?.GetType().FullName}");
+            _logger.Trace($"OrganizationUnitHelper: Конструктор вызван для типа {obj?.GetType().FullName}");
             _lookUpObject = obj;
             _name = obj?.Title;
             _isLookable = true;
             _stringId = obj?.Id.ToString();
-            System.Diagnostics.Debug.WriteLine($"[TRACE] OrganizationUnitHelper: _name = {_name}, _stringId = {_stringId}");
+            _logger.Trace($"OrganizationUnitHelper: _name = {_name}, _stringId = {_stringId}");
         }
 
         public override BitmapImage GetImage()

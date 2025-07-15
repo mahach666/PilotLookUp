@@ -1,10 +1,19 @@
 using PilotLookUp.Domain.Interfaces;
+using PilotLookUp.Utils;
 using System.Windows;
 
 namespace PilotLookUp.Model.Services
 {
     public class ClipboardService : IClipboardService
     {
+
+        private readonly ILogger _logger;
+
+        public ClipboardService(ILogger logger)
+        {
+            _logger = logger;
+        }
+
         public void CopyToClipboard(string text)
         {
             if (string.IsNullOrEmpty(text))
@@ -16,8 +25,7 @@ namespace PilotLookUp.Model.Services
             }
             catch (System.Exception ex)
             {
-                // Логируем ошибку, но не показываем пользователю
-                System.Diagnostics.Debug.WriteLine($"Ошибка при копировании в буфер обмена: {ex.Message}");
+                _logger.Warn($"Ошибка при копировании в буфер обмена: {ex.Message}");
             }
         }
 
@@ -29,7 +37,7 @@ namespace PilotLookUp.Model.Services
             }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка при получении текста из буфера обмена: {ex.Message}");
+                _logger.Warn($"Ошибка при получении текста из буфера обмена: {ex.Message}");
                 return string.Empty;
             }
         }
@@ -42,7 +50,7 @@ namespace PilotLookUp.Model.Services
             }
             catch (System.Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка при проверке наличия текста в буфере обмена: {ex.Message}");
+                _logger.Warn($"Ошибка при проверке наличия текста в буфере обмена: {ex.Message}");
                 return false;
             }
         }

@@ -37,13 +37,13 @@ namespace PilotLookUp.Domain.Entities
                 _validationService.ValidateNotNull(index, nameof(index));
                 if (index < 0 || index >= _items.Count)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Индекс вне диапазона: {index}");
+                    _logger.Warn($"Индекс вне диапазона: {index}");
                     return null;
                 }
                 var obj = _items[index];
                 if (obj == null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Обнаружен null по индексу {index}");
+                    _logger.Warn($"Обнаружен null по индексу {index}");
                 }
                 return obj;
             }
@@ -52,12 +52,12 @@ namespace PilotLookUp.Domain.Entities
                 _validationService.ValidateNotNull(index, nameof(index));
                 if (index < 0 || index >= _items.Count)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Индекс вне диапазона при set: {index}");
+                    _logger.Warn($"Индекс вне диапазона при set: {index}");
                     return;
                 }
                 if (value == null)
                 {
-                    System.Diagnostics.Debug.WriteLine($"[ObjectSet] Попытка установить null по индексу {index}");
+                    _logger.Warn($"Попытка установить null по индексу {index}");
                     return;
                 }
                 _items[index] = value;
@@ -70,7 +70,7 @@ namespace PilotLookUp.Domain.Entities
             _validationService.ValidateNotNull(item, nameof(item));
             if (item == null)
             {
-                System.Diagnostics.Debug.WriteLine("[ObjectSet] Попытка добавить null");
+                _logger.Warn("Попытка добавить null");
                 return;
             }
             _items.Add(item);
@@ -83,7 +83,7 @@ namespace PilotLookUp.Domain.Entities
             {
                 if (item == null)
                 {
-                    System.Diagnostics.Debug.WriteLine("[ObjectSet] Попытка добавить null в AddRange");
+                    _logger.Warn("Попытка добавить null в AddRange");
                     continue;
                 }
                 _items.Add(item);
