@@ -36,8 +36,8 @@ namespace PilotLookUp.Domain.Entities
             }
             catch
             {
-                return _factory.CreateDefault(Resources.Strings.Unknown,
-                    Resources.Strings.Unknown,
+                return _factory.CreateDefault(obj.ToString(),
+                    obj.ToString(),
                     obj,
                     false);
             }

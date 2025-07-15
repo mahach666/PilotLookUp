@@ -26,7 +26,6 @@ namespace PilotLookUp.Domain.Entities
 
         public override BitmapImage GetImage()
         {
-            // Реализуйте по необходимости
             return null;
         }
     }
