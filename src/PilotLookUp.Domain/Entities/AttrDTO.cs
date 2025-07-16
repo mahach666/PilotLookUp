@@ -1,4 +1,4 @@
-﻿namespace PilotLookUp.Domain.Entities
+namespace PilotLookUp.Domain.Entities
 {
     public class AttrDTO
     {
@@ -11,4 +11,4 @@
         public bool IsInitialized { get; set; }
         public bool IsValid { get; set; }
     }
-}
+} 

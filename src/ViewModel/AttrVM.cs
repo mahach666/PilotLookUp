@@ -36,9 +36,11 @@ namespace PilotLookUp.ViewModel
         {
             get
             {
-                if (_objectHelper == null || _objectHelper.LookUpObject == null)
-                    return new List<AttrDTO>();
-                return _dataObjectService.GetAttrDTOs(_objectHelper);
+                if (_objectHelper?.LookUpObject is Ascon.Pilot.SDK.IDataObject dataObj)
+                {
+                    return _dataObjectService.GetAttrDTOs(dataObj);
+                }
+                return new List<AttrDTO>();
             }
         }
 

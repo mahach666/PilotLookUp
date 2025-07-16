@@ -168,4 +168,11 @@
 	    <DependentUpon>Strings.resx</DependentUpon>
 	  </Compile>
 	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="PilotLookUp.Domain\PilotLookUp.Domain.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="PilotLookUp.Domain\**\*.cs" />
+	</ItemGroup>
 </Project>
