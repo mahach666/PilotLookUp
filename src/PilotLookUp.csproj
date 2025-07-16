@@ -12,6 +12,8 @@
 		<RootNamespace>PilotLookUp</RootNamespace>
 		<OutputType>Library</OutputType>
 		<EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
 	</PropertyGroup>
 
 	<PropertyGroup>
