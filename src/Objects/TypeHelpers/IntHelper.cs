@@ -10,18 +10,8 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class IntHelper : PilotObjectHelper
     {
-        private PilotObjectHelper _sender { get; }
-        private MemberInfo _senderMember { get; }
-        private IObjectsRepository _objectsRepository { get; }
-        private int _value { get; }
-
         public IntHelper(int value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
         {
-            _sender = sender;
-            _senderMember = senderMember;
-            _objectsRepository = objectsRepository;
-            _value = value;
-
             if (senderMember != null)
             {
                 if (senderMember.Name.Contains("AllOrgUnits"))
@@ -131,6 +121,18 @@ namespace PilotLookUp.Objects.TypeHelpers
                 else if (sender.LookUpObject is IAccessRecord
                         && (senderMember.Name.Contains("OrgUnitId")
                         || senderMember.Name.Contains("RecordOwner")))
+                {
+                    var unit = objectsRepository.GetOrganisationUnit(value);
+                    _lookUpObject = unit;
+                    _name = unit?.Title;
+                    _isLookable = true;
+                    _stringId = unit?.Id.ToString();
+                    return;
+                }
+
+                else if (senderMember.Name == "Value"
+                    && sender.LookUpObject is KeyValuePair<string, object> valuePair
+                    && valuePair.Value is IEnumerable<int>)
                 {
                     var unit = objectsRepository.GetOrganisationUnit(value);
                     _lookUpObject = unit;
