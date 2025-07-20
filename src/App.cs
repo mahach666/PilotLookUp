@@ -2,8 +2,11 @@
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.SDK.Toolbar;
 using Ascon.Pilot.Themes;
+using PilotLookUp.Model;
+using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using PilotLookUp.Utils;
+using SimpleInjector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -33,7 +36,7 @@ namespace PilotLookUp
         IMenu<LinkedObjectsContext>,
         IMenu<LinkedTasksContext2>,
         IToolbar<MainViewContext>,
-        IToolbar<ObjectsViewContext>, 
+        IToolbar<ObjectsViewContext>,
         IToolbar<TasksViewContext2>,
         IToolbar<DocumentFilesContext>,
         IToolbar<LinkedObjectsContext>,
@@ -41,7 +44,9 @@ namespace PilotLookUp
     {
         private IObjectsRepository _objectsRepository;
         private ITabServiceProvider _tabServiceProvider;
-        private ObjectSet _convertSelection;
+        private Container _container;
+
+        private SelectedService _selectedService;
         private static ThemeNames _theme { get; set; }
         public static ThemeNames Theme { get => _theme; }
 
@@ -51,9 +56,16 @@ namespace PilotLookUp
             IPilotDialogService pilotDialogService)
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
+
+            _selectedService = new SelectedService(objectsRepository);
+
+            _container = new ServiceContainer().CreateContainer(objectsRepository,
+                tabServiceProvider,
+                pilotDialogService,
+                _selectedService);
+
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
-
 
             _theme = pilotDialogService.Theme;
         }
@@ -119,14 +131,13 @@ namespace PilotLookUp
                 return;
             }
 
-            if (_convertSelection == null || !_convertSelection.Any()) return;
+            if (_selectedService.Selected == null || !_selectedService.Selected.Any()) return;
 
             if (name == "LookSelected")
             {
-                ViewDirector.LookSelection(_convertSelection, _objectsRepository, _tabServiceProvider);
+                ViewDirector.LookSelection(_selectedService.Selected, _objectsRepository, _tabServiceProvider);
                 return;
             }
-
         }
 
         private void ContextButtonBuilder(IMenuBuilder builder, MarshalByRefObject context)
@@ -135,29 +146,9 @@ namespace PilotLookUp
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
 
-        private void SelectUpdater(MarshalByRefObject context)
-        {
-            var map = new PilotObjectMap(_objectsRepository);
+        private void SelectUpdater(MarshalByRefObject context) =>
+            _selectedService.UpdateSelected(context);
 
-            IEnumerable<object>? raw = context switch
-            {
-                ObjectsViewContext c => c.SelectedObjects?.Cast<object>(),
-                DocumentFilesContext c => c.SelectedObjects?.Cast<object>(),
-                LinkedObjectsContext c => c.SelectedObjects?.Cast<object>(),
-                StorageContext c => c.SelectedObjects?.Cast<object>(),
-
-                TasksViewContext2 c => c.SelectedTasks?.Cast<object>(),
-                LinkedTasksContext2 c => c.SelectedTasks?.Cast<object>(),
-
-                _ => null
-            };
-
-            if (raw?.Any() == true)
-            {
-                _convertSelection = new ObjectSet(null);
-                _convertSelection.AddRange(raw.Select(map.Wrap));
-            }
-        }
 
         // Juts for stable update
         public void Build(IToolbarBuilder builder, ObjectsViewContext context) =>
