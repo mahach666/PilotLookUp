@@ -43,13 +43,11 @@ namespace PilotLookUp
         IToolbar<LinkedObjectsContext>,
         IToolbar<LinkedTasksContext2>
     {
-        private IObjectsRepository _objectsRepository;
-        private ITabServiceProvider _tabServiceProvider;
         private Container _container;
         private IViewFactory _viewFactory;
         private ISelectedService _selectedService;
-        
-        private static ThemeNames _theme { get; set; }
+
+        private static ThemeNames _theme;
         public static ThemeNames Theme { get => _theme; }
 
         [ImportingConstructor]
@@ -65,9 +63,6 @@ namespace PilotLookUp
 
             _viewFactory = _container.GetInstance<IViewFactory>();
             _selectedService = _container.GetInstance<ISelectedService>();
-
-            _objectsRepository = objectsRepository;
-            _tabServiceProvider = tabServiceProvider;
 
             _theme = pilotDialogService.Theme;
         }
