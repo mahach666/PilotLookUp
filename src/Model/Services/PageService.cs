@@ -103,10 +103,5 @@ namespace PilotLookUp.Model.Services
             var repo = _repoService.GetWrapedRepo();
             return _viewModelFactory.CreateLookUpVM(repo);
         }
-
-        private LookUpVM GetCustomLookUpVM(ObjectSet pilotObjectHelper)
-        {
-            return _viewModelFactory.CreateLookUpVM(pilotObjectHelper);
-        }
     }
 }

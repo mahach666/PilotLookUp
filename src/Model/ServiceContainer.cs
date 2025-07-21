@@ -65,6 +65,7 @@ namespace PilotLookUp.Model
         {
             container.Register<IViewFactory, ViewFactory>(Lifestyle.Singleton);
             container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
+            container.Register<IPageServiceFactory, PageServiceFactory>(Lifestyle.Singleton);
         }
 
         private void RegisterViewModels(Container container)

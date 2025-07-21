@@ -19,8 +19,8 @@ namespace PilotLookUp.Model.Factories
 
         public MainVM CreateMainVM(StartViewInfo startInfo)
         {
-            // Создаем PageService с StartViewInfo
-            var pageService = CreatePageService(startInfo);
+            var pageServiceFactory = _container.GetInstance<IPageServiceFactory>();
+            var pageService = pageServiceFactory.CreatePageService(startInfo);
             return new MainVM(pageService);
         }
 
@@ -44,7 +44,7 @@ namespace PilotLookUp.Model.Factories
             var searchService = _container.GetInstance<ICustomSearchService>();
             var windowService = _container.GetInstance<IWindowService>();
             var treeItemService = _container.GetInstance<ITreeItemService>();
-
+            
             return new TaskTreeVM(pilotObjectHelper, repoService, searchService, windowService, treeItemService, this);
         }
 
@@ -63,18 +63,6 @@ namespace PilotLookUp.Model.Factories
         {
             var tabService = _container.GetInstance<ITabService>();
             return new SearchResVM(pageService, tabService, pilotObjectHelper);
-        }
-
-        private IPageService CreatePageService(StartViewInfo startInfo)
-        {
-            var repoService = _container.GetInstance<IRepoService>();
-            var searchService = _container.GetInstance<ICustomSearchService>();
-            var tabService = _container.GetInstance<ITabService>();
-            var windowService = _container.GetInstance<IWindowService>();
-            var treeItemService = _container.GetInstance<ITreeItemService>();
-            var dataObjectService = _container.GetInstance<IDataObjectService>();
-
-            return new PageService(startInfo, repoService, searchService, tabService, this);
         }
     }
 }

@@ -57,7 +57,11 @@ namespace PilotLookUp.Core
 
         public void OnCompleted() { }
 
-        public void OnError(Exception error) { }
+        public void OnError(Exception error)
+        {
+            _tcs?.TrySetException(error);
+            _subscription?.Dispose();
+        }
 
         public void OnNext(IHistoryItem value)
         {
