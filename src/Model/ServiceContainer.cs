@@ -34,14 +34,6 @@ namespace PilotLookUp.Model
             return _container;
         }
 
-        public static Container GetContainer()
-        {
-            if (_container == null)
-                throw new InvalidOperationException("Container is not created yet. Call CreateContainer() first.");
-            
-            return _container;
-        }
-
         private void RegisterServices(Container container)
         {
             container.Register<IRepoService, RepoService>(Lifestyle.Singleton);

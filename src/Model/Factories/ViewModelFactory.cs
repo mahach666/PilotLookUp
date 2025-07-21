@@ -1,6 +1,5 @@
 using PilotLookUp.Contracts;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
 using SimpleInjector;
