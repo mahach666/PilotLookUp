@@ -25,13 +25,14 @@
         
         <!-- Стили для разных типов элементов (та же логика что и у ListBoxItem) -->
         <Style.Triggers>
-            <!-- Элементы с ошибками - красный цвет -->
+            <!-- Элементы с ошибками - используем системный цвет для критических уведомлений -->
             <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
-                <Setter Property="Foreground" Value="Red" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" />
             </DataTrigger>
-            <!-- Элементы по которым можно переходить - синий цвет -->
+            <!-- Элементы по которым можно переходить - используем системный акцентный цвет -->
             <DataTrigger Binding="{Binding IsLookable}" Value="True">
-                <Setter Property="Foreground" Value="Blue" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -139,9 +140,9 @@
             <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
                 <Setter Property="Foreground" Value="Red" />
             </DataTrigger>
-            <!-- Элементы по которым можно переходить - синий цвет -->
+            <!-- Элементы по которым можно переходить - используем системный акцентный цвет -->
             <DataTrigger Binding="{Binding IsLookable}" Value="True">
-                <Setter Property="Foreground" Value="Blue" />
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
