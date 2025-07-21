@@ -1,13 +1,11 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
-using PilotLookUp.Model.Services;
 using PilotLookUp.Model.Factories;
-using PilotLookUp.View;
-using PilotLookUp.View.UserControls;
+using PilotLookUp.Model.Services;
 using PilotLookUp.ViewModel;
 using SimpleInjector;
-using Container = SimpleInjector.Container;
 using System;
+using Container = SimpleInjector.Container;
 
 namespace PilotLookUp.Model
 {
@@ -21,11 +19,10 @@ namespace PilotLookUp.Model
             SelectedService selectedService)
         {
             if (_container != null)
-                throw new InvalidOperationException("Container is already created. Use GetContainer() to access existing container.");
+                throw new InvalidOperationException("!!!");
 
             _container = new Container();
 
-            // Регистрируем внешние зависимости
             _container.RegisterInstance(objectsRepository);
             _container.RegisterInstance(tabServiceProvider);
             _container.RegisterInstance(pilotDialogService);
@@ -34,7 +31,6 @@ namespace PilotLookUp.Model
             RegisterServices(_container);
             RegisterFactories(_container);
             RegisterViewModels(_container);
-            RegisterViews(_container);
 
             _container.Verify();
             return _container;
@@ -55,10 +51,7 @@ namespace PilotLookUp.Model
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
             container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
-            container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
-            
-            // PageService не регистрируется, так как требует StartViewInfo для каждого окна
-            // container.Register<IPageService, PageService>(Lifestyle.Singleton);
+            container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);            
         }
 
         private void RegisterFactories(Container container)
@@ -68,38 +61,8 @@ namespace PilotLookUp.Model
         }
 
         private void RegisterViewModels(Container container)
-        {
-            // MainVM не регистрируется - создается в ViewModelFactory.CreateMainVM с конкретным PageService
-            // container.Register<MainVM>(Lifestyle.Transient);
-            
+        {            
             container.Register<LookUpVM>(Lifestyle.Transient);
-            
-            // SearchVM не регистрируется - создается в PageService.CreatePage
-            // container.Register<SearchVM>(Lifestyle.Transient);
-            
-            // ViewModels ниже не регистрируются, так как требуют конкретные параметры:
-            // TaskTreeVM - требует конкретный PilotObjectHelper
-            // AttrVM - требует конкретный PilotObjectHelper  
-            // SearchResVM - требует конкретный PilotObjectHelper
-            // ListItemVM - требует конкретный PilotObjectHelper
-
-            // VMFactory удален, поэтому делегаты больше не нужны
-            // container.Register<Func<LookUpVM>>(() => () => container.GetInstance<LookUpVM>(), Lifestyle.Singleton);
-            // container.Register<Func<SearchVM>>(() => () => container.GetInstance<SearchVM>(), Lifestyle.Singleton);
-        }
-
-        private void RegisterViews(Container container)
-        {
-            // Views обычно не регистрируются в DI контейнере
-            // MainView создается в ViewFactory
-            // UserControls (LookUpPage, SearchPage, TaskTreeViewPage, AttrPage) создаются через XAML
-            
-            // container.Register<MainView>(Lifestyle.Transient); // Создается в ViewFactory
-            // UserControls не нужно регистрировать:
-            // container.Register<LookUpPage>(Lifestyle.Transient);
-            // container.Register<SearchPage>(Lifestyle.Transient);
-            // container.Register<TaskTreeViewPage>(Lifestyle.Transient);
-            // container.Register<AttrPage>(Lifestyle.Transient);
         }
     }
 }
