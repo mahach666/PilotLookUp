@@ -10,7 +10,6 @@ using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-
 namespace PilotLookUp
 {
     [Export(typeof(IMenu<MainViewContext>))]
