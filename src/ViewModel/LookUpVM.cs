@@ -16,13 +16,13 @@ namespace PilotLookUp.ViewModel
     public class LookUpVM : INotifyPropertyChanged, IPage
     {
         private IRepoService _repoService;
-        private IWindowService _windowService;
+        private IViewFactory _viewFactory;
 
         public LookUpVM(IRepoService lookUpModel, 
-            IWindowService windowService)
+            IViewFactory viewFactory)
         {
             _repoService = lookUpModel;
-            _windowService = windowService;
+            _viewFactory = viewFactory;
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
@@ -164,7 +164,7 @@ namespace PilotLookUp.ViewModel
         }
 
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindow(_dataGridSelected));
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
 
 
         public event PropertyChangedEventHandler PropertyChanged;

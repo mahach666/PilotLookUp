@@ -27,8 +27,8 @@ namespace PilotLookUp.Model.Factories
         public LookUpVM CreateLookUpVM()
         {
             var repoService = _container.GetInstance<IRepoService>();
-            var windowService = _container.GetInstance<IWindowService>();
-            return new LookUpVM(repoService, windowService);
+            var viewFactory = _container.GetInstance<IViewFactory>();
+            return new LookUpVM(repoService, viewFactory);
         }
 
         public LookUpVM CreateLookUpVM(ObjectSet objectSet)
@@ -42,10 +42,10 @@ namespace PilotLookUp.Model.Factories
         {
             var repoService = _container.GetInstance<IRepoService>();
             var searchService = _container.GetInstance<ICustomSearchService>();
-            var windowService = _container.GetInstance<IWindowService>();
+            var viewFactory = _container.GetInstance<IViewFactory>();
             var treeItemService = _container.GetInstance<ITreeItemService>();
             
-            return new TaskTreeVM(pilotObjectHelper, repoService, searchService, windowService, treeItemService, this);
+            return new TaskTreeVM(pilotObjectHelper, repoService, searchService, viewFactory, treeItemService, this);
         }
 
         public AttrVM CreateAttrVM(PilotObjectHelper pilotObjectHelper)

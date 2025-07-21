@@ -20,7 +20,7 @@ namespace PilotLookUp.ViewModel
         private PilotObjectHelper _objectHelper;
         private IRepoService _repoService;
         private ICustomSearchService _searchService;
-        private IWindowService _windowService;
+        private IViewFactory _viewFactory;
         private ITreeItemService _treeItemService;
         private IViewModelFactory _viewModelFactory;
 
@@ -28,7 +28,7 @@ namespace PilotLookUp.ViewModel
              PilotObjectHelper pilotObjectHelper,
              IRepoService lookUpModel,
              ICustomSearchService searchService,
-             IWindowService windowService,
+             IViewFactory viewFactory,
              ITreeItemService treeItemService,
              IViewModelFactory viewModelFactory)
         {
@@ -36,7 +36,7 @@ namespace PilotLookUp.ViewModel
             _repoService = lookUpModel;
             _objectHelper = pilotObjectHelper;
             _searchService = searchService;
-            _windowService = windowService;
+            _viewFactory = viewFactory;
             _treeItemService = treeItemService;
             _viewModelFactory = viewModelFactory;
             FirstParrentNode = new ObservableCollection<ICustomTree>();
@@ -195,7 +195,7 @@ namespace PilotLookUp.ViewModel
                 OnPropertyChanged();
             }
         }
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _windowService.CreateNewMainWindow(_dataGridSelected));
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
 
         private void CopyToClipboard(string sender)
         {
