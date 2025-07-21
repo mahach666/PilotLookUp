@@ -25,10 +25,9 @@
         
         <!-- Стили для разных типов элементов (та же логика что и у ListBoxItem) -->
         <Style.Triggers>
-            <!-- Элементы с ошибками - используем системный цвет для критических уведомлений -->
+            <!-- Элементы с ошибками - мягкий красный цвет без заливки -->
             <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InfoBrushKey}}" />
+                <Setter Property="Foreground" Value="Crimson" />
             </DataTrigger>
             <!-- Элементы по которым можно переходить - используем системный акцентный цвет -->
             <DataTrigger Binding="{Binding IsLookable}" Value="True">
