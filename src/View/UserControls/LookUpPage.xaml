@@ -43,7 +43,7 @@
                        IsEnabled="False"
                        Content="Введите имя или Id"
                        Visibility="{Binding PromtVisibility}"
-                       Foreground="Gray"
+                       Foreground="{DynamicResource DisabledForeground}"
                        IsHitTestVisible="False"
                        VerticalAlignment="Center">
                 </Label>

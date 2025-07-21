@@ -46,7 +46,7 @@
                      IsEnabled="False"
                      Content="Введите Id или GUID"
                      Visibility="{Binding PromtVisibility}"
-                     Foreground ="Gray"
+                     Foreground="{DynamicResource DisabledForeground}"
                      IsHitTestVisible ="False">
             </Label>
             <Button                    Command="{Binding SearchCommand}"

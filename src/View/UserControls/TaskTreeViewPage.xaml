@@ -29,11 +29,11 @@
         <!-- Новый верхний Grid -->
         <Grid Background="{DynamicResource HoverBackground}">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0,0,0">
-                <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" />
-                <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" />
-                <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" />
-                <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" />
-                <CheckBox  Content="Отозванные задания" IsChecked="{Binding RevokedTask}" Visibility="{Binding RevokedTaskVisible}" Margin="5,0" />
+                <TextBlock Text="Выбранный элемент Id: " FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
+                <TextBlock Text="{Binding IdSelectedItem}" Margin="5,0" Foreground="{DynamicResource NormalForeground}" />
+                <TextBlock Text="Имя: " FontWeight="Bold" Margin="20,0,0,0" Foreground="{DynamicResource NormalForeground}" />
+                <TextBlock Text="{Binding NameSelectedItem}" Margin="5,0" Foreground="{DynamicResource NormalForeground}" />
+                <CheckBox  Content="Отозванные задания" IsChecked="{Binding RevokedTask}" Visibility="{Binding RevokedTaskVisible}" Margin="5,0" Foreground="{DynamicResource NormalForeground}" />
             </StackPanel>
         </Grid>
 
@@ -54,7 +54,7 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding ObjImage}" Width="16" Height="16" Margin="2"/>
-                            <TextBlock Text="{Binding ObjName}" Margin="5,0,0,0"/>
+                            <TextBlock Text="{Binding ObjName}" Margin="5,0,0,0" Foreground="{DynamicResource NormalForeground}"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
