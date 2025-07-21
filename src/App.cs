@@ -1,7 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.SDK.Toolbar;
-using Ascon.Pilot.Themes;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Utils;
@@ -43,9 +42,6 @@ namespace PilotLookUp
         private IViewFactory _viewFactory;
         private ISelectedService _selectedService;
 
-        private static ThemeNames _theme;
-        public static ThemeNames Theme { get => _theme; }
-
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
@@ -59,8 +55,6 @@ namespace PilotLookUp
 
             _viewFactory = _container.GetInstance<IViewFactory>();
             _selectedService = _container.GetInstance<ISelectedService>();
-
-            _theme = pilotDialogService.Theme;
         }
 
         // Build

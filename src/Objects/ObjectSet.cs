@@ -32,18 +32,9 @@ namespace PilotLookUp.Objects
             }
         }
 
-        public Brush Color
-        {
-            get
-            {
-                if (IsLookable == true)
-                {
-                    return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Blue : Colors.SteelBlue);
-                }
-                else if (Discription.StartsWith("Error:")) return new SolidColorBrush(Colors.Red);
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
-            }
-        }
+        // Цвет теперь определяется через XAML стили и динамические ресурсы
+        // Убираем программную логику - цвет должен задаваться в XAML через стили
+        public Brush Color => null; // Будет использован стиль из XAML
 
         public TextDecorationCollection Decoration
         {

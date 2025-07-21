@@ -25,14 +25,10 @@ namespace PilotLookUp.Objects
         // Рефлексия обьекта
         public ObjReflection Reflection { get { return LookUpObject == null ? ObjReflection.Empty() : new ObjReflection(this); } }
 
-        // Цвет текста в листБоксе
-        public Brush DefaultTextColor
-        {
-            get
-            {
-                return new SolidColorBrush(App.Theme == Ascon.Pilot.Themes.ThemeNames.Jedi ? Colors.Black : Colors.White);
-            }
-        }
+        // Цвет текста теперь определяется через XAML стили и динамические ресурсы
+        // Убираем программную логику - цвет должен задаваться в XAML
+        public Brush DefaultTextColor => null; // Будет использован стиль из XAML
+
         abstract public BitmapImage GetImage();
     }
 }

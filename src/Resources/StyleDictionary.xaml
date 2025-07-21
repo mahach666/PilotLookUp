@@ -16,6 +16,25 @@
 
 
     <converters:EqualityConverter x:Key="EqualityConverter"/>
+    <converters:StringStartsWithConverter x:Key="StringStartsWithConverter"/>
+
+    <!-- Стиль для TextBlock в DataGrid с логикой цветов -->
+    <Style TargetType="TextBlock" x:Key="DataGridTextBlock_Style">
+        <Setter Property="Foreground" Value="{DynamicResource NormalForeground}" />
+        <Setter Property="FontSize" Value="{DynamicResource DefaultFontSize}" />
+        
+        <!-- Стили для разных типов элементов (та же логика что и у ListBoxItem) -->
+        <Style.Triggers>
+            <!-- Элементы с ошибками - красный цвет -->
+            <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
+                <Setter Property="Foreground" Value="Red" />
+            </DataTrigger>
+            <!-- Элементы по которым можно переходить - синий цвет -->
+            <DataTrigger Binding="{Binding IsLookable}" Value="True">
+                <Setter Property="Foreground" Value="Blue" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
 
 
     <!-- Стиль текста -->
@@ -82,7 +101,7 @@
         <Setter Property="Background"
                 Value="Transparent" />
         <Setter Property="Foreground"
-                Value="{Binding DefaultTextColor}" />
+                Value="{DynamicResource NormalForeground}" />
         <Setter Property="HorizontalContentAlignment"
                 Value="Stretch" />
         <Setter Property="Template">
@@ -98,23 +117,33 @@
                                  Value="True">
                             <Setter Property="Background"
                                     Value="{DynamicResource SelectedBackground}" />
-                            <!--Светло-голубой-->
                             <Setter Property="Foreground"
-                                    Value="Black" />
+                                    Value="{DynamicResource NormalForeground}" />
                         </Trigger>
                         <!--Триггер для наведения мыши-->
                         <Trigger Property="IsMouseOver"
                                  Value="True">
                             <Setter Property="Background"
                                     Value="{DynamicResource HoverBackground}" />
-                            <!--Цвет при наведении-->
                             <Setter Property="Foreground"
-                                    Value="Black" />
+                                    Value="{DynamicResource NormalForeground}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        
+        <!-- Стили для разных типов элементов -->
+        <Style.Triggers>
+            <!-- Элементы с ошибками - красный цвет -->
+            <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
+                <Setter Property="Foreground" Value="Red" />
+            </DataTrigger>
+            <!-- Элементы по которым можно переходить - синий цвет -->
+            <DataTrigger Binding="{Binding IsLookable}" Value="True">
+                <Setter Property="Foreground" Value="Blue" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
 
