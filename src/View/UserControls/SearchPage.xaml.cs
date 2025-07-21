@@ -4,7 +4,7 @@ namespace PilotLookUp.View.UserControls
 {
     public partial class SearchPage : UserControl
     {
-        internal SearchPage()
+        public SearchPage()
         {
             InitializeComponent();
         }        

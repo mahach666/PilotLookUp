@@ -15,7 +15,7 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class TaskTreeVM : INotifyPropertyChanged, IPage
+    public class TaskTreeVM : INotifyPropertyChanged, IPage
     {
         private PilotObjectHelper _objectHelper;
         private IRepoService _repoService;

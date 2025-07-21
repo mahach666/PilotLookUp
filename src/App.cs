@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using PilotLookUp.Interfaces;
 
 
 namespace PilotLookUp
@@ -45,6 +46,7 @@ namespace PilotLookUp
         private IObjectsRepository _objectsRepository;
         private ITabServiceProvider _tabServiceProvider;
         private Container _container;
+        private IViewFactory _viewFactory;
 
         private SelectedService _selectedService;
         private static ThemeNames _theme { get; set; }
@@ -63,6 +65,8 @@ namespace PilotLookUp
                 tabServiceProvider,
                 pilotDialogService,
                 _selectedService);
+
+            _viewFactory = _container.GetInstance<IViewFactory>();
 
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;
@@ -122,12 +126,12 @@ namespace PilotLookUp
         {
             if (name == "LookDB")
             {
-                ViewDirector.LookDB(_objectsRepository, _tabServiceProvider);
+                _viewFactory.LookDB();
                 return;
             }
             else if (name == "Search")
             {
-                ViewDirector.SearchPage(_objectsRepository, _tabServiceProvider);
+                _viewFactory.SearchPage();
                 return;
             }
 
@@ -135,7 +139,7 @@ namespace PilotLookUp
 
             if (name == "LookSelected")
             {
-                ViewDirector.LookSelection(_selectedService.Selected, _objectsRepository, _tabServiceProvider);
+                _viewFactory.LookSelection(_selectedService.Selected);
                 return;
             }
         }

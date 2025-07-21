@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class SearchVM : INotifyPropertyChanged, IPage
+    public class SearchVM : INotifyPropertyChanged, IPage
     {
         private IPageService _pageController { get; }
         private ICustomSearchService _searchService { get; }

@@ -6,20 +6,17 @@ namespace PilotLookUp.Model.Services
 {
     public class WindowService : IWindowService
     {
-        private IObjectsRepository _objectsRepository;
-        private ITabServiceProvider _tabServiceProvider;
+        private readonly IViewFactory _viewFactory;
 
-        public WindowService(IObjectsRepository objectsRepository
-            , ITabServiceProvider tabServiceProvider)
+        public WindowService(IViewFactory viewFactory)
         {
-            _objectsRepository = objectsRepository;
-            _tabServiceProvider = tabServiceProvider;
+            _viewFactory = viewFactory;
         }
 
         public void CreateNewMainWindow(ObjectSet obj)
         {
             if (obj == null) return;
-            ViewDirector.LookSelection(obj, _objectsRepository, _tabServiceProvider);
+            _viewFactory.LookSelection(obj);
         }
     }
 }

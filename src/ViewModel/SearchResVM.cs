@@ -9,14 +9,14 @@ using IDataObject = Ascon.Pilot.SDK.IDataObject;
 
 namespace PilotLookUp.ViewModel
 {
-    internal class SearchResVM
+    public class SearchResVM
     {
         private PilotObjectHelper _dataObj { get; }
         private IPageService _pageController { get; }
         private ITabService _tabService { get; }
 
 
-        internal SearchResVM(
+        public SearchResVM(
              IPageService pageController
             , ITabService tabService
             , PilotObjectHelper pilotObjectHelper)
