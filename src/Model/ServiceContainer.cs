@@ -28,7 +28,6 @@ namespace PilotLookUp.Model
 
             RegisterServices(_container);
             RegisterFactories(_container);
-            RegisterViewModels(_container);
 
             _container.Verify();
             return _container;
@@ -41,13 +40,7 @@ namespace PilotLookUp.Model
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             container.Register<ISelectedService, SelectedService>(Lifestyle.Singleton);
-            
-            container.Register<ITreeItemService>(() => 
-            {
-                var repoService = container.GetInstance<IRepoService>();
-                var viewModelFactory = container.GetInstance<IViewModelFactory>();
-                return new TreeItemService(repoService, viewModelFactory);
-            }, Lifestyle.Singleton);
+            container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
         }
 
         private void RegisterFactories(Container container)
@@ -55,11 +48,6 @@ namespace PilotLookUp.Model
             container.Register<IViewFactory, ViewFactory>(Lifestyle.Singleton);
             container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
             container.Register<IPageServiceFactory, PageServiceFactory>(Lifestyle.Singleton);
-        }
-
-        private void RegisterViewModels(Container container)
-        {            
-            container.Register<LookUpVM>(Lifestyle.Transient);
         }
     }
 }
