@@ -2,7 +2,6 @@
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model.Factories;
 using PilotLookUp.Model.Services;
-using PilotLookUp.ViewModel;
 using SimpleInjector;
 using System;
 using Container = SimpleInjector.Container;
