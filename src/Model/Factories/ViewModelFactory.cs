@@ -1,7 +1,6 @@
 using PilotLookUp.Contracts;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model.Services;
-using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
 using SimpleInjector;
 
@@ -18,7 +17,6 @@ namespace PilotLookUp.Model.Factories
 
         public MainVM CreateMainVM(StartViewInfo startInfo)
         {
-            // Создаем PageService с StartViewInfo
             var pageService = CreatePageService(startInfo);
             return new MainVM(pageService);
         }
@@ -29,9 +27,6 @@ namespace PilotLookUp.Model.Factories
             var windowService = _container.GetInstance<IWindowService>();
             return new LookUpVM(repoService, windowService);
         }
-
-        // SearchVM не создается через фабрику - создается в PageService.CreatePage
-        // public SearchVM CreateSearchVM() - метод удален
 
         private IPageService CreatePageService(StartViewInfo startInfo)
         {

@@ -3,19 +3,15 @@ using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.View;
-using PilotLookUp.ViewModel;
-using SimpleInjector;
 
 namespace PilotLookUp.Model.Factories
 {
     public class ViewFactory : IViewFactory
     {
-        private readonly Container _container;
         private readonly IViewModelFactory _viewModelFactory;
 
-        public ViewFactory(Container container, IViewModelFactory viewModelFactory)
+        public ViewFactory( IViewModelFactory viewModelFactory)
         {
-            _container = container;
             _viewModelFactory = viewModelFactory;
         }
 
