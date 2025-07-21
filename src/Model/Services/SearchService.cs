@@ -61,7 +61,7 @@ namespace PilotLookUp.Model.Services
                 {
                     if (dataHelp.IsTask)
                     {
-                        if (!findRevoked) // Пропуск отозванных заданий
+                        if (!findRevoked)
                         {
                             if (dataHelp.IsRevokedTask)
                             {

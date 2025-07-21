@@ -1,7 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
-using PilotLookUp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,8 +29,7 @@ namespace PilotLookUp.Model.Services
         private async Task BuildChildNodes(ICustomTree lastParrent)
         {
             var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
-            List<Guid> children = sad.Children.ToList();  // Метод получения детей по ID
-            //ObjectSet newPilotObj = await new Tracer(objectsRepository, null, null).Trace(children);
+            List<Guid> children = sad.Children.ToList();  
             ObjectSet newPilotObj = await _lookUpModel.GetWrapedObjs(children);
 
             foreach (var dataObjectHelper in newPilotObj)
@@ -48,7 +46,7 @@ namespace PilotLookUp.Model.Services
                         childNode
                     };
                 }
-                await BuildChildNodes(childNode); // Рекурсия для вложенных детей
+                await BuildChildNodes(childNode);
             }
         }
     }
