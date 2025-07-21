@@ -22,13 +22,15 @@ namespace PilotLookUp.ViewModel
         private ICustomSearchService _searchService;
         private IWindowService _windowService;
         private ITreeItemService _treeItemService;
+        private IViewModelFactory _viewModelFactory;
 
         public TaskTreeVM(
              PilotObjectHelper pilotObjectHelper,
              IRepoService lookUpModel,
              ICustomSearchService searchService,
              IWindowService windowService,
-             ITreeItemService treeItemService)
+             ITreeItemService treeItemService,
+             IViewModelFactory viewModelFactory)
         {
             _revokedTask = false;
             _repoService = lookUpModel;
@@ -36,6 +38,7 @@ namespace PilotLookUp.ViewModel
             _searchService = searchService;
             _windowService = windowService;
             _treeItemService = treeItemService;
+            _viewModelFactory = viewModelFactory;
             FirstParrentNode = new ObservableCollection<ICustomTree>();
             _ = LoadDataAsync();
         }
@@ -99,14 +102,14 @@ namespace PilotLookUp.ViewModel
             if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
             {
                 LastParrent = await _searchService.GetLastParent(dataObject);
-                ICustomTree rootNode = new ListItemVM(LastParrent);
+                ICustomTree rootNode = _viewModelFactory.CreateListItemVM(LastParrent);
                 rootNode = await _treeItemService.FillChild(rootNode);
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     RevokedTaskVisible = Visibility.Hidden;
                     FirstParrentNode.Clear();
-                    FirstParrentNode = new ObservableCollection<ICustomTree> { rootNode };
+                    FirstParrentNode.Add(rootNode);
                 });
                 return;
             }
@@ -116,14 +119,17 @@ namespace PilotLookUp.ViewModel
                 ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
                 foreach (PilotObjectHelper item in allLastParrent)
                 {
-                    ICustomTree rootNode = new ListItemVM(item);
+                    ICustomTree rootNode = _viewModelFactory.CreateListItemVM(item);
                     rootNode = await _treeItemService.FillChild(rootNode);
                     treeItems.Add(rootNode);
                 }
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     FirstParrentNode.Clear();
-                    FirstParrentNode = treeItems;
+                    foreach (var item in treeItems)
+                    {
+                        FirstParrentNode.Add(item);
+                    }
                 });
                 return;
             }

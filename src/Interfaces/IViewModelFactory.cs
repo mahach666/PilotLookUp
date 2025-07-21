@@ -1,21 +1,29 @@
 using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
 using PilotLookUp.Contracts;
+using PilotLookUp.Interfaces;
 
 namespace PilotLookUp.Interfaces
 {
     public interface IViewModelFactory
     {
         MainVM CreateMainVM(StartViewInfo startInfo);
+        
+        // LookUpVM создается через фабрику
         LookUpVM CreateLookUpVM();
+        LookUpVM CreateLookUpVM(ObjectSet objectSet);
         
-        // SearchVM не создается через фабрику - создается в PageService.CreatePage
-        // SearchVM CreateSearchVM();
+        // SearchVM создается напрямую в PageService (циклическая зависимость)
+        // SearchVM CreateSearchVM(IPageService pageService);
         
-        // ViewModels ниже не создаются через фабрику, так как требуют конкретные параметры:
-        // TaskTreeVM - создается с конкретным PilotObjectHelper в PageService
-        // AttrVM - создается с конкретным PilotObjectHelper в PageService
-        // SearchResVM - создается с конкретными параметрами в SearchVM
-        // ListItemVM - создается с конкретным PilotObjectHelper в PageService
+        // ViewModels с конкретными параметрами
+        TaskTreeVM CreateTaskTreeVM(PilotObjectHelper pilotObjectHelper);
+        AttrVM CreateAttrVM(PilotObjectHelper pilotObjectHelper);
+        
+        // ListItemVM для коллекций
+        ListItemVM CreateListItemVM(PilotObjectHelper pilotObjectHelper);
+        
+        // SearchResVM создается в SearchVM
+        SearchResVM CreateSearchResVM(IPageService pageService, PilotObjectHelper pilotObjectHelper);
     }
 } 

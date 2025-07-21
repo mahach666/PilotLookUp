@@ -13,10 +13,12 @@ namespace PilotLookUp.Model.Services
     public class TreeItemService : ITreeItemService
     {
         private IRepoService _lookUpModel { get; }
+        private IViewModelFactory _viewModelFactory { get; }
 
-        public TreeItemService(IRepoService lookUpModel)
+        public TreeItemService(IRepoService lookUpModel, IViewModelFactory viewModelFactory)
         {
             _lookUpModel = lookUpModel;
+            _viewModelFactory = viewModelFactory;
         }
 
         public async Task<ICustomTree> FillChild(ICustomTree lastParrent)
@@ -34,7 +36,7 @@ namespace PilotLookUp.Model.Services
 
             foreach (var dataObjectHelper in newPilotObj)
             {
-                var childNode = new ListItemVM(dataObjectHelper);
+                var childNode = _viewModelFactory.CreateListItemVM(dataObjectHelper);
                 if (lastParrent.Children != null)
                 {
                     lastParrent.Children.Add(childNode);
