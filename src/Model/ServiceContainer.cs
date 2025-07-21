@@ -50,10 +50,6 @@ namespace PilotLookUp.Model
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             container.Register<ISelectedService, SelectedService>(Lifestyle.Singleton);
             
-            // IWindowService удален - заменен на прямое использование IViewFactory
-            // container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
-            
-            // TreeItemService регистрируется с делегатом для избежания циклической зависимости с IViewModelFactory
             container.Register<ITreeItemService>(() => 
             {
                 var repoService = container.GetInstance<IRepoService>();
