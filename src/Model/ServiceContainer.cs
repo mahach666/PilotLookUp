@@ -15,8 +15,7 @@ namespace PilotLookUp.Model
 
         public Container CreateContainer(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
-            IPilotDialogService pilotDialogService,
-            SelectedService selectedService)
+            IPilotDialogService pilotDialogService)
         {
             if (_container != null)
                 throw new InvalidOperationException("!!!");
@@ -26,7 +25,6 @@ namespace PilotLookUp.Model
             _container.RegisterInstance(objectsRepository);
             _container.RegisterInstance(tabServiceProvider);
             _container.RegisterInstance(pilotDialogService);
-            _container.RegisterInstance(selectedService);
 
             RegisterServices(_container);
             RegisterFactories(_container);
@@ -51,6 +49,7 @@ namespace PilotLookUp.Model
             container.Register<ITabService, TabService>(Lifestyle.Singleton);
             container.Register<IWindowService, WindowService>(Lifestyle.Singleton);
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
+            container.Register<ISelectedService, SelectedService>(Lifestyle.Singleton);
             
             // TreeItemService регистрируется с делегатом для избежания циклической зависимости с IViewModelFactory
             container.Register<ITreeItemService>(() => 

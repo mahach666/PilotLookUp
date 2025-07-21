@@ -2,6 +2,7 @@
 using Ascon.Pilot.SDK.Menu;
 using Ascon.Pilot.SDK.Toolbar;
 using Ascon.Pilot.Themes;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Model;
 using PilotLookUp.Model.Services;
 using PilotLookUp.Objects;
@@ -11,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using PilotLookUp.Interfaces;
 
 
 namespace PilotLookUp
@@ -47,8 +47,8 @@ namespace PilotLookUp
         private ITabServiceProvider _tabServiceProvider;
         private Container _container;
         private IViewFactory _viewFactory;
-
-        private SelectedService _selectedService;
+        private ISelectedService _selectedService;
+        
         private static ThemeNames _theme { get; set; }
         public static ThemeNames Theme { get => _theme; }
 
@@ -59,14 +59,12 @@ namespace PilotLookUp
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
 
-            _selectedService = new SelectedService(objectsRepository);
-
             _container = new ServiceContainer().CreateContainer(objectsRepository,
                 tabServiceProvider,
-                pilotDialogService,
-                _selectedService);
+                pilotDialogService);
 
             _viewFactory = _container.GetInstance<IViewFactory>();
+            _selectedService = _container.GetInstance<ISelectedService>();
 
             _objectsRepository = objectsRepository;
             _tabServiceProvider = tabServiceProvider;

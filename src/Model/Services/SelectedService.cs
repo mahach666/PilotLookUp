@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 
 namespace PilotLookUp.Model.Services
 {
-    public class SelectedService
+    public class SelectedService : ISelectedService
     {
         private IObjectsRepository _objectsRepository;
         private ObjectSet _convertSelection;
