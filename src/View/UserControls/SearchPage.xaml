@@ -30,7 +30,7 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <TextBox Margin="20,30,60,30"
+            <TextBox Margin="20,0,60,60"
                      Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                      FontSize="20"
                      HorizontalScrollBarVisibility="Hidden"
@@ -41,7 +41,7 @@
                                 Command="{Binding SearchCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
-            <Label Margin="20,30,60,30"
+            <Label Margin="20,0,60,60"
                      FontSize="20"                    
                      IsEnabled="False"
                      Content="Введите Id или GUID"
@@ -50,14 +50,14 @@
                      IsHitTestVisible ="False">
             </Label>
             <Button                    Command="{Binding SearchCommand}"
-                                       Margin="20,30,20,30"
+                                       Margin="20,0,20,60"
                                        HorizontalAlignment="Right"
                                        Style="{StaticResource CastomImageButton}"
                                        Content="..\Resources\UI\search.png" />
         </Grid>
 
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="20,0,20,0">
                 <ItemsControl ItemsSource="{Binding Result}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
