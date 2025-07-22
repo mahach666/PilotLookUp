@@ -38,9 +38,9 @@ namespace PilotLookUp
         IToolbar<LinkedObjectsContext>,
         IToolbar<LinkedTasksContext2>
     {
-        private Container _container;
-        private IViewFactory _viewFactory;
-        private ISelectedService _selectedService;
+        private readonly Container _container;
+        private readonly IViewFactory _viewFactory;
+        private readonly ISelectedService _selectedService;
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository,
