@@ -13,7 +13,7 @@ namespace PilotLookUp
         }
 
         private void SelectUpdater(MarshalByRefObject context) =>
-    _selectedService.UpdateSelected(context);
+            _selectedService.UpdateSelected(context);
 
         // Build
         public void Build(IMenuBuilder builder, MainViewContext context)
