@@ -29,9 +29,9 @@ namespace PilotLookUp.Model.Services
                 DocumentFilesContext c => c.SelectedObjects?.Cast<object>(),
                 LinkedObjectsContext c => c.SelectedObjects?.Cast<object>(),
                 StorageContext c => c.SelectedObjects?.Cast<object>(),
-
                 TasksViewContext2 c => c.SelectedTasks?.Cast<object>(),
                 LinkedTasksContext2 c => c.SelectedTasks?.Cast<object>(),
+                DocumentAnnotationsListContext с => с.SelectedAnnotations?.Cast<object>(),
 
                 _ => null
             };
