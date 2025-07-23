@@ -42,5 +42,18 @@ namespace PilotLookUp.Model.Services
                 _convertSelection.AddRange(raw.Select(map.Wrap));
             }
         }
+
+        public void UpdateSelected(SignatureRequestsContext context)
+        {
+            var map = new PilotObjectMap(_objectsRepository);
+
+            var raw = context.SelectedSignatureRequests?.Cast<object>();
+
+            if (raw?.Any() == true)
+            {
+                _convertSelection = new ObjectSet(null);
+                _convertSelection.AddRange(raw.Select(map.Wrap));
+            }
+        }
     }
 }

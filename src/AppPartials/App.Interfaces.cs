@@ -13,6 +13,7 @@ namespace PilotLookUp
     [Export(typeof(IMenu<LinkedObjectsContext>))]
     [Export(typeof(IMenu<LinkedTasksContext2>))]
     [Export(typeof(IMenu<DocumentAnnotationsListContext>))]
+    [Export(typeof(IMenu<SignatureRequestsContext>))]
 
     [Export(typeof(IToolbar<MainViewContext>))]
     [Export(typeof(IToolbar<ObjectsViewContext>))]
@@ -21,6 +22,7 @@ namespace PilotLookUp
     [Export(typeof(IToolbar<LinkedObjectsContext>))]
     [Export(typeof(IToolbar<LinkedTasksContext2>))]
     [Export(typeof(IToolbar<DocumentAnnotationsListContext>))]
+    [Export(typeof(IToolbar<SignatureRequestsContext>))]
     public partial class App : IMenu<MainViewContext>,
         IMenu<ObjectsViewContext>,
         IMenu<StorageContext>,
@@ -29,6 +31,7 @@ namespace PilotLookUp
         IMenu<LinkedObjectsContext>,
         IMenu<LinkedTasksContext2>,
         IMenu<DocumentAnnotationsListContext>,
+        IMenu<SignatureRequestsContext>,
 
         IToolbar<MainViewContext>,
         IToolbar<ObjectsViewContext>,
@@ -36,17 +39,27 @@ namespace PilotLookUp
         IToolbar<DocumentFilesContext>,
         IToolbar<LinkedObjectsContext>,
         IToolbar<LinkedTasksContext2>,
-        IToolbar<DocumentAnnotationsListContext>
+        IToolbar<DocumentAnnotationsListContext>,
+        IToolbar<SignatureRequestsContext>
     {
         public void Build(IMenuBuilder builder, DocumentAnnotationsListContext context) =>
+            ContextButtonBuilder(builder, context);
+        public void Build(IMenuBuilder builder, SignatureRequestsContext context) =>
             ContextButtonBuilder(builder, context);
 
         public void Build(IToolbarBuilder builder, DocumentAnnotationsListContext context) =>
             SelectUpdater(context);
+        public void Build(IToolbarBuilder builder, SignatureRequestsContext context) =>
+            SelectUpdater(context);
+
 
         public void OnMenuItemClick(string name, DocumentAnnotationsListContext context) =>
             ItemClick(name);
+        public void OnMenuItemClick(string name, SignatureRequestsContext context) =>
+            ItemClick(name);
+
 
         public void OnToolbarItemClick(string name, DocumentAnnotationsListContext context) { }
+        public void OnToolbarItemClick(string name, SignatureRequestsContext context) { }
     }
 }

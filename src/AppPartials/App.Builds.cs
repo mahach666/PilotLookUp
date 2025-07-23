@@ -12,7 +12,16 @@ namespace PilotLookUp
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
 
+        private void ContextButtonBuilder(IMenuBuilder builder, SignatureRequestsContext context)
+        {
+            SelectUpdater(context);
+            builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
+        }
+
         private void SelectUpdater(MarshalByRefObject context) =>
+            _selectedService.UpdateSelected(context);
+
+        private void SelectUpdater(SignatureRequestsContext context) =>
             _selectedService.UpdateSelected(context);
 
         // Build

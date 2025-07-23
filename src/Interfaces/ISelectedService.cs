@@ -1,3 +1,4 @@
+using Ascon.Pilot.SDK;
 using PilotLookUp.Objects;
 using System;
 
@@ -7,5 +8,7 @@ namespace PilotLookUp.Interfaces
     {
         ObjectSet Selected { get; }
         void UpdateSelected(MarshalByRefObject context);
+        void UpdateSelected(SignatureRequestsContext context);
+
     }
 } 
