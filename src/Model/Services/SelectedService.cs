@@ -1,4 +1,5 @@
-﻿using Ascon.Pilot.SDK;
+﻿using Ascon.Pilot.Bim.SDK;
+using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using System;
@@ -48,6 +49,19 @@ namespace PilotLookUp.Model.Services
             var map = new PilotObjectMap(_objectsRepository);
 
             var raw = context.SelectedSignatureRequests?.Cast<object>();
+
+            if (raw?.Any() == true)
+            {
+                _convertSelection = new ObjectSet(null);
+                _convertSelection.AddRange(raw.Select(map.Wrap));
+            }
+        }
+
+        public void UpdateSelected(IModelElementId context)
+        {
+            var map = new PilotObjectMap(_objectsRepository);
+
+            var raw = new List<object>() { context.ElementId };
 
             if (raw?.Any() == true)
             {
