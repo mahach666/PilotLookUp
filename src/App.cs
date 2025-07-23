@@ -40,13 +40,13 @@ namespace PilotLookUp
                     ContextButtonBuilder,
                     ItemClick));
 
-            var modelManager = serviceProvider.GetServices<IModelManager>().FirstOrDefault();
-            var modelStorageProvider = serviceProvider.GetServices<IModelStorageProvider>().FirstOrDefault();
+            //var modelManager = serviceProvider.GetServices<IModelManager>().FirstOrDefault();
+            //var modelStorageProvider = serviceProvider.GetServices<IModelStorageProvider>().FirstOrDefault();
 
-            if (modelManager != null && modelStorageProvider != null)
-            {
-                serviceContainer.RegisterBim(modelManager, modelStorageProvider);
-            }
+            //if (modelManager != null && modelStorageProvider != null)
+            //{
+            //    serviceContainer.RegisterBim(modelManager, modelStorageProvider);
+            //}
         }
     }
 }
