@@ -1,4 +1,7 @@
-﻿using Ascon.Pilot.SDK;
+﻿using Ascon.Pilot.Bim.SDK.Model;
+using Ascon.Pilot.Bim.SDK.ModelStorage;
+using Ascon.Pilot.SDK;
+using PilotLookUp.Extensions;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model.Factories;
 using PilotLookUp.Model.Services;
@@ -17,7 +20,7 @@ namespace PilotLookUp.Model
             IPilotDialogService pilotDialogService)
         {
             if (_container != null)
-                throw new InvalidOperationException("!!!");
+                throw new InvalidOperationException("Container has already been created. Repeated initialization is not allowed.");
 
             _container = new Container();
 
@@ -27,6 +30,21 @@ namespace PilotLookUp.Model
 
             RegisterServices(_container);
             RegisterFactories(_container);
+
+            _container.Verify();
+            return _container;
+        }
+
+        public Container RegisterBim(IModelManager modelManager,
+         IModelStorageProvider modelStorageProvider)
+        {
+            if (_container == null)
+                throw new InvalidOperationException("Container is not initialized.");
+
+            _container.RegisterInstance(modelManager);
+            _container.RegisterInstance(modelStorageProvider);
+
+            _container.Register<BimModelService>(Lifestyle.Singleton);
 
             _container.Verify();
             return _container;

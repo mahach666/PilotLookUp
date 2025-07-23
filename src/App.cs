@@ -1,7 +1,6 @@
 ﻿using Ascon.Pilot.Bim.SDK;
 using Ascon.Pilot.Bim.SDK.Model;
 using Ascon.Pilot.Bim.SDK.ModelStorage;
-using Ascon.Pilot.Bim.SDK.ModelViewer;
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
 using PilotLookUp.Interfaces;
@@ -18,13 +17,6 @@ namespace PilotLookUp
         private readonly IViewFactory _viewFactory;
         private readonly ISelectedService _selectedService;
 
-        private readonly IModelManager _modelManager;
-        private readonly IModelStorageProvider _modelStorageProvider;
-        private IModelViewer _modelViewer;
-
-        private IModelStorage _modelStorage;
-        private DateTime _curentVersion;
-
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
@@ -33,8 +25,9 @@ namespace PilotLookUp
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
 
-
-            var container = new ServiceContainer().CreateContainer(objectsRepository,
+            var serviceContainer = new ServiceContainer();
+            var container = serviceContainer
+                .CreateContainer(objectsRepository,
                 tabServiceProvider,
                 pilotDialogService);
 
@@ -47,23 +40,13 @@ namespace PilotLookUp
                     ContextButtonBuilder,
                     ItemClick));
 
-            _modelManager = serviceProvider.GetServices<IModelManager>().FirstOrDefault();
-            _modelStorageProvider = serviceProvider.GetServices<IModelStorageProvider>().FirstOrDefault();
+            var modelManager = serviceProvider.GetServices<IModelManager>().FirstOrDefault();
+            var modelStorageProvider = serviceProvider.GetServices<IModelStorageProvider>().FirstOrDefault();
 
-            if (_modelManager != null && _modelStorageProvider != null)
-                Subscribe();
-        }
-
-        private void Subscribe()
-        {
-            _modelManager.ModelLoaded += OnModelLoaded;
-        }
-
-        private void OnModelLoaded(object sender, ModelEventArgs e)
-        {
-            _modelViewer = e.Viewer;
-            _modelStorage = _modelStorageProvider.GetStorage(e.Viewer.ModelId);
-            _curentVersion = e.Viewer.ModelVersion;
+            if (modelManager != null && modelStorageProvider != null)
+            {
+                serviceContainer.RegisterBim(modelManager, modelStorageProvider);
+            }
         }
     }
 }

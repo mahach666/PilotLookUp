@@ -20,10 +20,7 @@ namespace PilotLookUp
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
         private void ContextButtonBuilder(IMenuBuilder builder, IModelElementId context)
-        {
-            //var a = _modelViewer.GetSelection().ToList();
-            //var modelElement = _modelStorage.LoadElement(context, _curentVersion);
-
+        {            
             SelectUpdater(context);
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }

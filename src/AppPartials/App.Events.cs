@@ -48,8 +48,10 @@ namespace PilotLookUp
 
         public void OnMenuItemClick(string name, LinkedTasksContext2 context) =>
             ItemClick(name);
+
         public void OnMenuItemClick(string name, DocumentAnnotationsListContext context) =>
             ItemClick(name);
+
         public void OnMenuItemClick(string name, SignatureRequestsContext context) =>
             ItemClick(name);
     }
