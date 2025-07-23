@@ -2,7 +2,7 @@
 using Ascon.Pilot.SDK.Menu;
 using System;
 
-namespace PilotLookUp
+namespace PilotLookUp.Utils
 {
     public class BimContextButton : IMenu<IModelElementId>
     {

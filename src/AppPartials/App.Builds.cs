@@ -60,5 +60,9 @@ namespace PilotLookUp
 
         public void Build(IMenuBuilder builder, LinkedTasksContext2 context) =>
             ContextButtonBuilder(builder, context);
+        public void Build(IMenuBuilder builder, DocumentAnnotationsListContext context) =>
+            ContextButtonBuilder(builder, context);
+        public void Build(IMenuBuilder builder, SignatureRequestsContext context) =>
+            ContextButtonBuilder(builder, context);
     }
 }
