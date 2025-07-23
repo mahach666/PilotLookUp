@@ -21,7 +21,8 @@ namespace PilotLookUp
         }
         private void ContextButtonBuilder(IMenuBuilder builder, IModelElementId context)
         {
-            var modelElement = _modelStorage.LoadElement(context, _curentVersion);
+            //var a = _modelViewer.GetSelection().ToList();
+            //var modelElement = _modelStorage.LoadElement(context, _curentVersion);
 
             SelectUpdater(context);
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");

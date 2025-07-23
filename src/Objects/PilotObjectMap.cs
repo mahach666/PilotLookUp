@@ -1,4 +1,5 @@
-﻿using Ascon.Pilot.SDK;
+﻿using Ascon.Pilot.Bim.SDK;
+using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
 using PilotLookUp.Objects.TypeHelpers;
 using System;
@@ -64,6 +65,10 @@ namespace PilotLookUp.Objects
                 ISignatureRequest value => new SignatureRequestHelper(value),
                 IReportItem value => new ReportItemHelper(value),
                 ISignature value => new SignatureHelper(value),
+
+                // PilotBimTypes
+                IModelElementId value => new ModelElementIdHelper(value),
+
                 null => new NullHelper(),
 
                 _ => new OtherHelper(obj)

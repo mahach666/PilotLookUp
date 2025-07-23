@@ -61,7 +61,7 @@ namespace PilotLookUp.Model.Services
         {
             var map = new PilotObjectMap(_objectsRepository);
 
-            var raw = new List<object>() { context.ElementId };
+            var raw = new List<object>() { context };
 
             if (raw?.Any() == true)
             {
