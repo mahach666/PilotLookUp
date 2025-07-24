@@ -1,6 +1,4 @@
-﻿using Ascon.Pilot.Bim.SDK;
-using Ascon.Pilot.Bim.SDK.Model;
-using Ascon.Pilot.Bim.SDK.ModelStorage;
+﻿using Ascon.Pilot.Bim.SDK.ModelTab.Menu;
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
 using PilotLookUp.Interfaces;
@@ -8,7 +6,6 @@ using PilotLookUp.Model;
 using PilotLookUp.Utils;
 using System;
 using System.ComponentModel.Composition;
-using System.Linq;
 
 namespace PilotLookUp
 {
@@ -35,10 +32,10 @@ namespace PilotLookUp
             _selectedService = container.GetInstance<ISelectedService>();
 
             serviceProvider
-                .Register<IMenu<IModelElementId>>(
-                new BimContextButton(
-                    ContextButtonBuilder,
-                    ItemClick));
+                .Register<IMenu<ModelContext>>(
+                    new ModelContextButton(
+                        ContextButtonBuilder,
+                        ItemClick));
 
             //var modelManager = serviceProvider.GetServices<IModelManager>().FirstOrDefault();
             //var modelStorageProvider = serviceProvider.GetServices<IModelStorageProvider>().FirstOrDefault();

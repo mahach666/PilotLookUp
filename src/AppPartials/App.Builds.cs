@@ -1,9 +1,8 @@
 ﻿using Ascon.Pilot.Bim.SDK;
-using Ascon.Pilot.Bim.SDK.ModelStorage;
+using Ascon.Pilot.Bim.SDK.ModelTab.Menu;
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
 using System;
-using System.Linq;
 
 namespace PilotLookUp
 {
@@ -19,8 +18,8 @@ namespace PilotLookUp
             SelectUpdater(context);
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
-        private void ContextButtonBuilder(IMenuBuilder builder, IModelElementId context)
-        {            
+        private void ContextButtonBuilder(IMenuBuilder builder, ModelContext context)
+        {
             SelectUpdater(context);
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
@@ -29,7 +28,7 @@ namespace PilotLookUp
             _selectedService.UpdateSelected(context);
         private void SelectUpdater(SignatureRequestsContext context) =>
             _selectedService.UpdateSelected(context);
-        private void SelectUpdater(IModelElementId context) =>
+        private void SelectUpdater(ModelContext context) =>
             _selectedService.UpdateSelected(context);
 
         // Build

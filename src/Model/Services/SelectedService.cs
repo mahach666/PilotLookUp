@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.Bim.SDK;
+using Ascon.Pilot.Bim.SDK.ModelTab.Menu;
 using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
@@ -57,11 +58,11 @@ namespace PilotLookUp.Model.Services
             }
         }
 
-        public void UpdateSelected(IModelElementId context)
+        public void UpdateSelected(ModelContext context)
         {
             var map = new PilotObjectMap(_objectsRepository);
 
-            var raw = new List<object>() { context };
+            var raw = context.SelectedElements;
 
             if (raw?.Any() == true)
             {
