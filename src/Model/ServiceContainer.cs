@@ -1,7 +1,6 @@
 ﻿using Ascon.Pilot.Bim.SDK.Model;
 using Ascon.Pilot.Bim.SDK.ModelStorage;
 using Ascon.Pilot.SDK;
-using PilotLookUp.Extensions;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model.Factories;
 using PilotLookUp.Model.Services;
@@ -19,8 +18,8 @@ namespace PilotLookUp.Model
             ITabServiceProvider tabServiceProvider,
             IPilotDialogService pilotDialogService)
         {
-            if (_container != null)
-                throw new InvalidOperationException("Container has already been created. Repeated initialization is not allowed.");
+            //if (_container != null)
+            //    throw new InvalidOperationException("Container has already been created. Repeated initialization is not allowed.");
 
             _container = new Container();
 
