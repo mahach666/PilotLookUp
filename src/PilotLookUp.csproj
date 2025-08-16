@@ -97,7 +97,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ascon.Pilot.Bim.SDK" Version="25.8.0" />
+		<PackageReference Include="Ascon.Pilot.Bim.SDK" Version="*" />
 		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
