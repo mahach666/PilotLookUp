@@ -16,7 +16,8 @@ namespace PilotLookUp.Model
 
         public Container CreateContainer(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
-            IPilotDialogService pilotDialogService)
+            IPilotDialogService pilotDialogService,
+            IFileProvider fileProvider)
         {
             //if (_container != null)
             //    throw new InvalidOperationException("Container has already been created. Repeated initialization is not allowed.");
@@ -26,6 +27,7 @@ namespace PilotLookUp.Model
             _container.RegisterInstance(objectsRepository);
             _container.RegisterInstance(tabServiceProvider);
             _container.RegisterInstance(pilotDialogService);
+            _container.RegisterInstance(fileProvider);
 
             RegisterServices(_container);
             RegisterFactories(_container);
@@ -57,6 +59,7 @@ namespace PilotLookUp.Model
             container.Register<IDataObjectService, DataObjectService>(Lifestyle.Singleton);
             container.Register<ISelectedService, SelectedService>(Lifestyle.Singleton);
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
+            container.Register<IFileService, FileService>(Lifestyle.Singleton);
         }
 
         private void RegisterFactories(Container container)

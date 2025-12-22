@@ -18,7 +18,8 @@ namespace PilotLookUp
         public App(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
             IPilotDialogService pilotDialogService,
-            IPilotServiceProvider serviceProvider)
+            IPilotServiceProvider serviceProvider,
+            IFileProvider fileProvider)
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
 
@@ -26,7 +27,8 @@ namespace PilotLookUp
             var container = serviceContainer
                 .CreateContainer(objectsRepository,
                 tabServiceProvider,
-                pilotDialogService);
+                pilotDialogService,
+                fileProvider);
 
             _viewFactory = container.GetInstance<IViewFactory>();
             _selectedService = container.GetInstance<ISelectedService>();

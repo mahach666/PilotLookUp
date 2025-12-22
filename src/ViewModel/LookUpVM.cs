@@ -2,6 +2,10 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
+using Ascon.Pilot.SDK;
+using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,12 +21,15 @@ namespace PilotLookUp.ViewModel
     {
         private IRepoService _repoService;
         private IViewFactory _viewFactory;
+        private IFileService _fileService;
 
         public LookUpVM(IRepoService lookUpModel, 
-            IViewFactory viewFactory)
+            IViewFactory viewFactory,
+            IFileService fileService)
         {
             _repoService = lookUpModel;
             _viewFactory = viewFactory;
+            _fileService = fileService;
             DataObjectSelected = SelectionDataObjects?.FirstOrDefault();
         }
 
@@ -94,11 +101,40 @@ namespace PilotLookUp.ViewModel
                 if (_dataObjectSelected != value)
                 {
                     _dataObjectSelected = value;
-                    UpdateInfo();
+                    if (_dataObjectSelected != null && (_dataObjectsSelected == null || _dataObjectsSelected.Count == 0))
+                        DataObjectsSelected = new ArrayList { _dataObjectSelected };
+                    if (_dataObjectSelected != null)
+                        UpdateInfo();
+                    else
+                        Info = null;
                     OnPropertyChanged();
                 }
             }
         }
+
+        private IList _dataObjectsSelected;
+        public IList DataObjectsSelected
+        {
+            get => _dataObjectsSelected;
+            set
+            {
+                _dataObjectsSelected = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(OpenFileButtonVisibility));
+                OnPropertyChanged(nameof(DownloadFilesButtonVisibility));
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
+        public Visibility OpenFileButtonVisibility =>
+            DataObjectsSelected?.Count == 1 && GetSelectedFiles().Count == 1
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
+        public Visibility DownloadFilesButtonVisibility =>
+            GetSelectedFiles().Count >= 1
+                ? Visibility.Visible
+                : Visibility.Collapsed;
 
         private ObjectSet _dataGridSelected;
         public ObjectSet DataGridSelected
@@ -166,6 +202,65 @@ namespace PilotLookUp.ViewModel
         public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
         public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
 
+        public ICommand OpenSelectedFileCommand =>
+            new RelayCommand<object>(_ => OpenSelectedFileAsync(), _ => OpenFileButtonVisibility == Visibility.Visible);
+
+        public ICommand DownloadSelectedFilesCommand =>
+            new RelayCommand<object>(_ => DownloadSelectedFilesAsync(), _ => DownloadFilesButtonVisibility == Visibility.Visible);
+
+        private List<IFile> GetSelectedFiles()
+        {
+            return (DataObjectsSelected?.Cast<object>() ?? Enumerable.Empty<object>())
+                .OfType<ListItemVM>()
+                .Select(i => i?.PilotObjectHelper?.LookUpObject)
+                .OfType<IFile>()
+                .ToList();
+        }
+
+        private async void OpenSelectedFileAsync()
+        {
+            var file = GetSelectedFiles().FirstOrDefault();
+            if (file == null) return;
+
+            try
+            {
+                var localPath = await Task.Run(() => _fileService.SaveFileToTemp(file));
+                Process.Start(new ProcessStartInfo(localPath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void DownloadSelectedFilesAsync()
+        {
+            var files = GetSelectedFiles();
+            if (files.Count == 0) return;
+
+            string folderPath;
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog
+            {
+                Description = "Выберите папку для скачивания",
+                ShowNewFolderButton = true
+            })
+            {
+                var result = dialog.ShowDialog();
+                if (result != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                    return;
+
+                folderPath = dialog.SelectedPath;
+            }
+
+            try
+            {
+                await Task.Run(() => _fileService.SaveFilesToFolder(files, folderPath));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

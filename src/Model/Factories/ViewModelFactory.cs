@@ -27,7 +27,8 @@ namespace PilotLookUp.Model.Factories
         {
             var repoService = _container.GetInstance<IRepoService>();
             var viewFactory = _container.GetInstance<IViewFactory>();
-            return new LookUpVM(repoService, viewFactory);
+            var fileService = _container.GetInstance<IFileService>();
+            return new LookUpVM(repoService, viewFactory, fileService);
         }
 
         public LookUpVM CreateLookUpVM(ObjectSet objectSet)
