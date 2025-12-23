@@ -24,6 +24,9 @@ namespace PilotLookUp.Model.Services
                 Value = objAttr.TryGetValue(attr.Name, out var value)
                         ? FormatValue(value)
                         : string.Empty,
+                RawValue = objAttr.TryGetValue(attr.Name, out var rawValue)
+                        ? rawValue
+                        : null,
                 IsObligatory = attr.IsObligatory.ToString(),
                 IsService = attr.IsService.ToString(),
                 Type = attr.Type.ToString(),
@@ -37,6 +40,7 @@ namespace PilotLookUp.Model.Services
                     Name = attr.Key,
                     Title = "Unknown",
                     Value = attr.Value?.ToString() ?? string.Empty,
+                    RawValue = attr.Value,
                     IsObligatory = "Unknown",
                     IsService = "Unknown",
                     Type = "Unknown",      

@@ -51,7 +51,10 @@ namespace PilotLookUp.Model.Factories
         public AttrVM CreateAttrVM(PilotObjectHelper pilotObjectHelper)
         {
             var dataObjectService = _container.GetInstance<IDataObjectService>();
-            return new AttrVM(pilotObjectHelper, dataObjectService);
+            var repoService = _container.GetInstance<IRepoService>();
+            var viewFactory = _container.GetInstance<IViewFactory>();
+            var objectsRepository = _container.GetInstance<Ascon.Pilot.SDK.IObjectsRepository>();
+            return new AttrVM(pilotObjectHelper, dataObjectService, repoService, viewFactory, objectsRepository);
         }
 
         public ListItemVM CreateListItemVM(PilotObjectHelper pilotObjectHelper)
