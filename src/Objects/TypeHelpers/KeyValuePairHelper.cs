@@ -8,11 +8,17 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class KeyValuePairHelper : PilotObjectHelper
     {
+        public AttributeType? AttrType { get; }
+
         // Attr
         public KeyValuePairHelper(KeyValuePair<string, object> keyValuePair, IDataObject sender)
         {
             _lookUpObject = keyValuePair;
-            _name = sender.Type.Attributes.FirstOrDefault(i => i.Name == keyValuePair.Key)?.Title ?? keyValuePair.Key;
+
+            var attr = sender?.Type?.Attributes?.FirstOrDefault(i => i.Name == keyValuePair.Key);
+            _name = attr?.Title ?? keyValuePair.Key;
+            AttrType = attr?.Type;
+
             _isLookable = true;
         }
 

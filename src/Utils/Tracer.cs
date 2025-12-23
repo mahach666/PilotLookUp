@@ -1,6 +1,7 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Extensions;
 using PilotLookUp.Objects;
+using PilotLookUp.Objects.TypeHelpers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace PilotLookUp.Utils
         {
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             _objectsRepository = objectsRepository;
+            _senderObj = senderObj;
             _memberInfo = senderMember;
             _objectSet = new ObjectSet(senderMember);
         }
@@ -23,6 +25,7 @@ namespace PilotLookUp.Utils
         private int _adaptiveTimer = 200;
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
+        private PilotObjectHelper _senderObj { get; }
         private ObjectSet _objectSet { get; set; }
         private MemberInfo _memberInfo { get; }
         private IEnumerable<IUserState> _userStates { get; set; }
@@ -55,6 +58,13 @@ namespace PilotLookUp.Utils
                     _userStateMachines = _objectsRepository.GetUserStateMachines();
                     _objectSet.Add(await GuidHandler(guid));
                 }
+                else if (TryParseElementBookGuidsFromString(obj, out var parsedGuids))
+                {
+                    _userStates = _objectsRepository.GetUserStates();
+                    _userStateMachines = _objectsRepository.GetUserStateMachines();
+                    foreach (var parsedGuid in parsedGuids)
+                        _objectSet.Add(await GuidHandler(parsedGuid));
+                }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
                     var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObjectWithTimeout(keyVal.Key), keyVal.Value);
@@ -74,11 +84,49 @@ namespace PilotLookUp.Utils
                 _userStateMachines = _objectsRepository.GetUserStateMachines();
                 _objectSet.Add(await GuidHandler(guid));
             }
+            else if (TryParseElementBookGuidsFromString(obj, out var parsedGuids))
+            {
+                _userStates = _objectsRepository.GetUserStates();
+                _userStateMachines = _objectsRepository.GetUserStateMachines();
+                foreach (var parsedGuid in parsedGuids)
+                    _objectSet.Add(await GuidHandler(parsedGuid));
+            }
             else
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
             return _objectSet;
+        }
+
+        private bool TryParseElementBookGuidsFromString(object obj, out List<Guid> guids)
+        {
+            guids = null;
+
+            if (_memberInfo?.Name != "Value")
+                return false;
+
+            if (_senderObj is not KeyValuePairHelper keyValuePairHelper)
+                return false;
+
+            if (keyValuePairHelper.AttrType != AttributeType.ElementBook)
+                return false;
+
+            if (obj is not string s || string.IsNullOrWhiteSpace(s))
+                return false;
+
+            var tokens = s.Split(new[] { ';', ',', '\n', '\r', '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var parsed = new List<Guid>();
+            foreach (var token in tokens)
+            {
+                if (Guid.TryParse(token.Trim(), out var guid))
+                    parsed.Add(guid);
+            }
+
+            if (parsed.Count == 0)
+                return false;
+
+            guids = parsed.Distinct().ToList();
+            return true;
         }
 
         private async Task<PilotObjectHelper> GuidHandler(Guid guid)
