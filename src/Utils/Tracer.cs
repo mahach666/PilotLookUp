@@ -7,12 +7,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Utils
 {
     public class Tracer
     {
+        private static readonly Regex GuidRegex = new Regex(
+            @"[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}",
+            RegexOptions.Compiled);
+
         public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember)
         {
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
@@ -84,6 +89,16 @@ namespace PilotLookUp.Utils
                 _userStateMachines = _objectsRepository.GetUserStateMachines();
                 _objectSet.Add(await GuidHandler(guid));
             }
+            else if (TryParseAttributeConfigGuidsFromString(obj, out var originalText, out var configGuids))
+            {
+                _userStates = _objectsRepository.GetUserStates();
+                _userStateMachines = _objectsRepository.GetUserStateMachines();
+
+                foreach (var parsedGuid in configGuids)
+                    _objectSet.Add(await GuidHandler(parsedGuid));
+
+                _objectSet.DiscriptionOverride = originalText;
+            }
             else if (TryParseElementBookGuidsFromString(obj, out var parsedGuids))
             {
                 _userStates = _objectsRepository.GetUserStates();
@@ -96,6 +111,39 @@ namespace PilotLookUp.Utils
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
             return _objectSet;
+        }
+
+        private bool TryParseAttributeConfigGuidsFromString(object obj, out string originalText, out List<Guid> guids)
+        {
+            originalText = null;
+            guids = null;
+
+            if (_senderObj?.LookUpObject is not IAttribute)
+                return false;
+
+            if (_memberInfo?.Name != "Configuration" && _memberInfo?.Name != "Configuration2")
+                return false;
+
+            if (obj is not string text || string.IsNullOrWhiteSpace(text))
+                return false;
+
+            var matches = GuidRegex.Matches(text);
+            if (matches.Count == 0)
+                return false;
+
+            var parsed = new List<Guid>();
+            foreach (Match match in matches)
+            {
+                if (Guid.TryParse(match.Value, out var guid))
+                    parsed.Add(guid);
+            }
+
+            if (parsed.Count == 0)
+                return false;
+
+            originalText = text;
+            guids = parsed.Distinct().ToList();
+            return true;
         }
 
         private bool TryParseElementBookGuidsFromString(object obj, out List<Guid> guids)
@@ -133,17 +181,29 @@ namespace PilotLookUp.Utils
         {
             if (_memberInfo?.Name== "HistoryItems")
             {
-                var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
-                if (lodedHistory != null)
+                try
                 {
-                    return _pilotObjectMap.Wrap(lodedHistory);
-                } 
+                    var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
+                    if (lodedHistory != null)
+                    {
+                        return _pilotObjectMap.Wrap(lodedHistory);
+                    }
+                }
+                catch
+                {
+                }
             }
 
-            var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-            if (lodedObj != null)
+            try
             {
-                return _pilotObjectMap.Wrap(lodedObj);
+                var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
+                if (lodedObj != null)
+                {
+                    return _pilotObjectMap.Wrap(lodedObj);
+                }
+            }
+            catch
+            {
             }
 
             _adaptiveTimer = 10;

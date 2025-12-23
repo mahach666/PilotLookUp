@@ -15,6 +15,7 @@ namespace PilotLookUp.Objects
         }
 
         private MemberInfo _memberInfo { get; }
+        public string DiscriptionOverride { get; set; }
         public bool IsMethodResult { get => _memberInfo?.MemberType is MemberTypes.Method; }
         public string SenderMemberName { get => IsMethodResult ? _memberInfo?.Name + "()" : _memberInfo?.Name; }
 
@@ -22,6 +23,9 @@ namespace PilotLookUp.Objects
         {
             get
             {
+                if (DiscriptionOverride != null)
+                    return DiscriptionOverride;
+
                 var firstObj = this.FirstOrDefault();
                 if (Count == 0) return "No objects";
                 else if (Count == 1)
