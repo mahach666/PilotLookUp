@@ -12,7 +12,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Input;
+using PilotLookUp.Utils;
 using Application = System.Windows.Application;
 
 namespace PilotLookUp.ViewModel
@@ -238,19 +240,40 @@ namespace PilotLookUp.ViewModel
             var files = GetSelectedFiles();
             if (files.Count == 0) return;
 
-            string folderPath;
-            using (var dialog = new System.Windows.Forms.FolderBrowserDialog
+            string folderPath = null;
+
+            try
             {
-                Description = "Выберите папку для скачивания",
-                ShowNewFolderButton = true
-            })
-            {
-                var result = dialog.ShowDialog();
-                if (result != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                var owner = Application.Current?.MainWindow;
+                var ownerHandle = owner != null ? new WindowInteropHelper(owner).Handle : IntPtr.Zero;
+
+                var pickResult = FolderPicker.PickFolder(ownerHandle, "Выберите папку для скачивания", out folderPath);
+                if (pickResult == FolderPicker.PickResult.Cancelled)
                     return;
 
-                folderPath = dialog.SelectedPath;
+                if (pickResult != FolderPicker.PickResult.Ok)
+                {
+                    using (var dialog = new System.Windows.Forms.FolderBrowserDialog
+                    {
+                        Description = "Выберите папку для скачивания",
+                        ShowNewFolderButton = true
+                    })
+                    {
+                        var result = dialog.ShowDialog();
+                        if (result != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                            return;
+
+                        folderPath = dialog.SelectedPath;
+                    }
+                }
             }
+            catch
+            {
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(folderPath))
+                return;
 
             try
             {
