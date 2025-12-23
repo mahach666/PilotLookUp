@@ -8,7 +8,7 @@
 		<AssemblyProduct>PilotLookUp</AssemblyProduct>
 		<Product>PilotLookUp</Product>
 		<Description>PilotLookUp</Description>
-		<AssemblyVersion>2.4.5.0</AssemblyVersion>
+		<AssemblyVersion>2.5.0.0</AssemblyVersion>
 		<RootNamespace>PilotLookUp</RootNamespace>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
