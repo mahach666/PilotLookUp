@@ -9,8 +9,8 @@ namespace PilotLookUp.Interfaces
     public interface ISelectedService
     {
         ObjectSet Selected { get; }
-        void UpdateSelected(MarshalByRefObject context);
-        void UpdateSelected(SignatureRequestsContext context);
-        void UpdateSelected(ModelContext context);
+        void UpdateSelected(MarshalByRefObject context, string source = null);
+        void UpdateSelected(SignatureRequestsContext context, string source = null);
+        void UpdateSelected(ModelContext context, string source = null);
     }
 } 

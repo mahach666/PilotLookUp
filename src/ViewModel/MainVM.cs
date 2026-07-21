@@ -2,6 +2,7 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects.TypeHelpers;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -9,7 +10,7 @@ using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
 {
-    public class MainVM : INotifyPropertyChanged
+    public class MainVM : INotifyPropertyChanged, IDisposable
     {
         private IPageService _pageController { get; }
 
@@ -36,6 +37,17 @@ namespace PilotLookUp.ViewModel
 
         public PagesName ActivePage => _pageController.ActivePage.GetName();
 
+        private bool _isTopmost;
+        public bool IsTopmost
+        {
+            get => _isTopmost;
+            set
+            {
+                _isTopmost = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Visibility TaskButtVisibilities
         {
             get
@@ -57,6 +69,9 @@ namespace PilotLookUp.ViewModel
         public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
         public ICommand TaskTreeCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
         public ICommand AttrCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.AttrPage));
+        public ICommand EventMonitorCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.EventMonitor));
+
+        public void Dispose() => (_pageController as IDisposable)?.Dispose();
 
 
         public event PropertyChangedEventHandler PropertyChanged;

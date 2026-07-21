@@ -7,35 +7,35 @@ namespace PilotLookUp
     {
         // Juts for stable update
         public void Build(IToolbarBuilder builder, ObjectsViewContext context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, ObjectsViewContext context) { }
 
         public void Build(IToolbarBuilder builder, TasksViewContext2 context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, TasksViewContext2 context) { }
 
         public void Build(IToolbarBuilder builder, DocumentFilesContext context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, DocumentFilesContext context) { }
 
         public void Build(IToolbarBuilder builder, LinkedObjectsContext context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, LinkedObjectsContext context) { }
 
         public void Build(IToolbarBuilder builder, LinkedTasksContext2 context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, LinkedTasksContext2 context) { }
 
         public void Build(IToolbarBuilder builder, MainViewContext context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, MainViewContext context) { }
 
         public void Build(IToolbarBuilder builder, DocumentAnnotationsListContext context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, DocumentAnnotationsListContext context) { }
 
         public void Build(IToolbarBuilder builder, SignatureRequestsContext context) =>
-            SelectUpdater(context);
+            SelectUpdater(context, "Toolbar");
         public void OnToolbarItemClick(string name, SignatureRequestsContext context) { }
     }
 }

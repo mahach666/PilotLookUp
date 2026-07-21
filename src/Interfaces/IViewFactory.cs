@@ -7,5 +7,6 @@ namespace PilotLookUp.Interfaces
         void LookSelection(ObjectSet selected);
         void LookDB();
         void SearchPage();
+        void EventMonitor();
     }
 }

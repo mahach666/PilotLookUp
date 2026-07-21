@@ -10,7 +10,8 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800"
                        Title="PilotLookUp"
-                       ShowInTaskbar="True">
+                       ShowInTaskbar="True"
+                       Topmost="{Binding IsTopmost}">
 
     
     <!-- Экспорт словарей ресурсов Pilot -->
@@ -37,7 +38,7 @@
             </Grid.RowDefinitions>
 
             <UniformGrid Grid.Row="0"
-                         Rows="5"
+                         Rows="6"
                          VerticalAlignment="Top"
                          HorizontalAlignment="Left" Margin="0,-5,0,0">
                 <Button ToolTip="LookDB"
@@ -53,11 +54,17 @@
                         Content="..\Resources\UI\search.png" />
 
                 <Button ToolTip="LookUpView"
-                        Tag="{x:Static enums:PagesName.LookUpPage}"                        
+                        Tag="{x:Static enums:PagesName.LookUpPage}"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding LookUpPageCommand}"
                         Content="..\Resources\UI\lookUpView.png" />
-                
+
+                <Button ToolTip="Event Monitor"
+                        Tag="{x:Static enums:PagesName.EventMonitor}"
+                        Style="{StaticResource CastomImageButton}"
+                        Command="{Binding EventMonitorCommand}"
+                        Content="..\Resources\UI\eventMonitor.png" />
+
                 <Button ToolTip="Tasks"
                         Tag="{x:Static enums:PagesName.TaskTree}"                        
                         Style="{StaticResource CastomImageButton}"
@@ -78,6 +85,13 @@
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Left"
                         Margin="0,0,0,5">
+                <!-- Запасной пин: скрывается, если удалось встроить пин в заголовок окна -->
+                <ToggleButton x:Name="SidebarPin"
+                              ToolTip="Поверх всех окон"
+                              Style="{StaticResource PinToggleButton}"
+                              IsChecked="{Binding IsTopmost}"
+                              Content="..\Resources\UI\pin.png" />
+
                 <Button ToolTip="Открыть"
                         Style="{StaticResource CastomImageButton}"
                         Command="{Binding SelectedControl.OpenSelectedFileCommand}"

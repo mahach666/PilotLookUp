@@ -7,6 +7,7 @@
         DBPage,
         SearchPage,
         TaskTree,
-        AttrPage
+        AttrPage,
+        EventMonitor
     }
 }

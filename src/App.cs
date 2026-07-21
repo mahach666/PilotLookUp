@@ -13,6 +13,7 @@ namespace PilotLookUp
     {
         private readonly IViewFactory _viewFactory;
         private readonly ISelectedService _selectedService;
+        private readonly IClientEventService _clientEventService;
 
         [ImportingConstructor]
         public App(IObjectsRepository objectsRepository,
@@ -32,6 +33,7 @@ namespace PilotLookUp
 
             _viewFactory = container.GetInstance<IViewFactory>();
             _selectedService = container.GetInstance<ISelectedService>();
+            _clientEventService = container.GetInstance<IClientEventService>();
 
             serviceProvider
                 .Register<IMenu<ModelContext>>(

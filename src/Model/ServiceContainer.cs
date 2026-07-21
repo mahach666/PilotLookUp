@@ -60,6 +60,7 @@ namespace PilotLookUp.Model
             container.Register<ISelectedService, SelectedService>(Lifestyle.Singleton);
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
             container.Register<IFileService, FileService>(Lifestyle.Singleton);
+            container.Register<IClientEventService, ClientEventService>(Lifestyle.Singleton);
         }
 
         private void RegisterFactories(Container container)

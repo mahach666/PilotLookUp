@@ -28,9 +28,15 @@ namespace PilotLookUp.Model.Factories
             Show(startInfo);
         }
 
-        public void SearchPage() 
+        public void SearchPage()
         {
             var startInfo = new StartViewInfo { PageName = PagesName.SearchPage };
+            Show(startInfo);
+        }
+
+        public void EventMonitor()
+        {
+            var startInfo = new StartViewInfo { PageName = PagesName.EventMonitor };
             Show(startInfo);
         }
 

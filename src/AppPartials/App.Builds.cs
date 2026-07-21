@@ -10,26 +10,26 @@ namespace PilotLookUp
     {
         private void ContextButtonBuilder(IMenuBuilder builder, MarshalByRefObject context)
         {
-            SelectUpdater(context);
+            SelectUpdater(context, "Menu");
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
         private void ContextButtonBuilder(IMenuBuilder builder, SignatureRequestsContext context)
         {
-            SelectUpdater(context);
+            SelectUpdater(context, "Menu");
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
         private void ContextButtonBuilder(IMenuBuilder builder, ModelContext context)
         {
-            SelectUpdater(context);
+            SelectUpdater(context, "Menu");
             builder.AddItem("LookSelected", 0).WithHeader("LookSelected");
         }
 
-        private void SelectUpdater(MarshalByRefObject context) =>
-            _selectedService.UpdateSelected(context);
-        private void SelectUpdater(SignatureRequestsContext context) =>
-            _selectedService.UpdateSelected(context);
-        private void SelectUpdater(ModelContext context) =>
-            _selectedService.UpdateSelected(context);
+        private void SelectUpdater(MarshalByRefObject context, string source = null) =>
+            _selectedService.UpdateSelected(context, source);
+        private void SelectUpdater(SignatureRequestsContext context, string source = null) =>
+            _selectedService.UpdateSelected(context, source);
+        private void SelectUpdater(ModelContext context, string source = null) =>
+            _selectedService.UpdateSelected(context, source);
 
         // Build
         public void Build(IMenuBuilder builder, MainViewContext context)
@@ -38,6 +38,7 @@ namespace PilotLookUp
             item.WithSubmenu().AddItem("LookSelected", 0).WithHeader("LookSelected");
             item.WithSubmenu().AddItem("LookDB", 1).WithHeader("LookDB");
             item.WithSubmenu().AddItem("Search", 2).WithHeader("Search");
+            item.WithSubmenu().AddItem("EventMonitor", 3).WithHeader("EventMonitor");
         }
         public void Build(IMenuBuilder builder, ObjectsViewContext context) =>
             ContextButtonBuilder(builder, context);

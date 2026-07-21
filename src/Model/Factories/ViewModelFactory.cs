@@ -67,5 +67,14 @@ namespace PilotLookUp.Model.Factories
             var tabService = _container.GetInstance<ITabService>();
             return new SearchResVM(pageService, tabService, pilotObjectHelper);
         }
+
+        public EventMonitorVM CreateEventMonitorVM(IPageService pageService)
+        {
+            var objectsRepository = _container.GetInstance<Ascon.Pilot.SDK.IObjectsRepository>();
+            var tabService = _container.GetInstance<ITabService>();
+            var repoService = _container.GetInstance<IRepoService>();
+            var clientEventService = _container.GetInstance<IClientEventService>();
+            return new EventMonitorVM(objectsRepository, tabService, repoService, pageService, clientEventService);
+        }
     }
 }

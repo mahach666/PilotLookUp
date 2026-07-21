@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace PilotLookUp.Model.Services
 {
-    public class PageService : IPageService
+    public class PageService : IPageService, IDisposable
     {
         private IRepoService _repoService { get; }
         private ICustomSearchService _searchService { get; }
@@ -89,13 +89,27 @@ namespace PilotLookUp.Model.Services
                     AddPage(_viewModelFactory.CreateAttrVM(itemOne));
                     GoToPage(pageName);
                     break;
+                case PagesName.EventMonitor:
+                    AddPage(_viewModelFactory.CreateEventMonitorVM(this));
+                    GoToPage(pageName);
+                    break;
             }
         }
 
         private void AddPage(IPage item)
         {
+            foreach (var replaced in _controlsHolder.Where(obj => obj.GetName() == item.GetName()))
+                (replaced as IDisposable)?.Dispose();
+
             _controlsHolder.RemoveAll(obj => obj.GetName() == item.GetName());
             _controlsHolder.Add(item);
+        }
+
+        public void Dispose()
+        {
+            foreach (var page in _controlsHolder)
+                (page as IDisposable)?.Dispose();
+            _controlsHolder.Clear();
         }
 
         private LookUpVM GetDBLookUpVM()

@@ -285,6 +285,52 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Кнопка-пин "поверх всех окон" -->
+    <Style x:Key="PinToggleButton"
+           TargetType="ToggleButton">
+        <Setter Property="Background"
+                Value="{DynamicResource ButtonDefaultBackgroundBrush}" />
+        <Setter Property="Width"
+                Value="40" />
+        <Setter Property="Height"
+                Value="40" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="Margin"
+                Value="0,5,0,5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="5">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource ButtonDefaultHoverBackground}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource SelectedBackground}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Image Source="{Binding}"
+                           Height="20"
+                           Width="20" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Стиль кнопки Выполнить -->
     <Style x:Key="ExecuteButton_Style">
         <Setter Property="Button.Background"

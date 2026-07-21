@@ -93,6 +93,8 @@
 	  <None Remove="Resources\TypeIcons\transitionIcon.png" />
 	  <None Remove="Resources\UI\attr.png" />
 	  <None Remove="Resources\UI\download.png" />
+	  <None Remove="Resources\UI\eventMonitor.png" />
+	  <None Remove="Resources\UI\pin.png" />
 	  <None Remove="Resources\UI\lookUpView.png" />
 	  <None Remove="Resources\UI\open.png" />
 	  <None Remove="Resources\UI\task.png" />
@@ -141,11 +143,13 @@
 	  <Resource Include="Resources\UI\attr.png" />
 	  <Resource Include="Resources\UI\databaseEnabled.png" />
 	  <Resource Include="Resources\UI\download.png" />
+	  <Resource Include="Resources\UI\eventMonitor.png" />
 	  <Resource Include="Resources\UI\goTo.png" />
 	  <Resource Include="Resources\TypeIcons\organisationUnitIcon.png" />
 	  <Resource Include="Resources\TypeIcons\personIcon.png" />
 	  <Resource Include="Resources\UI\lookUpView.png" />
 	  <Resource Include="Resources\UI\open.png" />
+	  <Resource Include="Resources\UI\pin.png" />
 	  <Resource Include="Resources\UI\search.png" />
 	  <Resource Include="Resources\UI\task.png" />
 	</ItemGroup>

@@ -7,6 +7,8 @@ namespace PilotLookUp
     {
         private void ItemClick(string name)
         {
+            _clientEventService.Raise("MenuItemClick", $"Пункт меню: {name}");
+
             if (name == "LookDB")
             {
                 _viewFactory.LookDB();
@@ -15,6 +17,11 @@ namespace PilotLookUp
             else if (name == "Search")
             {
                 _viewFactory.SearchPage();
+                return;
+            }
+            else if (name == "EventMonitor")
+            {
+                _viewFactory.EventMonitor();
                 return;
             }
 
