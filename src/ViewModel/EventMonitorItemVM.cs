@@ -1,106 +1,65 @@
 using Ascon.Pilot.SDK;
 using PilotLookUp.Objects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PilotLookUp.ViewModel
 {
+    // Элемент ленты событий: запись оборачивается в PilotObjectHelper
+    // и дальше снупается штатным механизмом (GetObjInfo), как в LookUp
     public class EventMonitorItemVM
     {
-        // Серверное уведомление
         public EventMonitorItemVM(NotificationRecord record, IObjectsRepository repository)
         {
+            Helper = new PilotObjectMap(repository).Wrap(record);
             EventDateTime = record.DateTime.ToLocalTime();
             Kind = record.ChangeKind.ToString();
             Title = record.Title;
-            UserName = ResolveUserName(record, repository);
-            TypeTitle = ResolveTypeTitle(record, repository);
             Category = GetCategory(record.ChangeKind);
-            NavigateIds = new[] { record.ObjectId };
-            ObjectId = record.ObjectId.ToString();
-            UserInfo = record.UserId.HasValue ? $"{UserName} ({record.UserId})" : UserName;
-            TypeInfo = $"{TypeTitle} ({record.TypeId})";
-            NotificationName = record.NotificationName;
-            Message = record.Message;
-            ChangesetId = record.ChangesetId.ToString();
+            SearchText = $"{Kind} {record.Title} {record.Message} {record.NotificationName}";
         }
 
-        // Клиентское событие (выделение, клик меню)
-        public EventMonitorItemVM(ClientEventRecord record, IObjectsRepository repository)
+        // Клиентские события (выделение, клики меню, ошибки перехвата)
+        public EventMonitorItemVM(object clientRecord, IObjectsRepository repository)
         {
-            EventDateTime = record.DateTime;
-            Kind = record.Name;
-            Title = record.Message;
-            UserName = ResolveCurrentUserName(repository);
-            TypeTitle = record.TypeInfo;
+            Helper = new PilotObjectMap(repository).Wrap(clientRecord);
             Category = "Client";
-            NavigateIds = record.ObjectIds;
-            ObjectId = string.Join(Environment.NewLine, record.ObjectIds);
-            UserInfo = UserName;
-            TypeInfo = record.TypeInfo;
-            NotificationName = record.Name;
-            Message = record.Message;
-            ChangesetId = string.Empty;
+
+            switch (clientRecord)
+            {
+                case SelectionChangedRecord selection:
+                    EventDateTime = selection.DateTime;
+                    Kind = "SelectionChanged";
+                    Title = $"{selection.ContextName}: выделено {selection.SelectedCount}";
+                    break;
+                case MenuItemClickRecord menuClick:
+                    EventDateTime = menuClick.DateTime;
+                    Kind = "MenuItemClick";
+                    Title = menuClick.ItemName;
+                    break;
+                case SelectionErrorRecord error:
+                    EventDateTime = error.DateTime;
+                    Kind = "SelectionError";
+                    Title = error.Error;
+                    break;
+                default:
+                    EventDateTime = DateTime.Now;
+                    Kind = clientRecord.GetType().Name;
+                    Title = clientRecord.ToString();
+                    break;
+            }
+
+            SearchText = $"{Kind} {Title}";
         }
 
+        public PilotObjectHelper Helper { get; }
         public DateTime EventDateTime { get; }
         public string Time => EventDateTime.ToString("HH:mm:ss");
-        public string FullTime => EventDateTime.ToString("dd.MM.yyyy HH:mm:ss");
         public string Kind { get; }
         public string Title { get; }
-        public string UserName { get; }
-        public string TypeTitle { get; }
         public string Category { get; }
 
-        // Id объектов для навигации (пусто — переход недоступен)
-        public IReadOnlyList<Guid> NavigateIds { get; }
-
-        public string ObjectId { get; }
-        public string UserInfo { get; }
-        public string TypeInfo { get; }
-        public string NotificationName { get; }
-        public string Message { get; }
-        public string ChangesetId { get; }
-
-        private static string ResolveUserName(NotificationRecord record, IObjectsRepository repository)
-        {
-            if (!record.UserId.HasValue)
-                return string.Empty;
-
-            try
-            {
-                return repository.GetPerson(record.UserId.Value)?.DisplayName ?? record.UserId.ToString();
-            }
-            catch
-            {
-                return record.UserId.ToString();
-            }
-        }
-
-        private static string ResolveTypeTitle(NotificationRecord record, IObjectsRepository repository)
-        {
-            try
-            {
-                return repository.GetType(record.TypeId)?.Title ?? record.TypeId.ToString();
-            }
-            catch
-            {
-                return record.TypeId.ToString();
-            }
-        }
-
-        private static string ResolveCurrentUserName(IObjectsRepository repository)
-        {
-            try
-            {
-                return repository.GetCurrentPerson()?.DisplayName ?? string.Empty;
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
+        // Склеенный текст для фильтра
+        public string SearchText { get; }
 
         public static string GetCategory(NotificationKind kind)
         {

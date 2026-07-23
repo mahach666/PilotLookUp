@@ -40,7 +40,7 @@ namespace PilotLookUp.Core
             var loadTask = LoadData(guid);
             var delayTask = Task.Delay(timeoutMilliseconds);
 
-            // Ожидаем завершения одной из задач — загрузки данных или таймаута
+            // Ожидаем завершения одной из задач - загрузки данных или таймаута
             var completedTask = await Task.WhenAny(loadTask, delayTask);
 
             if (completedTask == loadTask)

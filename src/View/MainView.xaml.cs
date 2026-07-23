@@ -31,7 +31,7 @@ namespace PilotLookUp.View
             }
             catch
             {
-                // не удалось встроиться в шаблон окна — остаётся пин в сайдбаре
+                // не удалось встроиться в шаблон окна - остаётся пин в сайдбаре
             }
         }
 
@@ -43,7 +43,7 @@ namespace PilotLookUp.View
                 .Where(b => !IsInsideContent(b))
                 .ToList();
 
-            // в шаблоне заголовка ожидаем ровно одну кнопку — крестик
+            // в шаблоне заголовка ожидаем ровно одну кнопку - крестик
             if (templateButtons.Count != 1)
                 return false;
 

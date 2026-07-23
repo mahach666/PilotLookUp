@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450"
+             d:DesignWidth="800">
 
     <!-- Экспорт словарей ресурсов Pilot -->
     <UserControl.Resources>
@@ -18,145 +19,147 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-        <Grid Background="{DynamicResource HoverBackground}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <TextBlock Text="Категория: "
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="5,0,0,0"
-                       Foreground="{DynamicResource NormalForeground}" />
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-            <ComboBox Grid.Column="1"
-                      Width="100"
-                      VerticalAlignment="Center"
-                      Margin="5,0,10,0"
-                      ItemsSource="{Binding Categories}"
-                      SelectedItem="{Binding SelectedCategory}" />
+                <TextBox Grid.Column="0"
+                         Text="{Binding TextFilter, UpdateSourceTrigger=PropertyChanged}" />
 
-            <TextBox Grid.Column="2"
-                     Style="{StaticResource TextBox_Style}"
-                     VerticalAlignment="Center"
-                     Margin="0,0,10,0"
-                     Text="{Binding TextFilter, UpdateSourceTrigger=PropertyChanged}"
-                     ToolTip="Фильтр по тексту (вид, заголовок, пользователь, тип, сообщение)" />
+                <Label Grid.Column="0"
+                       IsEnabled="False"
+                       Content="Фильтр событий"
+                       Visibility="{Binding PromtVisibility}"
+                       Foreground="{DynamicResource DisabledForeground}"
+                       IsHitTestVisible="False"
+                       VerticalAlignment="Center" />
 
-            <TextBlock Grid.Column="3"
-                       Text="{Binding EventsCounter}"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"
-                       Foreground="{DynamicResource NormalForeground}" />
-
-            <Button Grid.Column="4"
-                    Content="Очистить"
-                    Command="{Binding ClearCommand}"
-                    Padding="10,3"
-                    Margin="0,5,5,5" />
-        </Grid>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <DataGrid ItemsSource="{Binding EventsView}"
-                      IsReadOnly="True"
-                      AutoGenerateColumns="False"
-                      SelectedItem="{Binding SelectedEvent}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Время"
-                                        Binding="{Binding Time, Mode=OneWay}"
-                                        Width="Auto" />
-                    <DataGridTextColumn Header="Вид"
-                                        Binding="{Binding Kind, Mode=OneWay}"
-                                        Width="Auto" />
-                    <DataGridTextColumn Header="Заголовок"
-                                        Binding="{Binding Title, Mode=OneWay}"
-                                        Width="*" />
-                    <DataGridTextColumn Header="Пользователь"
-                                        Binding="{Binding UserName, Mode=OneWay}"
-                                        Width="Auto" />
-                    <DataGridTextColumn Header="Тип"
-                                        Binding="{Binding TypeTitle, Mode=OneWay}"
-                                        Width="Auto" />
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <GridSplitter Grid.Column="1"
-                          Width="3"
-                          HorizontalAlignment="Stretch"
-                          Background="{DynamicResource HoverBackground}" />
-
-            <Grid Grid.Column="2"
-                  Visibility="{Binding DetailVisibility}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="10" DataContext="{Binding SelectedEvent}">
-                        <TextBlock Text="Вид события" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding Kind}" Margin="0,0,0,8" TextWrapping="Wrap" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="Заголовок" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding Title}" Margin="0,0,0,8" TextWrapping="Wrap" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="Дата и время" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding FullTime}" Margin="0,0,0,8" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="Пользователь" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding UserInfo}" Margin="0,0,0,8" TextWrapping="Wrap" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="Тип объекта" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding TypeInfo}" Margin="0,0,0,8" TextWrapping="Wrap" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="ObjectId" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBox Text="{Binding ObjectId, Mode=OneWay}"
-                                 IsReadOnly="True"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 Margin="0,0,0,8"
-                                 Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="NotificationName" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding NotificationName}" Margin="0,0,0,8" TextWrapping="Wrap" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="Сообщение" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding Message}" Margin="0,0,0,8" TextWrapping="Wrap" Foreground="{DynamicResource NormalForeground}" />
-
-                        <TextBlock Text="ChangesetId" FontWeight="Bold" Foreground="{DynamicResource NormalForeground}" />
-                        <TextBlock Text="{Binding ChangesetId}" Margin="0,0,0,8" Foreground="{DynamicResource NormalForeground}" />
-                    </StackPanel>
-                </ScrollViewer>
-
-                <StackPanel Grid.Row="1"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="0,0,5,5">
-                    <Button ToolTip="Перейти к объекту в Pilot"
-                            Style="{StaticResource CastomImageButton}"
-                            Command="{Binding GoToCommand}"
-                            Content="..\Resources\UI\goTo.png" />
-                    <Button ToolTip="Открыть в LookUp"
-                            Style="{StaticResource CastomImageButton}"
-                            Command="{Binding OpenLookUpCommand}"
-                            Content="..\Resources\UI\lookUpView.png" />
-                </StackPanel>
+                <ComboBox Grid.Column="1"
+                          Width="100"
+                          Margin="4,0,0,0"
+                          Style="{StaticResource ComboBox_Style}"
+                          VerticalContentAlignment="Center"
+                          ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding SelectedCategory}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"
+                                       FontSize="{DynamicResource DefaultFontSize}"
+                                       Foreground="{DynamicResource NormalForeground}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </Grid>
+
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding EventsView}"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     ScrollViewer.CanContentScroll="True"
+                     SelectedItem="{Binding SelectedEvent}">
+
+                <ListBox.ItemContainerStyle>
+                    <StaticResource ResourceKey="ListBoxItem_Style" />
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Очистить список"
+                                  Command="{Binding ClearCommand}" />
+                    </ContextMenu>
+                </ListBox.ContextMenu>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="30"
+                              ToolTip="{Binding Title}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                                   Content="{Binding Time}"
+                                   FontSize="12"
+                                   VerticalContentAlignment="Center"
+                                   Foreground="{DynamicResource DisabledForeground}" />
+
+                            <Label Grid.Column="1"
+                                   Content="{Binding Kind}"
+                                   FontSize="12"
+                                   VerticalContentAlignment="Center"
+                                   Style="{StaticResource Label_Style}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
+
+        <GridSplitter Grid.Column="1"
+                      ShowsPreview="False"
+                      Width="3"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" />
+
+        <DataGrid ItemsSource="{Binding Info}"
+                  Grid.Column="2"
+                  IsReadOnly="True"
+                  SelectedItem="{Binding DataGridSelected}">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Копировать Name"
+                              Command="{Binding CopyCommand}"
+                              CommandParameter="DataGridSelectName" />
+                    <MenuItem Header="Копировать Value"
+                              Command="{Binding CopyCommand}"
+                              CommandParameter="DataGridSelectValue" />
+                    <MenuItem Header="Копировать строку"
+                              Command="{Binding CopyCommand}"
+                              CommandParameter="DataGridSelectLine" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding SenderMemberName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                       Style="{StaticResource DataGridTextBlock_Style}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Value"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                           TextDecorations="{Binding Decoration}">
+                                    <TextBlock Text="{Binding Discription, Mode=OneWay}"
+                                               Style="{StaticResource DataGridTextBlock_Style}" />
+                                </Hyperlink>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

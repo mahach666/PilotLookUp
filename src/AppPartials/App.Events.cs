@@ -7,7 +7,7 @@ namespace PilotLookUp
     {
         private void ItemClick(string name)
         {
-            _clientEventService.Raise("MenuItemClick", $"Пункт меню: {name}");
+            _clientEventService.Raise(new PilotLookUp.Objects.MenuItemClickRecord(name));
 
             if (name == "LookDB")
             {

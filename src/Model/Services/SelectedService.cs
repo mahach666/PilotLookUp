@@ -1,4 +1,4 @@
-﻿using Ascon.Pilot.Bim.SDK;
+using Ascon.Pilot.Bim.SDK;
 using Ascon.Pilot.Bim.SDK.ModelTab.Menu;
 using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
@@ -56,19 +56,18 @@ namespace PilotLookUp.Model.Services
                 var rawList = raw?.ToList() ?? new List<object>();
                 var shortcutList = shortcuts?.ToList() ?? new List<object>();
                 var items = rawList.Concat(shortcutList).ToList();
-                var shortcutCount = shortcutList.Count;
 
-                var extra = context is ObjectsViewContext ctx ? $"; IsContext: {ctx.IsContext}" : string.Empty;
+                bool? isContext = context is ObjectsViewContext ctx ? ctx.IsContext : (bool?)null;
 
                 if (items.Count > 0)
                 {
                     _convertSelection = new ObjectSet(null);
                     _convertSelection.AddRange(items.Select(map.Wrap));
-                    RaiseSelectionChanged(context.GetType().Name + extra, source, shortcutCount);
+                    RaiseSelectionChanged(context.GetType().Name, source, isContext, shortcutList.Count);
                 }
                 else
                 {
-                    RaiseSelectionCleared(context.GetType().Name + extra, source);
+                    RaiseSelectionCleared(context.GetType().Name, source, isContext);
                 }
             }
             catch (Exception e)
@@ -89,11 +88,11 @@ namespace PilotLookUp.Model.Services
                 {
                     _convertSelection = new ObjectSet(null);
                     _convertSelection.AddRange(raw.Select(map.Wrap));
-                    RaiseSelectionChanged(context.GetType().Name, source, 0);
+                    RaiseSelectionChanged(context.GetType().Name, source, null, 0);
                 }
                 else
                 {
-                    RaiseSelectionCleared(context.GetType().Name, source);
+                    RaiseSelectionCleared(context.GetType().Name, source, null);
                 }
             }
             catch (Exception e)
@@ -114,11 +113,11 @@ namespace PilotLookUp.Model.Services
                 {
                     _convertSelection = new ObjectSet(null);
                     _convertSelection.AddRange(raw.Select(map.Wrap));
-                    RaiseSelectionChanged(context.GetType().Name, source, 0);
+                    RaiseSelectionChanged(context.GetType().Name, source, null, 0);
                 }
                 else
                 {
-                    RaiseSelectionCleared(context.GetType().Name, source);
+                    RaiseSelectionCleared(context.GetType().Name, source, null);
                 }
             }
             catch (Exception e)
@@ -127,7 +126,7 @@ namespace PilotLookUp.Model.Services
             }
         }
 
-        private void RaiseSelectionChanged(string contextName, string source, int shortcutCount)
+        private void RaiseSelectionChanged(string contextName, string source, bool? isContext, int shortcutsCount)
         {
             // Одинаковые подряд выделения из одного источника не дублируем;
             // источник входит в ключ, чтобы событие от меню не гасилось событием от тулбара
@@ -136,76 +135,45 @@ namespace PilotLookUp.Model.Services
                 return;
             _lastRaisedSelection = key;
 
-            var names = _convertSelection.Select(SafeName).Take(5).ToList();
-            var namesText = string.Join(", ", names);
-            if (_convertSelection.Count > names.Count)
-                namesText += $" … (+{_convertSelection.Count - names.Count})";
-
-            var dataObjects = _convertSelection
+            var dataObjectIds = _convertSelection
                 .Select(o => o.LookUpObject)
                 .OfType<IDataObject>()
+                .Select(o => o.Id)
                 .ToList();
-            var dataObjectIds = dataObjects.Select(o => o.Id).ToList();
-            var typeInfo = string.Join(", ", dataObjects
-                .Select(o => SafeTypeTitle(o))
-                .Where(t => !string.IsNullOrEmpty(t))
-                .Distinct());
 
-            var shortcutsText = shortcutCount > 0 ? $" (в т.ч. ярлыков: {shortcutCount})" : string.Empty;
-            var sourceText = string.IsNullOrEmpty(source) ? string.Empty : $"Источник: {source}; ";
-
-            _clientEventService.Raise(
-                "SelectionChanged",
-                $"{sourceText}Контекст: {contextName}; выделено: {_convertSelection.Count}{shortcutsText} — {namesText}",
+            _clientEventService.Raise(new SelectionChangedRecord(
+                source,
+                contextName,
+                isContext,
                 dataObjectIds,
-                typeInfo);
+                shortcutsCount,
+                _convertSelection.Count));
         }
 
         private const string EmptySelectionKey = "<empty>";
 
         // Пустое выделение: сбрасываем дедупликацию (иначе повторное выделение
         // того же объекта после сброса не даст события) и сообщаем о сбросе один раз
-        private void RaiseSelectionCleared(string contextName, string source)
+        private void RaiseSelectionCleared(string contextName, string source, bool? isContext)
         {
             if (_lastRaisedSelection == null || _lastRaisedSelection == EmptySelectionKey)
                 return;
             _lastRaisedSelection = EmptySelectionKey;
 
-            var sourceText = string.IsNullOrEmpty(source) ? string.Empty : $"Источник: {source}; ";
-            _clientEventService.Raise(
-                "SelectionChanged",
-                $"{sourceText}Контекст: {contextName}; выделено: 0");
-        }
-
-        private static string SafeTypeTitle(IDataObject dataObject)
-        {
-            try
-            {
-                return dataObject.Type?.Title ?? dataObject.Type?.Name;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private static string SafeName(PilotObjectHelper helper)
-        {
-            try
-            {
-                return helper.Name ?? helper.StringId ?? "?";
-            }
-            catch
-            {
-                return "?";
-            }
+            _clientEventService.Raise(new SelectionChangedRecord(
+                source,
+                contextName,
+                isContext,
+                Array.Empty<Guid>(),
+                0,
+                0));
         }
 
         private void RaiseSelectionError(Exception e)
         {
             try
             {
-                _clientEventService.Raise("SelectionError", e.ToString());
+                _clientEventService.Raise(new SelectionErrorRecord(e.ToString()));
             }
             catch
             {

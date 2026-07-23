@@ -3,7 +3,7 @@ using System;
 
 namespace PilotLookUp.Objects
 {
-    // Снимок INotification: сам INotification — временный DTO,
+    // Снимок INotification: сам INotification - временный DTO,
     // поэтому все поля копируются сразу при получении
     public sealed class NotificationRecord
     {

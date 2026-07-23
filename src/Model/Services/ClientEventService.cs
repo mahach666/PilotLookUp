@@ -1,17 +1,15 @@
 using PilotLookUp.Interfaces;
-using PilotLookUp.Objects;
 using System;
-using System.Collections.Generic;
 
 namespace PilotLookUp.Model.Services
 {
     public class ClientEventService : IClientEventService
     {
-        public event Action<ClientEventRecord> EventRaised;
+        public event Action<object> EventRaised;
 
-        public void Raise(string name, string message, IReadOnlyList<Guid> objectIds = null, string typeInfo = null)
+        public void Raise(object record)
         {
-            EventRaised?.Invoke(new ClientEventRecord(name, message, objectIds, typeInfo));
+            EventRaised?.Invoke(record);
         }
     }
 }

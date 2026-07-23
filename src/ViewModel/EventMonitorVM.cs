@@ -9,36 +9,36 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace PilotLookUp.ViewModel
 {
+    // Та же вкладка, что LookUp: слева лента событий, справа Info-грид (GetObjInfo)
     public class EventMonitorVM : IPage, INotifyPropertyChanged, IDisposable
     {
         private const int MaxEvents = 2000;
         private const string AllCategories = "Все";
 
         private readonly IObjectsRepository _objectsRepository;
-        private readonly ITabService _tabService;
         private readonly IRepoService _repoService;
-        private readonly IPageService _pageController;
+        private readonly IViewFactory _viewFactory;
         private readonly IClientEventService _clientEventService;
         private readonly Dispatcher _dispatcher;
         private readonly NotificationListener _listener;
 
         public EventMonitorVM(
             IObjectsRepository objectsRepository,
-            ITabService tabService,
             IRepoService repoService,
-            IPageService pageController,
+            IViewFactory viewFactory,
             IClientEventService clientEventService)
         {
             _objectsRepository = objectsRepository;
-            _tabService = tabService;
             _repoService = repoService;
-            _pageController = pageController;
+            _viewFactory = viewFactory;
             _clientEventService = clientEventService;
             _dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -78,9 +78,12 @@ namespace PilotLookUp.ViewModel
             {
                 _textFilter = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(PromtVisibility));
                 EventsView.Refresh();
             }
         }
+
+        public Visibility PromtVisibility => string.IsNullOrEmpty(_textFilter) ? Visibility.Visible : Visibility.Hidden;
 
         private EventMonitorItemVM _selectedEvent;
         public EventMonitorItemVM SelectedEvent
@@ -88,47 +91,73 @@ namespace PilotLookUp.ViewModel
             get => _selectedEvent;
             set
             {
-                _selectedEvent = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(DetailVisibility));
+                if (_selectedEvent != value)
+                {
+                    _selectedEvent = value;
+                    if (_selectedEvent != null)
+                        UpdateInfo();
+                    else
+                        Info = null;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        public System.Windows.Visibility DetailVisibility =>
-            SelectedEvent == null ? System.Windows.Visibility.Collapsed : System.Windows.Visibility.Visible;
+        private void UpdateInfo()
+        {
+            var selected = _selectedEvent;
+            Task.Run(async () =>
+            {
+                Info = await _repoService.GetObjInfo(selected.Helper);
+            });
+        }
 
-        public string EventsCounter => $"Событий: {Events.Count}";
+        private List<ObjectSet> _info;
+        public List<ObjectSet> Info
+        {
+            get => _info;
+            set
+            {
+                _info = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObjectSet _dataGridSelected;
+        public ObjectSet DataGridSelected
+        {
+            get => _dataGridSelected;
+            set
+            {
+                _dataGridSelected = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ICommand ClearCommand => new RelayCommand<object>(_ =>
         {
             Events.Clear();
             SelectedEvent = null;
-            OnPropertyChanged(nameof(EventsCounter));
         });
 
-        public ICommand GoToCommand => new RelayCommand<object>(_ => GoToObject());
-        public ICommand OpenLookUpCommand => new RelayCommand<object>(_ => OpenLookUp());
+        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
+        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
 
-        private async void GoToObject()
+        private void CopyToClipboard(string sender)
         {
-            // Pilot умеет показать один объект — ведем к первому из события
-            var navigateIds = SelectedEvent?.NavigateIds;
-            if (navigateIds == null || navigateIds.Count == 0)
-                return;
-
-            var dataObject = await new ObjectLoader(_objectsRepository).LoadWithTimeout(navigateIds[0]);
-            if (dataObject != null)
-                _tabService.GoTo(dataObject);
-        }
-
-        private async void OpenLookUp()
-        {
-            var navigateIds = SelectedEvent?.NavigateIds;
-            if (navigateIds == null || navigateIds.Count == 0)
-                return;
-
-            var objectSet = await _repoService.GetWrapedObjs(navigateIds);
-            _pageController.CreatePage(PagesName.LookUpPage, objectSet);
+            try
+            {
+                if (sender == "DataGridSelectName")
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName ?? string.Empty);
+                else if (sender == "DataGridSelectValue")
+                    Clipboard.SetText(_dataGridSelected?.Discription ?? string.Empty);
+                else if (sender == "DataGridSelectLine")
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+            }
+            catch
+            {
+                MessageBox.Show("Упс, ничего не выбрано.");
+            }
         }
 
         // Вызывается из фонового потока SDK
@@ -137,7 +166,7 @@ namespace PilotLookUp.ViewModel
             _dispatcher.BeginInvoke((Action)(() => AddEvent(new EventMonitorItemVM(record, _objectsRepository))));
         }
 
-        private void OnClientEventRaised(ClientEventRecord record)
+        private void OnClientEventRaised(object record)
         {
             _dispatcher.BeginInvoke((Action)(() => AddEvent(new EventMonitorItemVM(record, _objectsRepository))));
         }
@@ -147,7 +176,6 @@ namespace PilotLookUp.ViewModel
             Events.Add(item);
             if (Events.Count > MaxEvents)
                 Events.RemoveAt(0);
-            OnPropertyChanged(nameof(EventsCounter));
         }
 
         private bool FilterEvent(object item)
@@ -161,16 +189,7 @@ namespace PilotLookUp.ViewModel
             if (string.IsNullOrWhiteSpace(TextFilter))
                 return true;
 
-            return Contains(eventItem.Kind)
-                || Contains(eventItem.Title)
-                || Contains(eventItem.UserName)
-                || Contains(eventItem.TypeTitle)
-                || Contains(eventItem.Message)
-                || Contains(eventItem.NotificationName);
-
-            bool Contains(string source) =>
-                !string.IsNullOrEmpty(source)
-                && source.IndexOf(TextFilter, StringComparison.OrdinalIgnoreCase) >= 0;
+            return eventItem.SearchText.IndexOf(TextFilter, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         public void Dispose()

@@ -90,7 +90,7 @@ namespace PilotLookUp.Model.Services
                     GoToPage(pageName);
                     break;
                 case PagesName.EventMonitor:
-                    AddPage(_viewModelFactory.CreateEventMonitorVM(this));
+                    AddPage(_viewModelFactory.CreateEventMonitorVM());
                     GoToPage(pageName);
                     break;
             }

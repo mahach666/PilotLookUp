@@ -26,7 +26,6 @@ namespace PilotLookUp.Interfaces
         // SearchResVM создается в SearchVM
         SearchResVM CreateSearchResVM(IPageService pageService, PilotObjectHelper pilotObjectHelper);
 
-        // IPageService передается явно (циклическая зависимость, как у SearchResVM)
-        EventMonitorVM CreateEventMonitorVM(IPageService pageService);
+        EventMonitorVM CreateEventMonitorVM();
     }
 } 
