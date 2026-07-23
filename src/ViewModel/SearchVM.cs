@@ -2,11 +2,11 @@
 using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PilotLookUp.ViewModel
@@ -28,24 +28,38 @@ namespace PilotLookUp.ViewModel
             _searchService = searchService;
             _tabService = tabService;
             _viewModelFactory = viewModelFactory;
-            ClipboardCheck();
+            SearchFromClipboard();
         }
 
-        private void ClipboardCheck()
+        private async void SearchFromClipboard()
         {
-            string clipboardText = Clipboard.GetText();
-            Application.Current.Dispatcher.Invoke(async () =>
+            string clipboardText;
+            try
             {
-                var res = new List<UserControl>();
+                clipboardText = Clipboard.GetText();
+            }
+            catch
+            {
+                // Буфер обмена занят другим процессом - просто без автопоиска
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(clipboardText))
+                return;
+
+            try
+            {
                 var searchRes = await _searchService.GetObjByString(clipboardText);
+                if (searchRes?.Count > 0)
                 {
-                    if (searchRes?.Count > 0)
-                    {
-                        Text = clipboardText;
-                        SetRes(searchRes);
-                    }
+                    Text = clipboardText;
+                    SetRes(searchRes);
                 }
-            });
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private List<SearchResVM> _result;
@@ -59,21 +73,27 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public Visibility PromtVisibility => string.IsNullOrEmpty(_text) ? Visibility.Visible : Visibility.Hidden;
+        public Visibility PromptVisibility => string.IsNullOrEmpty(_text) ? Visibility.Visible : Visibility.Hidden;
 
         private string _text;
         public string Text
         {
             get => _text;
-            set { _text = value; OnPropertyChanged(); OnPropertyChanged("PromtVisibility"); }
+            set { _text = value; OnPropertyChanged(); OnPropertyChanged(nameof(PromptVisibility)); }
         }
-        private void Search()
+
+        private async void Search()
         {
-            Application.Current.Dispatcher.Invoke(async () =>
+            try
             {
                 var searchRes = await _searchService.GetObjByString(Text);
-                SetRes(searchRes);
-            });
+                if (searchRes != null)
+                    SetRes(searchRes);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private void SetRes(ObjectSet objectSet)
@@ -87,7 +107,8 @@ namespace PilotLookUp.ViewModel
             Result = res;
         }
 
-        public ICommand SearchCommand => new RelayCommand<object>(_ => Search());
+        private ICommand _searchCommand;
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand<object>(_ => Search());
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

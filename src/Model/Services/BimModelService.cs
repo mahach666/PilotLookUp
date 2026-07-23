@@ -19,14 +19,14 @@ namespace PilotLookUp.Model.Services
             Subscribe();
         }
 
-        public IModelViewer CurentViewer => _modelViewer;
-        public IModelStorage CurentStorage => _modelStorageProvider?.
+        public IModelViewer CurrentViewer => _modelViewer;
+        public IModelStorage CurrentStorage => _modelStorageProvider?.
             GetStorage(_modelViewer != null
             ? _modelViewer.ModelId
             : default)
             ?? null;
 
-        public DateTime CurentVersion => _modelViewer != null
+        public DateTime CurrentVersion => _modelViewer != null
             ? _modelViewer.ModelVersion
             : default;
 
@@ -43,7 +43,7 @@ namespace PilotLookUp.Model.Services
         }
         private void OnModelClosed(object sender, ModelEventArgs e)
         {
-            if (_modelViewer != null && _modelViewer.ModelId == e.Viewer.ModelId)
+            if (_modelViewer != null && _modelViewer.ModelId == e.Viewer?.ModelId)
             {
                 _modelViewer = null;
             }

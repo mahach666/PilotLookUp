@@ -1,34 +1,62 @@
+using Ascon.Pilot.SDK;
 using PilotLookUp.Contracts;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.ViewModel;
-using SimpleInjector;
+using System;
 using System.Linq;
 
 namespace PilotLookUp.Model.Factories
 {
     public class ViewModelFactory : IViewModelFactory
     {
-        private readonly Container _container;
+        private readonly IRepoService _repoService;
+        private readonly IFileService _fileService;
+        private readonly ICustomSearchService _searchService;
+        private readonly IDataObjectService _dataObjectService;
+        private readonly ITabService _tabService;
+        private readonly IObjectsRepository _objectsRepository;
+        private readonly IClientEventService _clientEventService;
 
-        public ViewModelFactory(Container container)
+        // Lazy разрывает циклы: ViewFactory/TreeItemService/PageServiceFactory
+        // сами зависят от IViewModelFactory
+        private readonly Lazy<IViewFactory> _viewFactory;
+        private readonly Lazy<ITreeItemService> _treeItemService;
+        private readonly Lazy<IPageServiceFactory> _pageServiceFactory;
+
+        public ViewModelFactory(
+            IRepoService repoService,
+            IFileService fileService,
+            ICustomSearchService searchService,
+            IDataObjectService dataObjectService,
+            ITabService tabService,
+            IObjectsRepository objectsRepository,
+            IClientEventService clientEventService,
+            Lazy<IViewFactory> viewFactory,
+            Lazy<ITreeItemService> treeItemService,
+            Lazy<IPageServiceFactory> pageServiceFactory)
         {
-            _container = container;
+            _repoService = repoService;
+            _fileService = fileService;
+            _searchService = searchService;
+            _dataObjectService = dataObjectService;
+            _tabService = tabService;
+            _objectsRepository = objectsRepository;
+            _clientEventService = clientEventService;
+            _viewFactory = viewFactory;
+            _treeItemService = treeItemService;
+            _pageServiceFactory = pageServiceFactory;
         }
 
         public MainVM CreateMainVM(StartViewInfo startInfo)
         {
-            var pageServiceFactory = _container.GetInstance<IPageServiceFactory>();
-            var pageService = pageServiceFactory.CreatePageService(startInfo);
+            var pageService = _pageServiceFactory.Value.CreatePageService(startInfo);
             return new MainVM(pageService);
         }
 
         public LookUpVM CreateLookUpVM()
         {
-            var repoService = _container.GetInstance<IRepoService>();
-            var viewFactory = _container.GetInstance<IViewFactory>();
-            var fileService = _container.GetInstance<IFileService>();
-            return new LookUpVM(repoService, viewFactory, fileService);
+            return new LookUpVM(_repoService, _viewFactory.Value, _fileService);
         }
 
         public LookUpVM CreateLookUpVM(ObjectSet objectSet)
@@ -40,21 +68,12 @@ namespace PilotLookUp.Model.Factories
 
         public TaskTreeVM CreateTaskTreeVM(PilotObjectHelper pilotObjectHelper)
         {
-            var repoService = _container.GetInstance<IRepoService>();
-            var searchService = _container.GetInstance<ICustomSearchService>();
-            var viewFactory = _container.GetInstance<IViewFactory>();
-            var treeItemService = _container.GetInstance<ITreeItemService>();
-            
-            return new TaskTreeVM(pilotObjectHelper, repoService, searchService, viewFactory, treeItemService, this);
+            return new TaskTreeVM(pilotObjectHelper, _repoService, _searchService, _viewFactory.Value, _treeItemService.Value, this);
         }
 
         public AttrVM CreateAttrVM(PilotObjectHelper pilotObjectHelper)
         {
-            var dataObjectService = _container.GetInstance<IDataObjectService>();
-            var repoService = _container.GetInstance<IRepoService>();
-            var viewFactory = _container.GetInstance<IViewFactory>();
-            var objectsRepository = _container.GetInstance<Ascon.Pilot.SDK.IObjectsRepository>();
-            return new AttrVM(pilotObjectHelper, dataObjectService, repoService, viewFactory, objectsRepository);
+            return new AttrVM(pilotObjectHelper, _dataObjectService, _repoService, _viewFactory.Value, _objectsRepository);
         }
 
         public ListItemVM CreateListItemVM(PilotObjectHelper pilotObjectHelper)
@@ -64,17 +83,12 @@ namespace PilotLookUp.Model.Factories
 
         public SearchResVM CreateSearchResVM(IPageService pageService, PilotObjectHelper pilotObjectHelper)
         {
-            var tabService = _container.GetInstance<ITabService>();
-            return new SearchResVM(pageService, tabService, pilotObjectHelper);
+            return new SearchResVM(pageService, _tabService, pilotObjectHelper);
         }
 
         public EventMonitorVM CreateEventMonitorVM()
         {
-            var objectsRepository = _container.GetInstance<Ascon.Pilot.SDK.IObjectsRepository>();
-            var repoService = _container.GetInstance<IRepoService>();
-            var viewFactory = _container.GetInstance<IViewFactory>();
-            var clientEventService = _container.GetInstance<IClientEventService>();
-            return new EventMonitorVM(objectsRepository, repoService, viewFactory, clientEventService);
+            return new EventMonitorVM(_objectsRepository, _repoService, _viewFactory.Value, _clientEventService);
         }
     }
 }

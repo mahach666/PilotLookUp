@@ -4,6 +4,6 @@ namespace PilotLookUp.Interfaces
 {
     public interface ITreeItemService
     {
-        public Task<ICustomTree> FillChild(ICustomTree lastParrent);
+        public Task<ICustomTree> FillChild(ICustomTree lastParent);
     }
 }

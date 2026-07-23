@@ -45,7 +45,7 @@ namespace PilotLookUp.ViewModel
                 _selectionDataObjects = value;
                 DataObjectSelected = value?.FirstOrDefault();
                 OnPropertyChanged();
-                UpdateFiltredDataObjectsAsync();
+                _ = UpdateFilteredDataObjectsAsync();
             }
         }
 
@@ -57,40 +57,47 @@ namespace PilotLookUp.ViewModel
             {
                 _searchText = value;
                 OnPropertyChanged();
-                OnPropertyChanged("PromtVisibility");
-                UpdateFiltredDataObjectsAsync();
+                OnPropertyChanged(nameof(PromptVisibility));
+                _ = UpdateFilteredDataObjectsAsync();
             }
         }
 
-        public Visibility PromtVisibility => string.IsNullOrEmpty(_searchText) ? Visibility.Visible : Visibility.Hidden;
+        public Visibility PromptVisibility => string.IsNullOrEmpty(_searchText) ? Visibility.Visible : Visibility.Hidden;
 
-        private List<ListItemVM> _filtredDataObjects;
-        public List<ListItemVM> FiltredDataObjects
+        private List<ListItemVM> _filteredDataObjects;
+        public List<ListItemVM> FilteredDataObjects
         {
-            get => _filtredDataObjects;
+            get => _filteredDataObjects;
             private set
             {
-                _filtredDataObjects = value;
+                _filteredDataObjects = value;
                 OnPropertyChanged();
             }
         }
 
-        public async Task UpdateFiltredDataObjectsAsync()
+        public async Task UpdateFilteredDataObjectsAsync()
         {
-            if (SearchText?.Length >= 2)
+            try
             {
-                var filtered = await Task.Run(() =>
-                    SelectionDataObjects
-                        .Where(i => i.ObjName.ToUpper().Contains(SearchText.ToUpper())
-                                 || i.StrId.ToUpper().Contains(SearchText.ToUpper()))
-                        .ToList()
-                );
+                if (SearchText?.Length >= 2)
+                {
+                    var filtered = await Task.Run(() =>
+                        SelectionDataObjects
+                            .Where(i => i.ObjName.ToUpper().Contains(SearchText.ToUpper())
+                                     || i.StrId.ToUpper().Contains(SearchText.ToUpper()))
+                            .ToList()
+                    );
 
-                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = filtered);
+                    Application.Current.Dispatcher.Invoke(() => FilteredDataObjects = filtered);
+                }
+                else
+                {
+                    Application.Current.Dispatcher.Invoke(() => FilteredDataObjects = SelectionDataObjects);
+                }
             }
-            else
+            catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke(() => FiltredDataObjects = SelectionDataObjects);
+                MessageBox.Show(e.Message);
             }
         }
 
@@ -149,12 +156,27 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void UpdateInfo()
+        private async void UpdateInfo()
         {
-            Task.Run(async () =>
+            var selected = _dataObjectSelected;
+            if (selected == null)
             {
-                Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
-            });
+                Info = null;
+                return;
+            }
+
+            try
+            {
+                var info = await Task.Run(() => _repoService.GetObjInfo(selected.PilotObjectHelper));
+
+                // Выделение могло смениться, пока грузилась информация
+                if (ReferenceEquals(selected, _dataObjectSelected))
+                    Info = info;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
         private List<ObjectSet> _info;
         public List<ObjectSet> Info
@@ -170,7 +192,11 @@ namespace PilotLookUp.ViewModel
         private void CopyToClipboard(string sender)
         {
             var errorText = "Упс, ничего не выбрано.";
-            if (_dataObjectSelected == null) MessageBox.Show(errorText);
+            if (_dataObjectSelected == null)
+            {
+                MessageBox.Show(errorText);
+                return;
+            }
 
             try
             {
@@ -184,31 +210,36 @@ namespace PilotLookUp.ViewModel
                 }
                 else if (sender == "DataGridSelectValue")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
+                    Clipboard.SetText(_dataGridSelected?.Description);
                 }
                 else if (sender == "DataGridSelectLine")
                 {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Description);
                 }
                 else
                 {
                     MessageBox.Show(errorText);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                MessageBox.Show(errorText);
+                MessageBox.Show(e.Message);
             }
         }
 
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
+        private ICommand _copyCommand;
+        public ICommand CopyCommand => _copyCommand ??= new RelayCommand<string>(CopyToClipboard);
 
+        private ICommand _selectedValueCommand;
+        public ICommand SelectedValueCommand => _selectedValueCommand ??= new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
+
+        private ICommand _openSelectedFileCommand;
         public ICommand OpenSelectedFileCommand =>
-            new RelayCommand<object>(_ => OpenSelectedFileAsync(), _ => OpenFileButtonVisibility == Visibility.Visible);
+            _openSelectedFileCommand ??= new RelayCommand<object>(_ => OpenSelectedFileAsync(), _ => OpenFileButtonVisibility == Visibility.Visible);
 
+        private ICommand _downloadSelectedFilesCommand;
         public ICommand DownloadSelectedFilesCommand =>
-            new RelayCommand<object>(_ => DownloadSelectedFilesAsync(), _ => DownloadFilesButtonVisibility == Visibility.Visible);
+            _downloadSelectedFilesCommand ??= new RelayCommand<object>(_ => DownloadSelectedFilesAsync(), _ => DownloadFilesButtonVisibility == Visibility.Visible);
 
         private List<IFile> GetSelectedFiles()
         {

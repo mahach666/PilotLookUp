@@ -9,13 +9,13 @@ namespace PilotLookUp.Objects.TypeHelpers
         public AccessRecordHelper(IAccessRecord obj, IObjectsRepository objectsRepository) 
         {
             _lookUpObject = obj;
-            _name = objectsRepository.GetOrganisationUnit(obj.OrgUnitId).Title;
-            _isLookable = true;            
+            _name = objectsRepository.GetOrganisationUnit(obj.OrgUnitId)?.Title ?? obj.OrgUnitId.ToString();
+            _isLookable = true;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\accessIcon.png", UriKind.RelativeOrAbsolute));
+            return TypeIcons.Get("accessIcon");
         }
     }
 }

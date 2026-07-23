@@ -26,7 +26,7 @@
         <!-- Стили для разных типов элементов (та же логика что и у ListBoxItem) -->
         <Style.Triggers>
             <!-- Элементы с ошибками - мягкий красный цвет без заливки -->
-            <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
+            <DataTrigger Binding="{Binding Description, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
                 <Setter Property="Foreground" Value="Crimson" />
             </DataTrigger>
             <!-- Элементы по которым можно переходить - используем системный акцентный цвет -->
@@ -136,7 +136,7 @@
         <!-- Стили для разных типов элементов -->
         <Style.Triggers>
             <!-- Элементы с ошибками - красный цвет -->
-            <DataTrigger Binding="{Binding Discription, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
+            <DataTrigger Binding="{Binding Description, Converter={StaticResource StringStartsWithConverter}, ConverterParameter='Error:'}" Value="True">
                 <Setter Property="Foreground" Value="Red" />
             </DataTrigger>
             <!-- Элементы по которым можно переходить - используем системный акцентный цвет -->
@@ -215,7 +215,7 @@
     </Style>
 
     <!-- Кастомный стиль кнопки с картинкой -->
-    <Style x:Key="CastomImageButton"
+    <Style x:Key="CustomImageButton"
            TargetType="Button"
            BasedOn="{StaticResource ImageButtonStyle}">
         <Setter Property="Background"

@@ -101,13 +101,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Ascon.Pilot.Bim.SDK" Version="*" />
-		<PackageReference Include="Ascon.Pilot.SDK" Version="*" />
+		<PackageReference Include="Ascon.Pilot.Bim.SDK" Version="26.15.0" />
+		<PackageReference Include="Ascon.Pilot.SDK" Version="26.15.0" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
 		<PackageReference Include="SimpleInjector" Version="5.5.0" />
 		<PackageReference Include="Svg" Version="3.4.7" />
-		<PackageReference Include="System.Composition" Version="*" />
+		<PackageReference Include="System.Composition" Version="10.0.10" />
 	</ItemGroup>
 	
 	<ItemGroup>

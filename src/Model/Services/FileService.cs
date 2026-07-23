@@ -9,11 +9,47 @@ namespace PilotLookUp.Model.Services
 {
     public class FileService : IFileService
     {
+        private const int TempFileLifetimeDays = 7;
+
         private readonly IFileProvider _fileProvider;
 
         public FileService(IFileProvider fileProvider)
         {
             _fileProvider = fileProvider;
+            CleanupOldTempFiles();
+        }
+
+        // Временные файлы копятся между сессиями - подчищаем старые при старте.
+        // Best-effort: открытые в просмотрщике файлы удалить нельзя, пропускаем
+        private static void CleanupOldTempFiles()
+        {
+            try
+            {
+                var tempRoot = Path.Combine(Path.GetTempPath(), "PilotLookUp");
+                if (!Directory.Exists(tempRoot))
+                    return;
+
+                var threshold = DateTime.Now.AddDays(-TempFileLifetimeDays);
+                foreach (var file in Directory.EnumerateFiles(tempRoot))
+                {
+                    try
+                    {
+                        if (File.GetLastWriteTime(file) < threshold)
+                            File.Delete(file);
+                    }
+                    catch (IOException)
+                    {
+                        // файл занят - оставляем
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                    }
+                }
+            }
+            catch
+            {
+                // очистка не должна мешать запуску плагина
+            }
         }
 
         public string SaveFileToTemp(IFile file)

@@ -12,7 +12,7 @@ namespace PilotLookUp.Objects.TypeHelpers
     {
         public IntHelper(int value, IObjectsRepository objectsRepository, PilotObjectHelper sender, MemberInfo senderMember)
         {
-            if (senderMember != null)
+            if (senderMember != null && sender != null)
             {
                 if (senderMember.Name.Contains("AllOrgUnits"))
                 {
@@ -143,7 +143,7 @@ namespace PilotLookUp.Objects.TypeHelpers
                 }
             }
 
-            else if (sender.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair
+            else if (sender?.LookUpObject is KeyValuePair<IDataObject, int> keyValuePair
                 && keyValuePair.Key.Type.Id == value)
             {
                 _lookUpObject = keyValuePair.Key.Type;
@@ -163,11 +163,11 @@ namespace PilotLookUp.Objects.TypeHelpers
         {
             if (_lookUpObject is IOrganisationUnit)
             {
-                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+                return TypeIcons.Get("organisationUnitIcon");
             }
             else if (_lookUpObject is IPerson)
             {
-                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\personIcon.png", UriKind.RelativeOrAbsolute));
+                return TypeIcons.Get("personIcon");
             }
             else if (_lookUpObject is IType type)
             {
@@ -175,7 +175,7 @@ namespace PilotLookUp.Objects.TypeHelpers
             }
             else
             {
-                return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\intIcon.png", UriKind.RelativeOrAbsolute));
+                return TypeIcons.Get("intIcon");
             }
         }
     }

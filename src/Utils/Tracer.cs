@@ -97,7 +97,7 @@ namespace PilotLookUp.Utils
                 foreach (var parsedGuid in configGuids)
                     _objectSet.Add(await GuidHandler(parsedGuid));
 
-                _objectSet.DiscriptionOverride = originalText;
+                _objectSet.DescriptionOverride = originalText;
             }
             else if (TryParseElementBookGuidsFromString(obj, out var parsedGuids))
             {
@@ -196,10 +196,10 @@ namespace PilotLookUp.Utils
 
             try
             {
-                var lodedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
-                if (lodedObj != null)
+                var loadedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
+                if (loadedObj != null)
                 {
-                    return _pilotObjectMap.Wrap(lodedObj);
+                    return _pilotObjectMap.Wrap(loadedObj);
                 }
             }
             catch

@@ -46,7 +46,7 @@ namespace PilotLookUp.Objects
                 IUserState value => new UserStateHelper(value),
                 IUserStateMachine value => new UserStateMachineHelper(value),
                 IAttribute value => new AttributeHelper(value),
-                KeyValuePair<string, object> value => new KeyValuePairHelper(value, (IDataObject)_senderObj.LookUpObject),
+                KeyValuePair<string, object> value => new KeyValuePairHelper(value, _senderObj?.LookUpObject as IDataObject),
                 KeyValuePair<Guid, int> value => new KeyValuePairHelper(value),
                 KeyValuePair<IDataObject, int> value => new KeyValuePairHelper(value),
                 KeyValuePair<Guid, IEnumerable<ITransition>> value => new KeyValuePairHelper(value, _objectsRepository),

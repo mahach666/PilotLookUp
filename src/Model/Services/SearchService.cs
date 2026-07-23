@@ -68,10 +68,15 @@ namespace PilotLookUp.Model.Services
                                 continue;
                             }
                         }
-                        DataObjectHelper lastParrent = await GetLastParent(dataObj);
-                        if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParrent.StringId))
+                        DataObjectHelper lastParent = await GetLastParent(dataObj);
+
+                        // Родитель мог не загрузиться (таймаут) или оказаться не объектом БД
+                        if (lastParent == null)
+                            continue;
+
+                        if (!pilotObjectHelpers.Select(it => it.StringId).Contains(lastParent.StringId))
                         {
-                            pilotObjectHelpers.Add(lastParrent);
+                            pilotObjectHelpers.Add(lastParent);
                         }
                     }
                 }
@@ -83,7 +88,7 @@ namespace PilotLookUp.Model.Services
         {
             if (dataObject != null)
             {
-                var parent = await dataObject.FindLastParrent(_objectsRepository);
+                var parent = await dataObject.FindLastParent(_objectsRepository);
                 var objSet = await new Tracer(_objectsRepository, null, null).Trace(parent);
                 return objSet.FirstOrDefault() is DataObjectHelper result ? result : null;
             }

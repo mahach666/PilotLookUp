@@ -9,13 +9,13 @@ namespace PilotLookUp.Objects.TypeHelpers
         public PositionHelper(IPosition obj, IObjectsRepository objectsRepository)
         {
             _lookUpObject = obj;
-            _name = objectsRepository.GetOrganisationUnit(obj.Position).Title;
+            _name = objectsRepository.GetOrganisationUnit(obj.Position)?.Title ?? obj.Position.ToString();
             _isLookable = true;
         }
 
         public override BitmapImage GetImage()
         {
-            return new BitmapImage(new Uri(@"..\..\Resources\TypeIcons\organisationUnitIcon.png", UriKind.RelativeOrAbsolute));
+            return TypeIcons.Get("organisationUnitIcon");
         }
     }
 }

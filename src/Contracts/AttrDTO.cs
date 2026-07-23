@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
 using System.Windows;
 
@@ -35,7 +35,7 @@ namespace PilotLookUp.Contracts
 
         public bool IsLookable => IsValueLinkType && HasRawValue;
 
-        public string Discription => Value;
+        public string Description => Value;
 
         public TextDecorationCollection Decoration =>
             IsLookable ? TextDecorations.Underline : null;

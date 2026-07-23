@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
-             xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
+             xmlns:views="clr-namespace:PilotLookUp.View.CustomUIElements"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behaviorutils="clr-namespace:PilotLookUp.Utils"
              mc:Ignorable="d"
@@ -44,14 +44,14 @@
                 <Label Grid.Row="0"
                        IsEnabled="False"
                        Content="Введите имя или Id"
-                       Visibility="{Binding PromtVisibility}"
+                       Visibility="{Binding PromptVisibility}"
                        Foreground="{DynamicResource DisabledForeground}"
                        IsHitTestVisible="False"
                        VerticalAlignment="Center">
                 </Label>
                 
                 <ListBox Grid.Row="1"
-                         ItemsSource="{Binding FiltredDataObjects}"
+                         ItemsSource="{Binding FilteredDataObjects}"
                          VirtualizingPanel.IsVirtualizing="True"
                          VirtualizingPanel.VirtualizationMode="Recycling"
                          ScrollViewer.CanContentScroll="True"
@@ -123,7 +123,7 @@
                                 <TextBlock>
                                 <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                            TextDecorations="{Binding Decoration}">
-                                    <TextBlock Text="{Binding Discription, Mode=OneWay}"
+                                    <TextBlock Text="{Binding Description, Mode=OneWay}"
                                                Style="{StaticResource DataGridTextBlock_Style}" />
                                 </Hyperlink>
                             </TextBlock>

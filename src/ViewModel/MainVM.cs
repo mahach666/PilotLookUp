@@ -53,8 +53,8 @@ namespace PilotLookUp.ViewModel
             get
             {
                 if (SelectedControl is LookUpVM lookUpVM
-                        && lookUpVM.DataObjectSelected is ICustomTree castomTree
-                        && castomTree.PilotObjectHelper is DataObjectHelper)
+                        && lookUpVM.DataObjectSelected is ICustomTree customTree
+                        && customTree.PilotObjectHelper is DataObjectHelper)
                     return Visibility.Visible;
                 else if (SelectedControl is TaskTreeVM || SelectedControl is AttrVM)
                     return Visibility.Visible;
@@ -64,12 +64,23 @@ namespace PilotLookUp.ViewModel
 
         public Visibility AttrButtVisibilities => TaskButtVisibilities;
 
-        public ICommand LookDBCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.DBPage));
-        public ICommand SearchCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.SearchPage));
-        public ICommand LookUpPageCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
-        public ICommand TaskTreeCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
-        public ICommand AttrCommand => new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.AttrPage));
-        public ICommand EventMonitorCommand => new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.EventMonitor));
+        private ICommand _lookDBCommand;
+        public ICommand LookDBCommand => _lookDBCommand ??= new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.DBPage));
+
+        private ICommand _searchCommand;
+        public ICommand SearchCommand => _searchCommand ??= new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.SearchPage));
+
+        private ICommand _lookUpPageCommand;
+        public ICommand LookUpPageCommand => _lookUpPageCommand ??= new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.LookUpPage));
+
+        private ICommand _taskTreeCommand;
+        public ICommand TaskTreeCommand => _taskTreeCommand ??= new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.TaskTree));
+
+        private ICommand _attrCommand;
+        public ICommand AttrCommand => _attrCommand ??= new RelayCommand<object>(_ => _pageController.CreatePage(PagesName.AttrPage));
+
+        private ICommand _eventMonitorCommand;
+        public ICommand EventMonitorCommand => _eventMonitorCommand ??= new RelayCommand<object>(_ => _pageController.GoToPage(PagesName.EventMonitor));
 
         public void Dispose() => (_pageController as IDisposable)?.Dispose();
 

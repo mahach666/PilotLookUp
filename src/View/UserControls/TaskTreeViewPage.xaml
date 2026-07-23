@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
-             xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
+             xmlns:views="clr-namespace:PilotLookUp.View.CustomUIElements"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:behaviorutils="clr-namespace:PilotLookUp.Utils"
              mc:Ignorable="d"
@@ -45,7 +45,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TreeView ItemsSource="{Binding FirstParrentNode}">
+            <TreeView ItemsSource="{Binding FirstParentNode}">
                 <i:Interaction.Behaviors>
                     <behaviorutils:TreeViewSelectedItemBehavior SelectedItem="{Binding DataObjectSelected, Mode=TwoWay}" />
                 </i:Interaction.Behaviors>
@@ -86,7 +86,7 @@
                                 <TextBlock>
                                     <Hyperlink Command="{Binding DataContext.SelectedValueCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                TextDecorations="{Binding Decoration}">
-                                        <TextBlock Text="{Binding Discription, Mode=OneWay}" Style="{StaticResource DataGridTextBlock_Style}" />
+                                        <TextBlock Text="{Binding Description, Mode=OneWay}" Style="{StaticResource DataGridTextBlock_Style}" />
                                     </Hyperlink>
                                 </TextBlock>
                             </DataTemplate>

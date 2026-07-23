@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
-             xmlns:views="clr-namespace:PilotLookUp.View.CastomUIElemens"
+             xmlns:views="clr-namespace:PilotLookUp.View.CustomUIElements"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -45,14 +45,14 @@
                      FontSize="20"                    
                      IsEnabled="False"
                      Content="Введите Id или GUID"
-                     Visibility="{Binding PromtVisibility}"
+                     Visibility="{Binding PromptVisibility}"
                      Foreground="{DynamicResource DisabledForeground}"
                      IsHitTestVisible ="False">
             </Label>
             <Button                    Command="{Binding SearchCommand}"
                                        Margin="20,0,20,60"
                                        HorizontalAlignment="Right"
-                                       Style="{StaticResource CastomImageButton}"
+                                       Style="{StaticResource CustomImageButton}"
                                        Content="..\Resources\UI\search.png" />
         </Grid>
 

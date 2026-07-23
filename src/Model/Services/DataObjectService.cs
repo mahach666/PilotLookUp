@@ -12,7 +12,8 @@ namespace PilotLookUp.Model.Services
     {
         public IEnumerable<AttrDTO> GetAttrDTOs(DataObjectHelper dataObjectHelper)
         {
-            var castedObject = dataObjectHelper.LookUpObject as IDataObject;
+            if (!(dataObjectHelper?.LookUpObject is IDataObject castedObject))
+                return Enumerable.Empty<AttrDTO>();
 
             var objAttr = castedObject.Attributes;
             var typeAttr = castedObject.Type.Attributes;

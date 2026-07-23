@@ -43,38 +43,38 @@
                          HorizontalAlignment="Left" Margin="0,-5,0,0">
                 <Button ToolTip="LookDB"
                         Tag="{x:Static enums:PagesName.DBPage}"
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding LookDBCommand}"
                         Content="..\Resources\UI\databaseEnabled.png" />
 
                 <Button ToolTip="Search"
                         Tag="{x:Static enums:PagesName.SearchPage}"                        
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding SearchCommand}"
                         Content="..\Resources\UI\search.png" />
 
                 <Button ToolTip="LookUpView"
                         Tag="{x:Static enums:PagesName.LookUpPage}"
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding LookUpPageCommand}"
                         Content="..\Resources\UI\lookUpView.png" />
 
                 <Button ToolTip="Event Monitor"
                         Tag="{x:Static enums:PagesName.EventMonitor}"
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding EventMonitorCommand}"
                         Content="..\Resources\UI\eventMonitor.png" />
 
                 <Button ToolTip="Tasks"
                         Tag="{x:Static enums:PagesName.TaskTree}"                        
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding TaskTreeCommand}"
                         Content="..\Resources\UI\task.png"
                         Visibility="{Binding TaskButtVisibilities}"/>
 
                 <Button ToolTip="Attr"
                         Tag="{x:Static enums:PagesName.AttrPage}"                        
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding AttrCommand}"
                         Content="..\Resources\UI\attr.png"
                         Visibility="{Binding AttrButtVisibilities}"/>
@@ -93,13 +93,13 @@
                               Content="..\Resources\UI\pin.png" />
 
                 <Button ToolTip="Открыть"
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding SelectedControl.OpenSelectedFileCommand}"
                         Visibility="{Binding SelectedControl.OpenFileButtonVisibility, FallbackValue=Collapsed}"
                         Content="..\Resources\UI\open.png" />
 
                 <Button ToolTip="Скачать"
-                        Style="{StaticResource CastomImageButton}"
+                        Style="{StaticResource CustomImageButton}"
                         Command="{Binding SelectedControl.DownloadSelectedFilesCommand}"
                         Visibility="{Binding SelectedControl.DownloadFilesButtonVisibility, FallbackValue=Collapsed}"
                         Content="..\Resources\UI\download.png" />

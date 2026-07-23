@@ -1,4 +1,4 @@
-using Ascon.Pilot.SDK;
+﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Commands;
 using PilotLookUp.Core;
 using PilotLookUp.Enums;
@@ -78,12 +78,12 @@ namespace PilotLookUp.ViewModel
             {
                 _textFilter = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(PromtVisibility));
+                OnPropertyChanged(nameof(PromptVisibility));
                 EventsView.Refresh();
             }
         }
 
-        public Visibility PromtVisibility => string.IsNullOrEmpty(_textFilter) ? Visibility.Visible : Visibility.Hidden;
+        public Visibility PromptVisibility => string.IsNullOrEmpty(_textFilter) ? Visibility.Visible : Visibility.Hidden;
 
         private EventMonitorItemVM _selectedEvent;
         public EventMonitorItemVM SelectedEvent
@@ -103,13 +103,21 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        private void UpdateInfo()
+        private async void UpdateInfo()
         {
             var selected = _selectedEvent;
-            Task.Run(async () =>
+            try
             {
-                Info = await _repoService.GetObjInfo(selected.Helper);
-            });
+                var info = await Task.Run(() => _repoService.GetObjInfo(selected.Helper));
+
+                // Выделение могло смениться, пока грузилась информация
+                if (ReferenceEquals(selected, _selectedEvent))
+                    Info = info;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private List<ObjectSet> _info;
@@ -134,14 +142,18 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ICommand ClearCommand => new RelayCommand<object>(_ =>
+        private ICommand _clearCommand;
+        public ICommand ClearCommand => _clearCommand ??= new RelayCommand<object>(_ =>
         {
             Events.Clear();
             SelectedEvent = null;
         });
 
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        private ICommand _selectedValueCommand;
+        public ICommand SelectedValueCommand => _selectedValueCommand ??= new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
+
+        private ICommand _copyCommand;
+        public ICommand CopyCommand => _copyCommand ??= new RelayCommand<string>(CopyToClipboard);
 
         private void CopyToClipboard(string sender)
         {
@@ -150,9 +162,9 @@ namespace PilotLookUp.ViewModel
                 if (sender == "DataGridSelectName")
                     Clipboard.SetText(_dataGridSelected?.SenderMemberName ?? string.Empty);
                 else if (sender == "DataGridSelectValue")
-                    Clipboard.SetText(_dataGridSelected?.Discription ?? string.Empty);
+                    Clipboard.SetText(_dataGridSelected?.Description ?? string.Empty);
                 else if (sender == "DataGridSelectLine")
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Description);
             }
             catch
             {

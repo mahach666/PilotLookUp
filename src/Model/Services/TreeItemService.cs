@@ -20,28 +20,31 @@ namespace PilotLookUp.Model.Services
             _viewModelFactory = viewModelFactory;
         }
 
-        public async Task<ICustomTree> FillChild(ICustomTree lastParrent)
+        public async Task<ICustomTree> FillChild(ICustomTree lastParent)
         {
-            await BuildChildNodes(lastParrent);
-            return lastParrent;
+            await BuildChildNodes(lastParent);
+            return lastParent;
         }
 
-        private async Task BuildChildNodes(ICustomTree lastParrent)
+        private async Task BuildChildNodes(ICustomTree lastParent)
         {
-            var sad = lastParrent.PilotObjectHelper.LookUpObject as IDataObject;
-            List<Guid> children = sad.Children.ToList();  
+            // Узел без объекта БД (например, ярлык или спецтип) - потомков нет
+            if (!(lastParent.PilotObjectHelper?.LookUpObject is IDataObject dataObject))
+                return;
+
+            List<Guid> children = dataObject.Children.ToList();
             ObjectSet newPilotObj = await _lookUpModel.GetWrapedObjs(children);
 
             foreach (var dataObjectHelper in newPilotObj)
             {
                 var childNode = _viewModelFactory.CreateListItemVM(dataObjectHelper);
-                if (lastParrent.Children != null)
+                if (lastParent.Children != null)
                 {
-                    lastParrent.Children.Add(childNode);
+                    lastParent.Children.Add(childNode);
                 }
                 else
                 {
-                    lastParrent.Children = new ObservableCollection<ICustomTree>()
+                    lastParent.Children = new ObservableCollection<ICustomTree>()
                     {
                         childNode
                     };

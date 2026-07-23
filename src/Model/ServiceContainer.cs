@@ -1,4 +1,4 @@
-﻿using Ascon.Pilot.Bim.SDK.Model;
+using Ascon.Pilot.Bim.SDK.Model;
 using Ascon.Pilot.Bim.SDK.ModelStorage;
 using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
@@ -12,16 +12,13 @@ namespace PilotLookUp.Model
 {
     public class ServiceContainer
     {
-        private static Container _container;
+        private Container _container;
 
         public Container CreateContainer(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
             IPilotDialogService pilotDialogService,
             IFileProvider fileProvider)
         {
-            //if (_container != null)
-            //    throw new InvalidOperationException("Container has already been created. Repeated initialization is not allowed.");
-
             _container = new Container();
 
             _container.RegisterInstance(objectsRepository);
@@ -61,6 +58,7 @@ namespace PilotLookUp.Model
             container.Register<ITreeItemService, TreeItemService>(Lifestyle.Singleton);
             container.Register<IFileService, FileService>(Lifestyle.Singleton);
             container.Register<IClientEventService, ClientEventService>(Lifestyle.Singleton);
+            container.Register<IMenuCommandHandler, MenuCommandHandler>(Lifestyle.Singleton);
         }
 
         private void RegisterFactories(Container container)
@@ -68,6 +66,12 @@ namespace PilotLookUp.Model
             container.Register<IViewFactory, ViewFactory>(Lifestyle.Singleton);
             container.Register<IViewModelFactory, ViewModelFactory>(Lifestyle.Singleton);
             container.Register<IPageServiceFactory, PageServiceFactory>(Lifestyle.Singleton);
+
+            // Lazy-обертки для разрыва циклов между фабриками и сервисами,
+            // зависящими от IViewModelFactory
+            container.Register(() => new Lazy<IViewFactory>(container.GetInstance<IViewFactory>), Lifestyle.Singleton);
+            container.Register(() => new Lazy<ITreeItemService>(container.GetInstance<ITreeItemService>), Lifestyle.Singleton);
+            container.Register(() => new Lazy<IPageServiceFactory>(container.GetInstance<IPageServiceFactory>), Lifestyle.Singleton);
         }
     }
 }

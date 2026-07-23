@@ -1,27 +1,31 @@
 using PilotLookUp.Contracts;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Model.Services;
-using SimpleInjector;
 
 namespace PilotLookUp.Model.Factories
 {
     public class PageServiceFactory : IPageServiceFactory
     {
-        private readonly Container _container;
+        private readonly IRepoService _repoService;
+        private readonly ICustomSearchService _searchService;
+        private readonly ITabService _tabService;
+        private readonly IViewModelFactory _viewModelFactory;
 
-        public PageServiceFactory(Container container)
+        public PageServiceFactory(
+            IRepoService repoService,
+            ICustomSearchService searchService,
+            ITabService tabService,
+            IViewModelFactory viewModelFactory)
         {
-            _container = container;
+            _repoService = repoService;
+            _searchService = searchService;
+            _tabService = tabService;
+            _viewModelFactory = viewModelFactory;
         }
 
         public IPageService CreatePageService(StartViewInfo startViewInfo)
         {
-            var repoService = _container.GetInstance<IRepoService>();
-            var searchService = _container.GetInstance<ICustomSearchService>();
-            var tabService = _container.GetInstance<ITabService>();
-            var viewModelFactory = _container.GetInstance<IViewModelFactory>();
-
-            return new PageService(startViewInfo, repoService, searchService, tabService, viewModelFactory);
+            return new PageService(startViewInfo, _repoService, _searchService, _tabService, _viewModelFactory);
         }
     }
-} 
+}

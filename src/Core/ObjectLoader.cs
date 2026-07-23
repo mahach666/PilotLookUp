@@ -1,4 +1,5 @@
 ﻿using Ascon.Pilot.SDK;
+using PilotLookUp.Core;
 using System;
 using System.Threading.Tasks;
 using IDataObject = Ascon.Pilot.SDK.IDataObject;
@@ -26,14 +27,9 @@ namespace PilotLookUp.Core
             return _tcs.Task;
         }
 
-        private async Task<IDataObject> LoadData(Guid guid)
+        public async Task<IDataObject> LoadWithTimeout(Guid guid, int timeoutMilliseconds = PilotTimeouts.ObjectLoadMs)
         {
-            return await Load(guid);
-        }
-
-        public async Task<IDataObject> LoadWithTimeout(Guid guid, int timeoutMilliseconds = 300)
-        {
-            var loadTask = LoadData(guid);
+            var loadTask = Load(guid);
             var delayTask = Task.Delay(timeoutMilliseconds);
 
             // Ожидаем завершения одной из задач - загрузки данных или таймаута
@@ -44,11 +40,11 @@ namespace PilotLookUp.Core
                 // Если загрузка завершилась, возвращаем результат
                 return await loadTask;
             }
-            else
-            {
-                // Если завершился таймаут, возвращаем null
-                return null;
-            }
+
+            // Таймаут: снимаем подписку, иначе она живет до конца сессии
+            _subscription?.Dispose();
+            _tcs.TrySetResult(null);
+            return null;
         }
 
         public void OnNext(IDataObject value)

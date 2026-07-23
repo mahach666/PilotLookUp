@@ -31,7 +31,7 @@ namespace PilotLookUp.Model.Services
             {
                 var map = new PilotObjectMap(_objectsRepository);
 
-                IEnumerable<object>? raw = context switch
+                IEnumerable<object> raw = context switch
                 {
                     ObjectsViewContext c => c.SelectedObjects?.Cast<object>(),
                     DocumentFilesContext c => c.SelectedObjects?.Cast<object>(),

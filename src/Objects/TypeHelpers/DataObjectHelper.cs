@@ -13,10 +13,6 @@ namespace PilotLookUp.Objects.TypeHelpers
             _name = obj.DisplayName;
             _isLookable = true;
             _stringId = obj.Id.ToString();
-            //if (revokedId == null)
-            //{
-            //    revokedId = objectsRepository.GetUserStates().FirstOrDefault(i => i.Name == "revoked").Id;
-            //}
         }
 
         public override BitmapImage GetImage()

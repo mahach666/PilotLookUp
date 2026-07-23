@@ -38,13 +38,14 @@ namespace PilotLookUp.ViewModel
             _objectsRepository = objectsRepository;
         }
 
+        private IEnumerable<AttrDTO> _attrs;
         public IEnumerable<AttrDTO> Attrs
         {
             get
             {
                 if (_objectHelper == null || _objectHelper.LookUpObject == null)
                     return new List<AttrDTO>();
-                return _dataObjectService.GetAttrDTOs(_objectHelper as DataObjectHelper);
+                return _attrs ??= _dataObjectService.GetAttrDTOs(_objectHelper as DataObjectHelper);
             }
         }
 
@@ -66,7 +67,11 @@ namespace PilotLookUp.ViewModel
         private void CopyToClipboard(string sender)
         {
             var errorText = "Упс, ничего не выбрано.";
-            if (_dataGridSelected == null) MessageBox.Show(errorText);
+            if (_dataGridSelected == null)
+            {
+                MessageBox.Show(errorText);
+                return;
+            }
 
             try
             {
@@ -87,15 +92,17 @@ namespace PilotLookUp.ViewModel
                     MessageBox.Show(errorText);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                MessageBox.Show(errorText);
+                MessageBox.Show(e.Message);
             }
         }
 
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        private ICommand _copyCommand;
+        public ICommand CopyCommand => _copyCommand ??= new RelayCommand<string>(CopyToClipboard);
 
-        public ICommand OpenAttrValueCommand => new RelayCommand<AttrDTO>(OpenAttrValueAsync, CanOpenAttrValue);
+        private ICommand _openAttrValueCommand;
+        public ICommand OpenAttrValueCommand => _openAttrValueCommand ??= new RelayCommand<AttrDTO>(OpenAttrValueAsync, CanOpenAttrValue);
 
         private bool CanOpenAttrValue(AttrDTO attr) =>
             attr?.IsLookable == true;

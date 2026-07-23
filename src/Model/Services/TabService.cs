@@ -13,6 +13,11 @@ namespace PilotLookUp.Model.Services
         }
 
         public void GoTo(IDataObject dataObject)
-        => _tabServiceProvider.ShowElement(dataObject.Id);
+        {
+            if (dataObject == null)
+                return;
+
+            _tabServiceProvider.ShowElement(dataObject.Id);
+        }
     }
 }

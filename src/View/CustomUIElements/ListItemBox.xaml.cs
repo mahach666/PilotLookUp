@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PilotLookUp.View.CastomUIElemens
+namespace PilotLookUp.View.CustomUIElements
 {
     public partial class ListItemBox : UserControl
     {

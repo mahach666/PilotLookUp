@@ -56,7 +56,6 @@ namespace PilotLookUp.Model.Services
         }
         public void CreatePage(PagesName pageName, ObjectSet dataObj = null)
         {
-            LookUpVM selectedItemVM;
             PilotObjectHelper itemOne;
 
             switch (pageName)
@@ -78,14 +77,16 @@ namespace PilotLookUp.Model.Services
                     GoToPage(pageName);
                     break;
                 case PagesName.TaskTree:
-                    selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
-                    itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
+                    itemOne = GetSelectedLookUpObject();
+                    if (itemOne == null)
+                        return;
                     AddPage(_viewModelFactory.CreateTaskTreeVM(itemOne));
                     GoToPage(pageName);
                     break;
                 case PagesName.AttrPage:
-                    selectedItemVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
-                    itemOne = selectedItemVM.DataObjectSelected.PilotObjectHelper;
+                    itemOne = GetSelectedLookUpObject();
+                    if (itemOne == null)
+                        return;
                     AddPage(_viewModelFactory.CreateAttrVM(itemOne));
                     GoToPage(pageName);
                     break;
@@ -94,6 +95,13 @@ namespace PilotLookUp.Model.Services
                     GoToPage(pageName);
                     break;
             }
+        }
+
+        // TaskTree/AttrPage строятся от объекта, выбранного на LookUp-странице
+        private PilotObjectHelper GetSelectedLookUpObject()
+        {
+            var lookUpVM = _controlsHolder.FirstOrDefault(it => it.GetName() == PagesName.LookUpPage) as LookUpVM;
+            return lookUpVM?.DataObjectSelected?.PilotObjectHelper;
         }
 
         private void AddPage(IPage item)

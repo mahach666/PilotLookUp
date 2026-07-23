@@ -15,16 +15,16 @@ namespace PilotLookUp.Objects
         }
 
         private MemberInfo _memberInfo { get; }
-        public string DiscriptionOverride { get; set; }
+        public string DescriptionOverride { get; set; }
         public bool IsMethodResult { get => _memberInfo?.MemberType is MemberTypes.Method; }
         public string SenderMemberName { get => IsMethodResult ? _memberInfo?.Name + "()" : _memberInfo?.Name; }
 
-        public string Discription
+        public string Description
         {
             get
             {
-                if (DiscriptionOverride != null)
-                    return DiscriptionOverride;
+                if (DescriptionOverride != null)
+                    return DescriptionOverride;
 
                 var firstObj = this.FirstOrDefault();
                 if (Count == 0) return "No objects";
@@ -67,7 +67,7 @@ namespace PilotLookUp.Objects
 
         public override string ToString()
         {
-            return Discription;
+            return Description;
         }
     }
 }

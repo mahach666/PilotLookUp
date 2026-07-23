@@ -3,14 +3,14 @@
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:vm="clr-namespace:PilotLookUp.ViewModel"
                      xmlns:view="clr-namespace:PilotLookUp.View"
-                     xmlns:castomview="clr-namespace:PilotLookUp.View.CastomUIElemens"
+                     xmlns:customview="clr-namespace:PilotLookUp.View.CustomUIElements"
                     xmlns:page="clr-namespace:PilotLookUp.View.UserControls">
 
     <DataTemplate DataType="{x:Type vm:ListItemVM}">
-        <castomview:ListItemBox />
+        <customview:ListItemBox />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SearchResVM}">
-        <castomview:SearchResBox />
+        <customview:SearchResBox />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:SearchVM}">
         <page:SearchPage />

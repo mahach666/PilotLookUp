@@ -37,7 +37,8 @@ namespace PilotLookUp.ViewModel
             _pageController.CreatePage(PagesName.LookUpPage, new ObjectSet(null) { _dataObj });
         }
 
-        public ICommand GoPageCommand => new RelayCommand<object>(_ => GoPage());
+        private ICommand _goPageCommand;
+        public ICommand GoPageCommand => _goPageCommand ??= new RelayCommand<object>(_ => GoPage());
 
         private void GoObj()
         {
@@ -45,6 +46,7 @@ namespace PilotLookUp.ViewModel
                 _tabService.GoTo(dataObj);
         }
 
-        public ICommand GoObjCommand => new RelayCommand<object>(_ => GoObj());
+        private ICommand _goObjCommand;
+        public ICommand GoObjCommand => _goObjCommand ??= new RelayCommand<object>(_ => GoObj());
     }
 }

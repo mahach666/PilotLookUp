@@ -1,10 +1,6 @@
-﻿using Ascon.Pilot.SDK;
+using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Core
@@ -14,30 +10,23 @@ namespace PilotLookUp.Core
         private readonly IObjectsRepository _repository;
         private IDisposable _subscription;
         private TaskCompletionSource<IHistoryItem> _tcs;
-        private long _changesetId;
 
         public HistoryItemLoader(IObjectsRepository repository)
         {
             _repository = repository;
         }
 
-        public Task<IHistoryItem> Load(Guid id, long changesetId = 0)
+        public Task<IHistoryItem> Load(Guid id)
         {
-            _changesetId = changesetId;
             _tcs = new TaskCompletionSource<IHistoryItem>();
             _subscription = _repository.GetHistoryItems(new[] { id }).Subscribe(this);
 
             return _tcs.Task;
         }
 
-        private async Task<IHistoryItem> LoadData(Guid guid)
+        public async Task<IHistoryItem> LoadWithTimeout(Guid guid, int timeoutMilliseconds = PilotTimeouts.ObjectLoadMs)
         {
-            return await Load(guid);
-        }
-
-        public async Task<IHistoryItem> LoadWithTimeout(Guid guid, int timeoutMilliseconds = 300)
-        {
-            var loadTask = LoadData(guid);
+            var loadTask = Load(guid);
             var delayTask = Task.Delay(timeoutMilliseconds);
 
             // Ожидаем завершения одной из задач - загрузки данных или таймаута
@@ -48,11 +37,11 @@ namespace PilotLookUp.Core
                 // Если загрузка завершилась, возвращаем результат
                 return await loadTask;
             }
-            else
-            {
-                // Если завершился таймаут, возвращаем null
-                return null;
-            }
+
+            // Таймаут: снимаем подписку, иначе она живет до конца сессии
+            _subscription?.Dispose();
+            _tcs.TrySetResult(null);
+            return null;
         }
 
         public void OnCompleted() { }

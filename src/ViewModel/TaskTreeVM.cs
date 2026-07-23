@@ -3,6 +3,7 @@ using PilotLookUp.Enums;
 using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -39,8 +40,20 @@ namespace PilotLookUp.ViewModel
             _viewFactory = viewFactory;
             _treeItemService = treeItemService;
             _viewModelFactory = viewModelFactory;
-            FirstParrentNode = new ObservableCollection<ICustomTree>();
-            _ = LoadDataAsync();
+            FirstParentNode = new ObservableCollection<ICustomTree>();
+            LoadDataSafe();
+        }
+
+        private async void LoadDataSafe()
+        {
+            try
+            {
+                await LoadDataAsync();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         #region Информация о выбранном задании
@@ -68,7 +81,7 @@ namespace PilotLookUp.ViewModel
             set
             {
                 _revokedTask = value;
-                _ = LoadDataAsync();
+                LoadDataSafe();
                 OnPropertyChanged();
             }
         }
@@ -101,23 +114,23 @@ namespace PilotLookUp.ViewModel
 
             if (isTask && _objectHelper.LookUpObject is IDataObject dataObject)
             {
-                LastParrent = await _searchService.GetLastParent(dataObject);
-                ICustomTree rootNode = _viewModelFactory.CreateListItemVM(LastParrent);
+                LastParent = await _searchService.GetLastParent(dataObject);
+                ICustomTree rootNode = _viewModelFactory.CreateListItemVM(LastParent);
                 rootNode = await _treeItemService.FillChild(rootNode);
                 // Обновляем UI-поток
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     RevokedTaskVisible = Visibility.Hidden;
-                    FirstParrentNode.Clear();
-                    FirstParrentNode.Add(rootNode);
+                    FirstParentNode.Clear();
+                    FirstParentNode.Add(rootNode);
                 });
                 return;
             }
             else
             {
                 var treeItems = new ObservableCollection<ICustomTree>();
-                ObjectSet allLastParrent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
-                foreach (PilotObjectHelper item in allLastParrent)
+                ObjectSet allLastParent = await _searchService.GetBaseParentsOfRelations(_objectHelper, RevokedTask);
+                foreach (PilotObjectHelper item in allLastParent)
                 {
                     ICustomTree rootNode = _viewModelFactory.CreateListItemVM(item);
                     rootNode = await _treeItemService.FillChild(rootNode);
@@ -125,26 +138,26 @@ namespace PilotLookUp.ViewModel
                 }
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    FirstParrentNode.Clear();
+                    FirstParentNode.Clear();
                     foreach (var item in treeItems)
                     {
-                        FirstParrentNode.Add(item);
+                        FirstParentNode.Add(item);
                     }
                 });
                 return;
             }
         }
-        private PilotObjectHelper LastParrent { get; set; }
+        private PilotObjectHelper LastParent { get; set; }
 
-        private ObservableCollection<ICustomTree> _firstParrentNode;
+        private ObservableCollection<ICustomTree> _firstParentNode;
 
-        public ObservableCollection<ICustomTree> FirstParrentNode
+        public ObservableCollection<ICustomTree> FirstParentNode
         {
 
-            get => _firstParrentNode;
+            get => _firstParentNode;
             set
             {
-                _firstParrentNode = value;
+                _firstParentNode = value;
                 OnPropertyChanged();
             }
         }
@@ -162,12 +175,27 @@ namespace PilotLookUp.ViewModel
                 }
             }
         }
-        private void UpdateInfo()
+        private async void UpdateInfo()
         {
-            Task.Run(async () =>
+            var selected = _dataObjectSelected;
+            if (selected == null)
             {
-                Info = await _repoService.GetObjInfo(_dataObjectSelected.PilotObjectHelper);
-            });
+                Info = null;
+                return;
+            }
+
+            try
+            {
+                var info = await Task.Run(() => _repoService.GetObjInfo(selected.PilotObjectHelper));
+
+                // Выделение могло смениться, пока грузилась информация
+                if (ReferenceEquals(selected, _dataObjectSelected))
+                    Info = info;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
 
         #endregion
@@ -195,12 +223,17 @@ namespace PilotLookUp.ViewModel
                 OnPropertyChanged();
             }
         }
-        public ICommand SelectedValueCommand => new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
+        private ICommand _selectedValueCommand;
+        public ICommand SelectedValueCommand => _selectedValueCommand ??= new RelayCommand<object>(_ => _viewFactory.LookSelection(_dataGridSelected));
 
         private void CopyToClipboard(string sender)
         {
             var errorText = "Упс, ничего не выбрано.";
-            if (_dataObjectSelected == null) MessageBox.Show(errorText);
+            if (_dataObjectSelected == null)
+            {
+                MessageBox.Show(errorText);
+                return;
+            }
 
             try
             {
@@ -214,24 +247,25 @@ namespace PilotLookUp.ViewModel
                 }
                 else if (sender == "DataGridSelectValue")
                 {
-                    Clipboard.SetText(_dataGridSelected?.Discription);
+                    Clipboard.SetText(_dataGridSelected?.Description);
                 }
                 else if (sender == "DataGridSelectLine")
                 {
-                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Discription);
+                    Clipboard.SetText(_dataGridSelected?.SenderMemberName + "\t" + _dataGridSelected?.Description);
                 }
                 else
                 {
                     MessageBox.Show(errorText);
                 }
             }
-            catch
+            catch (Exception e)
             {
-                MessageBox.Show(errorText);
+                MessageBox.Show(e.Message);
             }
         }
 
-        public ICommand CopyCommand => new RelayCommand<string>(CopyToClipboard);
+        private ICommand _copyCommand;
+        public ICommand CopyCommand => _copyCommand ??= new RelayCommand<string>(CopyToClipboard);
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")

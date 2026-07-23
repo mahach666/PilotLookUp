@@ -7,6 +7,16 @@ namespace PilotLookUp.Core
 {
     public class ObjReflection
     {
+        // Методы с побочными эффектами: их вызов при просмотре объекта
+        // может изменить или уничтожить живой SDK-объект
+        private static readonly HashSet<string> ForbiddenMethods = new HashSet<string>
+        {
+            "Dispose", "Close", "Clear", "Reset", "Refresh", "Delete", "Remove",
+            "Save", "Commit", "Rollback", "Abort",
+            "InitializeLifetimeService", "GetLifetimeService", "CreateObjRef",
+            "GetEnumerator", "MoveNext"
+        };
+
         public ObjReflection(PilotObjectHelper typeHelper)
         {
             object dataObjects = typeHelper?.LookUpObject;
@@ -20,7 +30,15 @@ namespace PilotLookUp.Core
                 // Поля
                 foreach (PropertyInfo property in _propertyes)
                 {
-                    object value = property.GetValue(dataObjects);
+                    object value;
+                    try
+                    {
+                        value = property.GetValue(dataObjects);
+                    }
+                    catch (Exception e)
+                    {
+                        value = "Error: " + (e.InnerException ?? e).Message;
+                    }
                     if (value == null) value = "null";
                     KeyValuePairs.Add(property, value);
                 }
@@ -32,6 +50,9 @@ namespace PilotLookUp.Core
                     if (method.GetParameters().Length == 0)
                     {
                         if (method.Name.Contains("get_")) continue;
+                        if (ForbiddenMethods.Contains(method.Name)) continue;
+                        if (method.DeclaringType == typeof(MarshalByRefObject)) continue;
+
                         object result;
                         try
                         {

@@ -31,8 +31,6 @@ namespace PilotLookUp.ViewModel
             }
         }
 
-        public ICustomTree Parrent { get; set; }
-
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
