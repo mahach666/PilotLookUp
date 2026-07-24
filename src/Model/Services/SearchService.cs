@@ -13,15 +13,17 @@ namespace PilotLookUp.Model.Services
     public class SearchService : ICustomSearchService
     {
         private IObjectsRepository _objectsRepository { get; }
+        private IBimModelService _bimModelService { get; }
 
-        public SearchService(IObjectsRepository objectsRepository)
+        public SearchService(IObjectsRepository objectsRepository, IBimModelService bimModelService)
         {
             _objectsRepository = objectsRepository;
+            _bimModelService = bimModelService;
         }
 
         public async Task<ObjectSet> GetObjByString(string request)
         {
-            var tracer = new Tracer(_objectsRepository, null, null);
+            var tracer = new Tracer(_objectsRepository, null, null, _bimModelService);
             if (Guid.TryParse(request, out var id))
             {
                 var res = await tracer.Trace(await _objectsRepository.GetObjByGuid(id));
@@ -51,7 +53,7 @@ namespace PilotLookUp.Model.Services
             if (objectHelper.LookUpObject is IDataObject dataObject)
             {
                 var listId = dataObject.Relations.Where(it => it.Type == ObjectRelationType.TaskAttachments).Select(fd => fd.TargetId).ToList();
-                childrenSet = await new Tracer(_objectsRepository, null, null).Trace(listId);
+                childrenSet = await new Tracer(_objectsRepository, null, null, _bimModelService).Trace(listId);
             }
             else return null;
 
@@ -89,7 +91,7 @@ namespace PilotLookUp.Model.Services
             if (dataObject != null)
             {
                 var parent = await dataObject.FindLastParent(_objectsRepository);
-                var objSet = await new Tracer(_objectsRepository, null, null).Trace(parent);
+                var objSet = await new Tracer(_objectsRepository, null, null, _bimModelService).Trace(parent);
                 return objSet.FirstOrDefault() is DataObjectHelper result ? result : null;
             }
             return null;

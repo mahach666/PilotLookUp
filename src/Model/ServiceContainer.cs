@@ -17,7 +17,9 @@ namespace PilotLookUp.Model
         public Container CreateContainer(IObjectsRepository objectsRepository,
             ITabServiceProvider tabServiceProvider,
             IPilotDialogService pilotDialogService,
-            IFileProvider fileProvider)
+            IFileProvider fileProvider,
+            IModelManager modelManager = null,
+            IModelStorageProvider modelStorageProvider = null)
         {
             _container = new Container();
 
@@ -29,20 +31,12 @@ namespace PilotLookUp.Model
             RegisterServices(_container);
             RegisterFactories(_container);
 
-            _container.Verify();
-            return _container;
-        }
-
-        public Container RegisterBim(IModelManager modelManager,
-         IModelStorageProvider modelStorageProvider)
-        {
-            if (_container == null)
-                throw new InvalidOperationException("Container is not initialized.");
-
-            _container.RegisterInstance(modelManager);
-            _container.RegisterInstance(modelStorageProvider);
-
-            _container.Register<BimModelService>(Lifestyle.Singleton);
+            // BIM-сервисы клиент отдает только в Pilot-BIM (в ICE - null);
+            // регистрация делегатом до единственного Verify, RegisterInstance(null) невозможен
+            _container.Register<IBimModelService>(
+                () => new BimModelService(modelManager, modelStorageProvider,
+                    _container.GetInstance<IClientEventService>()),
+                Lifestyle.Singleton);
 
             _container.Verify();
             return _container;

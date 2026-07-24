@@ -1,4 +1,5 @@
 using Ascon.Pilot.Bim.SDK;
+using Ascon.Pilot.Bim.SDK.ModelStorage;
 using Ascon.Pilot.Bim.SDK.ModelTab.Menu;
 using Ascon.Pilot.SDK;
 using PilotLookUp.Interfaces;
@@ -12,15 +13,23 @@ namespace PilotLookUp.Model.Services
 {
     public class SelectedService : ISelectedService
     {
+        // Ограничение на глубокий резолв элементов модели (защита от заморозки на больших выделениях)
+        private const int MaxBimElementsToLoad = 50;
+
         private IObjectsRepository _objectsRepository;
         private IClientEventService _clientEventService;
+        private IBimModelService _bimModelService;
         private ObjectSet _convertSelection;
         private string _lastRaisedSelection;
 
-        public SelectedService(IObjectsRepository objectsRepository, IClientEventService clientEventService)
+        public SelectedService(
+            IObjectsRepository objectsRepository,
+            IClientEventService clientEventService,
+            IBimModelService bimModelService)
         {
             _objectsRepository = objectsRepository;
             _clientEventService = clientEventService;
+            _bimModelService = bimModelService;
         }
 
         public ObjectSet Selected => _convertSelection;
@@ -107,12 +116,32 @@ namespace PilotLookUp.Model.Services
             {
                 var map = new PilotObjectMap(_objectsRepository);
 
-                var raw = context.SelectedElements?.Cast<object>().ToList();
+                var ids = context.SelectedElements?.ToList();
 
-                if (raw?.Count > 0)
+                if (ids?.Count > 0)
                 {
                     _convertSelection = new ObjectSet(null);
-                    _convertSelection.AddRange(raw.Select(map.Wrap));
+                    var loaded = 0;
+
+                    foreach (var id in ids)
+                    {
+                        // Элемент + свойства грузятся в момент выделения (из хелперов
+                        // хранилище недоступно); сверх лимита - легкий id
+                        var view = loaded < MaxBimElementsToLoad
+                            ? _bimModelService.TryLoadElementView(id)
+                            : null;
+
+                        if (view != null)
+                        {
+                            _convertSelection.Add(map.Wrap(view));
+                            loaded++;
+                        }
+                        else
+                        {
+                            _convertSelection.Add(map.Wrap(id));
+                        }
+                    }
+
                     RaiseSelectionChanged(context.GetType().Name, source, null, 0);
                 }
                 else

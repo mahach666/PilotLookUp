@@ -56,7 +56,7 @@ namespace PilotLookUp.ViewModel
         public ObservableCollection<EventMonitorItemVM> Events { get; }
         public ICollectionView EventsView { get; }
 
-        public IReadOnlyList<string> Categories { get; } = new[] { AllCategories, "Objects", "Tasks", "Storage", "Client", "Other" };
+        public IReadOnlyList<string> Categories { get; } = new[] { AllCategories, "Objects", "Tasks", "Storage", "Client", "Bim", "Other" };
 
         private string _selectedCategory = AllCategories;
         public string SelectedCategory

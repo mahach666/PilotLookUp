@@ -1,5 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
 using PilotLookUp.Extensions;
+using PilotLookUp.Interfaces;
 using PilotLookUp.Objects;
 using PilotLookUp.Objects.TypeHelpers;
 using System;
@@ -18,12 +19,14 @@ namespace PilotLookUp.Utils
             @"[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}",
             RegexOptions.Compiled);
 
-        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember)
+        public Tracer(IObjectsRepository objectsRepository, PilotObjectHelper senderObj, MemberInfo senderMember,
+            IBimModelService bimModelService = null)
         {
             _pilotObjectMap = new PilotObjectMap(objectsRepository, senderObj, senderMember);
             _objectsRepository = objectsRepository;
             _senderObj = senderObj;
             _memberInfo = senderMember;
+            _bimModelService = bimModelService;
             _objectSet = new ObjectSet(senderMember);
         }
 
@@ -31,6 +34,7 @@ namespace PilotLookUp.Utils
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
         private PilotObjectHelper _senderObj { get; }
+        private IBimModelService _bimModelService { get; }
         private ObjectSet _objectSet { get; set; }
         private MemberInfo _memberInfo { get; }
         private IEnumerable<IUserState> _userStates { get; set; }
@@ -75,6 +79,10 @@ namespace PilotLookUp.Utils
                     var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObjectWithTimeout(keyVal.Key), keyVal.Value);
                     _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
                 }
+                else if (obj is Ascon.Pilot.Bim.SDK.IModelElementId modelElementId)
+                {
+                    _objectSet.Add(WrapModelElementId(modelElementId));
+                }
                 else
                     _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
@@ -106,11 +114,22 @@ namespace PilotLookUp.Utils
                 foreach (var parsedGuid in parsedGuids)
                     _objectSet.Add(await GuidHandler(parsedGuid));
             }
+            else if (obj is Ascon.Pilot.Bim.SDK.IModelElementId modelElementId)
+            {
+                _objectSet.Add(WrapModelElementId(modelElementId));
+            }
             else
             {
                 _objectSet.Add(_pilotObjectMap.Wrap(obj));
             }
             return _objectSet;
+        }
+
+        // Id элемента модели резолвим в элемент со свойствами, если модель загружена
+        private PilotObjectHelper WrapModelElementId(Ascon.Pilot.Bim.SDK.IModelElementId id)
+        {
+            var view = _bimModelService?.TryLoadElementView(id);
+            return _pilotObjectMap.Wrap(view ?? (object)id);
         }
 
         private bool TryParseAttributeConfigGuidsFromString(object obj, out string originalText, out List<Guid> guids)
@@ -220,7 +239,60 @@ namespace PilotLookUp.Utils
                 return _pilotObjectMap.Wrap(userStateMachine);
             }
 
+            var bimElement = TryResolveBimGuid(guid);
+            if (bimElement != null)
+            {
+                return _pilotObjectMap.Wrap(bimElement);
+            }
+
             return _pilotObjectMap.Wrap(guid);
+        }
+
+        // Голые Guid'ы ElementId/ParentId у BIM-объектов: контекст модели берем у отправителя
+        private object TryResolveBimGuid(Guid guid)
+        {
+            if (_bimModelService == null)
+                return null;
+
+            try
+            {
+                var sender = _senderObj?.LookUpObject;
+
+                if (sender is Ascon.Pilot.Bim.SDK.IModelElement element)
+                {
+                    if (element.Id?.ElementId == guid)
+                        return _bimModelService.TryLoadElementView(element.Id);
+                    if (element.ParentId?.ElementId == guid)
+                        return _bimModelService.TryLoadElementView(element.ParentId);
+                }
+
+                if (sender is Ascon.Pilot.Bim.SDK.IModelElementId senderId)
+                {
+                    if (senderId.ElementId == guid)
+                        return _bimModelService.TryLoadElementView(senderId);
+
+                    var senderView = _bimModelService.TryLoadElementView(senderId);
+                    var parentId = senderView?.Element?.ParentId;
+                    if (parentId != null && parentId.ElementId == guid)
+                        return _bimModelService.TryLoadElementView(parentId);
+                }
+
+                if (sender is BimElementView view)
+                {
+                    if (view.Id?.ElementId == guid)
+                        return view;
+
+                    var parentId = view.Element?.ParentId;
+                    if (parentId != null && parentId.ElementId == guid)
+                        return _bimModelService.TryLoadElementView(parentId);
+                }
+            }
+            catch
+            {
+                // Модель могла выгрузиться - оставляем голый Guid
+            }
+
+            return null;
         }
     }
 }

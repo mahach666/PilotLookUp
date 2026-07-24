@@ -14,15 +14,15 @@ namespace PilotLookUp.ViewModel
             EventDateTime = record.DateTime.ToLocalTime();
             Kind = record.ChangeKind.ToString();
             Title = record.Title;
-            Category = GetCategory(record.ChangeKind);
+            Category = GetNotificationCategory(record.ChangeKind);
             SearchText = $"{Kind} {record.Title} {record.Message} {record.NotificationName}";
         }
 
-        // Клиентские события (выделение, клики меню, ошибки перехвата)
+        // Клиентские события (выделение, клики меню, ошибки перехвата) и BIM-события
         public EventMonitorItemVM(object clientRecord, IObjectsRepository repository)
         {
             Helper = new PilotObjectMap(repository).Wrap(clientRecord);
-            Category = "Client";
+            var category = "Client";
 
             switch (clientRecord)
             {
@@ -41,6 +41,38 @@ namespace PilotLookUp.ViewModel
                     Kind = "SelectionError";
                     Title = error.Error;
                     break;
+
+                case BimModelLifecycleRecord lifecycle:
+                    EventDateTime = lifecycle.DateTime;
+                    Kind = "Model" + lifecycle.Stage;
+                    Title = $"Модель {lifecycle.ModelId}";
+                    category = "Bim";
+                    break;
+                case BimSelectionChangedRecord bimSelection:
+                    EventDateTime = bimSelection.DateTime;
+                    Kind = "BimSelectionChanged";
+                    Title = $"Выделено {bimSelection.SelectedCount}";
+                    category = "Bim";
+                    break;
+                case BimModelVersionRecord version:
+                    EventDateTime = version.DateTime;
+                    Kind = "ModelVersion" + version.Kind;
+                    Title = version.Version.ToString("dd.MM.yyyy HH:mm:ss");
+                    category = "Bim";
+                    break;
+                case BimModelPartRecord part:
+                    EventDateTime = part.DateTime;
+                    Kind = "ModelPart" + part.Kind;
+                    Title = part.PartId.ToString();
+                    category = "Bim";
+                    break;
+                case BimTreeNodeRecord treeNode:
+                    EventDateTime = treeNode.DateTime;
+                    Kind = "TreeNode" + treeNode.Kind;
+                    Title = treeNode.Id?.ElementId.ToString();
+                    category = "Bim";
+                    break;
+
                 default:
                     EventDateTime = DateTime.Now;
                     Kind = clientRecord.GetType().Name;
@@ -48,6 +80,7 @@ namespace PilotLookUp.ViewModel
                     break;
             }
 
+            Category = category;
             SearchText = $"{Kind} {Title}";
         }
 
@@ -61,7 +94,7 @@ namespace PilotLookUp.ViewModel
         // Склеенный текст для фильтра
         public string SearchText { get; }
 
-        public static string GetCategory(NotificationKind kind)
+        public static string GetNotificationCategory(NotificationKind kind)
         {
             var name = kind.ToString();
             if (name.StartsWith("Task"))

@@ -1,3 +1,5 @@
+using Ascon.Pilot.Bim.SDK.Model;
+using Ascon.Pilot.Bim.SDK.ModelStorage;
 using Ascon.Pilot.Bim.SDK.ModelTab.Menu;
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Menu;
@@ -7,6 +9,7 @@ using PilotLookUp.Model;
 using PilotLookUp.Utils;
 using System;
 using System.ComponentModel.Composition;
+using System.Linq;
 
 namespace PilotLookUp
 {
@@ -65,11 +68,18 @@ namespace PilotLookUp
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
 
+            // BIM-сервисы есть только в Pilot-BIM; в Pilot-ICE вернется пусто -
+            // BIM-функции мягко отключаются (IBimModelService.IsAvailable == false)
+            var modelManager = serviceProvider.GetServices<IModelManager>().FirstOrDefault();
+            var modelStorageProvider = serviceProvider.GetServices<IModelStorageProvider>().FirstOrDefault();
+
             var container = new ServiceContainer()
                 .CreateContainer(objectsRepository,
                     tabServiceProvider,
                     pilotDialogService,
-                    fileProvider);
+                    fileProvider,
+                    modelManager,
+                    modelStorageProvider);
 
             _menuHandler = container.GetInstance<IMenuCommandHandler>();
             _selectedService = container.GetInstance<ISelectedService>();

@@ -11,10 +11,12 @@ namespace PilotLookUp.Model.Services
     public class RepoService : IRepoService
     {
         private IObjectsRepository _objectsRepository { get; }
+        private IBimModelService _bimModelService { get; }
 
-        public RepoService(IObjectsRepository objectsRepository)
+        public RepoService(IObjectsRepository objectsRepository, IBimModelService bimModelService)
         {
             _objectsRepository = objectsRepository;
+            _bimModelService = bimModelService;
         }
 
         public async Task<List<ObjectSet>> GetObjInfo(PilotObjectHelper sender)
@@ -22,7 +24,7 @@ namespace PilotLookUp.Model.Services
             var res = new List<ObjectSet>();
             foreach (var pair in sender.Reflection.KeyValuePairs)
             {
-                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender, pair.Key).Trace(pair.Value);
+                ObjectSet newPilotObj = await new Tracer(_objectsRepository, sender, pair.Key, _bimModelService).Trace(pair.Value);
                 res.Add(newPilotObj);
             }
             return res;
@@ -35,7 +37,7 @@ namespace PilotLookUp.Model.Services
         }
         public async Task<ObjectSet> GetWrapedObjs(IEnumerable<Guid> guids)
         {
-            return await new Tracer(_objectsRepository, null, null).Trace(guids);
+            return await new Tracer(_objectsRepository, null, null, _bimModelService).Trace(guids);
         }
     }
 }

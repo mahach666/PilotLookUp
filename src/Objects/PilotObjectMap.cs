@@ -1,4 +1,6 @@
 ﻿using Ascon.Pilot.Bim.SDK;
+using Ascon.Pilot.Bim.SDK.ModelStorage;
+using Ascon.Pilot.Bim.SDK.ModelViewer;
 using Ascon.Pilot.SDK;
 using Ascon.Pilot.SDK.Data;
 using PilotLookUp.Objects.TypeHelpers;
@@ -67,6 +69,15 @@ namespace PilotLookUp.Objects
                 ISignature value => new SignatureHelper(value),
 
                 // PilotBimTypes
+                BimElementView value => new BimElementViewHelper(value),
+                IModelElement value => new ModelElementHelper(value),
+                IModelViewer value => new ModelViewerHelper(value),
+                IModelStorage value => new ModelStorageHelper(value),
+                IPropertySet value => new PropertySetHelper(value),
+                IProperty value => new PropertyHelper(value),
+                IMeshInstance value => new MeshInstanceHelper(value),
+                IMeshDefinition value => new MeshDefinitionHelper(value),
+                IMeshDefinitionId value => new MeshDefinitionIdHelper(value),
                 IModelElementId value => new ModelElementIdHelper(value),
 
                 null => new NullHelper(),

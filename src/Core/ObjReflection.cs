@@ -14,7 +14,8 @@ namespace PilotLookUp.Core
             "Dispose", "Close", "Clear", "Reset", "Refresh", "Delete", "Remove",
             "Save", "Commit", "Rollback", "Abort",
             "InitializeLifetimeService", "GetLifetimeService", "CreateObjRef",
-            "GetEnumerator", "MoveNext"
+            "GetEnumerator", "MoveNext",
+            "FitToView", "ClearSelection", "IsolateSelection"
         };
 
         public ObjReflection(PilotObjectHelper typeHelper)
@@ -52,6 +53,10 @@ namespace PilotLookUp.Core
                         if (method.Name.Contains("get_")) continue;
                         if (ForbiddenMethods.Contains(method.Name)) continue;
                         if (method.DeclaringType == typeof(MarshalByRefObject)) continue;
+
+                        // void без параметров - чистый побочный эффект (FitToView, ClearSelection...):
+                        // показывать нечего, а вызов может мутировать живой SDK-объект
+                        if (method.ReturnType == typeof(void)) continue;
 
                         object result;
                         try
