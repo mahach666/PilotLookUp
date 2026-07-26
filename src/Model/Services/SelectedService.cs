@@ -13,9 +13,6 @@ namespace PilotLookUp.Model.Services
 {
     public class SelectedService : ISelectedService
     {
-        // Ограничение на глубокий резолв элементов модели (защита от заморозки на больших выделениях)
-        private const int MaxBimElementsToLoad = 50;
-
         private IObjectsRepository _objectsRepository;
         private IClientEventService _clientEventService;
         private IBimModelService _bimModelService;
@@ -120,27 +117,12 @@ namespace PilotLookUp.Model.Services
 
                 if (ids?.Count > 0)
                 {
+                    // ВАЖНО: никакой загрузки из хранилища здесь - метод выполняется
+                    // на UI-потоке при построении контекстного меню, обращения к
+                    // репозиторию/хранилищу вешают клиент. Элемент со свойствами
+                    // резолвится позже, при снупе (Tracer, фоновый поток)
                     _convertSelection = new ObjectSet(null);
-                    var loaded = 0;
-
-                    foreach (var id in ids)
-                    {
-                        // Элемент + свойства грузятся в момент выделения (из хелперов
-                        // хранилище недоступно); сверх лимита - легкий id
-                        var view = loaded < MaxBimElementsToLoad
-                            ? _bimModelService.TryLoadElementView(id)
-                            : null;
-
-                        if (view != null)
-                        {
-                            _convertSelection.Add(map.Wrap(view));
-                            loaded++;
-                        }
-                        else
-                        {
-                            _convertSelection.Add(map.Wrap(id));
-                        }
-                    }
+                    _convertSelection.AddRange(ids.Select(id => map.Wrap(id)));
 
                     RaiseSelectionChanged(context.GetType().Name, source, null, 0);
                 }

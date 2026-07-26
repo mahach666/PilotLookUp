@@ -19,5 +19,8 @@ namespace PilotLookUp.Interfaces
 
         // Элемент со свойствами из хранилищ всех отслеживаемых моделей; null - не найден
         BimElementView TryLoadElementView(IModelElementId id);
+
+        // То же по голым Guid'ам (внутренние типы вьюера не реализуют SDK-интерфейсы)
+        BimElementView TryLoadElementView(Guid elementId, Guid modelPartId);
     }
 }

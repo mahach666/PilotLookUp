@@ -445,6 +445,113 @@
     </Style>
 
 
+    <!-- Выпадающий список на кистях темы (адаптируется к светлой/темной) -->
+    <Style x:Key="ThemeComboBox_Style"
+           TargetType="ComboBox">
+        <Setter Property="Foreground"
+                Value="{DynamicResource NormalForeground}" />
+        <Setter Property="Background"
+                Value="{DynamicResource NormalBackground}" />
+        <Setter Property="FontSize"
+                Value="{DynamicResource DefaultFontSize}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <!-- Style=null: иначе применится имплицитный стиль ToggleButton
+                             из словаря темы (togglebutton.xaml) со своими размерами -->
+                        <ToggleButton Style="{x:Null}"
+                                      Focusable="False"
+                                      ClickMode="Press"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <Border x:Name="Border"
+                                            Background="{DynamicResource NormalBackground}"
+                                            BorderBrush="{DynamicResource ButtonDefaultHoverBackground}"
+                                            BorderThickness="1">
+                                        <Path HorizontalAlignment="Right"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,7,0"
+                                              Data="M 0 0 L 4 4 L 8 0 Z"
+                                              Fill="{DynamicResource NormalForeground}" />
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter TargetName="Border"
+                                                    Property="Background"
+                                                    Value="{DynamicResource HoverBackground}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                        </ToggleButton>
+
+                        <ContentPresenter Margin="7,0,22,0"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" />
+
+                        <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                               Placement="Bottom"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Border Background="{DynamicResource NormalBackground}"
+                                    BorderBrush="{DynamicResource ButtonDefaultHoverBackground}"
+                                    BorderThickness="1"
+                                    MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="220">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <StackPanel IsItemsHost="True"
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Foreground"
+                            Value="{DynamicResource NormalForeground}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ComboBoxItem">
+                                <Border x:Name="Border"
+                                        Background="Transparent"
+                                        Padding="7,4">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter TargetName="Border"
+                                                Property="Background"
+                                                Value="{DynamicResource HoverBackground}" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected"
+                                             Value="True">
+                                        <Setter TargetName="Border"
+                                                Property="Background"
+                                                Value="{DynamicResource SelectedBackground}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Стиль поля ввода -->
     <Style x:Key="TextBox_Style">
 

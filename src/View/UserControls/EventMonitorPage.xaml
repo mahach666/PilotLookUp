@@ -34,7 +34,7 @@
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="110" />
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0"
@@ -49,20 +49,12 @@
                        VerticalAlignment="Center" />
 
                 <ComboBox Grid.Column="1"
-                          Width="100"
                           Margin="4,0,0,0"
-                          Style="{StaticResource ComboBox_Style}"
-                          VerticalContentAlignment="Center"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          Style="{StaticResource ThemeComboBox_Style}"
                           ItemsSource="{Binding Categories}"
-                          SelectedItem="{Binding SelectedCategory}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}"
-                                       FontSize="{DynamicResource DefaultFontSize}"
-                                       Foreground="{DynamicResource NormalForeground}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                          SelectedItem="{Binding SelectedCategory}" />
             </Grid>
 
             <ListBox Grid.Row="1"

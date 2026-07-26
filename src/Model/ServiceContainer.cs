@@ -35,7 +35,8 @@ namespace PilotLookUp.Model
             // регистрация делегатом до единственного Verify, RegisterInstance(null) невозможен
             _container.Register<IBimModelService>(
                 () => new BimModelService(modelManager, modelStorageProvider,
-                    _container.GetInstance<IClientEventService>()),
+                    _container.GetInstance<IClientEventService>(),
+                    _container.GetInstance<IObjectsRepository>()),
                 Lifestyle.Singleton);
 
             _container.Verify();

@@ -257,34 +257,53 @@ namespace PilotLookUp.Utils
             try
             {
                 var sender = _senderObj?.LookUpObject;
-
-                if (sender is Ascon.Pilot.Bim.SDK.IModelElement element)
-                {
-                    if (element.Id?.ElementId == guid)
-                        return _bimModelService.TryLoadElementView(element.Id);
-                    if (element.ParentId?.ElementId == guid)
-                        return _bimModelService.TryLoadElementView(element.ParentId);
-                }
-
-                if (sender is Ascon.Pilot.Bim.SDK.IModelElementId senderId)
-                {
-                    if (senderId.ElementId == guid)
-                        return _bimModelService.TryLoadElementView(senderId);
-
-                    var senderView = _bimModelService.TryLoadElementView(senderId);
-                    var parentId = senderView?.Element?.ParentId;
-                    if (parentId != null && parentId.ElementId == guid)
-                        return _bimModelService.TryLoadElementView(parentId);
-                }
+                if (sender == null)
+                    return null;
 
                 if (sender is BimElementView view)
                 {
                     if (view.Id?.ElementId == guid)
                         return view;
 
-                    var parentId = view.Element?.ParentId;
-                    if (parentId != null && parentId.ElementId == guid)
-                        return _bimModelService.TryLoadElementView(parentId);
+                    var viewParentId = view.Element?.ParentId;
+                    if (viewParentId != null && viewParentId.ElementId == guid)
+                        return _bimModelService.TryLoadElementView(viewParentId);
+                }
+
+                if (sender is Ascon.Pilot.Bim.SDK.IModelElement element)
+                {
+                    if (element.Id?.ElementId == guid)
+                    {
+                        var resolved = _bimModelService.TryLoadElementView(element.Id);
+                        if (resolved != null)
+                            return resolved;
+                    }
+                    if (element.ParentId?.ElementId == guid)
+                    {
+                        var resolved = _bimModelService.TryLoadElementView(element.ParentId);
+                        if (resolved != null)
+                            return resolved;
+                    }
+                }
+
+                if (sender is Ascon.Pilot.Bim.SDK.IModelElementId senderId && senderId.ElementId == guid)
+                {
+                    var resolved = _bimModelService.TryLoadElementView(senderId);
+                    if (resolved != null)
+                        return resolved;
+                }
+
+                // Внутренние типы вьюера (ObjectNodeViewModel и пр.) SDK-интерфейсы
+                // не реализуют, но несут свойства ElementId/ParentId/ModelPartId -
+                // читаем их рефлексией и резолвим через собственный id
+                var modelPartId = ReadGuidProperty(sender, "ModelPartId");
+                if (modelPartId.HasValue)
+                {
+                    var elementId = ReadGuidProperty(sender, "ElementId");
+                    var parentGuid = ReadGuidProperty(sender, "ParentId");
+
+                    if (elementId == guid || parentGuid == guid)
+                        return _bimModelService.TryLoadElementView(guid, modelPartId.Value);
                 }
             }
             catch
@@ -293,6 +312,23 @@ namespace PilotLookUp.Utils
             }
 
             return null;
+        }
+
+        private static Guid? ReadGuidProperty(object obj, string propertyName)
+        {
+            try
+            {
+                // GetProperty(name) может бросить AmbiguousMatchException на перекрытых
+                // свойствах внутренних типов - ищем перебором
+                var property = obj.GetType()
+                    .GetProperties()
+                    .FirstOrDefault(p => p.Name == propertyName && p.PropertyType == typeof(Guid));
+                return property?.GetValue(obj) is Guid guid ? guid : (Guid?)null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

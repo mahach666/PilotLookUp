@@ -13,9 +13,6 @@ using System.Linq;
 
 namespace PilotLookUp
 {
-    // MEF-точка входа плагина. Логики здесь нет: построение меню и роутинг команд -
-    // в IMenuCommandHandler, перехват выделения - в ISelectedService.
-    // Build меню вызывается перед показом меню, Build тулбара - при смене выделения
     [Export(typeof(IMenu<MainViewContext>))]
     [Export(typeof(IMenu<ObjectsViewContext>))]
     [Export(typeof(IMenu<StorageContext>))]

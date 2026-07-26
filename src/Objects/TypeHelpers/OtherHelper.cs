@@ -5,11 +5,14 @@ namespace PilotLookUp.Objects.TypeHelpers
 {
     public class OtherHelper : PilotObjectHelper
     {
-        public OtherHelper(object obj) 
+        public OtherHelper(object obj)
         {
             _lookUpObject = obj;
             _name = obj.ToString();
-            _isLookable = false;
+
+            // Неизвестные объекты (включая внутренние типы клиента вроде
+            // IfcNodeId или ObjectsTreeViewModel) снупаются генерически рефлексией
+            _isLookable = true;
         }
 
         public override BitmapImage GetImage()
