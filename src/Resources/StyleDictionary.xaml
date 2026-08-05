@@ -331,6 +331,49 @@
         </Setter>
     </Style>
 
+    <!-- Кнопка-иконка внутри строки (удалить условие): по высоте строки,
+         без постоянной рамки - подсвечивается только под курсором -->
+    <Style x:Key="RowIconButton"
+           TargetType="Button">
+        <Setter Property="Width"
+                Value="26" />
+        <Setter Property="Height"
+                Value="26" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="5">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource ButtonDefaultHoverBackground}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter Property="Background"
+                                    Value="{DynamicResource SelectedBackground}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Image Source="{Binding}"
+                           Height="14"
+                           Width="14" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Стиль кнопки Выполнить -->
     <Style x:Key="ExecuteButton_Style">
         <Setter Property="Button.Background"

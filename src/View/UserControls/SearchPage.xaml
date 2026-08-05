@@ -113,7 +113,7 @@
                           ToolTip="Advanced search"
                           Visibility="{Binding AdvancedToggleVisibility}"
                           IsChecked="{Binding IsAdvancedMode}"
-                          Content="..\Resources\UI\attr.png" />
+                          Content="..\Resources\UI\advancedSearch.png" />
 
             <!-- ===== Простой режим: старое окно как есть ===== -->
             <Grid Grid.Column="0"
@@ -153,46 +153,83 @@
             <StackPanel Margin="20,8,0,8"
                         DataContext="{Binding Advanced}">
 
-                <StackPanel Orientation="Horizontal"
-                            Height="26">
-                    <TextBlock Text="Макс:"
-                               Margin="0,0,4,0"
-                               VerticalAlignment="Center"
-                               Foreground="{DynamicResource NormalForeground}" />
-                    <TextBox Width="50"
-                             Style="{StaticResource TextBox_Style}"
-                             Text="{Binding MaxResultsText, UpdateSourceTrigger=PropertyChanged}" />
+                <!-- Панель действий: слева действия по частоте использования,
+                     справа настройка выдачи - она не действие и не должна быть первой -->
+                <Grid Height="26">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left">
+                        <Button Padding="10,0"
+                                ToolTip="Найти (Enter)"
+                                Command="{Binding RunSearchCommand}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="pack://application:,,,/PilotLookUp.ext2;component/Resources/UI/search.png"
+                                       Width="14"
+                                       Height="14"
+                                       Margin="0,0,6,0" />
+                                <TextBlock Text="Найти"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
 
-                    <Button Content="+ условие"
-                            Margin="12,0,0,0"
-                            Padding="8,0"
-                            Command="{Binding AddCriterionCommand}" />
+                        <Button Content="+ условие"
+                                Margin="6,0,0,0"
+                                Padding="10,0"
+                                ToolTip="Добавить условие поиска"
+                                Command="{Binding AddCriterionCommand}" />
 
-                    <Button ToolTip="Найти"
-                            Width="26"
-                            Height="26"
-                            Margin="12,0,0,0"
-                            Style="{StaticResource CustomImageButton}"
-                            Command="{Binding RunSearchCommand}"
-                            Content="..\Resources\UI\search.png" />
-                </StackPanel>
+                        <Button Content="Очистить"
+                                Margin="6,0,0,0"
+                                Padding="10,0"
+                                ToolTip="Убрать все условия"
+                                Command="{Binding ClearCriteriaCommand}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="0,0,20,0">
+                        <TextBlock Text="Макс:"
+                                   Margin="0,0,4,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource NormalForeground}" />
+                        <TextBox Width="50"
+                                 VerticalAlignment="Stretch"
+                                 ToolTip="Максимум результатов, 1-1000"
+                                 Style="{StaticResource TextBox_Style}"
+                                 Text="{Binding MaxResultsText, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
 
                 <ScrollViewer MaxHeight="250"
                               Margin="0,6,0,0"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
-                    <ItemsControl ItemsSource="{Binding Criteria}">
+                    <ItemsControl ItemsSource="{Binding Criteria}"
+                                  AlternationCount="1000">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <!-- Компактная строка: все элементы слева, одной высоты -->
                                 <StackPanel Orientation="Horizontal"
                                             Margin="0,2"
                                             Height="26">
+                                    <!-- У первой строки сочетание бессмысленно (не с чем сочетать),
+                                         но место сохраняем, чтобы строки оставались выровненными -->
                                     <ComboBox Width="70"
                                               Margin="0,0,4,0"
-                                              Style="{StaticResource ThemeComboBox_Style}"
                                               ItemsSource="{Binding OccurOptions}"
-                                              SelectedItem="{Binding SelectedOccur}" />
+                                              SelectedItem="{Binding SelectedOccur}">
+                                        <ComboBox.Style>
+                                            <Style TargetType="ComboBox"
+                                                   BasedOn="{StaticResource ThemeComboBox_Style}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Value="0"
+                                                                 Binding="{Binding (ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}">
+                                                        <Setter Property="Visibility"
+                                                                Value="Hidden" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ComboBox.Style>
+                                    </ComboBox>
 
                                     <!-- Категория поиска -->
                                     <ComboBox Width="150"
@@ -216,11 +253,11 @@
 
                                     <ContentPresenter Content="{Binding Editor}" />
 
-                                    <Button Content="✕"
-                                            Width="26"
-                                            Margin="4,0,0,0"
+                                    <Button Margin="4,0,0,0"
                                             ToolTip="Удалить условие"
-                                            Command="{Binding RemoveCommand}" />
+                                            Style="{StaticResource RowIconButton}"
+                                            Command="{Binding RemoveCommand}"
+                                            Content="..\Resources\UI\delete.png" />
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

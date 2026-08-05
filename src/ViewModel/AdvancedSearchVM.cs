@@ -97,6 +97,22 @@ namespace PilotLookUp.ViewModel
         public ICommand RunSearchCommand =>
             _runSearchCommand ??= new RelayCommand<object>(_ => RunSearch(), _ => !IsSearching);
 
+        private ICommand _clearCriteriaCommand;
+        public ICommand ClearCriteriaCommand =>
+            _clearCriteriaCommand ??= new RelayCommand<object>(_ => ClearCriteria(), _ => Criteria.Count > 0);
+
+        // Сырой Lucene-запрос не трогаем: он в свернутой панели, и его молчаливая
+        // очистка была бы неожиданной
+        private void ClearCriteria()
+        {
+            foreach (var criterion in Criteria)
+                criterion.Changed -= RefreshPreview;
+
+            Criteria.Clear();
+            ResultsSummary = null;
+            AddCriterion();
+        }
+
         private void AddCriterion()
         {
             var criterion = new SearchCriterionVM(_advancedSearchService.GetCategories(), RemoveCriterion);

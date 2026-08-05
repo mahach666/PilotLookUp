@@ -8,7 +8,7 @@
 		<AssemblyProduct>PilotLookUp</AssemblyProduct>
 		<Product>PilotLookUp</Product>
 		<Description>PilotLookUp</Description>
-		<AssemblyVersion>2.7.0.0</AssemblyVersion>
+		<AssemblyVersion>2.8.0.0</AssemblyVersion>
 		<RootNamespace>PilotLookUp</RootNamespace>
 		<OutputType>Library</OutputType>
 	</PropertyGroup>
@@ -140,8 +140,10 @@
 	  <Resource Include="Resources\TypeIcons\storageIcon.png" />
 	  <Resource Include="Resources\TypeIcons\stringIcon.png" />
 	  <Resource Include="Resources\TypeIcons\transitionIcon.png" />
+	  <Resource Include="Resources\UI\advancedSearch.png" />
 	  <Resource Include="Resources\UI\attr.png" />
 	  <Resource Include="Resources\UI\databaseEnabled.png" />
+	  <Resource Include="Resources\UI\delete.png" />
 	  <Resource Include="Resources\UI\download.png" />
 	  <Resource Include="Resources\UI\eventMonitor.png" />
 	  <Resource Include="Resources\UI\goTo.png" />

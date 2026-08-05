@@ -51,6 +51,23 @@ namespace PilotLookUp.Tests
         }
 
         [PilotFact]
+        public void Clear_Leaves_One_Empty_Criterion(ITestContext ctx)
+        {
+            RequireSearchService(ctx);
+            var vm = CreateVM(ctx);
+
+            vm.AddCriterionCommand.Execute(null);
+            vm.AddCriterionCommand.Execute(null);
+            Check.Equal(3, vm.Criteria.Count, "добавленные условия");
+
+            vm.ClearCriteriaCommand.Execute(null);
+
+            Check.Equal(1, vm.Criteria.Count, "после очистки остается одна пустая строка");
+            Check.That(vm.Criteria[0].SelectedCategory != null, "строка сразу готова к вводу");
+            Check.That(string.IsNullOrEmpty(vm.ResultsSummary), "итог прошлого поиска сброшен");
+        }
+
+        [PilotFact]
         public void Service_Is_Available_And_Caches_Categories(ITestContext ctx)
         {
             RequireSearchService(ctx);
