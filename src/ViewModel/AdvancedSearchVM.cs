@@ -147,7 +147,7 @@ namespace PilotLookUp.ViewModel
             try
             {
                 var maxResults = ParseMaxResults();
-                var result = await _advancedSearchService.RunAsync(BuildQuery(maxResults));
+                var result = await _advancedSearchService.RunAsync(BuildQuery(maxResults), maxResults);
                 var objectSet = await _repoService.GetWrapedObjs(result.Ids);
 
                 _publishResults(objectSet);

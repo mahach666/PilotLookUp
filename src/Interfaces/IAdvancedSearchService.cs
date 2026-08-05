@@ -15,6 +15,8 @@ namespace PilotLookUp.Interfaces
         // Пустой билдер: поиск по всей базе, сужение - критериями
         IQueryBuilder CreateBuilder();
 
-        Task<AdvancedSearchResult> RunAsync(IQueryBuilder builder);
+        // maxResults дублируется параметром: сервер применяет лимит не ко всем
+        // эмиссиям, обрезка выполняется на клиенте
+        Task<AdvancedSearchResult> RunAsync(IQueryBuilder builder, int maxResults);
     }
 }

@@ -40,13 +40,13 @@ namespace PilotLookUp.Model.Services
             return _searchService.GetEmptyQueryBuilder();
         }
 
-        public async Task<AdvancedSearchResult> RunAsync(IQueryBuilder builder)
+        public async Task<AdvancedSearchResult> RunAsync(IQueryBuilder builder, int maxResults)
         {
             if (!IsAvailable)
                 throw new InvalidOperationException("ISearchService недоступен в этом клиенте.");
 
             var observer = new SearchResultObserver();
-            return await observer.WaitAsync(_searchService.Search(builder), SearchTimeoutMs);
+            return await observer.WaitAsync(_searchService.Search(builder), SearchTimeoutMs, maxResults);
         }
     }
 }

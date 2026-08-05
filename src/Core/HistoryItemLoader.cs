@@ -16,6 +16,9 @@ namespace PilotLookUp.Core
             _repository = repository;
         }
 
+        // ВНИМАНИЕ: GetHistoryItems по несуществующему id блокирует UI-поток внутри
+        // самого вызова SDK (таймаут ниже не спасает) - передавать только id,
+        // полученные из реальной коллекции HistoryItems
         public Task<IHistoryItem> Load(Guid id)
         {
             _tcs = new TaskCompletionSource<IHistoryItem>();

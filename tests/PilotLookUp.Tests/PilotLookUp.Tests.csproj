@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<LangVersion>10.0</LangVersion>
+		<AssemblyName>PilotLookUp.Tests</AssemblyName>
+		<RootNamespace>PilotLookUp.Tests</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Ascon.Pilot.SDK" Version="26.15.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\PilotLookUp.csproj" />
+
+		<!-- Private=false: тест и хост должны видеть один экземпляр SDK-сборки хоста -->
+		<ProjectReference Include="..\..\..\..\PilotTestHost\src\PilotTestHost.Sdk\PilotTestHost.Sdk.csproj">
+			<Private>false</Private>
+		</ProjectReference>
+	</ItemGroup>
+
+	<!-- Деплой в папку дискавери хоста -->
+	<PropertyGroup>
+		<AppData>$(USERPROFILE)\AppData\Local</AppData>
+		<TestsDirBIM>$(AppData)\ASCON\Pilot-BIM\Development\PilotTestHost\Tests</TestsDirBIM>
+		<TestsDirICE>$(AppData)\ASCON\Pilot-ICE Enterprise\Development\PilotTestHost\Tests</TestsDirICE>
+	</PropertyGroup>
+
+	<Target Name="DeployToTestHost" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+		<ItemGroup>
+			<TestFiles Include="$(TargetDir)$(AssemblyName).dll" />
+			<TestFiles Include="$(TargetDir)PilotLookUp.ext2.dll" />
+		</ItemGroup>
+		<MakeDir Directories="$(TestsDirBIM)" Condition="!Exists('$(TestsDirBIM)')" />
+		<Copy SourceFiles="@(TestFiles)" DestinationFolder="$(TestsDirBIM)" ContinueOnError="true" />
+		<MakeDir Directories="$(TestsDirICE)" Condition="!Exists('$(TestsDirICE)')" />
+		<Copy SourceFiles="@(TestFiles)" DestinationFolder="$(TestsDirICE)" ContinueOnError="true" />
+	</Target>
+
+</Project>

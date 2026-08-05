@@ -1,4 +1,6 @@
 ﻿using Ascon.Pilot.SDK;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PilotLookUp.Extensions
@@ -7,7 +9,11 @@ namespace PilotLookUp.Extensions
     {
         static public async Task<IDataObject> FindLastParent(this IDataObject dataObject, IObjectsRepository objectsRepository)
         {
-            while (dataObject.ParentId != null && dataObject.ParentId != default)
+            // Корень ссылается сам на себя (а данные могут содержать цикл) -
+            // без учета пройденных id подъем зацикливается и вешает клиент
+            var visited = new HashSet<Guid> { dataObject.Id };
+
+            while (dataObject.ParentId != null && dataObject.ParentId != default && !visited.Contains(dataObject.ParentId))
             {
                 var parent = await objectsRepository.GetObjectWithTimeout(dataObject.ParentId);
 
@@ -16,6 +22,7 @@ namespace PilotLookUp.Extensions
                     break;
 
                 dataObject = parent;
+                visited.Add(dataObject.Id);
             }
             return dataObject;
         }
