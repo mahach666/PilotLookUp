@@ -28,8 +28,31 @@ namespace PilotLookUp.ViewModel
             _searchService = searchService;
             _tabService = tabService;
             _viewModelFactory = viewModelFactory;
+            Advanced = _viewModelFactory.CreateAdvancedSearchVM(SetRes);
             SearchFromClipboard();
         }
+
+        public AdvancedSearchVM Advanced { get; }
+
+        // Кнопка режима видна, только если клиент отдал ISearchService
+        public Visibility AdvancedToggleVisibility =>
+            Advanced.IsAvailable ? Visibility.Visible : Visibility.Collapsed;
+
+        private bool _isAdvancedMode;
+        public bool IsAdvancedMode
+        {
+            get => _isAdvancedMode;
+            set
+            {
+                _isAdvancedMode = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SimpleVisibility));
+                OnPropertyChanged(nameof(AdvancedVisibility));
+            }
+        }
+
+        public Visibility SimpleVisibility => IsAdvancedMode ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility AdvancedVisibility => IsAdvancedMode ? Visibility.Visible : Visibility.Collapsed;
 
         private async void SearchFromClipboard()
         {
@@ -84,6 +107,14 @@ namespace PilotLookUp.ViewModel
 
         private async void Search()
         {
+            // Enter работает в обоих режимах: в расширенном - запускает его поиск
+            if (IsAdvancedMode)
+            {
+                if (Advanced.RunSearchCommand.CanExecute(null))
+                    Advanced.RunSearchCommand.Execute(null);
+                return;
+            }
+
             try
             {
                 var searchRes = await _searchService.GetObjByString(Text);

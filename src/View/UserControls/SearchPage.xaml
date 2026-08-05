@@ -1,10 +1,11 @@
-﻿<UserControl x:Class="PilotLookUp.View.UserControls.SearchPage"
+<UserControl x:Class="PilotLookUp.View.UserControls.SearchPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PilotLookUp.View.UserControls"
              xmlns:views="clr-namespace:PilotLookUp.View.CustomUIElements"
+             xmlns:editors="clr-namespace:PilotLookUp.ViewModel.Editors"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -20,44 +21,241 @@
                 <ResourceDictionary Source="..\..\Resources\StyleDictionary.xaml" />
                 <ResourceDictionary Source="..\..\Resources\VMMap.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Редакторы значений строк критериев -->
+            <DataTemplate DataType="{x:Type editors:NoValueVM}">
+                <Grid />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type editors:TextValueVM}">
+                <TextBox Width="260"
+                         Style="{StaticResource TextBox_Style}"
+                         VerticalAlignment="Stretch"
+                         ToolTip="{Binding Hint}"
+                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type editors:NumberRangeVM}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Width="90"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource TextBox_Style}"
+                             Text="{Binding From, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Text=" — "
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource NormalForeground}"
+                               Visibility="{Binding ToVisibility}" />
+                    <TextBox Width="90"
+                             VerticalAlignment="Center"
+                             Style="{StaticResource TextBox_Style}"
+                             Visibility="{Binding ToVisibility}"
+                             Text="{Binding To, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type editors:DateRangeVM}">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Width="120"
+                              VerticalAlignment="Center"
+                              Style="{StaticResource ThemeComboBox_Style}"
+                              ItemsSource="{Binding Presets}"
+                              SelectedItem="{Binding SelectedPreset}" />
+                    <DatePicker Width="115"
+                                Margin="4,0,0,0"
+                                VerticalAlignment="Center"
+                                SelectedDate="{Binding From}" />
+                    <TextBlock Text=" — "
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource NormalForeground}" />
+                    <DatePicker Width="115"
+                                VerticalAlignment="Center"
+                                SelectedDate="{Binding To}" />
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type editors:BoolValueVM}">
+                <CheckBox VerticalAlignment="Center"
+                          Content="истина"
+                          Foreground="{DynamicResource NormalForeground}"
+                          IsChecked="{Binding Value}" />
+            </DataTemplate>
+
+            <!-- Значение из справочника: выпадашка с поиском -->
+            <DataTemplate DataType="{x:Type editors:LookupValueVM}">
+                <views:SearchableDropDown Width="260"
+                                          ItemsSource="{Binding Items}"
+                                          SelectedItem="{Binding SelectedItem}" />
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <TextBox Margin="20,0,60,60"
-                     Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                     FontSize="20"
-                     HorizontalScrollBarVisibility="Hidden"
-                     AcceptsReturn="True"
-                     TextWrapping="NoWrap">
-                <TextBox.InputBindings>
-                    <KeyBinding Gesture="Enter"
-                                Command="{Binding SearchCommand}" />
-                </TextBox.InputBindings>
-            </TextBox>
-            <Label Margin="20,0,60,60"
-                     FontSize="20"                    
-                     IsEnabled="False"
-                     Content="Введите Id или GUID"
-                     Visibility="{Binding PromptVisibility}"
-                     Foreground="{DynamicResource DisabledForeground}"
-                     IsHitTestVisible ="False">
-            </Label>
-            <Button                    Command="{Binding SearchCommand}"
-                                       Margin="20,0,20,60"
-                                       HorizontalAlignment="Right"
-                                       Style="{StaticResource CustomImageButton}"
-                                       Content="..\Resources\UI\search.png" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="50" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Переключатель режима: отдельная колонка, ничего не перекрывает.
+                 Без вертикальных отступов - вровень со строкой ввода простого режима -->
+            <ToggleButton Grid.Column="1"
+                          Style="{StaticResource PinToggleButton}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Margin="0,0,10,0"
+                          ToolTip="Advanced search"
+                          Visibility="{Binding AdvancedToggleVisibility}"
+                          IsChecked="{Binding IsAdvancedMode}"
+                          Content="..\Resources\UI\attr.png" />
+
+            <!-- ===== Простой режим: старое окно как есть ===== -->
+            <Grid Grid.Column="0"
+                  MinHeight="100"
+                  Visibility="{Binding SimpleVisibility}">
+                <TextBox Margin="20,0,60,60"
+                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="20"
+                         HorizontalScrollBarVisibility="Hidden"
+                         AcceptsReturn="True"
+                         TextWrapping="NoWrap">
+                    <TextBox.InputBindings>
+                        <KeyBinding Gesture="Enter"
+                                    Command="{Binding SearchCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Label Margin="20,0,60,60"
+                       FontSize="20"
+                       IsEnabled="False"
+                       Content="Введите Id или GUID"
+                       Visibility="{Binding PromptVisibility}"
+                       Foreground="{DynamicResource DisabledForeground}"
+                       IsHitTestVisible="False">
+                </Label>
+                <Button Command="{Binding SearchCommand}"
+                        Margin="20,0,20,60"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource CustomImageButton}"
+                        Content="..\Resources\UI\search.png" />
+            </Grid>
+
+            <!-- ===== Расширенный режим =====
+                 Visibility на обертке: на элементе с DataContext=Advanced биндинг
+                 к AdvancedVisibility резолвился бы уже относительно Advanced -->
+            <Grid Grid.Column="0"
+                  Visibility="{Binding AdvancedVisibility}">
+            <StackPanel Margin="20,8,0,8"
+                        DataContext="{Binding Advanced}">
+
+                <StackPanel Orientation="Horizontal"
+                            Height="26">
+                    <TextBlock Text="Макс:"
+                               Margin="0,0,4,0"
+                               VerticalAlignment="Center"
+                               Foreground="{DynamicResource NormalForeground}" />
+                    <TextBox Width="50"
+                             Style="{StaticResource TextBox_Style}"
+                             Text="{Binding MaxResultsText, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <Button Content="+ условие"
+                            Margin="12,0,0,0"
+                            Padding="8,0"
+                            Command="{Binding AddCriterionCommand}" />
+
+                    <Button ToolTip="Найти"
+                            Width="26"
+                            Height="26"
+                            Margin="12,0,0,0"
+                            Style="{StaticResource CustomImageButton}"
+                            Command="{Binding RunSearchCommand}"
+                            Content="..\Resources\UI\search.png" />
+                </StackPanel>
+
+                <ScrollViewer MaxHeight="250"
+                              Margin="0,6,0,0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Criteria}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!-- Компактная строка: все элементы слева, одной высоты -->
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,2"
+                                            Height="26">
+                                    <ComboBox Width="70"
+                                              Margin="0,0,4,0"
+                                              Style="{StaticResource ThemeComboBox_Style}"
+                                              ItemsSource="{Binding OccurOptions}"
+                                              SelectedItem="{Binding SelectedOccur}" />
+
+                                    <!-- Категория поиска -->
+                                    <ComboBox Width="150"
+                                              Margin="0,0,4,0"
+                                              Style="{StaticResource ThemeComboBox_Style}"
+                                              ItemsSource="{Binding Categories}"
+                                              SelectedItem="{Binding SelectedCategory}" />
+
+                                    <!-- Детализация: конкретный атрибут / системное поле (с поиском) -->
+                                    <views:SearchableDropDown Width="230"
+                                                              Margin="0,0,4,0"
+                                                              Visibility="{Binding DetailVisibility}"
+                                                              ItemsSource="{Binding DetailOptions}"
+                                                              SelectedItem="{Binding SelectedDetail}" />
+
+                                    <ComboBox Width="140"
+                                              Margin="0,0,4,0"
+                                              Style="{StaticResource ThemeComboBox_Style}"
+                                              ItemsSource="{Binding OperatorOptions}"
+                                              SelectedItem="{Binding SelectedOperator}" />
+
+                                    <ContentPresenter Content="{Binding Editor}" />
+
+                                    <Button Content="✕"
+                                            Width="26"
+                                            Margin="4,0,0,0"
+                                            ToolTip="Удалить условие"
+                                            Command="{Binding RemoveCommand}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <Expander Margin="0,6,0,0"
+                          Foreground="{DynamicResource NormalForeground}"
+                          Header="Lucene-запрос (вручную)">
+                    <TextBox MinHeight="40"
+                             Style="{StaticResource TextBox_Style}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             FontFamily="Consolas"
+                             Text="{Binding RawLuceneQuery, UpdateSourceTrigger=PropertyChanged}" />
+                </Expander>
+
+                <!-- Живое превью итогового запроса -->
+                <TextBox Margin="0,6,0,0"
+                         IsReadOnly="True"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         FontFamily="Consolas"
+                         TextWrapping="Wrap"
+                         Foreground="{DynamicResource DisabledForeground}"
+                         Text="{Binding Preview, Mode=OneWay}" />
+
+                <TextBlock Margin="0,2,0,0"
+                           Foreground="{DynamicResource NormalForeground}"
+                           Text="{Binding ResultsSummary}" />
+            </StackPanel>
+            </Grid>
         </Grid>
 
         <Grid Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="20,0,20,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          Margin="20,0,20,0">
                 <ItemsControl ItemsSource="{Binding Result}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

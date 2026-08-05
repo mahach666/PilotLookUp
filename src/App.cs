@@ -61,7 +61,10 @@ namespace PilotLookUp
             ITabServiceProvider tabServiceProvider,
             IPilotDialogService pilotDialogService,
             IPilotServiceProvider serviceProvider,
-            IFileProvider fileProvider)
+            IFileProvider fileProvider,
+            // Поисковый сервис клиент экспортирует через MEF (не через IPilotServiceProvider);
+            // AllowDefault: без него плагин загрузится, расширенный поиск скроется
+            [Import(AllowDefault = true)] ISearchService searchService)
         {
             AppDomain.CurrentDomain.AssemblyResolve += Resolver.ResolveAssembly;
 
@@ -75,6 +78,7 @@ namespace PilotLookUp
                     tabServiceProvider,
                     pilotDialogService,
                     fileProvider,
+                    searchService,
                     modelManager,
                     modelStorageProvider);
 

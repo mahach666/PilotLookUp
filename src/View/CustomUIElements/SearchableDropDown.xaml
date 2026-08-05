@@ -1,0 +1,79 @@
+<UserControl x:Class="PilotLookUp.View.CustomUIElements.SearchableDropDown"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="230"
+             Height="26">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\StyleDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <ToggleButton x:Name="Toggle"
+                      Style="{x:Null}"
+                      ClickMode="Press"
+                      Focusable="False"
+                      Click="OnToggleClick">
+            <ToggleButton.Template>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border Background="{DynamicResource NormalBackground}"
+                            BorderBrush="{DynamicResource ButtonDefaultHoverBackground}"
+                            BorderThickness="1">
+                        <Grid>
+                            <ContentPresenter Margin="7,0,22,0"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center" />
+                            <Path HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  Margin="0,0,7,0"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource NormalForeground}" />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </ToggleButton.Template>
+            <TextBlock x:Name="DisplayTextBlock"
+                       Foreground="{DynamicResource NormalForeground}"
+                       TextTrimming="CharacterEllipsis" />
+        </ToggleButton>
+
+        <Popup x:Name="DropPopup"
+               StaysOpen="False"
+               PlacementTarget="{Binding ElementName=Toggle}"
+               Placement="Bottom"
+               AllowsTransparency="True"
+               MinWidth="{Binding ActualWidth, ElementName=Toggle}"
+               Opened="OnPopupOpened"
+               Closed="OnPopupClosed">
+            <Border Background="{DynamicResource NormalBackground}"
+                    BorderBrush="{DynamicResource ButtonDefaultHoverBackground}"
+                    BorderThickness="1">
+                <StackPanel>
+                    <TextBox x:Name="FilterBox"
+                             Margin="4"
+                             Style="{StaticResource TextBox_Style}"
+                             ToolTip="Поиск по списку"
+                             TextChanged="OnFilterTextChanged" />
+                    <ListBox x:Name="List"
+                             MaxHeight="220"
+                             BorderThickness="0"
+                             Style="{StaticResource ListBox_Style}"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             SelectionChanged="OnListSelectionChanged">
+                        <ListBox.ItemContainerStyle>
+                            <StaticResource ResourceKey="ListBoxItem_Style" />
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+        </Popup>
+    </Grid>
+</UserControl>

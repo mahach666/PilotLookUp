@@ -18,6 +18,7 @@ namespace PilotLookUp.Model
             ITabServiceProvider tabServiceProvider,
             IPilotDialogService pilotDialogService,
             IFileProvider fileProvider,
+            ISearchService searchService = null,
             IModelManager modelManager = null,
             IModelStorageProvider modelStorageProvider = null)
         {
@@ -31,11 +32,16 @@ namespace PilotLookUp.Model
             RegisterServices(_container);
             RegisterFactories(_container);
 
-            // BIM-сервисы клиент отдает только в Pilot-BIM (в ICE - null);
-            // регистрация делегатом до единственного Verify, RegisterInstance(null) невозможен
+            // Опциональные сервисы клиента (могут быть null) регистрируются
+            // делегатами до единственного Verify: RegisterInstance(null) невозможен
             _container.Register<IBimModelService>(
                 () => new BimModelService(modelManager, modelStorageProvider,
                     _container.GetInstance<IClientEventService>(),
+                    _container.GetInstance<IObjectsRepository>()),
+                Lifestyle.Singleton);
+
+            _container.Register<IAdvancedSearchService>(
+                () => new AdvancedSearchService(searchService,
                     _container.GetInstance<IObjectsRepository>()),
                 Lifestyle.Singleton);
 

@@ -17,6 +17,7 @@ namespace PilotLookUp.Model.Factories
         private readonly ITabService _tabService;
         private readonly IObjectsRepository _objectsRepository;
         private readonly IClientEventService _clientEventService;
+        private readonly IAdvancedSearchService _advancedSearchService;
 
         // Lazy разрывает циклы: ViewFactory/TreeItemService/PageServiceFactory
         // сами зависят от IViewModelFactory
@@ -32,6 +33,7 @@ namespace PilotLookUp.Model.Factories
             ITabService tabService,
             IObjectsRepository objectsRepository,
             IClientEventService clientEventService,
+            IAdvancedSearchService advancedSearchService,
             Lazy<IViewFactory> viewFactory,
             Lazy<ITreeItemService> treeItemService,
             Lazy<IPageServiceFactory> pageServiceFactory)
@@ -43,6 +45,7 @@ namespace PilotLookUp.Model.Factories
             _tabService = tabService;
             _objectsRepository = objectsRepository;
             _clientEventService = clientEventService;
+            _advancedSearchService = advancedSearchService;
             _viewFactory = viewFactory;
             _treeItemService = treeItemService;
             _pageServiceFactory = pageServiceFactory;
@@ -89,6 +92,11 @@ namespace PilotLookUp.Model.Factories
         public EventMonitorVM CreateEventMonitorVM()
         {
             return new EventMonitorVM(_objectsRepository, _repoService, _viewFactory.Value, _clientEventService);
+        }
+
+        public AdvancedSearchVM CreateAdvancedSearchVM(Action<ObjectSet> publishResults)
+        {
+            return new AdvancedSearchVM(_advancedSearchService, _repoService, publishResults);
         }
     }
 }

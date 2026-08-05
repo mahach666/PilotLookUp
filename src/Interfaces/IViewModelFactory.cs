@@ -27,5 +27,8 @@ namespace PilotLookUp.Interfaces
         SearchResVM CreateSearchResVM(IPageService pageService, PilotObjectHelper pilotObjectHelper);
 
         EventMonitorVM CreateEventMonitorVM();
+
+        // publishResults - куда отдавать найденные объекты (список результатов SearchVM)
+        AdvancedSearchVM CreateAdvancedSearchVM(System.Action<ObjectSet> publishResults);
     }
 } 
