@@ -35,18 +35,20 @@
                          Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
             </DataTemplate>
 
+            <!-- Редакторы растягиваются на всю высоту строки (26): с VerticalAlignment=Center
+                 контролы берут собственную высоту и визуально мельче соседних комбо -->
             <DataTemplate DataType="{x:Type editors:NumberRangeVM}">
                 <StackPanel Orientation="Horizontal">
                     <TextBox Width="90"
-                             VerticalAlignment="Center"
+                             VerticalAlignment="Stretch"
                              Style="{StaticResource TextBox_Style}"
                              Text="{Binding From, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Text=" — "
+                    <TextBlock Text=" - "
                                VerticalAlignment="Center"
                                Foreground="{DynamicResource NormalForeground}"
                                Visibility="{Binding ToVisibility}" />
                     <TextBox Width="90"
-                             VerticalAlignment="Center"
+                             VerticalAlignment="Stretch"
                              Style="{StaticResource TextBox_Style}"
                              Visibility="{Binding ToVisibility}"
                              Text="{Binding To, UpdateSourceTrigger=PropertyChanged}" />
@@ -56,19 +58,19 @@
             <DataTemplate DataType="{x:Type editors:DateRangeVM}">
                 <StackPanel Orientation="Horizontal">
                     <ComboBox Width="120"
-                              VerticalAlignment="Center"
+                              VerticalAlignment="Stretch"
                               Style="{StaticResource ThemeComboBox_Style}"
                               ItemsSource="{Binding Presets}"
                               SelectedItem="{Binding SelectedPreset}" />
                     <DatePicker Width="115"
                                 Margin="4,0,0,0"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Stretch"
                                 SelectedDate="{Binding From}" />
-                    <TextBlock Text=" — "
+                    <TextBlock Text=" - "
                                VerticalAlignment="Center"
                                Foreground="{DynamicResource NormalForeground}" />
                     <DatePicker Width="115"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Stretch"
                                 SelectedDate="{Binding To}" />
                 </StackPanel>
             </DataTemplate>

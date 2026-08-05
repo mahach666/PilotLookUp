@@ -11,20 +11,22 @@ namespace PilotLookUp.Model.AdvancedSearch
     // Поле поиска: редактор значения, допустимые операторы и построение термов.
     // Обычное поле дает один терм; поля «любой атрибут ...» - по терму на каждый
     // атрибут (собираются в MustAnyOf). Ошибки ввода - FormatException с текстом
-    public sealed class FieldDescriptor
+    public sealed class FieldDescriptor : ISearchableText
     {
         private FieldDescriptor(
             string displayName,
             ValueEditorKind editorKind,
             IReadOnlyList<CriterionOperator> operators,
             Func<CriterionOperator, CriterionValue, IReadOnlyList<ISearchTerm>> buildTerms,
-            Func<IEnumerable<LookupItem>> lookupItemsProvider = null)
+            Func<IEnumerable<LookupItem>> lookupItemsProvider = null,
+            string searchText = null)
         {
             DisplayName = displayName;
             EditorKind = editorKind;
             Operators = operators;
             _buildTerms = buildTerms;
             LookupItemsProvider = lookupItemsProvider;
+            SearchText = searchText ?? displayName;
         }
 
         private readonly Func<CriterionOperator, CriterionValue, IReadOnlyList<ISearchTerm>> _buildTerms;
@@ -33,6 +35,10 @@ namespace PilotLookUp.Model.AdvancedSearch
         public ValueEditorKind EditorKind { get; }
         public IReadOnlyList<CriterionOperator> Operators { get; }
         public Func<IEnumerable<LookupItem>> LookupItemsProvider { get; }
+
+        // Текст для фильтра выпадашки: помимо подписи включает прочие заголовки
+        // атрибута, чтобы он находился и по названию из другого типа
+        public string SearchText { get; }
 
         public IReadOnlyList<ISearchTerm> BuildTerms(CriterionOperator op, CriterionValue value) =>
             _buildTerms(op.ToPositive(), value);
@@ -43,7 +49,7 @@ namespace PilotLookUp.Model.AdvancedSearch
 
         // ===== Обычные поля (один терм) =====
 
-        public static FieldDescriptor ForString(string title, StringField field)
+        public static FieldDescriptor ForString(string title, StringField field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Text,
                 new[]
@@ -57,19 +63,19 @@ namespace PilotLookUp.Model.AdvancedSearch
                     CriterionOperator.Equals => field.Be(RequireText(v)),
                     CriterionOperator.ContainsAll => field.ContainsAll(SplitWords(RequireText(v))),
                     _ => field.Exists()
-                }));
+                }), null, searchText);
         }
 
-        public static FieldDescriptor ForDateRange(string title, DateTimeField field)
+        public static FieldDescriptor ForDateRange(string title, DateTimeField field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.DateRange,
                 new[] { CriterionOperator.InRange, CriterionOperator.Exists, CriterionOperator.NotExists },
                 (op, v) => One(op == CriterionOperator.Exists
                     ? field.Exists()
-                    : BuildDateRangeTerm(field, v)));
+                    : BuildDateRangeTerm(field, v)), null, searchText);
         }
 
-        public static FieldDescriptor ForInt32(string title, Int32Field field)
+        public static FieldDescriptor ForInt32(string title, Int32Field field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Number,
                 new[]
@@ -83,10 +89,10 @@ namespace PilotLookUp.Model.AdvancedSearch
                     CriterionOperator.Equals => field.Be(ParseInt32(RequireText(v))),
                     CriterionOperator.InRange => field.BeInRange(ParseInt32(RequireText(v)), ParseInt32(RequireTextTo(v))),
                     _ => field.Exists()
-                }));
+                }), null, searchText);
         }
 
-        public static FieldDescriptor ForInt64(string title, Int64Field field)
+        public static FieldDescriptor ForInt64(string title, Int64Field field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Number,
                 new[]
@@ -100,10 +106,10 @@ namespace PilotLookUp.Model.AdvancedSearch
                     CriterionOperator.Equals => field.Be(ParseInt64(RequireText(v))),
                     CriterionOperator.InRange => field.BeInRange(ParseInt64(RequireText(v)), ParseInt64(RequireTextTo(v))),
                     _ => field.Exists()
-                }));
+                }), null, searchText);
         }
 
-        public static FieldDescriptor ForDouble(string title, DoubleField field)
+        public static FieldDescriptor ForDouble(string title, DoubleField field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Number,
                 new[]
@@ -117,17 +123,17 @@ namespace PilotLookUp.Model.AdvancedSearch
                     CriterionOperator.Equals => field.Be(ParseDouble(RequireText(v))),
                     CriterionOperator.InRange => field.BeInRange(ParseDouble(RequireText(v)), ParseDouble(RequireTextTo(v))),
                     _ => field.Exists()
-                }));
+                }), null, searchText);
         }
 
-        public static FieldDescriptor ForBool(string title, BoolField field)
+        public static FieldDescriptor ForBool(string title, BoolField field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Bool,
                 new[] { CriterionOperator.Equals, CriterionOperator.Exists, CriterionOperator.NotExists },
-                (op, v) => One(op == CriterionOperator.Equals ? field.Be(v.BoolValue) : field.Exists()));
+                (op, v) => One(op == CriterionOperator.Equals ? field.Be(v.BoolValue) : field.Exists()), null, searchText);
         }
 
-        public static FieldDescriptor ForGuid(string title, GuidField field)
+        public static FieldDescriptor ForGuid(string title, GuidField field, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Text,
                 new[]
@@ -137,11 +143,11 @@ namespace PilotLookUp.Model.AdvancedSearch
                 },
                 (op, v) => One(op == CriterionOperator.Exists
                     ? field.Exists()
-                    : field.Be(ParseGuid(RequireText(v)))));
+                    : field.Be(ParseGuid(RequireText(v)))), null, searchText);
         }
 
         public static FieldDescriptor ForLookupInt32(string title, Int32Field field,
-            Func<IEnumerable<LookupItem>> itemsProvider)
+            Func<IEnumerable<LookupItem>> itemsProvider, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Lookup,
                 new[]
@@ -157,11 +163,11 @@ namespace PilotLookUp.Model.AdvancedSearch
                     var keys = RequireLookup(v).Select(i => (int)i.Key).ToArray();
                     return One(keys.Length == 1 ? field.Be(keys[0]) : field.BeAnyOf(keys));
                 },
-                itemsProvider);
+                itemsProvider, searchText);
         }
 
         public static FieldDescriptor ForLookupGuid(string title, GuidField field,
-            Func<IEnumerable<LookupItem>> itemsProvider)
+            Func<IEnumerable<LookupItem>> itemsProvider, string searchText = null)
         {
             return new FieldDescriptor(title, ValueEditorKind.Lookup,
                 new[]
@@ -177,7 +183,7 @@ namespace PilotLookUp.Model.AdvancedSearch
                     var keys = RequireLookup(v).Select(i => (Guid)i.Key).ToArray();
                     return One(keys.Length == 1 ? field.Be(keys[0]) : field.BeAnyOf(keys));
                 },
-                itemsProvider);
+                itemsProvider, searchText);
         }
 
         public static FieldDescriptor ForObjectState(string title, EnumField<ObjectState> field,

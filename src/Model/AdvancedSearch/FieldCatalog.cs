@@ -63,65 +63,98 @@ namespace PilotLookUp.Model.AdvancedSearch
             return details;
         }
 
-        private static bool IsStringKind(IAttribute attribute) =>
+        private static bool IsStringKind(AttributeGroup attribute) =>
             attribute.Type == AttributeType.String
             || attribute.Type == AttributeType.Numerator
             || attribute.Type == AttributeType.Array
             || attribute.Type == AttributeType.ElementBook;
 
-        private static IEnumerable<IAttribute> AttributeFieldsOfKind(
-            IReadOnlyList<IAttribute> attributes, Func<IAttribute, bool> predicate) =>
+        private static IEnumerable<AttributeGroup> AttributeFieldsOfKind(
+            IReadOnlyList<AttributeGroup> attributes, Func<AttributeGroup, bool> predicate) =>
             attributes.Where(predicate);
 
-        // Уникальные не-сервисные атрибуты по всем типам
-        private IReadOnlyList<IAttribute> CollectAttributes()
+        // Не-сервисные атрибуты по всем типам, схлопнутые по (имя, тип).
+        // Один и тот же атрибут в разных типах может иметь разные заголовки
+        // и разные машины состояний - сохраняем все варианты
+        private IReadOnlyList<AttributeGroup> CollectAttributes()
         {
-            var seen = new HashSet<string>();
-            var result = new List<IAttribute>();
+            var groups = new Dictionary<string, AttributeGroup>();
 
-            var types = _repository.GetTypes();
-
-            foreach (var type in types)
+            foreach (var type in _repository.GetTypes())
             {
                 foreach (var attribute in type.Attributes.Where(a => !a.IsService))
                 {
-                    if (seen.Add(attribute.Name + "|" + attribute.Type))
-                        result.Add(attribute);
+                    var key = attribute.Name + "|" + attribute.Type;
+
+                    if (!groups.TryGetValue(key, out var group))
+                        groups[key] = group = new AttributeGroup(attribute.Name, attribute.Type);
+
+                    group.Add(attribute);
                 }
             }
 
-            return result;
+            return groups.Values.ToList();
         }
 
-        private FieldDescriptor BuildAttributeDescriptor(IAttribute attribute)
+        private FieldDescriptor BuildAttributeDescriptor(AttributeGroup attribute)
         {
-            var title = string.IsNullOrEmpty(attribute.Title)
+            // Заголовок берем самый распространенный: у grif это «Гриф» (783 типа),
+            // а не «Гриф конфиденциальности» (24 типа). Тип в подписи нужен, потому что
+            // в базе есть одноименные атрибуты разных типов (grif - и строка, и состояние)
+            var name = string.IsNullOrEmpty(attribute.MainTitle)
                 ? attribute.Name
-                : $"{attribute.Title} ({attribute.Name})";
+                : $"{attribute.MainTitle} ({attribute.Name})";
+            var title = $"{name} · {TypeTitle(attribute.Type)}";
+
+            // Прочие заголовки этого атрибута ищутся, но список не засоряют
+            var searchText = attribute.Titles.Count > 1
+                ? title + " " + string.Join(" ", attribute.Titles)
+                : null;
 
             switch (attribute.Type)
             {
                 case AttributeType.Integer:
-                    return FieldDescriptor.ForInt64(title, AttributeFields.Integer(attribute.Name));
+                    return FieldDescriptor.ForInt64(title, AttributeFields.Integer(attribute.Name), searchText);
                 case AttributeType.Double:
                 case AttributeType.Decimal:
-                    return FieldDescriptor.ForDouble(title, AttributeFields.Double(attribute.Name));
+                    return FieldDescriptor.ForDouble(title, AttributeFields.Double(attribute.Name), searchText);
                 case AttributeType.DateTime:
-                    return FieldDescriptor.ForDateRange(title, AttributeFields.DateTime(attribute.Name));
+                    return FieldDescriptor.ForDateRange(title, AttributeFields.DateTime(attribute.Name), searchText);
                 case AttributeType.String:
                 case AttributeType.Numerator:
                 case AttributeType.Array:
                 case AttributeType.ElementBook:
-                    return FieldDescriptor.ForString(title, AttributeFields.String(attribute.Name));
+                    return FieldDescriptor.ForString(title, AttributeFields.String(attribute.Name), searchText);
                 case AttributeType.UserState:
-                    return FieldDescriptor.ForLookupGuid(title, AttributeFields.State(attribute.Name), UserStateItems);
+                    return FieldDescriptor.ForLookupGuid(title, AttributeFields.State(attribute.Name),
+                        () => UserStatesOfAttribute(attribute), searchText);
                 case AttributeType.OrgUnit:
-                    return FieldDescriptor.ForLookupInt32(title, AttributeFields.OrgUnit(attribute.Name), OrgUnitItems);
+                    return FieldDescriptor.ForLookupInt32(title, AttributeFields.OrgUnit(attribute.Name),
+                        OrgUnitItems, searchText);
                 case AttributeType.Boolean:
-                    return FieldDescriptor.ForBool(title, AttributeFields.Bool(attribute.Name));
+                    return FieldDescriptor.ForBool(title, AttributeFields.Bool(attribute.Name), searchText);
                 default:
                     // Inherited и ByteArray не индексируются
                     return null;
+            }
+        }
+
+        private static string TypeTitle(AttributeType type)
+        {
+            switch (type)
+            {
+                case AttributeType.Integer: return "целое";
+                case AttributeType.Double:
+                case AttributeType.Decimal: return "дробное";
+                case AttributeType.DateTime: return "дата";
+                case AttributeType.String: return "строка";
+                case AttributeType.Numerator: return "нумератор";
+                case AttributeType.Array: return "массив";
+                case AttributeType.ElementBook: return "справочник";
+                case AttributeType.UserState: return "состояние";
+                case AttributeType.OrgUnit: return "оргединица";
+                case AttributeType.Boolean: return "да/нет";
+                default: return type.ToString();
             }
         }
 
@@ -161,11 +194,64 @@ namespace PilotLookUp.Model.AdvancedSearch
                 .Select(p => new LookupItem(p.Id, p.DisplayName));
         }
 
+        // Должность показывается вместе с ФИО занимающего ее человека:
+        // по одним названиям должностей («Новая должность», «bot») найти человека нельзя
         private IEnumerable<LookupItem> OrgUnitItems()
         {
+            var peopleByPosition = new Dictionary<int, List<string>>();
+
+            foreach (var person in _repository.GetPeople())
+            {
+                foreach (var position in person.Positions)
+                {
+                    if (!peopleByPosition.TryGetValue(position.Position, out var names))
+                        peopleByPosition[position.Position] = names = new List<string>();
+                    names.Add(person.DisplayName);
+                }
+            }
+
             return _repository.GetOrganisationUnits()
-                .OrderBy(u => u.Title, StringComparer.CurrentCultureIgnoreCase)
-                .Select(u => new LookupItem(u.Id, u.Title));
+                .Select(u => new LookupItem(u.Id, BuildOrgUnitTitle(u, peopleByPosition)))
+                .OrderBy(i => i.Title, StringComparer.CurrentCultureIgnoreCase);
+        }
+
+        private static string BuildOrgUnitTitle(IOrganisationUnit unit, IDictionary<int, List<string>> peopleByPosition)
+        {
+            var title = unit.Title;
+
+            if (peopleByPosition.TryGetValue(unit.Id, out var names) && names.Count > 0)
+                title = string.Join(", ", names) + " - " + title;
+
+            return unit.IsDeleted ? title + " (удалена)" : title;
+        }
+
+        // Состояния конкретного атрибута: Configuration хранит id машины состояний.
+        // У одного атрибута в разных типах машины могут быть разными (status_doc - три),
+        // поэтому берем объединение: искать можно по любому допустимому состоянию
+        private IEnumerable<LookupItem> UserStatesOfAttribute(AttributeGroup attribute)
+        {
+            var machines = _repository.GetUserStateMachines().ToDictionary(m => m.Id);
+            var states = _repository.GetUserStates().ToDictionary(s => s.Id);
+            var items = new Dictionary<Guid, LookupItem>();
+
+            foreach (var configuration in attribute.Configurations)
+            {
+                if (!Guid.TryParse(configuration, out var machineId))
+                    continue;
+                if (!machines.TryGetValue(machineId, out var machine))
+                    continue;
+
+                foreach (var stateId in machine.StateTransitions.Keys)
+                {
+                    if (states.TryGetValue(stateId, out var state) && !items.ContainsKey(stateId))
+                        items[stateId] = new LookupItem(stateId, state.Title);
+                }
+            }
+
+            if (items.Count == 0)
+                return UserStateItems(); // машины состояний не найдены - все состояния базы
+
+            return items.Values.OrderBy(i => i.Title, StringComparer.CurrentCultureIgnoreCase).ToList();
         }
 
         private IEnumerable<LookupItem> UserStateItems()

@@ -52,7 +52,8 @@
                MinWidth="{Binding ActualWidth, ElementName=Toggle}"
                Opened="OnPopupOpened"
                Closed="OnPopupClosed">
-            <Border Background="{DynamicResource NormalBackground}"
+            <Border x:Name="PopupRoot"
+                    Background="{DynamicResource NormalBackground}"
                     BorderBrush="{DynamicResource ButtonDefaultHoverBackground}"
                     BorderThickness="1">
                 <StackPanel>
@@ -61,9 +62,12 @@
                              Style="{StaticResource TextBox_Style}"
                              ToolTip="Поиск по списку"
                              TextChanged="OnFilterTextChanged" />
+                    <!-- Без False лист сам выделяет CurrentItem коллекции при Refresh,
+                         что выглядит как выбор пользователя и мгновенно закрывает попап -->
                     <ListBox x:Name="List"
                              MaxHeight="220"
                              BorderThickness="0"
+                             IsSynchronizedWithCurrentItem="False"
                              Style="{StaticResource ListBox_Style}"
                              VirtualizingPanel.IsVirtualizing="True"
                              ScrollViewer.VerticalScrollBarVisibility="Auto"

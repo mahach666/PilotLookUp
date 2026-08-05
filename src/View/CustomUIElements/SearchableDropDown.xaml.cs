@@ -1,3 +1,4 @@
+using PilotLookUp.Model.AdvancedSearch;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,6 +32,16 @@ namespace PilotLookUp.View.CustomUIElements
         {
             InitializeComponent();
             UpdateDisplayText();
+
+            // Схема захвата мыши как у ComboBox: пока попап открыт, держим
+            // SubTree-захват на контроле; клик вне поддерева закрывает попап
+            AddHandler(Mouse.PreviewMouseDownOutsideCapturedElementEvent,
+                new MouseButtonEventHandler(OnOutsideMouseDown), true);
+
+            // Текстбокс фильтра и скроллбар списка перехватывают захват на время
+            // своих жестов - после отпускания кнопки возвращаем его контролу
+            PopupRoot.AddHandler(PreviewMouseUpEvent,
+                new MouseButtonEventHandler(OnPopupPreviewMouseUp), true);
         }
 
         public IEnumerable ItemsSource
@@ -71,7 +82,9 @@ namespace PilotLookUp.View.CustomUIElements
             if (string.IsNullOrWhiteSpace(filter))
                 return true;
 
-            return item?.ToString()?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
+            // У элемента может быть текст поиска шире подписи (прочие заголовки атрибута)
+            var text = (item as ISearchableText)?.SearchText ?? item?.ToString();
+            return text?.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0;
         }
 
         private void UpdateDisplayText()
@@ -79,16 +92,44 @@ namespace PilotLookUp.View.CustomUIElements
             DisplayTextBlock.Text = SelectedItem?.ToString() ?? Placeholder;
         }
 
-        // Попап управляется кодом: TwoWay-биндинг IsOpen на IsChecked через
-        // ElementName внутри DataTemplate работает ненадежно
+        // Попап управляется кодом. Открытие строго на ClickMode=Press с захватом
+        // SubTree: без захвата Popup(StaysOpen=False) закрывается уже на отпускании
+        // кнопки мыши над тогглом - "выпадашка не кликабельна"
         private void OnToggleClick(object sender, RoutedEventArgs e)
         {
-            DropPopup.IsOpen = Toggle.IsChecked == true;
+            if (Toggle.IsChecked == true)
+            {
+                DropPopup.IsOpen = true;
+                Mouse.Capture(this, CaptureMode.SubTree);
+            }
+            else
+            {
+                DropPopup.IsOpen = false;
+            }
+        }
+
+        private void OnOutsideMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DropPopup.IsOpen)
+                DropPopup.IsOpen = false;
+        }
+
+        private void OnPopupPreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            // Вернуть захват после жеста вложенного элемента (выделение текста,
+            // перетаскивание скроллбара), иначе клик мимо перестанет закрывать попап
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (DropPopup.IsOpen && Mouse.Captured == null)
+                    Mouse.Capture(this, CaptureMode.SubTree);
+            }), System.Windows.Threading.DispatcherPriority.Input);
         }
 
         private void OnPopupClosed(object sender, EventArgs e)
         {
             Toggle.IsChecked = false;
+            if (ReferenceEquals(Mouse.Captured, this))
+                Mouse.Capture(null);
         }
 
         private void OnPopupOpened(object sender, EventArgs e)
