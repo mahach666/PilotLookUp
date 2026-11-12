@@ -26,6 +26,18 @@ namespace PilotLookUp.Tests
             Check.That(loaded == null, "несуществующий id должен дать null по таймауту");
         }
 
+        // Отсутствие объекта Pilot сообщает состоянием NonExistent за миллисекунды -
+        // ждать таймаута не нужно (иначе таймаут приходится делать коротким)
+        [PilotFact]
+        public void ObjectLoader_Returns_Null_On_NonExistent_Without_Waiting_Timeout(ITestContext ctx)
+        {
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            var loaded = TestPump.Await(new ObjectLoader(ctx.Repository).LoadWithTimeout(Guid.NewGuid(), 15000));
+
+            Check.That(loaded == null, "несуществующий id дает null");
+            Check.That(sw.ElapsedMilliseconds < 5000, $"ответ по NonExistent, а не по таймауту ({sw.ElapsedMilliseconds} мс)");
+        }
+
         // Проверено прогоном: GetHistoryItems(несуществующий id) блокирует UI-поток
         // внутри самого вызова SDK и не возвращается - клиентский таймаут бессилен.
         // В продукте путь безопасен: Tracer передает только id из реальных HistoryItems

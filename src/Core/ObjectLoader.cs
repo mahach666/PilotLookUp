@@ -49,6 +49,14 @@ namespace PilotLookUp.Core
 
         public void OnNext(IDataObject value)
         {
+            // Не объект (или нет доступа): Pilot отвечает NoData -> NonExistent за миллисекунды
+            if (value.State == DataState.NonExistent)
+            {
+                _tcs.TrySetResult(null);
+                _subscription?.Dispose();
+                return;
+            }
+
             if (value.State != DataState.Loaded)
                 return;
 

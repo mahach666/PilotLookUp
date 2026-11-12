@@ -30,7 +30,6 @@ namespace PilotLookUp.Utils
             _objectSet = new ObjectSet(senderMember);
         }
 
-        private int _adaptiveTimer = 200;
         private PilotObjectMap _pilotObjectMap { get; }
         private IObjectsRepository _objectsRepository { get; }
         private PilotObjectHelper _senderObj { get; }
@@ -76,8 +75,10 @@ namespace PilotLookUp.Utils
                 }
                 else if (obj is KeyValuePair<Guid, int> keyVal)
                 {
-                    var lodetDict = new KeyValuePair<IDataObject, int>(await _objectsRepository.GetObjectWithTimeout(keyVal.Key), keyVal.Value);
-                    _objectSet.Add(_pilotObjectMap.Wrap(lodetDict));
+                    var loaded = await _objectsRepository.GetObjectWithTimeout(keyVal.Key);
+                    _objectSet.Add(loaded != null
+                        ? _pilotObjectMap.Wrap(new KeyValuePair<IDataObject, int>(loaded, keyVal.Value))
+                        : _pilotObjectMap.Wrap(keyVal));
                 }
                 else if (obj is Ascon.Pilot.Bim.SDK.IModelElementId modelElementId)
                 {
@@ -202,7 +203,7 @@ namespace PilotLookUp.Utils
             {
                 try
                 {
-                    var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid, _adaptiveTimer);
+                    var lodedHistory = await _objectsRepository.GetHistoryItemWithTimeout(guid);
                     if (lodedHistory != null)
                     {
                         return _pilotObjectMap.Wrap(lodedHistory);
@@ -215,7 +216,7 @@ namespace PilotLookUp.Utils
 
             try
             {
-                var loadedObj = await _objectsRepository.GetObjectWithTimeout(guid, _adaptiveTimer);
+                var loadedObj = await _objectsRepository.GetObjectWithTimeout(guid);
                 if (loadedObj != null)
                 {
                     return _pilotObjectMap.Wrap(loadedObj);
@@ -224,8 +225,6 @@ namespace PilotLookUp.Utils
             catch
             {
             }
-
-            _adaptiveTimer = 10;
 
             var userState = _userStates.FirstOrDefault(i => i.Id == guid);
             if (userState != null)

@@ -11,7 +11,7 @@ namespace PilotLookUp.Extensions
     {
         internal async static Task<IDataObject> GetObjectWithTimeout(this IObjectsRepository objectsRepository,
             Guid id,
-            int timeoutMilliseconds = 300)
+            int timeoutMilliseconds = PilotTimeouts.ObjectLoadMs)
         {
             var loader = new ObjectLoader(objectsRepository);
             return await loader.LoadWithTimeout(id, timeoutMilliseconds);
@@ -19,7 +19,7 @@ namespace PilotLookUp.Extensions
 
         internal async static Task<IHistoryItem> GetHistoryItemWithTimeout(this IObjectsRepository objectsRepository,
             Guid id,
-            int timeoutMilliseconds = 300)
+            int timeoutMilliseconds = PilotTimeouts.ObjectLoadMs)
         {
             var loader = new HistoryItemLoader(objectsRepository);
             return await loader.LoadWithTimeout(id, timeoutMilliseconds);
@@ -27,7 +27,7 @@ namespace PilotLookUp.Extensions
 
         internal async static Task<object> GetObjByGuid(this IObjectsRepository objectsRepository,
             Guid guid,
-            int timeoutMilliseconds = 300)
+            int timeoutMilliseconds = PilotTimeouts.ObjectLoadMs)
         {
             var loadedObj = await objectsRepository.GetObjectWithTimeout(guid, timeoutMilliseconds);
             if (loadedObj != null)

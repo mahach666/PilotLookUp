@@ -30,6 +30,31 @@ namespace PilotLookUp.Tests
             Check.That(info.Any(set => set.SenderMemberName == "Id"), "должна быть строка Id");
         }
 
+        // Регрессия: при открытии окна UI-поток ~1 с занят построением окна, а SDK
+        // доставляет объекты через UI-поток. ParentId/Children не должны оставаться
+        // голыми Guid, TypesByChildren не должен падать с NRE
+        [PilotFact]
+        public void RepoService_GetObjInfo_Resolves_Links_While_UI_Thread_Busy(ITestContext ctx)
+        {
+            var repoService = CreateRepoService(ctx);
+            var map = new PilotObjectMap(ctx.Repository);
+            var root = TestData.GetRoot(ctx);
+            var child = TestPump.Await(new PilotLookUp.Core.ObjectLoader(ctx.Repository)
+                .LoadWithTimeout(root.Children.First(), 5000));
+            Check.NotNull(child, "ребенок корня");
+            Check.That(child.Children.Count > 0, "у тестового объекта должны быть дети");
+
+            var task = System.Threading.Tasks.Task.Run(() => repoService.GetObjInfo(map.Wrap(child)));
+            System.Threading.Thread.Sleep(1500); // UI-поток занят, как при построении окна
+            var info = TestPump.Await(task, 60);
+
+            var parent = info.Single(s => s.SenderMemberName == "ParentId");
+            Check.That(parent.FirstOrDefault() is DataObjectHelper, $"ParentId - объект, получено '{parent.Description}'");
+
+            var children = info.Single(s => s.SenderMemberName == "Children");
+            Check.That(children.All(h => h is DataObjectHelper), $"Children - объекты, получено '{children.Description}'");
+        }
+
         [PilotFact]
         public void RepoService_GetWrapedObjs_Resolves_Real_Id(ITestContext ctx)
         {
