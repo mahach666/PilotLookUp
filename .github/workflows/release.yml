@@ -17,9 +17,9 @@ jobs:
   release:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
@@ -49,7 +49,11 @@ jobs:
           if ('PilotLookUp.ext2.dll' -notin $entries) { throw 'В корне архива нет PilotLookUp.ext2.dll' }
           if ($entries -like '*.pdb') { throw 'В архив попали .pdb' }
 
+      # checkout кладет тег как легковесный (на коммит) - без этого --notes-from-tag
+      # берет сообщение коммита вместо текста аннотированного тега
       - name: Публикация
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$env:GITHUB_REF_NAME" bin/Release/PilotLookUp.zip --title "PilotLookUp $env:GITHUB_REF_NAME" --notes-from-tag
+        run: |
+          git fetch --force --no-tags origin "+refs/tags/${env:GITHUB_REF_NAME}:refs/tags/${env:GITHUB_REF_NAME}"
+          gh release create "$env:GITHUB_REF_NAME" bin/Release/PilotLookUp.zip --title "PilotLookUp $env:GITHUB_REF_NAME" --notes-from-tag
