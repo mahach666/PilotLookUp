@@ -62,7 +62,11 @@
 
 	<!-- Создаем архив на релизе -->
 	<Target Name="CreateZip" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-		<Delete Files="$(OutputPath)\*.pdb; $(OutputPath)\*.xml" />
+		<!-- Маски раскрываются только в Include, Delete Files="*.pdb" ничего не удаляет -->
+		<ItemGroup>
+			<ReleaseExcluded Include="$(OutputPath)*.pdb;$(OutputPath)*.xml" />
+		</ItemGroup>
+		<Delete Files="@(ReleaseExcluded)" />
 		<Exec Command="powershell -Command &quot;Compress-Archive -Path $(OutputPath)\* -DestinationPath $(OutputPath)\..\$(AssemblyProduct).zip -Force&quot;" />
 	</Target>
 	<ItemGroup>
